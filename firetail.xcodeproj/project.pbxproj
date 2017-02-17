@@ -8,22 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1211E5382D4003BDFE2 /* AppDelegate.swift */; };
-		069FD1241E5382D4003BDFE2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1231E5382D4003BDFE2 /* ViewController.swift */; };
+		069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1231E5382D4003BDFE2 /* GraphViewController.swift */; };
 		069FD1271E5382D4003BDFE2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD1251E5382D4003BDFE2 /* Main.storyboard */; };
 		069FD12A1E5382D4003BDFE2 /* firetail.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1281E5382D4003BDFE2 /* firetail.xcdatamodeld */; };
 		069FD12C1E5382D4003BDFE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 069FD12B1E5382D4003BDFE2 /* Assets.xcassets */; };
 		069FD12F1E5382D4003BDFE2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */; };
+		069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1361E538926003BDFE2 /* ViewSetup.swift */; };
+		0AD139DF73E251FE0D4D3193 /* Pods_firetail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587D23A742B0C36434F2833B /* Pods_firetail.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		069FD11E1E5382D4003BDFE2 /* firetail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = firetail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		069FD1211E5382D4003BDFE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		069FD1231E5382D4003BDFE2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		069FD1231E5382D4003BDFE2 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		069FD1261E5382D4003BDFE2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		069FD1291E5382D4003BDFE2 /* firetail.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = firetail.xcdatamodel; sourceTree = "<group>"; };
 		069FD12B1E5382D4003BDFE2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		069FD12E1E5382D4003BDFE2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		069FD1301E5382D4003BDFE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		069FD1361E538926003BDFE2 /* ViewSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewSetup.swift; sourceTree = "<group>"; };
+		4247F9327201846B6980BFCB /* Pods-firetail.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firetail.release.xcconfig"; path = "Pods/Target Support Files/Pods-firetail/Pods-firetail.release.xcconfig"; sourceTree = "<group>"; };
+		587D23A742B0C36434F2833B /* Pods_firetail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_firetail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D7C2B103539D5E6DBD6614D /* Pods-firetail.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firetail.debug.xcconfig"; path = "Pods/Target Support Files/Pods-firetail/Pods-firetail.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AD139DF73E251FE0D4D3193 /* Pods_firetail.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +49,8 @@
 			children = (
 				069FD1201E5382D4003BDFE2 /* firetail */,
 				069FD11F1E5382D4003BDFE2 /* Products */,
+				5B335822E5A875FD341CB99E /* Pods */,
+				259453A1E67893F45BCB5AE2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,7 +66,8 @@
 			isa = PBXGroup;
 			children = (
 				069FD1211E5382D4003BDFE2 /* AppDelegate.swift */,
-				069FD1231E5382D4003BDFE2 /* ViewController.swift */,
+				069FD1231E5382D4003BDFE2 /* GraphViewController.swift */,
+				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
 				069FD1251E5382D4003BDFE2 /* Main.storyboard */,
 				069FD12B1E5382D4003BDFE2 /* Assets.xcassets */,
 				069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */,
@@ -67,6 +77,23 @@
 			path = firetail;
 			sourceTree = "<group>";
 		};
+		259453A1E67893F45BCB5AE2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				587D23A742B0C36434F2833B /* Pods_firetail.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5B335822E5A875FD341CB99E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7D7C2B103539D5E6DBD6614D /* Pods-firetail.debug.xcconfig */,
+				4247F9327201846B6980BFCB /* Pods-firetail.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,9 +101,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 069FD1331E5382D4003BDFE2 /* Build configuration list for PBXNativeTarget "firetail" */;
 			buildPhases = (
+				D61023DEF98DC337ABF4A391 /* [CP] Check Pods Manifest.lock */,
 				069FD11A1E5382D4003BDFE2 /* Sources */,
 				069FD11B1E5382D4003BDFE2 /* Frameworks */,
 				069FD11C1E5382D4003BDFE2 /* Resources */,
+				FE571FB095EE8D6F88829340 /* [CP] Embed Pods Frameworks */,
+				A84EBC8586DBFDB8257B3101 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -135,14 +165,63 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A84EBC8586DBFDB8257B3101 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-firetail/Pods-firetail-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D61023DEF98DC337ABF4A391 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FE571FB095EE8D6F88829340 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-firetail/Pods-firetail-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		069FD11A1E5382D4003BDFE2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				069FD1241E5382D4003BDFE2 /* ViewController.swift in Sources */,
+				069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */,
 				069FD12A1E5382D4003BDFE2 /* firetail.xcdatamodeld in Sources */,
 				069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */,
+				069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +340,7 @@
 		};
 		069FD1341E5382D4003BDFE2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D7C2B103539D5E6DBD6614D /* Pods-firetail.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = PFDY3PS57G;
@@ -274,6 +354,7 @@
 		};
 		069FD1351E5382D4003BDFE2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4247F9327201846B6980BFCB /* Pods-firetail.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = PFDY3PS57G;
@@ -304,6 +385,7 @@
 				069FD1351E5382D4003BDFE2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
