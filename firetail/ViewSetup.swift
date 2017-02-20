@@ -15,10 +15,13 @@ struct CustomColor {
     var yellow = UIColor(red: 254/255, green: 203/255, blue: 9/255, alpha: 1.0)
     
     //gray
-    var blue = UIColor(red: 41/255, green: 41/255, blue: 41/255, alpha: 1.0)
+    var gray = UIColor(red: 41/255, green: 41/255, blue: 41/255, alpha: 1.0)
 
     //background
     var background = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
+    
+    //gridGray
+    var gridGray = UIColor(red: 38/255, green: 38/255, blue: 38/255, alpha: 0.1)
     
 }
 
@@ -58,6 +61,24 @@ class ViewSetup: UIViewController {
         name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: (width/750)*screenWidth, height: (height/750)*screenWidth)
         name.numberOfLines = lines
         
+    }
+    
+    public func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
+        let dispatchTime = DispatchTime.now() + seconds
+        dispatchLevel.dispatchQueue.asyncAfter(deadline: dispatchTime, execute: closure)
+    }
+    
+    public enum DispatchLevel {
+        case main, userInteractive, userInitiated, utility, background
+        var dispatchQueue: DispatchQueue {
+            switch self {
+            case .main:                 return DispatchQueue.main
+            case .userInteractive:      return DispatchQueue.global(qos: .userInteractive)
+            case .userInitiated:        return DispatchQueue.global(qos: .userInitiated)
+            case .utility:              return DispatchQueue.global(qos: .utility)
+            case .background:           return DispatchQueue.global(qos: .background)
+            }
+        }
     }
 
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		063E068A1E5A10FA009A8962 /* StockGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063E06891E5A10FA009A8962 /* StockGraphView.swift */; };
 		069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1211E5382D4003BDFE2 /* AppDelegate.swift */; };
 		069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1231E5382D4003BDFE2 /* GraphViewController.swift */; };
 		069FD1271E5382D4003BDFE2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD1251E5382D4003BDFE2 /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		063E06891E5A10FA009A8962 /* StockGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView.swift; sourceTree = "<group>"; };
 		069FD11E1E5382D4003BDFE2 /* firetail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = firetail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		069FD1211E5382D4003BDFE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		069FD1231E5382D4003BDFE2 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 			children = (
 				069FD1211E5382D4003BDFE2 /* AppDelegate.swift */,
 				069FD1231E5382D4003BDFE2 /* GraphViewController.swift */,
+				063E06891E5A10FA009A8962 /* StockGraphView.swift */,
 				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
 				069FD1251E5382D4003BDFE2 /* Main.storyboard */,
 				069FD12B1E5382D4003BDFE2 /* Assets.xcassets */,
@@ -220,6 +223,7 @@
 			files = (
 				069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */,
 				069FD12A1E5382D4003BDFE2 /* firetail.xcdatamodeld in Sources */,
+				063E068A1E5A10FA009A8962 /* StockGraphView.swift in Sources */,
 				069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */,
 				069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */,
 			);
