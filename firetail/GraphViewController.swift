@@ -41,10 +41,31 @@ class GraphViewController: ViewSetup, UITextFieldDelegate {
         sampleTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
         sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         sampleTextField.delegate = self
+        sampleTextField.backgroundColor = customColor.background
         self.view.addSubview(sampleTextField)
-        
+        addLabelsAndButtons()
         // graphView.frame = CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenHeight/1334)
         // barView.frame = CGRect(x: 0, y: 500*screenHeight/1334, width: screenWidth, height: screenWidth)
+        
+    }
+    @objc private func trade(_ sender: UIButton) {
+        if trade.title(for: .normal) == "TRADE" {
+        trade.setTitle("Not Connected", for: .normal)
+        } else {
+            trade.setTitle("TRADE", for: .normal)
+        }
+    }
+    let trade = UIButton()
+    
+    
+    
+    
+    private func addLabelsAndButtons() {
+        
+        addButton(name: trade, x: 0, y: 1194, width: 750, height: 1334-1194, title: "TRADE", font: "HelveticaNeue-Bold", fontSize: 18, titleColor: customColor.white, bgColor: customColor.black, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.trade(_:)), addSubview: true)
+        
+
+        
         
     }
     
@@ -70,7 +91,7 @@ class GraphViewController: ViewSetup, UITextFieldDelegate {
             print("entered0")
             
             
-            foo(stockName: stockName) {(_ stockData: StockData?) -> Void in
+            callCorrectGraph(stockName: stockName, chart: "1d") {(_ stockData: StockData?) -> Void in
                 if let data = stockData {
                 let graphView = StockGraphView(stockData: data)
                 self.view.addSubview(graphView)

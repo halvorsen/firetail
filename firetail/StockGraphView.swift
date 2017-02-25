@@ -15,7 +15,7 @@ class StockGraphView: UIView {
     let screenHeight = UIScreen.main.bounds.height
     let fontSizeMultiplier = UIScreen.main.bounds.width / 375
     let customColor = CustomColor()
-    let graphHeight: CGFloat = 646*UIScreen.main.bounds.height/1334
+    let graphHeight: CGFloat = 6*UIScreen.main.bounds.width/7
     var curvePath = UIBezierPath()
     //let stockData = StockData()
     
@@ -60,32 +60,29 @@ class StockGraphView: UIView {
         plotShape.fillColor = customColor.yellow.cgColor
         self.layer.addSublayer(plotShape)
         //layer.bounds.origin.x = 0
-       // plotShape.bounds.origin.y = -graphHeight
+        // plotShape.bounds.origin.y = -graphHeight
         
         self.backgroundColor = customColor.gray
         
         
         var horizontalGridPath = UIBezierPath()
         var vGridPath = UIBezierPath()
-        for i in 0...4 {
-            horizontalGridPath.move(to: CGPoint(x: 80*screenWidth/750, y: (CGFloat(i)*108 + 108)*screenHeight/1334))
-            horizontalGridPath.addLine(to: CGPoint(x: screenWidth, y: (CGFloat(i)*108 + 108)*screenHeight/1334))
-            horizontalGridPath.addLine(to: CGPoint(x: screenWidth, y: (CGFloat(i)*108 + 108)*screenHeight/1334+2*screenWidth/750))
-            horizontalGridPath.addLine(to: CGPoint(x: 80*screenWidth/750, y: (CGFloat(i)*108 + 108)*screenHeight/1334+2*screenWidth/750))
-            horizontalGridPath.addLine(to: CGPoint(x: 80*screenWidth/750, y: (CGFloat(i)*108 + 108)*screenHeight/1334))
+        for i in 1...5 {
+            horizontalGridPath.move(to: CGPoint(x: 80*screenWidth/750, y: graphHeight/6*CGFloat(i) - 1))
+            horizontalGridPath.addLine(to: CGPoint(x: screenWidth, y: graphHeight/6*CGFloat(i) - 1))
+            horizontalGridPath.addLine(to: CGPoint(x: screenWidth, y: graphHeight/6*CGFloat(i)))
+            horizontalGridPath.addLine(to: CGPoint(x: 80*screenWidth/750, y: graphHeight/6*CGFloat(i)))
+            horizontalGridPath.addLine(to: CGPoint(x: 80*screenWidth/750, y: graphHeight/6*CGFloat(i) - 1))
             horizontalGridPath.close()
             UIColor.red.setStroke()
-            // horizontalGridPath.lineWidth = 2.0
             horizontalGridPath.stroke()
-            
-            
         }
         let gridShape = CAShapeLayer()
         gridShape.zPosition = 2
         gridShape.path = horizontalGridPath.cgPath
         gridShape.fillColor = customColor.gridGray.cgColor
         self.layer.addSublayer(gridShape)
-        for i in 0...6 {
+        for i in 0...5 {
             vGridPath.move(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 - screenWidth/750, y: 0))
             vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 - screenWidth/750, y: self.frame.height))
             vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 + screenWidth/750, y: self.frame.height))
@@ -98,11 +95,71 @@ class StockGraphView: UIView {
             
             
         }
+        //        for i in 0...7 {
+        //            vGridPath.move(to: CGPoint(x: CGFloat(i)*screenWidth/9 + screenWidth/9 - screenWidth/750, y: 0))
+        //            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/9 + screenWidth/9 - screenWidth/750, y: self.frame.height))
+        //            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/9 + screenWidth/9 + screenWidth/750, y: self.frame.height))
+        //            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/9 + screenWidth/9 + screenWidth/750, y: 0))
+        //            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/9 + screenWidth/9 - screenWidth/750, y: 0))
+        //            vGridPath.close()
+        //            UIColor.red.setStroke()
+        //            vGridPath.stroke()
+        //
+        //
+        //        }
         let gridShape2 = CAShapeLayer()
         gridShape2.zPosition = 2
         gridShape2.path = vGridPath.cgPath
         gridShape2.fillColor = customColor.gridGray.cgColor
         self.layer.addSublayer(gridShape2)
+        
+        let (y1,y2,y3,y4,y5,x1,x2,x3,x4,x5,x6,x7,x8,x9) = (UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel())
+        let ys = [y1,y2,y3,y4,y5]
+        let xs = [x1,x2,x3,x4,x5,x6,x7,x8,x9]
+        var yLabels: [String] {
+            get {
+                
+                var _yLabels = [String]()
+                for i in 0...4 {
+                    let atom = Float(i)*Float(dataEntries.yMaximum - dataEntries.yMinimum)/4
+                    if i != 0 && i != 4 {
+                        _yLabels.append(String(Int(Float(dataEntries.yMinimum) + atom)) + ".00")
+                    } else {
+                        
+                        _yLabels.append(String(format: "%.2f", Float(dataEntries.yMinimum) + atom))
+                        
+                    }
+                }
+                return _yLabels
+            }
+        }
+        var xLabels: [String] {
+            get {
+                var _xLabels = ["MAX","5yr","1yr","3m","1m","5d","1d"]
+                //                var _xLabels = [String]()
+                //                for i in 0...5 {
+                //
+                //                    _xLabels.append(String(i))
+                //
+                //                }
+                return _xLabels
+            }
+        }
+        for i in 0...4 {
+            let yY = (1111.66-222.33*CGFloat(i))*graphHeight/screenHeight - 9
+            addLabel(name: ys[i], text: yLabels[i], textColor: customColor.labelGray, textAlignment: .right, fontName: "HelveticaNeue-Bold", fontSize: 10, x: 0, y: yY, width: 70, height: 18, lines: 1)
+            self.addSubview(ys[i])
+        }
+        
+        //make a switch for different graph ranges
+        
+        for i in 0...6 {
+            addLabel(name: xs[i], text: xLabels[i], textColor: customColor.labelGray, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 10, x: (screenWidth/8)*(CGFloat(i)+1)*1334/screenHeight - 30, y: graphHeight*1334/screenHeight + 20, width: 60, height: 75, lines: 1)
+            if xs[i].text == "1m" {
+                xs[i].textColor = customColor.yellow
+            }
+            self.addSubview(xs[i])
+        }
         
     }
     
@@ -110,6 +167,16 @@ class StockGraphView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int) {
+        
+        name.text = text
+        name.textColor = textColor
+        name.textAlignment = textAlignment
+        name.font = UIFont(name: fontName, size: fontSizeMultiplier*fontSize)
+        name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: (width/750)*screenWidth, height: (height/750)*screenWidth)
+        name.numberOfLines = lines
+        
+    }
     
 }
 
@@ -184,35 +251,53 @@ struct StockData {
     var closingPrice = [Double]()
 }
 
-func foo(stockName: String, result: @escaping (_ stockData: StockData?) -> Void) {
+//class BigBoardStock : Mappable {
+//    open func mapOneDayChartDataModule(success:(() -> Void)?, failure:(BigBoardError) -> Void) -> Request?
+//    open func mapFiveDayChartDataModule(success:(() -> Void)?, failure:(BigBoardError) -> Void) -> Request?
+//    open func mapOneMonthChartDataModule(success:(() -> Void)?, failure:(BigBoardError) -> Void) -> Request?
+//    open func mapThreeMonthChartDataModule(success:(() -> Void)?, failure:(BigBoardError) -> Void) -> Request?
+//    open func mapOneYearChartDataModule(success:(() -> Void)?, failure:(BigBoardError) -> Void) -> Request?
+//    open func mapFiveYearChartDataModule(success:(() -> Void)?, failure:(BigBoardError) -> Void) -> Request?
+//    open func mapLifetimeChartDataModule(success:(() -> Void)?, failure:(BigBoardError) -> Void) -> Request?
+//}
+
+
+func callCorrectGraph(stockName: String, chart: String, result: @escaping (_ stockData: StockData?) -> Void) {
     BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
+
         var stockData = StockData()
-        
-        stock.mapOneMonthChartDataModule({
-            if stock.oneMonthChartModule != nil {
-                stockData.closingPrice.removeAll()
-                stockData.dates.removeAll()
-                print("stock.oneMonthChartModule!")
-                print(stock.oneMonthChartModule?.dataPoints)
-                for point in (stock.oneMonthChartModule?.dataPoints)! {
-                    stockData.dates.append(point.date)
-                    stockData.closingPrice.append(point.close)
-                    print(point.date)
-                    print(point.close)
+        let charts = ["1d":stock.mapOneDayChartDataModule,"5d":stock.mapFiveDayChartDataModule,"1m":stock.mapOneMonthChartDataModule,"3m":stock.mapThreeMonthChartDataModule,"1y":stock.mapOneYearChartDataModule,"5y":stock.mapFiveYearChartDataModule,"max":stock.mapLifetimeChartDataModule]
+
+            charts[chart]!({
+                let chartsModule = ["1d":stock.oneDayChartModule,"5d":stock.fiveDayChartModule,"1m":stock.oneMonthChartModule,"3m":stock.threeMonthChartModule,"1y":stock.oneYearChartModule,"5y":stock.fiveYearChartModule,"max":stock.lifetimeChartModule]
+                let asdf: BigBoardChartDataModule? = chartsModule[chart]!
+                if asdf != nil { //oneMonthChartModule
+                    stockData.closingPrice.removeAll()
+                    stockData.dates.removeAll()
+                    //                print("stock.oneMonthChartModule!")
+                    //                print(stock.oneMonthChartModule?.dataPoints)
+                    for point in (asdf?.dataPoints)! {
+                        stockData.dates.append(point.date)
+                        stockData.closingPrice.append(point.close)
+                        print(point.date)
+                        print(point.close)
+                    }
+                    result(stockData)
+                } else {
+                    print("Error stock.onemonthchartmodule is nil")
                 }
-                result(stockData)
-            } else {
-                print("Error stock.onemonthchartmodule is nil")
-            }
-            // oneMonthChartModule is now mapped to the stock
-        }, failure: { (error) in
+                // oneMonthChartModule is now mapped to the stock
+            }, { (error) in
+                print(error)
+                result(nil)
+            })
+        }) { (error) in
             print(error)
             result(nil)
-        })
-    }) { (error) in
-        print(error)
-        result(nil)
-    }
+        }
+
+    
+        
     
 }
 
