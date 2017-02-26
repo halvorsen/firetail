@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0609E4A61E6284DD005965C5 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */; };
+		0609E4A81E632DF4005965C5 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4A71E632DF4005965C5 /* MainViewController.swift */; };
+		0613068C1E625996008E5898 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0613068B1E625996008E5898 /* Roboto-Regular.ttf */; };
+		0613068E1E626DBA008E5898 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0613068D1E626DBA008E5898 /* Roboto-Bold.ttf */; };
+		061306901E626FC9008E5898 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0613068F1E626FC9008E5898 /* Roboto-Light.ttf */; };
 		063E068A1E5A10FA009A8962 /* StockGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063E06891E5A10FA009A8962 /* StockGraphView.swift */; };
 		069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1211E5382D4003BDFE2 /* AppDelegate.swift */; };
 		069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1231E5382D4003BDFE2 /* GraphViewController.swift */; };
@@ -19,6 +24,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		0609E4A71E632DF4005965C5 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		0613068B1E625996008E5898 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		0613068D1E626DBA008E5898 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		0613068F1E626FC9008E5898 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
 		063E06891E5A10FA009A8962 /* StockGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView.swift; sourceTree = "<group>"; };
 		069FD11E1E5382D4003BDFE2 /* firetail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = firetail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		069FD1211E5382D4003BDFE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -69,10 +79,15 @@
 			children = (
 				069FD1211E5382D4003BDFE2 /* AppDelegate.swift */,
 				069FD1231E5382D4003BDFE2 /* GraphViewController.swift */,
+				0609E4A71E632DF4005965C5 /* MainViewController.swift */,
 				063E06891E5A10FA009A8962 /* StockGraphView.swift */,
 				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
 				069FD1251E5382D4003BDFE2 /* Main.storyboard */,
 				069FD12B1E5382D4003BDFE2 /* Assets.xcassets */,
+				0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */,
+				0613068B1E625996008E5898 /* Roboto-Regular.ttf */,
+				0613068D1E626DBA008E5898 /* Roboto-Bold.ttf */,
+				0613068F1E626FC9008E5898 /* Roboto-Light.ttf */,
 				069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */,
 				069FD1301E5382D4003BDFE2 /* Info.plist */,
 				069FD1281E5382D4003BDFE2 /* firetail.xcdatamodeld */,
@@ -162,6 +177,10 @@
 			files = (
 				069FD12F1E5382D4003BDFE2 /* LaunchScreen.storyboard in Resources */,
 				069FD12C1E5382D4003BDFE2 /* Assets.xcassets in Resources */,
+				061306901E626FC9008E5898 /* Roboto-Light.ttf in Resources */,
+				0609E4A61E6284DD005965C5 /* Roboto-Medium.ttf in Resources */,
+				0613068E1E626DBA008E5898 /* Roboto-Bold.ttf in Resources */,
+				0613068C1E625996008E5898 /* Roboto-Regular.ttf in Resources */,
 				069FD1271E5382D4003BDFE2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -224,6 +243,7 @@
 				069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */,
 				069FD12A1E5382D4003BDFE2 /* firetail.xcdatamodeld in Sources */,
 				063E068A1E5A10FA009A8962 /* StockGraphView.swift in Sources */,
+				0609E4A81E632DF4005965C5 /* MainViewController.swift in Sources */,
 				069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */,
 				069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */,
 			);
@@ -347,6 +367,7 @@
 			baseConfigurationReference = 7D7C2B103539D5E6DBD6614D /* Pods-firetail.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = PFDY3PS57G;
 				INFOPLIST_FILE = firetail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -361,6 +382,7 @@
 			baseConfigurationReference = 4247F9327201846B6980BFCB /* Pods-firetail.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = PFDY3PS57G;
 				INFOPLIST_FILE = firetail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

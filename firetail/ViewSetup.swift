@@ -21,7 +21,7 @@ struct CustomColor {
     var background = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
     
     //gridGray
-    var gridGray = UIColor(red: 38/255, green: 38/255, blue: 38/255, alpha: 0.3)
+    var gridGray = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.05)
     
     //black
     var black = UIColor(red: 23/255, green: 23/255, blue: 23/255, alpha: 1.0)
@@ -30,7 +30,7 @@ struct CustomColor {
     var white = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
     
     //labelGray
-    var labelGray = UIColor(red: 80/255, green: 80/255, blue: 80/255, alpha: 1.0)
+    var labelGray = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
     
 }
 
