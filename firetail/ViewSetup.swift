@@ -32,6 +32,8 @@ struct CustomColor {
     //labelGray
     var labelGray = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
     
+    //alertLines
+    var alertLines = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 0.1)
 }
 
 class ViewSetup: UIViewController {
