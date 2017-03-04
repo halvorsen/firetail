@@ -34,6 +34,18 @@ struct CustomColor {
     
     //alertLines
     var alertLines = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 0.1)
+    
+    //fieldLines
+    var fieldLines = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 0.1)
+    
+    //black33
+    var black33 = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
+    //black42
+    var black42 = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
+    //black30
+    var black30 = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1.0)
+    //black24
+    var black24 = UIColor(red: 24/255, green: 24/255, blue: 24/255, alpha: 1.0)
 }
 
 class ViewSetup: UIViewController {
@@ -48,7 +60,7 @@ class ViewSetup: UIViewController {
     }
 
     func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor, act:
-        Selector, addSubview: Bool) {
+        Selector, addSubview: Bool, alignment: UIControlContentHorizontalAlignment = .left) {
         name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: width*screenWidth/750, height: height*screenWidth/750)
         name.setTitle(title, for: UIControlState.normal)
         name.titleLabel!.font = UIFont(name: font, size: fontSizeMultiplier*fontSize)
@@ -58,6 +70,7 @@ class ViewSetup: UIViewController {
         name.layer.borderWidth = boarderW
         name.layer.borderColor = boarderColor.cgColor
         name.addTarget(self, action: act, for: .touchUpInside)
+        name.contentHorizontalAlignment = alignment
         if addSubview {
             view.addSubview(name)
         }
@@ -89,6 +102,82 @@ class ViewSetup: UIViewController {
             case .utility:              return DispatchQueue.global(qos: .utility)
             case .background:           return DispatchQueue.global(qos: .background)
             }
+        }
+    }
+    
+    
+    class ProgressHUD: UIVisualEffectView {
+        
+        var text: String? {
+            didSet {
+                label.text = text
+            }
+        }
+        
+        let activityIndictor: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        let label: UILabel = UILabel()
+        let blurEffect = UIBlurEffect(style: .light)
+        let vibrancyView: UIVisualEffectView
+        
+        init(text: String) {
+            self.text = text
+            self.vibrancyView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: blurEffect))
+            super.init(effect: blurEffect)
+            self.setup()
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            self.text = ""
+            self.vibrancyView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: blurEffect))
+            super.init(coder: aDecoder)
+            self.setup()
+        }
+        
+        func setup() {
+            contentView.addSubview(vibrancyView)
+            contentView.addSubview(activityIndictor)
+            contentView.addSubview(label)
+            activityIndictor.startAnimating()
+        }
+        
+        override func didMoveToSuperview() {
+            super.didMoveToSuperview()
+            
+            if let superview = self.superview {
+                
+                let width = superview.frame.size.width / 2.3
+                let height: CGFloat = 50.0
+                self.frame = CGRect(x: superview.frame.size.width / 2 - width / 2,
+                                    y: superview.frame.height / 2 - height / 2,
+                                    width: width,
+                                    height: height)
+                vibrancyView.frame = self.bounds
+                
+                let activityIndicatorSize: CGFloat = 40
+                activityIndictor.frame = CGRect(x: 5,
+                                                y: height / 2 - activityIndicatorSize / 2,
+                                                width: activityIndicatorSize,
+                                                height: activityIndicatorSize)
+                
+                layer.cornerRadius = 8.0
+                layer.masksToBounds = true
+                label.text = text
+                label.textAlignment = NSTextAlignment.center
+                label.frame = CGRect(x: activityIndicatorSize + 5,
+                                     y: 0,
+                                     width: width - activityIndicatorSize - 15,
+                                     height: height)
+                label.textColor = UIColor.gray
+                label.font = UIFont.boldSystemFont(ofSize: 16)
+            }
+        }
+        
+        func show() {
+            self.isHidden = false
+        }
+        
+        func hide() {
+            self.isHidden = true
         }
     }
 
