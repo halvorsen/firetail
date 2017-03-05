@@ -17,15 +17,12 @@ import CoreGraphics
 #endif
 //Aaron Halvorsen Edit
 public struct PodVariable {
-    public static var gingerBreadMan = [CGPath]()
+    public static var gingerBreadMan = [CGMutablePath]()
 }
 //End Aaron Halvorsen Edit
 
 open class LineChartRenderer: LineRadarRenderer
 {
-    //Aaron Halvorsen Edit
-//    static var globalPath: CGMutablePath? = nil
-    //End Aaron Halvorsen Edit
     
     open weak var dataProvider: LineChartDataProvider?
     
@@ -286,23 +283,9 @@ open class LineChartRenderer: LineRadarRenderer
         spline.addLine(to: pt2)
         spline.closeSubpath()
         //Aaron Halvorsen Edit
-        
-        // open var globalFill: CGPath? { return filled }
-
-        
-//        globalPath = spline
-//        print("globalPath in LINECHARTRENDERER: \(globalPath)")
-        
-//        var globalPath2: CGMutablePath? {
-//            return spline
-//        }
-        
-//        print("globalPath in LINECHARTRENDERER2: \(globalPath2)")
-        PodVariable.gingerBreadMan.append(spline as! CGPath)
-        
-//         gingerBreadMan = spline
-//
-//        print("globalPath in LINECHARTRENDERER2: \(gingerBreadMan)")
+       
+        //spline.move(to: CGPoint(x: 0, y: 100))
+        PodVariable.gingerBreadMan.append(spline)// as! CGPath)
         
         // Aaron Halvorsen Done Edit
         if dataSet.fill != nil

@@ -300,7 +300,10 @@ open class Legend: ComponentBase
     /// If the legend is to the top/bottom of the chart, then this affects the height of the legend.
     /// 
     /// **default**: 0.95 (95%)
+    
+    
     open var maxSizePercent: CGFloat = 0.95
+ 
     
     open func calculateDimensions(labelFont: NSUIFont, viewPortHandler: ViewPortHandler)
     {

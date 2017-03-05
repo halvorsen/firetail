@@ -10,6 +10,11 @@ import UIKit
 import BigBoard
 import Charts
 
+public struct Label {
+    public static var percentageValues = [String]()
+    public static var changeValues = [String]()
+}
+
 class StockGraphView2: UIView {
     
     let screenWidth = UIScreen.main.bounds.width
@@ -28,8 +33,8 @@ class StockGraphView2: UIView {
     var bazShape = CAShapeLayer()
     var globalCGPath: CGMutablePath? = nil
     
-// fills the graph view with the uploaded stock data on initialization and loaded by controller //
-    func fillChartViewWithSetsOfData(dataPoints: [Double]) {
+    // fills the graph view with the uploaded stock data on initialization and loaded by controller //
+    func fillChartViewWithSetsOfData(dataPoints: [Double], cubic: Bool = true) {
         var yVal1 = [ChartDataEntry]()    //BarChartDataEntry] = []
         var yVal2 = [ChartDataEntry]()
         //        cubicChartView.xAxis.drawAxisLineEnabled = false
@@ -48,17 +53,18 @@ class StockGraphView2: UIView {
         //        cubicChartView.leftAxis.drawAxisLineEnabled = false
         //        cubicChartView.rightAxis.drawTopYLabelEntryEnabled = false
         //        cubicChartView.rightAxis.drawAxisLineEnabled = false
-        cubicChartView.minOffset = 0
-        cubicChartView.legend.enabled = false
-        
-        cubicChartView.rightAxis.enabled = false
-        cubicChartView.legend.enabled = false
-        cubicChartView.leftAxis.enabled = false
-        cubicChartView.xAxis.labelPosition = .bottom
-        cubicChartView.xAxis.drawGridLinesEnabled = false
-        cubicChartView.xAxis.drawAxisLineEnabled = false
-        cubicChartView.chartDescription?.text = ""
-        
+        if cubic {
+            cubicChartView.minOffset = 0
+            cubicChartView.legend.enabled = false
+            
+            cubicChartView.rightAxis.enabled = false
+            cubicChartView.legend.enabled = false
+            cubicChartView.leftAxis.enabled = false
+            cubicChartView.xAxis.labelPosition = .bottom
+            cubicChartView.xAxis.drawGridLinesEnabled = false
+            cubicChartView.xAxis.drawAxisLineEnabled = false
+            cubicChartView.chartDescription?.text = ""
+        }
         
         for i in 0..<dataPoints.count {
             let dataEntry = ChartDataEntry(x: Double(i), y: dataPoints[i])
@@ -78,10 +84,6 @@ class StockGraphView2: UIView {
         set1.fillColor = customColor.yellow
         set1.fillAlpha = 1.0
         
-//trying to get set1's shape "bazshape" to morph it to the next shape //
-        
-        
-        
         for i in 0..<dataPoints.count {
             let dataEntry = ChartDataEntry(x: Double(i), y: dataPoints[i]-3.0)
             yVal2.append(dataEntry)
@@ -100,15 +102,14 @@ class StockGraphView2: UIView {
         
         let data: LineChartData = LineChartData(dataSets: dataSets)
         data.setValueTextColor(UIColor.white)
-        
-        cubicChartView.frame = self.bounds
-        cubicChartView.backgroundColor = UIColor.clear
-        cubicChartView.data = data
-  
-//        var shape = CALayer()
-//        cubicChartView.layer.sublayers?.forEach { print($0) }
-//
-//        self.layer.addSublayer(bazShape)
+        if cubic {
+            cubicChartView.autoScaleMinMaxEnabled = false
+            cubicChartView.frame = self.bounds
+//            cubicChartView.frame.origin.y = self.bounds.height/6
+//            cubicChartView.frame.size =  CGSize(width: bounds.width, height: 4*bounds.height/5)  //self.bounds.height*4/5
+            cubicChartView.backgroundColor = UIColor.clear
+            cubicChartView.data = data
+        }
         
     }
     
@@ -121,7 +122,7 @@ class StockGraphView2: UIView {
         
         while _original.count%15 != 0 {
             _original.remove(at: 0)
-           
+            
         }
         for i in 0..<_original.count {
             let j = Int(i/setAmount)
@@ -134,27 +135,53 @@ class StockGraphView2: UIView {
     }
     
     
+    
+    
     init() {super.init(frame: CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenHeight/1334))}
-    init(stockData: StockData2, key: String) {
-     
+    init(stockData: StockData2, key: String, cubic: Bool) {
+        
         _stockData = stockData
         super.init(frame: CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenHeight/1334))
         ys = [y1,y2,y3,y4,y5]
         xs = [x1,x2,x3,x4,x5,x6,x7]
+        
         var dataEntries = GraphSet2()
         if stockData.closingPrice.count <= 15 {
-            fillChartViewWithSetsOfData(dataPoints: stockData.closingPrice)
+            fillChartViewWithSetsOfData(dataPoints: stockData.closingPrice, cubic: cubic)
         } else {
-            fillChartViewWithSetsOfData(dataPoints: reduceDataPoints(original: stockData.closingPrice))
+            fillChartViewWithSetsOfData(dataPoints: reduceDataPoints(original: stockData.closingPrice), cubic: cubic)
         }
-        self.addSubview(cubicChartView)
-//        print("DID THE GLOBALPATH MAKE IT???: \(globalCGPath)")
-//        globalCGPath = cubicChartView.globalPath
-   
-//        let layer = CAShapeLayer()
-//        layer.path = globalCGPath
-//        layer.fillColor = UIColor.red.cgColor
-//        self.layer.addSublayer(layer)
+        if cubic {
+            self.addSubview(cubicChartView)
+        }
+        if cubic {
+        var changeValue: String {
+            get {
+                var _changeValue = String()
+                if (stockData.closingPrice.last)! - (stockData.closingPrice.first)! > 0 {
+                    _changeValue = "+" + String(format: "%.2f", Float((stockData.closingPrice.last)! - (stockData.closingPrice.first)!))
+                    
+                } else {
+                    _changeValue = String(format: "%.2f", Float((stockData.closingPrice.last)! - (stockData.closingPrice.first)!))
+                }
+                return _changeValue
+            }
+        }
+        Label.changeValues.append(changeValue)
+        var percentageValue: String {
+            get {
+                var _changeValue = String()
+                if (stockData.closingPrice.last! - stockData.closingPrice.first!) > 0 {
+                    _changeValue = "\u{2191}" + String(format: "%.2f", Float(100*(stockData.closingPrice.last! - stockData.closingPrice.first!)/stockData.closingPrice.first!)) + "%"
+                    
+                } else {
+                    _changeValue = "\u{2193}" + String(format: "%.2f", Float(100*(stockData.closingPrice.first! - stockData.closingPrice.last!)/stockData.closingPrice.first!)) + "%"
+                }
+                return _changeValue
+            }
+        }
+        Label.percentageValues.append(percentageValue)
+        }
         
         
         addLabel(name: change, text: "bla", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 70, y: -86, width: 120, height: 32, lines: 1)
@@ -165,12 +192,43 @@ class StockGraphView2: UIView {
         self.backgroundColor = customColor.gray
         
         
+        var horizontalGridPath = UIBezierPath()
+        var vGridPath = UIBezierPath()
+        for i in 1...5 {
+            horizontalGridPath.move(to: CGPoint(x: 80*screenWidth/750, y: graphHeight/6*CGFloat(i) - 1))
+            horizontalGridPath.addLine(to: CGPoint(x: screenWidth, y: graphHeight/6*CGFloat(i) - 1))
+            horizontalGridPath.addLine(to: CGPoint(x: screenWidth, y: graphHeight/6*CGFloat(i)))
+            horizontalGridPath.addLine(to: CGPoint(x: 80*screenWidth/750, y: graphHeight/6*CGFloat(i)))
+            horizontalGridPath.addLine(to: CGPoint(x: 80*screenWidth/750, y: graphHeight/6*CGFloat(i) - 1))
+            horizontalGridPath.close()
+            UIColor.red.setStroke()
+            horizontalGridPath.stroke()
+        }
+        let gridShape = CAShapeLayer()
+        gridShape.zPosition = 2
+        gridShape.path = horizontalGridPath.cgPath
+        gridShape.fillColor = customColor.gridGray.cgColor
+        self.layer.addSublayer(gridShape)
+        for i in 0...5 {
+            vGridPath.move(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 - screenWidth/750, y: 0))
+            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 - screenWidth/750, y: self.frame.height))
+            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 + screenWidth/750, y: self.frame.height))
+            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 + screenWidth/750, y: 0))
+            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 - screenWidth/750, y: 0))
+            vGridPath.close()
+            UIColor.red.setStroke()
+            
+            vGridPath.stroke()
+            
+            
+        }
+        
         let gridShape2 = CAShapeLayer()
         gridShape2.zPosition = 2
-        //    gridShape2.path = vGridPath.cgPath
+        gridShape2.path = vGridPath.cgPath
         gridShape2.fillColor = customColor.gridGray.cgColor
         self.layer.addSublayer(gridShape2)
-
+        
         var yLabels: [String] {
             get {
                 var _yLabels = [String]()
@@ -195,7 +253,8 @@ class StockGraphView2: UIView {
         for i in 0...4 {
             let yY = (1111.66-222.33*CGFloat(i))*graphHeight/screenHeight - 9
             addLabel(name: ys[i], text: yLabels[i], textColor: customColor.labelGray, textAlignment: .right, fontName: "Roboto-Regular", fontSize: 12, x: 0, y: yY, width: 85, height: 18, lines: 1)
-            self.addSubview(ys[i])
+            ys[i].layer.zPosition = 1
+            //self.addSubview(ys[i])
         }
         
         //make a switch for different graph ranges
@@ -207,8 +266,7 @@ class StockGraphView2: UIView {
             }
             self.addSubview(xs[i])
         }
-        
-        
+
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -304,33 +362,33 @@ struct StockData2 {
 //sends the data for each graph to the controller that sends to the view to be initiated//
 func callCorrectGraph2(stockName: String, chart: String, result: @escaping (_ stockData: StockData2?) -> Void) {
     BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
-       
+        
         var stockData = StockData2()
         stockData.text = chart
         let charts = ["1d":stock.mapOneDayChartDataModule,"5d":stock.mapFiveDayChartDataModule,"1m":stock.mapOneMonthChartDataModule,"3m":stock.mapThreeMonthChartDataModule,"1y":stock.mapOneYearChartDataModule,"5y":stock.mapFiveYearChartDataModule,"Max":stock.mapLifetimeChartDataModule]
-       
-            charts[chart]!({
-                let chartsModule = ["1d":stock.oneDayChartModule,"5d":stock.fiveDayChartModule,"1m":stock.oneMonthChartModule,"3m":stock.threeMonthChartModule,"1y":stock.oneYearChartModule,"5y":stock.fiveYearChartModule,"Max":stock.lifetimeChartModule]
-                let asdf: BigBoardChartDataModule? = chartsModule[chart]!
-                if asdf != nil {
-                    stockData.closingPrice.removeAll()
-                    stockData.dates.removeAll()
+        
+        charts[chart]!({
+            let chartsModule = ["1d":stock.oneDayChartModule,"5d":stock.fiveDayChartModule,"1m":stock.oneMonthChartModule,"3m":stock.threeMonthChartModule,"1y":stock.oneYearChartModule,"5y":stock.fiveYearChartModule,"Max":stock.lifetimeChartModule]
+            let asdf: BigBoardChartDataModule? = chartsModule[chart]!
+            if asdf != nil {
+                stockData.closingPrice.removeAll()
+                stockData.dates.removeAll()
+                
+                for point in (asdf?.dataPoints)! {
+                    stockData.dates.append(point.date)
+                    stockData.closingPrice.append(point.close)
                     
-                    for point in (asdf?.dataPoints)! {
-                        stockData.dates.append(point.date)
-                        stockData.closingPrice.append(point.close)
-                  
-                    }
-                   
-                    result(stockData)
-                } else {
-                    print("Error stock.onemonthchartmodule is nil")
                 }
-                // oneMonthChartModule is now mapped to the stock
-            }, { (error) in
-                print(error)
-                result(nil)
-            })
+                
+                result(stockData)
+            } else {
+                print("Error stock.onemonthchartmodule is nil")
+            }
+            // oneMonthChartModule is now mapped to the stock
+        }, { (error) in
+            print(error)
+            result(nil)
+        })
         
     }) { (error) in
         print(error)
