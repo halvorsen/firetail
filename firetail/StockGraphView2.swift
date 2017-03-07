@@ -30,40 +30,32 @@ class StockGraphView2: UIView {
     var change = UILabel()
     var percentChange = UILabel()
     var cubicChartView = LineChartView()
-    var bazShape = CAShapeLayer()
     var globalCGPath: CGMutablePath? = nil
+    var layerView = UIView()
+    var baseOfGraphView = BaseOfGraphView()
+    var base = UIView()
+    var countinueBouncing = true
+    var doneSquashing = false
+    var graphAppearsInView = true
+    
     
     // fills the graph view with the uploaded stock data on initialization and loaded by controller //
     func fillChartViewWithSetsOfData(dataPoints: [Double], cubic: Bool = true) {
-        var yVal1 = [ChartDataEntry]()    //BarChartDataEntry] = []
+       
+        var yVal1 = [ChartDataEntry]()
         var yVal2 = [ChartDataEntry]()
-        //        cubicChartView.xAxis.drawAxisLineEnabled = false
-        //        cubicChartView.xAxis.drawGridLinesEnabled = false
-        cubicChartView.xAxis.drawLabelsEnabled = false
-        //        cubicChartView.accessibilityElementsHidden = true
-        //        cubicChartView.drawBordersEnabled = false
-        //        cubicChartView.drawGridBackgroundEnabled = false
-        //        cubicChartView.leftAxis.drawGridLinesEnabled = false
-        //        cubicChartView.rightAxis.drawGridLinesEnabled = false
-        //        cubicChartView.leftAxis.drawLabelsEnabled = false
-        //        cubicChartView.rightAxis.drawLabelsEnabled = false
-        //        cubicChartView.leftAxis.drawZeroLineEnabled = false
-        //        cubicChartView.rightAxis.drawZeroLineEnabled = false
-        //        cubicChartView.leftAxis.drawTopYLabelEntryEnabled = false
-        //        cubicChartView.leftAxis.drawAxisLineEnabled = false
-        //        cubicChartView.rightAxis.drawTopYLabelEntryEnabled = false
-        //        cubicChartView.rightAxis.drawAxisLineEnabled = false
+        self.cubicChartView.xAxis.drawLabelsEnabled = false
         if cubic {
-            cubicChartView.minOffset = 0
-            cubicChartView.legend.enabled = false
+            self.cubicChartView.minOffset = 0
+            self.cubicChartView.legend.enabled = false
             
-            cubicChartView.rightAxis.enabled = false
-            cubicChartView.legend.enabled = false
-            cubicChartView.leftAxis.enabled = false
-            cubicChartView.xAxis.labelPosition = .bottom
-            cubicChartView.xAxis.drawGridLinesEnabled = false
-            cubicChartView.xAxis.drawAxisLineEnabled = false
-            cubicChartView.chartDescription?.text = ""
+            self.cubicChartView.rightAxis.enabled = false
+            self.cubicChartView.legend.enabled = false
+            self.cubicChartView.leftAxis.enabled = false
+            self.cubicChartView.xAxis.labelPosition = .bottom
+            self.cubicChartView.xAxis.drawGridLinesEnabled = false
+            self.cubicChartView.xAxis.drawAxisLineEnabled = false
+            self.cubicChartView.chartDescription?.text = ""
         }
         
         for i in 0..<dataPoints.count {
@@ -77,11 +69,11 @@ class StockGraphView2: UIView {
         set1.drawCircleHoleEnabled = false
         set1.circleRadius = 3
         set1.cubicIntensity = 0.2
-        set1.setColor(customColor.yellow, alpha: 1.0)
-        set1.circleColors = [customColor.white]
+        set1.setColor(self.customColor.yellow, alpha: 1.0)
+        set1.circleColors = [self.customColor.white]
         set1.lineWidth = 2
         set1.drawFilledEnabled = true
-        set1.fillColor = customColor.yellow
+        set1.fillColor = self.customColor.yellow
         set1.fillAlpha = 1.0
         
         for i in 0..<dataPoints.count {
@@ -97,21 +89,65 @@ class StockGraphView2: UIView {
         
         var dataSets : [LineChartDataSet] = [LineChartDataSet]()
         dataSets.append(set1)
-        // dataSets.append(set2)
-        
-        
         let data: LineChartData = LineChartData(dataSets: dataSets)
         data.setValueTextColor(UIColor.white)
         if cubic {
-            cubicChartView.autoScaleMinMaxEnabled = false
-            cubicChartView.frame = self.bounds
-//            cubicChartView.frame.origin.y = self.bounds.height/6
-//            cubicChartView.frame.size =  CGSize(width: bounds.width, height: 4*bounds.height/5)  //self.bounds.height*4/5
-            cubicChartView.backgroundColor = UIColor.clear
-            cubicChartView.data = data
+           
+            self.cubicChartView.autoScaleMinMaxEnabled = false
+            self.cubicChartView.frame = self.bounds
+            self.cubicChartView.backgroundColor = UIColor.clear
+            self.cubicChartView.data = data
         }
+       
+    }
+
+    
+    func squash() {
+        baseOfGraphView.baseLayer.add(baseOfGraphView.layerAnimation, forKey: nil)
+        self.delay(bySeconds: 0.3) {
+            self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation2, forKey: nil)
+            self.delay(bySeconds: 0.05) {
+                self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation5, forKey: nil)
+                self.delay(bySeconds: 0.05) {
+                    self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation6, forKey: nil)
+                   // self.delay(bySeconds: 0.05) {
+                        self.doneSquashing = true
+                   // }
+                }
+            }
+            
+        }
+    }
+    
+    func bounce() {
+        //     DispatchQueue.global(qos: .userInteractive).async {
+        self.delay(bySeconds: 0.0) {
+            self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation, forKey: nil)
+            self.delay(bySeconds: 0.4) {
+                self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation2, forKey: nil)
+                self.delay(bySeconds: 0.1) {
+                    self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation3, forKey: nil)
+                    self.delay(bySeconds: 0.1) {
+                        self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation4, forKey: nil)
+                        self.delay(bySeconds: 0.4) {
+                            
+                            if self.countinueBouncing == true {
+                                self.bounce()
+                            } else {
+                                self.squash()
+                            }
+                            
+                        }
+                    }
+                }
+                
+            }
+        }
+        //  }
         
     }
+    
+    
     
     
     func reduceDataPoints(original: [Double]) -> [Double] {
@@ -136,15 +172,80 @@ class StockGraphView2: UIView {
     
     
     
+    func animateIt() {
+        self.baseOfGraphView.alpha = 1.0
+        self.baseOfGraphView.frame = CGRect(x: 0, y: 565*self.bounds.height/636, width: self.bounds.width, height: 70*self.bounds.height/636)
+        
+//        baseOfGraphView.baseLayer.path = baseOfGraphView.bez.cgPath
+//        baseOfGraphView.baseLayer.fillColor = customColor.yellow.cgColor
+//        baseOfGraphView.layer.addSublayer(baseOfGraphView.baseLayer)
+ 
+    }
     
+    override func draw(_ rect: CGRect) {
+        if graphAppearsInView {
+            DispatchQueue.global(qos: .utility).async {
+        let horizontalGridPath = UIBezierPath()
+        let vGridPath = UIBezierPath()
+        for i in 1...5 {
+            horizontalGridPath.move(to: CGPoint(x: 80*self.screenWidth/750, y: self.graphHeight/6*CGFloat(i) - 1))
+            horizontalGridPath.addLine(to: CGPoint(x: self.screenWidth, y: self.graphHeight/6*CGFloat(i) - 1))
+            horizontalGridPath.addLine(to: CGPoint(x: self.screenWidth, y: self.graphHeight/6*CGFloat(i)))
+            horizontalGridPath.addLine(to: CGPoint(x: 80*self.screenWidth/750, y: self.graphHeight/6*CGFloat(i)))
+            horizontalGridPath.addLine(to: CGPoint(x: 80*self.screenWidth/750, y: self.graphHeight/6*CGFloat(i) - 1))
+            horizontalGridPath.close()
+           // customColor.gridGray.setStroke()
+         //   horizontalGridPath.stroke()
+        }
+        let gridShape = CAShapeLayer()
+        gridShape.zPosition = 7
+        gridShape.path = horizontalGridPath.cgPath
+        gridShape.fillColor = self.customColor.gridGray.cgColor
+        self.layer.addSublayer(gridShape)
+        for i in 0...5 {
+            vGridPath.move(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: 0))
+            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: self.frame.height))
+            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 + self.screenWidth/750, y: self.frame.height))
+            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 + self.screenWidth/750, y: 0))
+            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: 0))
+            vGridPath.close()
+          //  UIColor.red.setStroke()
+            
+         //   vGridPath.stroke()
+            
+            
+        }
+        
+        let gridShape2 = CAShapeLayer()
+        gridShape2.zPosition = 7
+        gridShape2.path = vGridPath.cgPath
+        gridShape2.fillColor = self.customColor.gridGray.cgColor
+        self.layer.addSublayer(gridShape2)
+        }
+        }
+    }
+
     init() {super.init(frame: CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenHeight/1334))}
     init(stockData: StockData2, key: String, cubic: Bool) {
-        
+
         _stockData = stockData
         super.init(frame: CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenHeight/1334))
         ys = [y1,y2,y3,y4,y5]
         xs = [x1,x2,x3,x4,x5,x6,x7]
+        graphAppearsInView = !cubic
+        baseOfGraphView.frame = CGRect(x: 0, y: 565*bounds.height/636, width: bounds.width, height: 70*bounds.height/636)
+        baseOfGraphView.backgroundColor = .clear
+        baseOfGraphView.layer.zPosition = 5
+        self.addSubview(baseOfGraphView)
+        base.frame = CGRect(x: 0, y: self.bounds.height, width: self.bounds.width, height: 1)
+        base.backgroundColor = customColor.yellow
+        base.alpha = 0.0
+        base.layer.zPosition = 5
+        self.addSubview(base)
         
+        
+        
+
         var dataEntries = GraphSet2()
         if stockData.closingPrice.count <= 15 {
             fillChartViewWithSetsOfData(dataPoints: stockData.closingPrice, cubic: cubic)
@@ -155,79 +256,45 @@ class StockGraphView2: UIView {
             self.addSubview(cubicChartView)
         }
         if cubic {
-        var changeValue: String {
-            get {
-                var _changeValue = String()
-                if (stockData.closingPrice.last)! - (stockData.closingPrice.first)! > 0 {
-                    _changeValue = "+" + String(format: "%.2f", Float((stockData.closingPrice.last)! - (stockData.closingPrice.first)!))
-                    
-                } else {
-                    _changeValue = String(format: "%.2f", Float((stockData.closingPrice.last)! - (stockData.closingPrice.first)!))
+            var changeValue: String {
+                get {
+                    var _changeValue = String()
+                    if (stockData.closingPrice.last)! - (stockData.closingPrice.first)! > 0 {
+                        _changeValue = "+" + String(format: "%.2f", Float((stockData.closingPrice.last)! - (stockData.closingPrice.first)!))
+                        
+                    } else {
+                        _changeValue = String(format: "%.2f", Float((stockData.closingPrice.last)! - (stockData.closingPrice.first)!))
+                    }
+                    return _changeValue
                 }
-                return _changeValue
             }
-        }
-        Label.changeValues.append(changeValue)
-        var percentageValue: String {
-            get {
-                var _changeValue = String()
-                if (stockData.closingPrice.last! - stockData.closingPrice.first!) > 0 {
-                    _changeValue = "\u{2191}" + String(format: "%.2f", Float(100*(stockData.closingPrice.last! - stockData.closingPrice.first!)/stockData.closingPrice.first!)) + "%"
-                    
-                } else {
-                    _changeValue = "\u{2193}" + String(format: "%.2f", Float(100*(stockData.closingPrice.first! - stockData.closingPrice.last!)/stockData.closingPrice.first!)) + "%"
+            Label.changeValues.append(changeValue)
+            var percentageValue: String {
+                get {
+                    var _changeValue = String()
+                    if (stockData.closingPrice.last! - stockData.closingPrice.first!) > 0 {
+                        _changeValue = "\u{2191}" + String(format: "%.2f", Float(100*(stockData.closingPrice.last! - stockData.closingPrice.first!)/stockData.closingPrice.first!)) + "%"
+                        
+                    } else {
+                        _changeValue = "\u{2193}" + String(format: "%.2f", Float(100*(stockData.closingPrice.first! - stockData.closingPrice.last!)/stockData.closingPrice.first!)) + "%"
+                    }
+                    return _changeValue
                 }
-                return _changeValue
             }
-        }
-        Label.percentageValues.append(percentageValue)
+            Label.percentageValues.append(percentageValue)
         }
         
         
-        addLabel(name: change, text: "bla", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 70, y: -86, width: 120, height: 32, lines: 1)
+        addLabel(name: change, text: "", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 70, y: -86, width: 120, height: 32, lines: 1)
         self.addSubview(change)
-        addLabel(name: percentChange, text: "blah", textColor: customColor.yellow, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 184, y: -86, width: 300, height: 32, lines: 1)
+        addLabel(name: percentChange, text: "", textColor: customColor.yellow, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 184, y: -86, width: 300, height: 32, lines: 1)
         self.addSubview(percentChange)
         
         self.backgroundColor = customColor.gray
+        layerView.frame = self.bounds
+        self.addSubview(layerView)
         
         
-        var horizontalGridPath = UIBezierPath()
-        var vGridPath = UIBezierPath()
-        for i in 1...5 {
-            horizontalGridPath.move(to: CGPoint(x: 80*screenWidth/750, y: graphHeight/6*CGFloat(i) - 1))
-            horizontalGridPath.addLine(to: CGPoint(x: screenWidth, y: graphHeight/6*CGFloat(i) - 1))
-            horizontalGridPath.addLine(to: CGPoint(x: screenWidth, y: graphHeight/6*CGFloat(i)))
-            horizontalGridPath.addLine(to: CGPoint(x: 80*screenWidth/750, y: graphHeight/6*CGFloat(i)))
-            horizontalGridPath.addLine(to: CGPoint(x: 80*screenWidth/750, y: graphHeight/6*CGFloat(i) - 1))
-            horizontalGridPath.close()
-            UIColor.red.setStroke()
-            horizontalGridPath.stroke()
-        }
-        let gridShape = CAShapeLayer()
-        gridShape.zPosition = 2
-        gridShape.path = horizontalGridPath.cgPath
-        gridShape.fillColor = customColor.gridGray.cgColor
-        self.layer.addSublayer(gridShape)
-        for i in 0...5 {
-            vGridPath.move(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 - screenWidth/750, y: 0))
-            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 - screenWidth/750, y: self.frame.height))
-            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 + screenWidth/750, y: self.frame.height))
-            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 + screenWidth/750, y: 0))
-            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*screenWidth/7 + screenWidth/7 - screenWidth/750, y: 0))
-            vGridPath.close()
-            UIColor.red.setStroke()
-            
-            vGridPath.stroke()
-            
-            
-        }
-        
-        let gridShape2 = CAShapeLayer()
-        gridShape2.zPosition = 2
-        gridShape2.path = vGridPath.cgPath
-        gridShape2.fillColor = customColor.gridGray.cgColor
-        self.layer.addSublayer(gridShape2)
         
         var yLabels: [String] {
             get {
@@ -253,8 +320,8 @@ class StockGraphView2: UIView {
         for i in 0...4 {
             let yY = (1111.66-222.33*CGFloat(i))*graphHeight/screenHeight - 9
             addLabel(name: ys[i], text: yLabels[i], textColor: customColor.labelGray, textAlignment: .right, fontName: "Roboto-Regular", fontSize: 12, x: 0, y: yY, width: 85, height: 18, lines: 1)
-            ys[i].layer.zPosition = 1
-            //self.addSubview(ys[i])
+            ys[i].layer.zPosition = 7
+            self.addSubview(ys[i])
         }
         
         //make a switch for different graph ranges
@@ -266,7 +333,7 @@ class StockGraphView2: UIView {
             }
             self.addSubview(xs[i])
         }
-
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -282,6 +349,24 @@ class StockGraphView2: UIView {
         name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: (width/750)*screenWidth, height: (height/750)*screenWidth)
         name.numberOfLines = lines
         
+    }
+    
+    func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
+        let dispatchTime = DispatchTime.now() + seconds
+        dispatchLevel.dispatchQueue.asyncAfter(deadline: dispatchTime, execute: closure)
+    }
+    
+    enum DispatchLevel {
+        case main, userInteractive, userInitiated, utility, background
+        var dispatchQueue: DispatchQueue {
+            switch self {
+            case .main:                 return DispatchQueue.main
+            case .userInteractive:      return DispatchQueue.global(qos: .userInteractive)
+            case .userInitiated:        return DispatchQueue.global(qos: .userInitiated)
+            case .utility:              return DispatchQueue.global(qos: .utility)
+            case .background:           return DispatchQueue.global(qos: .background)
+            }
+        }
     }
     
 }
@@ -345,6 +430,8 @@ struct GraphSet2 {
         }
     }
     
+    
+    
 }
 
 struct DataPoint2 {
@@ -360,40 +447,48 @@ struct StockData2 {
 
 
 //sends the data for each graph to the controller that sends to the view to be initiated//
-func callCorrectGraph2(stockName: String, chart: String, result: @escaping (_ stockData: StockData2?) -> Void) {
+func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: [StockData2?]) -> Void) {
+    
     BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
+        let list = ["1y","5y","Max","1d","5d","1m","3m"]
+        let charts = ["1y":stock.mapOneYearChartDataModule,"5y":stock.mapFiveYearChartDataModule,"Max":stock.mapLifetimeChartDataModule,"1d":stock.mapOneDayChartDataModule,"5d":stock.mapFiveDayChartDataModule,"1m":stock.mapOneMonthChartDataModule,"3m":stock.mapThreeMonthChartDataModule]
         
-        var stockData = StockData2()
-        stockData.text = chart
-        let charts = ["1d":stock.mapOneDayChartDataModule,"5d":stock.mapFiveDayChartDataModule,"1m":stock.mapOneMonthChartDataModule,"3m":stock.mapThreeMonthChartDataModule,"1y":stock.mapOneYearChartDataModule,"5y":stock.mapFiveYearChartDataModule,"Max":stock.mapLifetimeChartDataModule]
+        var stockDatas = [StockData2]()
         
-        charts[chart]!({
-            let chartsModule = ["1d":stock.oneDayChartModule,"5d":stock.fiveDayChartModule,"1m":stock.oneMonthChartModule,"3m":stock.threeMonthChartModule,"1y":stock.oneYearChartModule,"5y":stock.fiveYearChartModule,"Max":stock.lifetimeChartModule]
-            let asdf: BigBoardChartDataModule? = chartsModule[chart]!
-            if asdf != nil {
-                stockData.closingPrice.removeAll()
-                stockData.dates.removeAll()
-                
-                for point in (asdf?.dataPoints)! {
-                    stockData.dates.append(point.date)
-                    stockData.closingPrice.append(point.close)
+        for key in list {
+            var stockData = StockData2()
+            stockData.text = key
+            charts[key]!({
+                let chartsModule = ["1y":stock.oneYearChartModule,"5y":stock.fiveYearChartModule,"Max":stock.lifetimeChartModule,"1d":stock.oneDayChartModule,"5d":stock.fiveDayChartModule,"1m":stock.oneMonthChartModule,"3m":stock.threeMonthChartModule]
+                let asdf: BigBoardChartDataModule? = chartsModule[key]!
+                if asdf != nil {
+                    stockData.closingPrice.removeAll()
+                    stockData.dates.removeAll()
                     
+                    for point in (asdf?.dataPoints)! {
+                        stockData.dates.append(point.date)
+                        stockData.closingPrice.append(point.close)
+                        
+                    }
+                    stockDatas.append(stockData)
                 }
                 
-                result(stockData)
-            } else {
-                print("Error stock.onemonthchartmodule is nil")
-            }
-            // oneMonthChartModule is now mapped to the stock
-        }, { (error) in
-            print(error)
-            result(nil)
-        })
-        
+                
+                result(stockDatas)
+                
+                
+                // oneMonthChartModule is now mapped to the stock
+            }, { (error) in
+                print(error)
+                result([nil])
+            })
+        }
     }) { (error) in
         print(error)
-        result(nil)
+        result([nil])
     }
+    
+    
     
 }
 

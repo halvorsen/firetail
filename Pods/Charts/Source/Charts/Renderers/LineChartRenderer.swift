@@ -283,8 +283,9 @@ open class LineChartRenderer: LineRadarRenderer
         spline.addLine(to: pt2)
         spline.closeSubpath()
         //Aaron Halvorsen Edit
-       
-        //spline.move(to: CGPoint(x: 0, y: 100))
+        
+        
+
         PodVariable.gingerBreadMan.append(spline)// as! CGPath)
         
         // Aaron Halvorsen Done Edit
