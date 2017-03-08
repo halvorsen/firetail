@@ -44,7 +44,8 @@ class GraphViewController: ViewSetup {
     var first = true
     let list = ["1y","5y","Max","1d","5d","1m","3m"]
     var orderOfGraphs = ["1y":0,"5y":1,"Max":2,"1d":3,"5d":4,"1m":5,"3m":6]
-    var orderOfLabels = ["Max":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
+    var orderofGraphsInverse = [Int:String]()
+    let orderOfLabels = ["Max":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
     // var createdList = [String]()
     
     
@@ -126,22 +127,76 @@ class GraphViewController: ViewSetup {
                 newTextKey = xLabel.text!
                 graphViewSeen.xs[orderOfLabels[newTextKey]!].textColor = customColor.yellow
                 layerAnimation.toValue = PodVariable.gingerBreadMan[orderOfGraphs[newTextKey]!]
+                print("key: \(newTextKey)")
+                print(orderOfGraphs)
+                print(orderOfGraphs[newTextKey]!)
                 currentTextKey = newTextKey
                 layer.add(layerAnimation, forKey: nil)
                 graphViewSeen.change.text = Label.changeValues[orderOfGraphs[newTextKey]!]
                 graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs[newTextKey]!]
             }
         }
+        for i in 0..<graphViewSeen.ys.count {
+          //  let y = yVals[newTextKey]!.i
+            switch i {
+            case 0: graphViewSeen.ys[i].text = yVals[newTextKey]!.4
+            case 1: graphViewSeen.ys[i].text = yVals[newTextKey]!.3
+            case 2: graphViewSeen.ys[i].text = yVals[newTextKey]!.2
+            case 3: graphViewSeen.ys[i].text = yVals[newTextKey]!.1
+            case 4: graphViewSeen.ys[i].text = yVals[newTextKey]!.0
+            default: break
+            }
+            
+        }
+        
+        
     }
-    
+
+
     private func addLabelsAndButtons() {
         
         addButton(name: trade, x: 0, y: 1194, width: 750, height: 1334-1194, title: "TRADE", font: "HelveticaNeue-Bold", fontSize: 18, titleColor: customColor.white, bgColor: customColor.black, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.trade(_:)), addSubview: false, alignment: .center)
         
     }
+    var i = 0
+    var yVals = [String:(l1:String,l2:String,l3:String,l4:String,l5:String)]()
+    
+    func implementDrawSubviews(stockData: ([String],[StockData2?])) {
+        print("1stockdata count: \(stockData.1.count)")
+        print("1stockdata count keys: \(stockData.0.count)")
+        if stockData.1[i] != nil {
+            let graphView = StockGraphView2(stockData: stockData.1[i]!, key: stockData.0[i], cubic: true)
+            let ma = stockData.1[i]!.closingPrice.max()!
+            let mi = stockData.1[i]!.closingPrice.min()!
+            yVals[orderofGraphsInverse[i]!] = (String(format: "%.1f", ma)+"0", String(format: "%.1f", mi + 3*(ma-mi)/4)+"0", String(format: "%.1f", mi + 2*(ma-mi)/4)+"0",String(format: "%.1f", mi + (ma-mi)/4)+"0",String(format: "%.1f", mi)+"0")
+            graphView.isUserInteractionEnabled = false
+            
+            graphView.frame.origin.x = self.screenWidth
+            
+            self.view.addSubview(graphView)
+            
+            self.graphViews[stockData.0[i]] = graphView
+            
+            if stockData.0[i] == "1d" {
+                
+                self.currentPrice.text = String(format: "%.2f", stockData.1[i]!.closingPrice.last!)
+            } else if stockData.0[i] == "3m" {
+                
+                self.graphViewSeen.countinueBouncing = false
+                self.myTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(GraphViewController.checkDoneSquashing), userInfo: nil, repeats: true)
+            }
+            if i < 6 {
+                i += 1
+                delay(bySeconds: 0.3){
+                    self.implementDrawSubviews(stockData: stockData)}
+            }
+            
+        }
+
+    }
     
     func showGraph() {
-        print("WOW")
+        print("SHOWGRAPH")
         graphViews = ["1y":nil,"5y":nil,"Max":nil,"1d":nil,"5d":nil,"1m":nil,"3m":nil]
         
         self.view.endEditing(true)
@@ -151,56 +206,43 @@ class GraphViewController: ViewSetup {
             stockHeader.text = passedString.uppercased()
             
             
-            let serialQueue = DispatchQueue(label: "serialqueue")
             
-            callCorrectGraph2(stockName: self.stockName) {(_ stockData: [StockData2?]) -> Void in
-                PodVariable.gingerBreadMan.count
-                var i = 0
-                print("stockdata count: \(stockData.count)")
-                if stockData.count == 7 { //temp fix, need to fix callcorrectgraph2 to only send once
-                for data in stockData {
-                    self.delay(bySeconds: 0.3){
-                        if data != nil {
-                            
-                            let graphView = StockGraphView2(stockData: data!, key: self.list[i], cubic: true)
-                            graphView.isUserInteractionEnabled = false
-                            
-                            graphView.frame.origin.x = self.screenWidth
-                            
-                            self.view.addSubview(graphView)
-                        
-                            
-                          //  graphView.removeFromSuperview()
-                            
-                            self.graphViews[self.list[i]] = graphView
-                            if self.list[i] == "1d"{
-                                print("asdfasdfasdfsd")
-                                self.currentPrice.text = String(format: "%.2f", data!.closingPrice.last!)
-                            } else if self.list[i] == "3m"{
-                                
-                                self.graphViewSeen.countinueBouncing = false
-                                self.myTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(GraphViewController.checkDoneSquashing), userInfo: nil, repeats: true)
-                                
-                            }
-                            
-                            i += 1
-                        }
-                    }
-                    
-                        }
-                    
-                }
+            callCorrectGraph2(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
                 
+                
+                print("2stockdata count: \(stockData.1.count)")
+                print("2stockdata count keys: \(stockData.0.count)")
+                if stockData.0.count == 7 { //temp fix, need to fix callcorrectgraph2 to only send once
+                    for i in 0..<stockData.0.count {
+                        self.orderOfGraphs[stockData.0[i]] = i
+                        self.orderofGraphsInverse[i] = stockData.0[i]
+                        
+                    }
+                    print("3stockdata count: \(stockData.1.count)")
+                    print("3stockdata count keys: \(stockData.0.count)")
+                   // self.delay(bySeconds: 0.3){
+                        self.implementDrawSubviews(stockData: stockData)}
+                    print("4stockdata count: \(stockData.1.count)")
+                    print("4stockdata count keys: \(stockData.0.count)")
+                        
+               // }
             }
-            
-            
         }
-        
     }
+    
+                    
+  
     func checkDoneSquashing() {
+        print("POD6")
         if graphViewSeen.doneSquashing {
+            print("POD7")
             add1YGraph()
             myTimer.invalidate()
+            for (_,graph) in self.graphViews {
+                if graph != nil && (graph?.isDescendant(of: self.view))! {
+                    graph!.removeFromSuperview()
+                }
+            }
         }
     }
     
@@ -215,14 +257,14 @@ class GraphViewController: ViewSetup {
     
     
     private func add1YGraph() {
-        
+        print("orderOfGraphs \(orderOfGraphs)")
         if PodVariable.gingerBreadMan.count > 0 {
             animateBase()
             view.addSubview(graphViewSeen)
             
             layer.path = PodVariable.gingerBreadMan[0]
             layer.fillColor = customColor.yellow.cgColor
-            layer.shadowColor = customColor.black.cgColor  //UIColor.black.cgColor
+            layer.shadowColor = customColor.black.cgColor
             layer.shadowOpacity = 1.0
             layer.shadowOffset = CGSize.zero
             layer.shadowRadius = 10
@@ -232,15 +274,15 @@ class GraphViewController: ViewSetup {
             graphViewSeen.layerView.clipsToBounds = true
             
             graphViewSeen.layerView.layer.addSublayer(layer)
-            graphViewSeen.change.text = Label.changeValues[0]
-            graphViewSeen.percentChange.text = Label.percentageValues[0]
+            graphViewSeen.change.text = Label.changeValues[orderOfGraphs["1y"]!]
+            graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs["1y"]!]
             trade.alpha = 0.0
             stockHeader.alpha = 0.0
             currentPrice.alpha = 0.0
             view.addSubview(currentPrice)
             view.addSubview(trade)
             view.addSubview(stockHeader)
-            
+
             
             UIView.animate(withDuration: 0.6) {self.graphViewSeen.layerView.frame = CGRect(x: 0, y: self.graphViewSeen.bounds.height/10, width: self.graphViewSeen.bounds.width, height: 5*self.graphViewSeen.bounds.height/6); self.trade.alpha = 1.0; self.stockHeader.alpha = 1.0; self.currentPrice.alpha = 1.0}
             
@@ -269,6 +311,61 @@ class GraphViewController: ViewSetup {
         
         return nil
     }
+    var j = 0
+    let serialQueue = DispatchQueue(label: "queuename")
+    var keys = [String]()
+    func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
+        print("stockname: \(stockName)")
+        BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
+            
+            let list = ["1y","5y","Max","1d","5d","1m","3m"]
+            
+            let charts = ["1y":stock.mapOneYearChartDataModule,"5y":stock.mapFiveYearChartDataModule,"Max":stock.mapLifetimeChartDataModule,"1d":stock.mapOneDayChartDataModule,"5d":stock.mapFiveDayChartDataModule,"1m":stock.mapOneMonthChartDataModule,"3m":stock.mapThreeMonthChartDataModule]
+            
+            var stockDatas = [StockData2]()
+            
+            for key in list {
+                
+                var stockData = StockData2()
+                stockData.text = key
+                
+                charts[key]!({
+                    let chartsModule = ["1y":stock.oneYearChartModule,"5y":stock.fiveYearChartModule,"Max":stock.lifetimeChartModule,"1d":stock.oneDayChartModule,"5d":stock.fiveDayChartModule,"1m":stock.oneMonthChartModule,"3m":stock.threeMonthChartModule]
+                    let asdf: BigBoardChartDataModule? = chartsModule[key]!
+                    
+                    if asdf != nil {
+                        print("key: \(key)")
+                        
+                        for point in (asdf?.dataPoints)! {
+                            
+                            stockData.dates.append(point.date)
+                            stockData.closingPrice.append(point.close)
+                
+                           // print(point.close!)
+                        }
+                        stockDatas.append(stockData)
+                    }
+//                    self.delay(bySeconds: 0.3) {
+
+                    self.keys.append(key)
+                    result((self.keys,stockDatas))
+//                    }
+                    
+                    // oneMonthChartModule is now mapped to the stock
+                }, { (error) in
+                    print(error)
+                    result(([""],[nil]))
+                })
+            }
+        }) { (error) in
+            print(error)
+            result(([""],[nil]))
+        }
+        
+        
+        
+    }
+
     
     
     

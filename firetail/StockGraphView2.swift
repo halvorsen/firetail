@@ -447,50 +447,6 @@ struct StockData2 {
 
 
 //sends the data for each graph to the controller that sends to the view to be initiated//
-func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: [StockData2?]) -> Void) {
-    
-    BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
-        let list = ["1y","5y","Max","1d","5d","1m","3m"]
-        let charts = ["1y":stock.mapOneYearChartDataModule,"5y":stock.mapFiveYearChartDataModule,"Max":stock.mapLifetimeChartDataModule,"1d":stock.mapOneDayChartDataModule,"5d":stock.mapFiveDayChartDataModule,"1m":stock.mapOneMonthChartDataModule,"3m":stock.mapThreeMonthChartDataModule]
-        
-        var stockDatas = [StockData2]()
-        
-        for key in list {
-            var stockData = StockData2()
-            stockData.text = key
-            charts[key]!({
-                let chartsModule = ["1y":stock.oneYearChartModule,"5y":stock.fiveYearChartModule,"Max":stock.lifetimeChartModule,"1d":stock.oneDayChartModule,"5d":stock.fiveDayChartModule,"1m":stock.oneMonthChartModule,"3m":stock.threeMonthChartModule]
-                let asdf: BigBoardChartDataModule? = chartsModule[key]!
-                if asdf != nil {
-                    stockData.closingPrice.removeAll()
-                    stockData.dates.removeAll()
-                    
-                    for point in (asdf?.dataPoints)! {
-                        stockData.dates.append(point.date)
-                        stockData.closingPrice.append(point.close)
-                        
-                    }
-                    stockDatas.append(stockData)
-                }
-                
-                
-                result(stockDatas)
-                
-                
-                // oneMonthChartModule is now mapped to the stock
-            }, { (error) in
-                print(error)
-                result([nil])
-            })
-        }
-    }) { (error) in
-        print(error)
-        result([nil])
-    }
-    
-    
-    
-}
 
 
 

@@ -16,7 +16,6 @@
 		0613068C1E625996008E5898 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0613068B1E625996008E5898 /* Roboto-Regular.ttf */; };
 		0613068E1E626DBA008E5898 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0613068D1E626DBA008E5898 /* Roboto-Bold.ttf */; };
 		061306901E626FC9008E5898 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0613068F1E626FC9008E5898 /* Roboto-Light.ttf */; };
-		063E068A1E5A10FA009A8962 /* StockGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063E06891E5A10FA009A8962 /* StockGraphView.swift */; };
 		0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0672601A1E67BD5B00F54500 /* StockGraphView2.swift */; };
 		069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1211E5382D4003BDFE2 /* AppDelegate.swift */; };
 		069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1231E5382D4003BDFE2 /* GraphViewController.swift */; };
@@ -39,7 +38,6 @@
 		0613068B1E625996008E5898 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		0613068D1E626DBA008E5898 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		0613068F1E626FC9008E5898 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
-		063E06891E5A10FA009A8962 /* StockGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView.swift; sourceTree = "<group>"; };
 		0672601A1E67BD5B00F54500 /* StockGraphView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView2.swift; sourceTree = "<group>"; };
 		069FD11E1E5382D4003BDFE2 /* firetail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = firetail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		069FD1211E5382D4003BDFE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -95,7 +93,6 @@
 				0609E4CE1E649596005965C5 /* LoginViewController.swift */,
 				0609E4A71E632DF4005965C5 /* MainViewController.swift */,
 				0609E4A91E635226005965C5 /* AlertBlockView.swift */,
-				063E06891E5A10FA009A8962 /* StockGraphView.swift */,
 				0672601A1E67BD5B00F54500 /* StockGraphView2.swift */,
 				06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */,
 				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
@@ -265,7 +262,6 @@
 				069FD12A1E5382D4003BDFE2 /* firetail.xcdatamodeld in Sources */,
 				06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */,
 				0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */,
-				063E068A1E5A10FA009A8962 /* StockGraphView.swift in Sources */,
 				0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */,
 				0609E4A81E632DF4005965C5 /* MainViewController.swift in Sources */,
 				069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */,

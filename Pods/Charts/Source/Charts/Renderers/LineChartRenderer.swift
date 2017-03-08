@@ -17,7 +17,7 @@ import CoreGraphics
 #endif
 //Aaron Halvorsen Edit
 public struct PodVariable {
-    public static var gingerBreadMan = [CGMutablePath]()
+    public static var gingerBreadMan = [CGMutablePath]() { didSet { print("ggm");print(gingerBreadMan)}}
 }
 //End Aaron Halvorsen Edit
 
