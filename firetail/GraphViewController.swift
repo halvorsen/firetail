@@ -46,7 +46,7 @@ class GraphViewController: ViewSetup {
     var orderOfGraphs = ["1y":0,"5y":1,"Max":2,"1d":3,"5d":4,"1m":5,"3m":6]
     var orderofGraphsInverse = [Int:String]()
     let orderOfLabels = ["Max":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
-    // var createdList = [String]()
+    var loading = UILabel()
     
     
     override func viewDidLoad() {
@@ -64,6 +64,10 @@ class GraphViewController: ViewSetup {
         addLabel(name: currentPrice, text: "", textColor: .white, textAlignment: .left, fontName: "Roboto-Light", fontSize: 40, x: 60, y: 180, width: 400, height: 106, lines: 1)
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
+        addLabel(name: loading, text: "Loading...", textColor: .white, textAlignment: .center, fontName: "Roboto-Bold", fontSize: 20, x: 0, y: (1334-150), width: 750, height: 150, lines: 1)
+        loading.layer.zPosition = 15
+        loading.alpha = 0.0
+        view.addSubview(loading)
         
         let a = StockData2()
         graphViewSeen = StockGraphView2(stockData: a, key: "", cubic: false)
@@ -90,7 +94,7 @@ class GraphViewController: ViewSetup {
     
     override func viewDidAppear(_ animated: Bool) {
         UIView.animate(withDuration: 0.5) {
-            self.graphViewSeen.alpha = 1.0}
+            self.graphViewSeen.alpha = 1.0; self.loading.alpha = 1.0}
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -127,32 +131,31 @@ class GraphViewController: ViewSetup {
                 newTextKey = xLabel.text!
                 graphViewSeen.xs[orderOfLabels[newTextKey]!].textColor = customColor.yellow
                 layerAnimation.toValue = PodVariable.gingerBreadMan[orderOfGraphs[newTextKey]!]
-                print("key: \(newTextKey)")
-                print(orderOfGraphs)
-                print(orderOfGraphs[newTextKey]!)
+    
                 currentTextKey = newTextKey
                 layer.add(layerAnimation, forKey: nil)
                 graphViewSeen.change.text = Label.changeValues[orderOfGraphs[newTextKey]!]
                 graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs[newTextKey]!]
+                
+                for i in 0..<graphViewSeen.ys.count {
+                    switch i {
+                    case 0: graphViewSeen.ys[i].text = yVals[newTextKey]!.4
+                    case 1: graphViewSeen.ys[i].text = yVals[newTextKey]!.3
+                    case 2: graphViewSeen.ys[i].text = yVals[newTextKey]!.2
+                    case 3: graphViewSeen.ys[i].text = yVals[newTextKey]!.1
+                    case 4: graphViewSeen.ys[i].text = yVals[newTextKey]!.0
+                    default: break
+                    }
+                    
+                }
             }
         }
-        for i in 0..<graphViewSeen.ys.count {
-          //  let y = yVals[newTextKey]!.i
-            switch i {
-            case 0: graphViewSeen.ys[i].text = yVals[newTextKey]!.4
-            case 1: graphViewSeen.ys[i].text = yVals[newTextKey]!.3
-            case 2: graphViewSeen.ys[i].text = yVals[newTextKey]!.2
-            case 3: graphViewSeen.ys[i].text = yVals[newTextKey]!.1
-            case 4: graphViewSeen.ys[i].text = yVals[newTextKey]!.0
-            default: break
-            }
-            
-        }
+        
         
         
     }
-
-
+    
+    
     private func addLabelsAndButtons() {
         
         addButton(name: trade, x: 0, y: 1194, width: 750, height: 1334-1194, title: "TRADE", font: "HelveticaNeue-Bold", fontSize: 18, titleColor: customColor.white, bgColor: customColor.black, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.trade(_:)), addSubview: false, alignment: .center)
@@ -161,38 +164,51 @@ class GraphViewController: ViewSetup {
     var i = 0
     var yVals = [String:(l1:String,l2:String,l3:String,l4:String,l5:String)]()
     
+   
+    
+    
+    
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
-        print("1stockdata count: \(stockData.1.count)")
-        print("1stockdata count keys: \(stockData.0.count)")
-        if stockData.1[i] != nil {
-            let graphView = StockGraphView2(stockData: stockData.1[i]!, key: stockData.0[i], cubic: true)
-            let ma = stockData.1[i]!.closingPrice.max()!
-            let mi = stockData.1[i]!.closingPrice.min()!
-            yVals[orderofGraphsInverse[i]!] = (String(format: "%.1f", ma)+"0", String(format: "%.1f", mi + 3*(ma-mi)/4)+"0", String(format: "%.1f", mi + 2*(ma-mi)/4)+"0",String(format: "%.1f", mi + (ma-mi)/4)+"0",String(format: "%.1f", mi)+"0")
-            graphView.isUserInteractionEnabled = false
+         let serialQueue = DispatchQueue(label: "queuename", qos: DispatchQoS.userInitiated)
+      //  serialQueue.async {
+        if stockData.1[self.i] != nil {
             
-            graphView.frame.origin.x = self.screenWidth
+                let graphView = StockGraphView2(stockData: stockData.1[self.i]!, key: stockData.0[self.i], cubic: true)
             
-            self.view.addSubview(graphView)
+            let ma = stockData.1[self.i]!.closingPrice.max()!
+            let mi = stockData.1[self.i]!.closingPrice.min()!
+            self.yVals[stockData.0[self.i]] = (String(format: "%.1f", ma)+"0", String(format: "%.1f", mi + 3*(ma-mi)/4)+"0", String(format: "%.1f", mi + 2*(ma-mi)/4)+"0",String(format: "%.1f", mi + (ma-mi)/4)+"0",String(format: "%.1f", mi)+"0")
             
-            self.graphViews[stockData.0[i]] = graphView
             
-            if stockData.0[i] == "1d" {
+                graphView.isUserInteractionEnabled = false
                 
-                self.currentPrice.text = String(format: "%.2f", stockData.1[i]!.closingPrice.last!)
-            } else if stockData.0[i] == "3m" {
+                graphView.frame.origin.x = self.screenWidth
                 
-                self.graphViewSeen.countinueBouncing = false
-                self.myTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(GraphViewController.checkDoneSquashing), userInfo: nil, repeats: true)
-            }
-            if i < 6 {
-                i += 1
-                delay(bySeconds: 0.3){
-                    self.implementDrawSubviews(stockData: stockData)}
-            }
-            
+                self.view.addSubview(graphView)
+                
+                self.graphViews[stockData.0[self.i]] = graphView
+                
+                if stockData.0[self.i] == "1d" {
+                    
+                    self.currentPrice.text = String(format: "%.2f", stockData.1[self.i]!.closingPrice.last!)
+                } else if stockData.0[self.i] == "3m" {
+                    
+                    self.graphViewSeen.countinueBouncing = false
+                    self.myTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(GraphViewController.checkDoneSquashing), userInfo: nil, repeats: true)
+                }
+                
+                if self.i < 6 {
+                    self.i += 1
+                      delay(bySeconds: 0.3){
+                    
+                    self.implementDrawSubviews(stockData: stockData)
+                    
+                }
+                 }
+     //       }
         }
-
+        
+        
     }
     
     func showGraph() {
@@ -208,34 +224,27 @@ class GraphViewController: ViewSetup {
             
             
             callCorrectGraph2(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
-                
-                
-                print("2stockdata count: \(stockData.1.count)")
-                print("2stockdata count keys: \(stockData.0.count)")
+
                 if stockData.0.count == 7 { //temp fix, need to fix callcorrectgraph2 to only send once
+                    
                     for i in 0..<stockData.0.count {
                         self.orderOfGraphs[stockData.0[i]] = i
                         self.orderofGraphsInverse[i] = stockData.0[i]
-                        
                     }
-                    print("3stockdata count: \(stockData.1.count)")
-                    print("3stockdata count keys: \(stockData.0.count)")
-                   // self.delay(bySeconds: 0.3){
-                        self.implementDrawSubviews(stockData: stockData)}
-                    print("4stockdata count: \(stockData.1.count)")
-                    print("4stockdata count keys: \(stockData.0.count)")
-                        
-               // }
+
+                     self.delay(bySeconds: 0.3){
+                    self.implementDrawSubviews(stockData: stockData)}
+                
+                 }
             }
         }
     }
     
-                    
-  
+    
+    
     func checkDoneSquashing() {
-        print("POD6")
         if graphViewSeen.doneSquashing {
-            print("POD7")
+            loading.removeFromSuperview()
             add1YGraph()
             myTimer.invalidate()
             for (_,graph) in self.graphViews {
@@ -257,12 +266,12 @@ class GraphViewController: ViewSetup {
     
     
     private func add1YGraph() {
-        print("orderOfGraphs \(orderOfGraphs)")
+        
         if PodVariable.gingerBreadMan.count > 0 {
             animateBase()
             view.addSubview(graphViewSeen)
             
-            layer.path = PodVariable.gingerBreadMan[0]
+            layer.path = PodVariable.gingerBreadMan[orderOfGraphs["1y"]!]
             layer.fillColor = customColor.yellow.cgColor
             layer.shadowColor = customColor.black.cgColor
             layer.shadowOpacity = 1.0
@@ -270,7 +279,6 @@ class GraphViewController: ViewSetup {
             layer.shadowRadius = 10
             layer.transform = CATransform3DMakeScale(1.0, 0.79, 1.0)
             graphViewSeen.layerView.frame = CGRect(x: 0, y: graphViewSeen.bounds.height, width: graphViewSeen.bounds.width, height: 1)
-            //graphViewSeen.layerView.sizeToFit()
             graphViewSeen.layerView.clipsToBounds = true
             
             graphViewSeen.layerView.layer.addSublayer(layer)
@@ -282,7 +290,19 @@ class GraphViewController: ViewSetup {
             view.addSubview(currentPrice)
             view.addSubview(trade)
             view.addSubview(stockHeader)
-
+            
+            for i in 0..<graphViewSeen.ys.count {
+                switch i {
+                case 0: graphViewSeen.ys[i].text = yVals["1y"]!.4
+                case 1: graphViewSeen.ys[i].text = yVals["1y"]!.3
+                case 2: graphViewSeen.ys[i].text = yVals["1y"]!.2
+                case 3: graphViewSeen.ys[i].text = yVals["1y"]!.1
+                case 4: graphViewSeen.ys[i].text = yVals["1y"]!.0
+                default: break
+                }
+                
+            }
+            
             
             UIView.animate(withDuration: 0.6) {self.graphViewSeen.layerView.frame = CGRect(x: 0, y: self.graphViewSeen.bounds.height/10, width: self.graphViewSeen.bounds.width, height: 5*self.graphViewSeen.bounds.height/6); self.trade.alpha = 1.0; self.stockHeader.alpha = 1.0; self.currentPrice.alpha = 1.0}
             
@@ -312,7 +332,7 @@ class GraphViewController: ViewSetup {
         return nil
     }
     var j = 0
-    let serialQueue = DispatchQueue(label: "queuename")
+    // let serialQueue = DispatchQueue(label: "queuename")
     var keys = [String]()
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         print("stockname: \(stockName)")
@@ -340,16 +360,16 @@ class GraphViewController: ViewSetup {
                             
                             stockData.dates.append(point.date)
                             stockData.closingPrice.append(point.close)
-                
-                           // print(point.close!)
+                            
+                            print(point.close!)
                         }
                         stockDatas.append(stockData)
                     }
-//                    self.delay(bySeconds: 0.3) {
-
+                                        self.delay(bySeconds: 0.3) {
+                    
                     self.keys.append(key)
                     result((self.keys,stockDatas))
-//                    }
+                                        }
                     
                     // oneMonthChartModule is now mapped to the stock
                 }, { (error) in
@@ -365,7 +385,7 @@ class GraphViewController: ViewSetup {
         
         
     }
-
+    
     
     
     

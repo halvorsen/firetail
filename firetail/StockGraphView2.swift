@@ -153,6 +153,9 @@ class StockGraphView2: UIView {
     func reduceDataPoints(original: [Double]) -> [Double] {
         let originalAmount = original.count
         var _original = original
+        
+        let last = original.last! //<--added to get the last value equal to last closing price and not average
+        print("last: \(last)")
         let setAmount: Int = originalAmount/15
         var outputValues = [Double](repeating: 0, count: 15)
         
@@ -161,12 +164,21 @@ class StockGraphView2: UIView {
             
         }
         for i in 0..<_original.count {
+            
             let j = Int(i/setAmount)
-            outputValues[j] += _original[i]
-        }
-        let _outputValues = outputValues.map { $0 / 15 }
         
-        return _outputValues
+            if j != 14 { //<--added to get the last value equal to last closing price and not average
+         
+            outputValues[j] += _original[i]
+            }
+        }
+        outputValues[14] += Double(setAmount)*last //<--added to get the last value equal to last closing price and not average
+        print("!!!!!!!!")
+        print(outputValues)
+        let _outputValues = outputValues.map { $0 / Double(setAmount) }
+        print("?????????")
+        print(_outputValues)
+               return _outputValues
         
     }
     
