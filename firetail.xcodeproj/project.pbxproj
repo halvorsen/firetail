@@ -25,6 +25,8 @@
 		069FD12F1E5382D4003BDFE2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */; };
 		069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1361E538926003BDFE2 /* ViewSetup.swift */; };
 		06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */; };
+		06FDA8DC1E7094270043BC90 /* CompareScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8DB1E7094270043BC90 /* CompareScroll.swift */; };
+		06FDA8DE1E711DD90043BC90 /* CompareScroll2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8DD1E711DD90043BC90 /* CompareScroll2.swift */; };
 		0AD139DF73E251FE0D4D3193 /* Pods_firetail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587D23A742B0C36434F2833B /* Pods_firetail.framework */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +51,8 @@
 		069FD1301E5382D4003BDFE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		069FD1361E538926003BDFE2 /* ViewSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewSetup.swift; sourceTree = "<group>"; };
 		06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseOfGraphView.swift; sourceTree = "<group>"; };
+		06FDA8DB1E7094270043BC90 /* CompareScroll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScroll.swift; sourceTree = "<group>"; };
+		06FDA8DD1E711DD90043BC90 /* CompareScroll2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScroll2.swift; sourceTree = "<group>"; };
 		4247F9327201846B6980BFCB /* Pods-firetail.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firetail.release.xcconfig"; path = "Pods/Target Support Files/Pods-firetail/Pods-firetail.release.xcconfig"; sourceTree = "<group>"; };
 		587D23A742B0C36434F2833B /* Pods_firetail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_firetail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D7C2B103539D5E6DBD6614D /* Pods-firetail.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firetail.debug.xcconfig"; path = "Pods/Target Support Files/Pods-firetail/Pods-firetail.debug.xcconfig"; sourceTree = "<group>"; };
@@ -89,9 +93,11 @@
 			children = (
 				069FD1211E5382D4003BDFE2 /* AppDelegate.swift */,
 				069FD1231E5382D4003BDFE2 /* GraphViewController.swift */,
+				0609E4A71E632DF4005965C5 /* MainViewController.swift */,
+				06FDA8DB1E7094270043BC90 /* CompareScroll.swift */,
+				06FDA8DD1E711DD90043BC90 /* CompareScroll2.swift */,
 				0609E4CC1E649578005965C5 /* SignupViewController.swift */,
 				0609E4CE1E649596005965C5 /* LoginViewController.swift */,
-				0609E4A71E632DF4005965C5 /* MainViewController.swift */,
 				0609E4A91E635226005965C5 /* AlertBlockView.swift */,
 				0672601A1E67BD5B00F54500 /* StockGraphView2.swift */,
 				06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */,
@@ -262,10 +268,12 @@
 				069FD12A1E5382D4003BDFE2 /* firetail.xcdatamodeld in Sources */,
 				06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */,
 				0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */,
+				06FDA8DC1E7094270043BC90 /* CompareScroll.swift in Sources */,
 				0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */,
 				0609E4A81E632DF4005965C5 /* MainViewController.swift in Sources */,
 				069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */,
 				069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */,
+				06FDA8DE1E711DD90043BC90 /* CompareScroll2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

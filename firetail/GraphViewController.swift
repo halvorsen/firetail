@@ -49,6 +49,7 @@ class GraphViewController: ViewSetup {
     var loading = UILabel()
     
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         PodVariable.gingerBreadMan.removeAll()
@@ -232,10 +233,10 @@ class GraphViewController: ViewSetup {
                         self.orderofGraphsInverse[i] = stockData.0[i]
                     }
 
-                     self.delay(bySeconds: 0.3){
+                 //    self.delay(bySeconds: 0.3){
                     self.implementDrawSubviews(stockData: stockData)}
                 
-                 }
+             //    }
             }
         }
     }
@@ -355,7 +356,7 @@ class GraphViewController: ViewSetup {
                     
                     if asdf != nil {
                         print("key: \(key)")
-                        
+                        print((asdf?.dataPoints)!.count)
                         for point in (asdf?.dataPoints)! {
                             
                             stockData.dates.append(point.date)
@@ -365,11 +366,11 @@ class GraphViewController: ViewSetup {
                         }
                         stockDatas.append(stockData)
                     }
-                                        self.delay(bySeconds: 0.3) {
+                                  //      self.delay(bySeconds: 0.3) {
                     
                     self.keys.append(key)
                     result((self.keys,stockDatas))
-                                        }
+                                 //       }
                     
                     // oneMonthChartModule is now mapped to the stock
                 }, { (error) in

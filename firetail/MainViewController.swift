@@ -25,6 +25,9 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
     var alerts1102 = UILabel()
     var daysOfTheWeek = UILabel()
     var (alerts, changeEmail, addPhone, changeBroker, legal, support, goPremium) = (UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton())
+    var container = UIView()
+ //   let sv = UIScrollView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = customColor.black33
@@ -53,6 +56,24 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
         
         
         
+        slideView.addSubview(container)
+        container.frame = CGRect(x: 0, y: 86*screenHeight/667, width: screenWidth, height: 259*screenHeight/667)
+        let sv =  CompareScroll(graphData: ([""],[[0.0]]), frame: container.bounds)
+
+        //self.container = sv
+        
+        container.addSubview(sv)
+//        container.backgroundColor = .blue
+
+//        sv.backgroundColor = .green
+//        let blah = UILabel(frame: CGRect(x: 0, y: 40, width: 40, height: 40))
+//        blah.text = "blah"
+//        blah.backgroundColor = .yellow
+//        sv.addSubview(blah)
+        sv.contentSize = CGSize(width: 13*screenWidth/5, height: 259*screenHeight/667)
+       
+        
+        
         
         
         
@@ -62,7 +83,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
         slideView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         view.addSubview(slideView)
         slideView.backgroundColor = customColor.black42
-        myTextField = UITextField(frame: CGRect(x: 0,y: 100,width: screenWidth ,height: 100*screenHeight/1334))
+        myTextField = UITextField(frame: CGRect(x: 0,y: 400,width: screenWidth ,height: 100*screenHeight/1334))
         myTextField.placeholder = "   Enter Stock Ticker To Enter Graph View"
         myTextField.setValue(customColor.yellow, forKeyPath: "_placeholderLabel.textColor")
         myTextField.font = UIFont.systemFont(ofSize: 15)

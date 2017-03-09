@@ -39,6 +39,7 @@ class StockGraphView2: UIView {
     var graphAppearsInView = true
     
     
+    
     // fills the graph view with the uploaded stock data on initialization and loaded by controller //
     func fillChartViewWithSetsOfData(dataPoints: [Double], cubic: Bool = true) {
        
