@@ -58,7 +58,9 @@ class AlertBlockView: UIView {
         self.addSubview(stockPrice)
         addLabel(name: line, text: "", textColor: .clear, textAlignment: .center, fontName: "", fontSize: 1, x: 0, y: 118, width: 750, height: 2, lines: 0)
         line.backgroundColor = customColor.alertLines
+        
         self.addSubview(line)
+    
     }
     
     required init?(coder aDecoder: NSCoder) {

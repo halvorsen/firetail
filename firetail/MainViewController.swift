@@ -25,8 +25,11 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
     var alerts1102 = UILabel()
     var daysOfTheWeek = UILabel()
     var (alerts, changeEmail, addPhone, changeBroker, legal, support, goPremium) = (UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton())
-    var container = UIView()
- //   let sv = UIScrollView()
+    var container = UIScrollView()
+    var alertScroller = UIScrollView()
+    let mask = UIView()
+    var (monthIndicator,stock1,stock2,stock3) = (UILabel(), UILabel(), UILabel(), UILabel())
+    var alertCount: CGFloat = 10
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,39 +56,42 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
         addButton(name: legal, x: 82, y: 1080, width: 280, height: 25, title: "LEGAL", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.legalFunc(_:)), addSubview: true)
         addButton(name: support, x: 82, y: 1160, width: 280, height: 25, title: "SUPPORT", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.supportFunc(_:)), addSubview: true)
         addButton(name: goPremium, x: 82, y: 1240, width: 280, height: 25, title: "GO PREMIUM", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.goPremiumFunc(_:)), addSubview: true)
-        
-        
-        
-        slideView.addSubview(container)
+        let indicator = UILabel(frame: CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: 3*screenWidth/375, height: 258*screenHeight/667))
+        indicator.backgroundColor = customColor.white77
+        slideView.addSubview(indicator)
         container.frame = CGRect(x: 0, y: 86*screenHeight/667, width: screenWidth, height: 259*screenHeight/667)
-        let sv =  CompareScroll(graphData: ([""],[[0.0]]), frame: container.bounds)
-
-        //self.container = sv
-        
+        slideView.addSubview(container)
+        let sv =  CompareScroll(graphData: Set.goog, stockName: "GOOG", color: customColor.white68)
+        let sv1 =  CompareScroll(graphData: Set.fb, stockName: "FB", color: customColor.white128)
+        let sv2 =  CompareScroll(graphData: Set.tsla, stockName: "TSLA", color: customColor.white209)
         container.addSubview(sv)
-//        container.backgroundColor = .blue
-
-//        sv.backgroundColor = .green
-//        let blah = UILabel(frame: CGRect(x: 0, y: 40, width: 40, height: 40))
-//        blah.text = "blah"
-//        blah.backgroundColor = .yellow
-//        sv.addSubview(blah)
-        sv.contentSize = CGSize(width: 13*screenWidth/5, height: 259*screenHeight/667)
-       
+        container.addSubview(sv1)
+        container.addSubview(sv2)
         
         
+        container.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
+        container.showsHorizontalScrollIndicator = false
+        container.showsVerticalScrollIndicator = false
         
         
+        addLabel(name: monthIndicator, text: "MARCH, 2017", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 22, lines: 1)
         
+        addLabel(name: stock1, text: "HOLD: 123.1%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 24, width: 352, height: 48, lines: 0)
+        addLabel(name: stock2, text: "HOLD: 123.1%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 72, width: 352, height: 48, lines: 0)
+        addLabel(name: stock3, text: "HOLD: 123.1%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 120, width: 352, height: 48, lines: 0)
+        for label in [monthIndicator,stock1,stock2,stock3] {
+            slideView.addSubview(label)
+            label.alpha = 0.0
+        }
         
         
         //slideview stuff//
         slideView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         view.addSubview(slideView)
-        slideView.backgroundColor = customColor.black42
+        slideView.backgroundColor = customColor.black33
         myTextField = UITextField(frame: CGRect(x: 0,y: 400,width: screenWidth ,height: 100*screenHeight/1334))
-        myTextField.placeholder = "   Enter Stock Ticker To Enter Graph View"
-        myTextField.setValue(customColor.yellow, forKeyPath: "_placeholderLabel.textColor")
+        myTextField.placeholder = "   Search Ticker"
+        myTextField.setValue(customColor.white68, forKeyPath: "_placeholderLabel.textColor")
         myTextField.font = UIFont.systemFont(ofSize: 15)
         //myTextField.borderStyle = UITextBorderStyle.roundedRect
         myTextField.autocorrectionType = UITextAutocorrectionType.no
@@ -95,7 +101,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
         myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         myTextField.delegate = self
         myTextField.backgroundColor = customColor.background
-        myTextField.textColor = customColor.yellow
+        myTextField.textColor = customColor.white68
         slideView.addSubview(myTextField)
         addButton(name: menu, x: 0, y: 0, width: 116, height: 122, title: "", font: "", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.menuFunc), addSubview: false)
         slideView.addSubview(menu)
@@ -106,15 +112,20 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
         addLabel(name: stockAlerts, text: "Stock Alerts", textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 60, y: 914, width: 300, height: 40, lines: 1)
         slideView.addSubview(stockAlerts)
         let line = UILabel()
-        addLabel(name: line, text: "", textColor: .clear, textAlignment: .center, fontName: "", fontSize: 1, x: 0, y: 970, width: 750, height: 2, lines: 0)
+        addLabel(name: line, text: "", textColor: .clear, textAlignment: .center, fontName: "", fontSize: 1, x: 0, y: 968, width: 750, height: 2, lines: 0)
         line.backgroundColor = customColor.alertLines
         slideView.addSubview(line)
-        let tslaBlock = AlertBlockView(y: 972, stockTicker: "TSLA", currentPrice: "257", sms: true, email: false, push: true, urgent: false)
-        slideView.addSubview(tslaBlock)
-        let fbBlock = AlertBlockView(y: 1092, stockTicker: "FB", currentPrice: "135", sms: false, email: false, push: false, urgent: true)
-        slideView.addSubview(fbBlock)
-        let googBlock = AlertBlockView(y: 1212, stockTicker: "GOOG", currentPrice: "828", sms: true, email: true, push: true, urgent: true)
-        slideView.addSubview(googBlock)
+        alertScroller.frame = CGRect(x: 0, y: 970*screenHeight/1334, width: screenWidth, height: (1334-750)*screenHeight/1334)
+        alertScroller.contentSize = CGSize(width: screenWidth, height: alertCount*120*screenHeight/1334)
+        slideView.addSubview(alertScroller)
+        
+        let tslaBlock = AlertBlockView(y: 0, stockTicker: "TSLA", currentPrice: "257", sms: true, email: false, push: true, urgent: false)
+        alertScroller.addSubview(tslaBlock)
+        let fbBlock = AlertBlockView(y: 120, stockTicker: "FB", currentPrice: "135", sms: false, email: false, push: false, urgent: true)
+        alertScroller.addSubview(fbBlock)
+        let googBlock = AlertBlockView(y: 240, stockTicker: "GOOG", currentPrice: "828", sms: true, email: true, push: true, urgent: true)
+        
+        alertScroller.addSubview(googBlock)
         slideView.layer.shadowColor = UIColor.black.cgColor
         slideView.layer.shadowOpacity = 1
         slideView.layer.shadowOffset = CGSize.zero
@@ -123,7 +134,16 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
         returnPan = UIPanGestureRecognizer(target: self, action: #selector(MainViewController.menuReturnFunc(_:)))
         returnSwipe = UISwipeGestureRecognizer(target: self, action: #selector(MainViewController.menuReturnFunc(_:)))
         
-
+        mask.frame = container.bounds
+        mask.backgroundColor = customColor.black33
+        container.addSubview(mask)
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        UIView.animate(withDuration: 2.0) {
+            self.mask.frame.origin.x += 2.5*11*self.screenWidth/5; self.monthIndicator.alpha = 1.0; self.stock3.alpha = 1.0; self.stock2.alpha = 1.0; self.stock1.alpha = 1.0}
     }
     
     @objc private func alertsFunc(_ sender: UIButton) {
@@ -150,7 +170,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
     
     func menuFunc() {
         if slideView.frame.origin.x == 0 {
-        UIView.animate(withDuration: 0.5) {self.slideView.frame.origin.x += 516*self.screenWidth/750}
+            UIView.animate(withDuration: 0.5) {self.slideView.frame.origin.x += 516*self.screenWidth/750}
             
             slideView.addGestureRecognizer(returnTap)
             slideView.addGestureRecognizer(returnSwipe)
@@ -185,9 +205,9 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
         }
         return false
     }
-
-
-
+    
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let graphView: GraphViewController = segue.destination as! GraphViewController
@@ -199,5 +219,5 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
     @objc private func goToGraph() {
         self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
     }
-
+    
 }

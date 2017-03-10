@@ -47,7 +47,7 @@ class GraphViewController: ViewSetup {
     var orderofGraphsInverse = [Int:String]()
     let orderOfLabels = ["Max":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
     var loading = UILabel()
-    
+
     
     
     override func viewDidLoad() {
@@ -74,7 +74,7 @@ class GraphViewController: ViewSetup {
         graphViewSeen = StockGraphView2(stockData: a, key: "", cubic: false)
         
         graphViewSeen.xs[2].textColor = customColor.yellow
-        
+
         
         
     }
@@ -96,6 +96,8 @@ class GraphViewController: ViewSetup {
     override func viewDidAppear(_ animated: Bool) {
         UIView.animate(withDuration: 0.5) {
             self.graphViewSeen.alpha = 1.0; self.loading.alpha = 1.0}
+        
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -309,7 +311,7 @@ class GraphViewController: ViewSetup {
             
             
         } else {
-            delay(bySeconds: 0.1) {self.add1YGraph()}
+            delay(bySeconds: 0.2) {self.add1YGraph()}
         }
         
     }
@@ -356,13 +358,13 @@ class GraphViewController: ViewSetup {
                     
                     if asdf != nil {
                         print("key: \(key)")
-                        print((asdf?.dataPoints)!.count)
+                   
                         for point in (asdf?.dataPoints)! {
                             
                             stockData.dates.append(point.date)
                             stockData.closingPrice.append(point.close)
                             
-                            print(point.close!)
+                            print("\(point.close!)" + ",")
                         }
                         stockDatas.append(stockData)
                     }
