@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainViewController: ViewSetup, UITextFieldDelegate {
+class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     
     var myTextField = UITextField()
     var stringToPass = "Patriots"
@@ -26,15 +26,27 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
     var daysOfTheWeek = UILabel()
     var (alerts, changeEmail, addPhone, changeBroker, legal, support, goPremium) = (UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton())
     var container = UIScrollView()
+    var container2 = UIScrollView()
     var alertScroller = UIScrollView()
     let mask = UIView()
     var (monthIndicator,stock1,stock2,stock3) = (UILabel(), UILabel(), UILabel(), UILabel())
     var alertCount: CGFloat = 10
+    var dots = [Dot]()
+    let indicatorDotWidth: CGFloat = 33
+    var sv =  CompareScroll()
+    var sv1 =  CompareScroll()
+    var sv2 =  CompareScroll()
+    var svs = [CompareScroll]()
+    var svDot =  CompareScrollDot()
+    var svDot1 =  CompareScrollDot()
+    var svDot2 =  CompareScrollDot()
+    var svsDot = [CompareScrollDot]()
+    var myTimer = Timer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = customColor.black33
-        //menu stuff//
+        svs = [sv,sv1,sv2]
         addLabel(name: date, text: "12 June", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 124, width: 150, height: 32, lines: 1)
         view.addSubview(date)
         addLabel(name: alertAmount, text: "24", textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
@@ -56,14 +68,18 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
         addButton(name: legal, x: 82, y: 1080, width: 280, height: 25, title: "LEGAL", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.legalFunc(_:)), addSubview: true)
         addButton(name: support, x: 82, y: 1160, width: 280, height: 25, title: "SUPPORT", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.supportFunc(_:)), addSubview: true)
         addButton(name: goPremium, x: 82, y: 1240, width: 280, height: 25, title: "GO PREMIUM", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.goPremiumFunc(_:)), addSubview: true)
-        let indicator = UILabel(frame: CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: 3*screenWidth/375, height: 258*screenHeight/667))
+        let indicator = UILabel(frame: CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667))
         indicator.backgroundColor = customColor.white77
         slideView.addSubview(indicator)
         container.frame = CGRect(x: 0, y: 86*screenHeight/667, width: screenWidth, height: 259*screenHeight/667)
         slideView.addSubview(container)
-        let sv =  CompareScroll(graphData: Set.goog, stockName: "GOOG", color: customColor.white68)
-        let sv1 =  CompareScroll(graphData: Set.fb, stockName: "FB", color: customColor.white128)
-        let sv2 =  CompareScroll(graphData: Set.tsla, stockName: "TSLA", color: customColor.white209)
+        container.delegate = self
+        sv =  CompareScroll(graphData: Set.goog, stockName: "GOOG", color: customColor.white68)
+        sv1 =  CompareScroll(graphData: Set.fb, stockName: "FB", color: customColor.white128)
+        sv2 =  CompareScroll(graphData: Set.tsla, stockName: "TSLA", color: customColor.white209)
+        svDot =  CompareScrollDot(graphData: Set.goog, stockName: "GOOG", color: customColor.white68)
+        svDot1 =  CompareScrollDot(graphData: Set.fb, stockName: "FB", color: customColor.white128)
+        svDot2 =  CompareScrollDot(graphData: Set.tsla, stockName: "TSLA", color: customColor.white209)
         container.addSubview(sv)
         container.addSubview(sv1)
         container.addSubview(sv2)
@@ -74,14 +90,17 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
         container.showsVerticalScrollIndicator = false
         
         
-        addLabel(name: monthIndicator, text: "MARCH, 2017", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 22, lines: 1)
+        addLabel(name: monthIndicator, text: "March, 2016", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 22, lines: 1)
         
-        addLabel(name: stock1, text: "HOLD: 123.1%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 24, width: 352, height: 48, lines: 0)
-        addLabel(name: stock2, text: "HOLD: 123.1%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 72, width: 352, height: 48, lines: 0)
-        addLabel(name: stock3, text: "HOLD: 123.1%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 120, width: 352, height: 48, lines: 0)
+        addLabel(name: stock1, text: "\(sv.stock): 0.0%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 24, width: 352, height: 48, lines: 0)
+        addLabel(name: stock2, text: "\(sv1.stock): 0.0%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 72, width: 352, height: 48, lines: 0)
+        addLabel(name: stock3, text: "\(sv2.stock): 0.0%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 120, width: 352, height: 48, lines: 0)
         for label in [monthIndicator,stock1,stock2,stock3] {
             slideView.addSubview(label)
             label.alpha = 0.0
+
+            
+            
         }
         
         
@@ -134,16 +153,92 @@ class MainViewController: ViewSetup, UITextFieldDelegate {
         returnPan = UIPanGestureRecognizer(target: self, action: #selector(MainViewController.menuReturnFunc(_:)))
         returnSwipe = UISwipeGestureRecognizer(target: self, action: #selector(MainViewController.menuReturnFunc(_:)))
         
-        mask.frame = container.bounds
+        
+        
+        
+//        for i in 0...2 {
+//            let dot: Dot = Dot(frame: CGRect(x: 0, y: 0, width: indicatorDotWidth*screenWidth/750, height: indicatorDotWidth*screenWidth/750))
+//            dot.layer.zPosition = 12
+//            slideView.addSubview(dot)
+//            dots.append(dot)
+//        }
+        
+        container2.frame = CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667)
+        container2.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
+        slideView.addSubview(container2)
+        container2.addSubview(svDot)
+        container2.addSubview(svDot1)
+        container2.addSubview(svDot2)
+        
+        
+        mask.frame = container.frame
         mask.backgroundColor = customColor.black33
-        container.addSubview(mask)
+        slideView.addSubview(mask)
         
-        
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print(scrollView.contentOffset.x)
+        container2.setContentOffset(scrollView.contentOffset, animated: false)
+        let months = ["March, 2016", "April, 2016", "May, 2016", "June, 2016", "July, 2016", "August, 2016", "September, 2016", "October, 2016", "November, 2016", "December, 2016", "January, 2017", "February, 2017"]
+        for i in 1...12 {
+            if scrollView.contentSize.width*CGFloat(i-1)/12...scrollView.contentSize.width*CGFloat(i)/12 ~= scrollView.contentOffset.x {
+                stock1.text = "\(sv.stock): \(sv.percentSet[i-1])%"
+                stock2.text = "\(sv1.stock): \(sv1.percentSet[i-1])%"
+                stock3.text = "\(sv2.stock): \(sv2.percentSet[i-1])%"
+                monthIndicator.text = "\(months[i])"
+                
+                let array = [sv.percentSetVal[i-1],sv1.percentSetVal[i-1],sv2.percentSetVal[i-1]].sorted { $0 > $1 }
+                UIView.animate(withDuration: 0.5) {
+                if self.sv.percentSetVal[i-1] > self.sv1.percentSetVal[i-1] {
+                    if self.sv.percentSetVal[i-1] > self.sv2.percentSetVal[i-1] {
+                        self.stock1.frame.origin.y = 24*self.screenHeight/1334
+                        if self.sv1.percentSetVal[i-1] > self.sv2.percentSetVal[i-1] {
+                            self.stock2.frame.origin.y = 72*self.screenHeight/1334
+                            self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                        } else {
+                            self.stock3.frame.origin.y = 72*self.screenHeight/1334
+                            self.stock2.frame.origin.y = 120*self.screenHeight/1334
+                        }
+                    } else {
+                        self.stock3.frame.origin.y = 24*self.screenHeight/1334
+                        self.stock1.frame.origin.y = 72*self.screenHeight/1334
+                        self.stock2.frame.origin.y = 120*self.screenHeight/1334
+                    }
+                } else {
+                    if self.sv.percentSetVal[i-1] > self.sv2.percentSetVal[i-1] {
+                        self.stock1.frame.origin.y = 72*self.screenHeight/1334
+                        if self.sv1.percentSetVal[i-1] > self.sv2.percentSetVal[i-1] {
+                            self.stock2.frame.origin.y = 24*self.screenHeight/1334
+                            self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                        } else {
+                            self.stock2.frame.origin.y = 120*self.screenHeight/1334
+                            self.stock3.frame.origin.y = 24*self.screenHeight/1334
+                        }
+                    }
+                }
+                    }
+                break
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         UIView.animate(withDuration: 2.0) {
             self.mask.frame.origin.x += 2.5*11*self.screenWidth/5; self.monthIndicator.alpha = 1.0; self.stock3.alpha = 1.0; self.stock2.alpha = 1.0; self.stock1.alpha = 1.0}
+        print(container.contentOffset.x)
+        runSearch()
+        
+        self.myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(MainViewController.updateDot), userInfo: nil, repeats: true)
+        
+        
+    }
+    
+    func updateDot() {
+        container2.setContentOffset(container.contentOffset, animated: false)
+    }
+    func runSearch() {
+        
     }
     
     @objc private func alertsFunc(_ sender: UIButton) {

@@ -192,3 +192,91 @@ class ViewSetup: UIViewController {
     }
 
 }
+
+//extension CGPath {
+//    
+//    func forEach( body: @convention(block) (CGPathElement) -> Void) {
+//        typealias Body = @convention(block) (CGPathElement) -> Void
+//        let callback: @convention(c) (UnsafeMutableRawPointer, UnsafePointer<CGPathElement>) -> Void = { (info, element) in
+//            let body = unsafeBitCast(info, to: Body.self)
+//            body(element.pointee)
+//        }
+//        print(MemoryLayout.size(ofValue: body))
+//        let unsafeBody = unsafeBitCast(body, to: UnsafeMutableRawPointer.self)
+//        self.apply(info: unsafeBody, function: unsafeBitCast(callback, to: CGPathApplierFunction.self))
+//    }
+//    
+//    
+//    func getPathElementsPoints() -> [CGPoint] {
+//        var arrayPoints : [CGPoint]! = [CGPoint]()
+//        self.forEach { element in
+//
+//            //print("elementPoints: \(element.points)")
+//            switch (element.type) {
+//            case CGPathElementType.moveToPoint:
+//                arrayPoints.append(element.points[0])
+//            case .addLineToPoint:
+//                arrayPoints.append(element.points[0])
+//            case .addQuadCurveToPoint:
+//                arrayPoints.append(element.points[0])
+//                arrayPoints.append(element.points[1])
+//            case .addCurveToPoint:
+//                arrayPoints.append(element.points[0])
+//                arrayPoints.append(element.points[1])
+//                arrayPoints.append(element.points[2])
+//            default: break
+//            }
+//        }
+//        return arrayPoints
+//    }
+//    
+//    func getPathElementsPointsAndTypes() -> ([CGPoint],[CGPathElementType]) {
+//        var arrayPoints : [CGPoint]! = [CGPoint]()
+//        var arrayTypes : [CGPathElementType]! = [CGPathElementType]()
+//        self.forEach { element in
+//            switch (element.type) {
+//            case CGPathElementType.moveToPoint:
+//                arrayPoints.append(element.points[0])
+//                arrayTypes.append(element.type)
+//            case .addLineToPoint:
+//                arrayPoints.append(element.points[0])
+//                arrayTypes.append(element.type)
+//            case .addQuadCurveToPoint:
+//                arrayPoints.append(element.points[0])
+//                arrayPoints.append(element.points[1])
+//                arrayTypes.append(element.type)
+//                arrayTypes.append(element.type)
+//            case .addCurveToPoint:
+//                arrayPoints.append(element.points[0])
+//                arrayPoints.append(element.points[1])
+//                arrayPoints.append(element.points[2])
+//                arrayTypes.append(element.type)
+//                arrayTypes.append(element.type)
+//                arrayTypes.append(element.type)
+//            default: break
+//            }
+//        }
+//        return (arrayPoints,arrayTypes)
+//    }
+//}
+
+//extension CALayer {
+//    
+//    func valueOfRedNumerator255AtPoint(point:CGPoint) -> Int16 {
+//        
+//        var pixel: [CUnsignedChar] = [0, 0, 0, 0]
+//        
+//        let colorSpace = CGColorSpaceCreateDeviceRGB()
+//        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+//        
+//        let context = CGContext(data: &pixel, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
+//        
+//        context!.translateBy(x: -point.x, y: -point.y)
+//        
+//        self.render(in: context!)
+//        
+//        let red: CGFloat   = CGFloat(pixel[0]) / 255.0
+//        
+//        return Int16(pixel[0])
+//    }
+//}

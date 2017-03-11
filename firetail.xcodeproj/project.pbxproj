@@ -17,6 +17,7 @@
 		0613068E1E626DBA008E5898 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0613068D1E626DBA008E5898 /* Roboto-Bold.ttf */; };
 		061306901E626FC9008E5898 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0613068F1E626FC9008E5898 /* Roboto-Light.ttf */; };
 		0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0672601A1E67BD5B00F54500 /* StockGraphView2.swift */; };
+		068D8D251E72F0D700E422DB /* Dot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068D8D241E72F0D700E422DB /* Dot.swift */; };
 		069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1211E5382D4003BDFE2 /* AppDelegate.swift */; };
 		069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1231E5382D4003BDFE2 /* GraphViewController.swift */; };
 		069FD1271E5382D4003BDFE2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD1251E5382D4003BDFE2 /* Main.storyboard */; };
@@ -24,9 +25,9 @@
 		069FD12C1E5382D4003BDFE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 069FD12B1E5382D4003BDFE2 /* Assets.xcassets */; };
 		069FD12F1E5382D4003BDFE2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */; };
 		069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1361E538926003BDFE2 /* ViewSetup.swift */; };
+		06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC27071E7319F700041D1F /* CompareScrollDot.swift */; };
 		06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */; };
 		06FDA8DC1E7094270043BC90 /* CompareScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8DB1E7094270043BC90 /* CompareScroll.swift */; };
-		06FDA8DE1E711DD90043BC90 /* CompareScroll2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8DD1E711DD90043BC90 /* CompareScroll2.swift */; };
 		06FDA8E01E71B9960043BC90 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8DF1E71B9960043BC90 /* Set.swift */; };
 		0AD139DF73E251FE0D4D3193 /* Pods_firetail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587D23A742B0C36434F2833B /* Pods_firetail.framework */; };
 /* End PBXBuildFile section */
@@ -42,6 +43,7 @@
 		0613068D1E626DBA008E5898 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		0613068F1E626FC9008E5898 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
 		0672601A1E67BD5B00F54500 /* StockGraphView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView2.swift; sourceTree = "<group>"; };
+		068D8D241E72F0D700E422DB /* Dot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dot.swift; sourceTree = "<group>"; };
 		069FD11E1E5382D4003BDFE2 /* firetail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = firetail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		069FD1211E5382D4003BDFE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		069FD1231E5382D4003BDFE2 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
@@ -51,9 +53,9 @@
 		069FD12E1E5382D4003BDFE2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		069FD1301E5382D4003BDFE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		069FD1361E538926003BDFE2 /* ViewSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewSetup.swift; sourceTree = "<group>"; };
+		06AC27071E7319F700041D1F /* CompareScrollDot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScrollDot.swift; sourceTree = "<group>"; };
 		06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseOfGraphView.swift; sourceTree = "<group>"; };
 		06FDA8DB1E7094270043BC90 /* CompareScroll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScroll.swift; sourceTree = "<group>"; };
-		06FDA8DD1E711DD90043BC90 /* CompareScroll2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScroll2.swift; sourceTree = "<group>"; };
 		06FDA8DF1E71B9960043BC90 /* Set.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
 		4247F9327201846B6980BFCB /* Pods-firetail.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firetail.release.xcconfig"; path = "Pods/Target Support Files/Pods-firetail/Pods-firetail.release.xcconfig"; sourceTree = "<group>"; };
 		587D23A742B0C36434F2833B /* Pods_firetail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_firetail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,9 +98,10 @@
 				069FD1211E5382D4003BDFE2 /* AppDelegate.swift */,
 				069FD1231E5382D4003BDFE2 /* GraphViewController.swift */,
 				0609E4A71E632DF4005965C5 /* MainViewController.swift */,
+				068D8D241E72F0D700E422DB /* Dot.swift */,
 				06FDA8DB1E7094270043BC90 /* CompareScroll.swift */,
+				06AC27071E7319F700041D1F /* CompareScrollDot.swift */,
 				06FDA8DF1E71B9960043BC90 /* Set.swift */,
-				06FDA8DD1E711DD90043BC90 /* CompareScroll2.swift */,
 				0609E4CC1E649578005965C5 /* SignupViewController.swift */,
 				0609E4CE1E649596005965C5 /* LoginViewController.swift */,
 				0609E4A91E635226005965C5 /* AlertBlockView.swift */,
@@ -268,16 +271,17 @@
 				06FDA8E01E71B9960043BC90 /* Set.swift in Sources */,
 				0609E4CF1E649596005965C5 /* LoginViewController.swift in Sources */,
 				0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */,
+				068D8D251E72F0D700E422DB /* Dot.swift in Sources */,
 				069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */,
 				069FD12A1E5382D4003BDFE2 /* firetail.xcdatamodeld in Sources */,
 				06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */,
 				0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */,
 				06FDA8DC1E7094270043BC90 /* CompareScroll.swift in Sources */,
+				06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */,
 				0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */,
 				0609E4A81E632DF4005965C5 /* MainViewController.swift in Sources */,
 				069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */,
 				069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */,
-				06FDA8DE1E711DD90043BC90 /* CompareScroll2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

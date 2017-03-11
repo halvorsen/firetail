@@ -12,7 +12,7 @@
 
 import UIKit
 
-class CompareScroll: UIView {
+class CompareScrollDot: UIView {
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -23,15 +23,11 @@ class CompareScroll: UIView {
     var passedColor = UIColor()
     let rangeMultiplier: CGFloat = 10
     let scale: CGFloat = 2.5
-    var stock = ""
-    var percentSet = [String]()
-    var percentSetVal = [CGFloat]()
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
-    init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: 259*UIScreen.main.bounds.height/667)) {
+    init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13 - 267*UIScreen.main.bounds.width/375, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: 259*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
-        stock = stockName
         self.backgroundColor = .clear
         passedColor = color
         var _set = [CGFloat]()
@@ -41,8 +37,6 @@ class CompareScroll: UIView {
         print("_set: \(_set)")
         
         _set = _set.map { $0 * rangeMultiplier / _set.first! }
-        percentSet = _set.map { String(format: "%.1f", $0 * 10 - 100 ) }
-        percentSetVal = _set.map { $0 * 10 - 100 }
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
         print("__set: \(__set)")
         data = __set
@@ -60,15 +54,11 @@ class CompareScroll: UIView {
         ctx!.translateBy(x: 0, y: (self.bounds.height/2 - (__set.last! - __set.first!)*45))   ///need to figure out what is conroling the scaling to do it automatically
         ctx!.scaleBy(x: scale, y: scale)
         let path = quadCurvedPath()
-        
-        
-        customColor.black33.setStroke()
-        path.lineWidth = 10/scale
+               
+        UIColor.white.setStroke()
+        path.lineWidth = 6/scale
         path.stroke()
-        
-        passedColor.setStroke()
-        path.lineWidth = 4/scale
-        path.stroke()
+     
         
         
     }
@@ -96,7 +86,7 @@ class CompareScroll: UIView {
         var p1 = CGPoint(x: 0, y: coordXFor(index: 0))
         path.move(to: p1)
         
-//        drawPoint(point: p1, color: .clear, radius: 3)
+       // drawPoint(point: p1, color: .clear, radius: 3)
         
         if (data.count == 2) {
             path.addLine(to: CGPoint(x: step, y: coordXFor(index: 1)))
@@ -107,7 +97,7 @@ class CompareScroll: UIView {
         
         for i in 1..<data.count {
             let p2 = CGPoint(x: step * CGFloat(i), y: coordXFor(index: i))
-//            drawPoint(point: p2, color: customColor.fieldLines, radius: 3)
+        //    drawPoint(point: p2, color: customColor.fieldLines, radius: 3)
             var p3: CGPoint?
             if i == data.count - 1 {
                 p3 = nil
