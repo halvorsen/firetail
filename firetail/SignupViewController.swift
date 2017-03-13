@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BigBoard
 
 class SignupViewController: ViewSetup, UITextFieldDelegate {
     var customColor = CustomColor()
@@ -15,8 +16,23 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     var continueB = UIButton()
     var createAccount = UILabel()
     var myTextFields = [UITextField]()
+    var doneLoading = false
+    var progressHUD = ProgressHUD(text: "Loading")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        for stock in ["t","k","fig"] {
+            getOneMonthData(stockName: stock) {
+                
+                Set.oneYearDictionary[$1] = $0
+                if stock == "fig" {
+                    self.doneLoading = true
+                }
+            }
+            
+        }
+
         view.backgroundColor = customColor.black33
         var logo = UIImageView(frame: CGRect(x: screenWidth/2 - 93*screenHeight/1334, y: 42*screenHeight/667, width: 93*screenHeight/667, height: 119*screenHeight/667))
         logo.image = #imageLiteral(resourceName: "logo93x119")
@@ -33,6 +49,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         arrowView.image = #imageLiteral(resourceName: "forwardarrow")
         view.addSubview(arrowView)
         addLabel(name: createAccount, text: "CREATE ACCOUNT", textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 80, y: 624, width: 360, height: 30, lines: 1)
+        view.addSubview(createAccount)
         for i in 0...2 {
             let line = UILabel(frame: CGRect(x: 38*screenWidth/375, y: 408*screenHeight/667 + CGFloat(i)*60*screenHeight/667, width: 300*screenWidth/375, height: 2*screenHeight/667))
             line.backgroundColor = customColor.fieldLines
@@ -69,7 +86,19 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         
     }
     @objc private func continueFunc(_ sender: UIButton) {
+        if doneLoading { // check if alert stocks have loaded
         self.performSegue(withIdentifier: "fromSignupToMain", sender: self)
+        } else {
+               self.view.addSubview(progressHUD)
+            let myTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(SignupViewController.checkIfDone), userInfo: nil, repeats: true)
+        }
+        
+    }
+    
+    func checkIfDone() {
+        if doneLoading {
+            self.performSegue(withIdentifier: "fromSignupToMain", sender: self)
+        }
         
     }
     
@@ -82,6 +111,40 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
            
         }
         return false
+    }
+    
+    func getOneMonthData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
+        print("stockname: \(stockName)")
+        BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
+            
+            var stockData = [Double]()
+            
+            stock.mapOneYearChartDataModule({
+                
+                print("stockname: \(stockName)")
+                
+                for point in (stock.oneYearChartModule?.dataPoints)! {
+                    
+                    // stockData.dates.append(point.date)
+                    stockData.append(point.close)
+                    
+                    print("\(point.close!)" + ",")
+                }
+                
+                result(stockData, stockName)
+                
+            }, failure: { (error) in
+                print(error)
+                result(nil, stockName)
+            })
+            
+        }) { (error) in
+            print(error)
+            result(nil, stockName)
+        }
+        
+        
+        
     }
     
     

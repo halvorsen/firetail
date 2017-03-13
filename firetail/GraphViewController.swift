@@ -103,6 +103,7 @@ class GraphViewController: ViewSetup {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let mainView: MainViewController = segue.destination as! MainViewController
     }
+
     
     @objc private func back(_ sender: UIButton) {
         self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
@@ -227,18 +228,18 @@ class GraphViewController: ViewSetup {
             
             
             callCorrectGraph2(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
-
+                
                 if stockData.0.count == 7 { //temp fix, need to fix callcorrectgraph2 to only send once
                     
                     for i in 0..<stockData.0.count {
                         self.orderOfGraphs[stockData.0[i]] = i
                         self.orderofGraphsInverse[i] = stockData.0[i]
                     }
-
-                 //    self.delay(bySeconds: 0.3){
+                    
+                    //    self.delay(bySeconds: 0.3){
                     self.implementDrawSubviews(stockData: stockData)}
                 
-             //    }
+                //    }
             }
         }
     }

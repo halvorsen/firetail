@@ -30,6 +30,27 @@
             </objects>
             <point key="canvasLocation" x="-1966" y="991"/>
         </scene>
+        <!--Add View Controller-->
+        <scene sceneID="CzO-Gj-xMU">
+            <objects>
+                <viewController id="VGb-5b-ve2" customClass="AddViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TOR-lR-XqF"/>
+                        <viewControllerLayoutGuide type="bottom" id="8Jc-IY-J25"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xt1-Gd-OMC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="9Rf-87-nHj" kind="show" identifier="fromAddToMain" id="EQX-Ew-9w8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jdV-Fo-qzU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-785" y="-765"/>
+        </scene>
         <!--Signup View Controller-->
         <scene sceneID="gQK-Yt-OFO">
             <objects>
@@ -67,6 +88,7 @@
                     </view>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="fromMainToGraph" id="Zxg-fl-6EZ"/>
+                        <segue destination="VGb-5b-ve2" kind="show" identifier="fromMainToAdd" id="cxp-Cj-N2o"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hb6-AR-41S" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -96,6 +118,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="EgL-kb-EF7"/>
+        <segue reference="EQX-Ew-9w8"/>
     </inferredMetricsTieBreakers>
 </document>

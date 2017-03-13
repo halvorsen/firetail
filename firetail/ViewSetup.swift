@@ -37,6 +37,14 @@ struct CustomColor {
     var white68 = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 1.0)
     //white77
     var white77 = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1.0)
+    //white216
+    var white216 = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
+    //white153
+    var white153 = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
+    //white115
+    var white115 = UIColor(red: 115/255, green: 115/255, blue: 115/255, alpha: 1.0)
+    //white229
+    var white229 = UIColor(red: 229/255, green: 229/255, blue: 229/255, alpha: 1.0)
     
     
     //labelGray

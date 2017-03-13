@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import BigBoard
+import Charts
 
 class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     
@@ -45,6 +47,8 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         self.view.backgroundColor = customColor.black33
         svs = [sv,sv1,sv2]
         addLabel(name: date, text: "12 June", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 124, width: 150, height: 32, lines: 1)
@@ -74,12 +78,12 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         container.frame = CGRect(x: 0, y: 86*screenHeight/667, width: screenWidth, height: 259*screenHeight/667)
         slideView.addSubview(container)
         container.delegate = self
-        sv =  CompareScroll(graphData: Set.goog, stockName: "GOOG", color: customColor.white68)
-        sv1 =  CompareScroll(graphData: Set.fb, stockName: "FB", color: customColor.white128)
-        sv2 =  CompareScroll(graphData: Set.tsla, stockName: "TSLA", color: customColor.white209)
-        svDot =  CompareScrollDot(graphData: Set.goog, stockName: "GOOG", color: customColor.white68)
-        svDot1 =  CompareScrollDot(graphData: Set.fb, stockName: "FB", color: customColor.white128)
-        svDot2 =  CompareScrollDot(graphData: Set.tsla, stockName: "TSLA", color: customColor.white209)
+        sv =  CompareScroll(graphData: Set.oneYearDictionary["t"]!, stockName: "T", color: customColor.white68)
+        sv1 =  CompareScroll(graphData: Set.oneYearDictionary["k"]!, stockName: "K", color: customColor.white128)
+        sv2 =  CompareScroll(graphData: Set.oneYearDictionary["fig"]!, stockName: "FIG", color: customColor.white209)
+        svDot =  CompareScrollDot(graphData: Set.oneYearDictionary["t"]!, stockName: "T", color: customColor.white68)
+        svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary["k"]!, stockName: "K", color: customColor.white128)
+        svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary["fig"]!, stockName: "FIG", color: customColor.white209)
         container.addSubview(sv)
         container.addSubview(sv1)
         container.addSubview(sv2)
@@ -164,6 +168,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
 //        }
         
         container2.frame = CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667)
+        container2.isUserInteractionEnabled = false
         container2.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
         slideView.addSubview(container2)
         container2.addSubview(svDot)
@@ -182,11 +187,11 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         container2.setContentOffset(scrollView.contentOffset, animated: false)
         let months = ["March, 2016", "April, 2016", "May, 2016", "June, 2016", "July, 2016", "August, 2016", "September, 2016", "October, 2016", "November, 2016", "December, 2016", "January, 2017", "February, 2017"]
         for i in 1...12 {
-            if scrollView.contentSize.width*CGFloat(i-1)/12...scrollView.contentSize.width*CGFloat(i)/12 ~= scrollView.contentOffset.x {
+            if scrollView.contentSize.width*CGFloat(Double(i)-2.2)/12...scrollView.contentSize.width*CGFloat(Double(i)-1.2)/12 ~= scrollView.contentOffset.x {
                 stock1.text = "\(sv.stock): \(sv.percentSet[i-1])%"
                 stock2.text = "\(sv1.stock): \(sv1.percentSet[i-1])%"
                 stock3.text = "\(sv2.stock): \(sv2.percentSet[i-1])%"
-                monthIndicator.text = "\(months[i])"
+                monthIndicator.text = "\(months[i-1])"
                 
                 let array = [sv.percentSetVal[i-1],sv1.percentSetVal[i-1],sv2.percentSetVal[i-1]].sorted { $0 > $1 }
                 UIView.animate(withDuration: 0.5) {
@@ -265,28 +270,35 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     
     func menuFunc() {
         if slideView.frame.origin.x == 0 {
-            UIView.animate(withDuration: 0.5) {self.slideView.frame.origin.x += 516*self.screenWidth/750}
+            UIView.animate(withDuration: 0.3) {self.slideView.frame.origin.x += 516*self.screenWidth/750}
             
             slideView.addGestureRecognizer(returnTap)
             slideView.addGestureRecognizer(returnSwipe)
             slideView.addGestureRecognizer(returnPan)
+            container.isUserInteractionEnabled = false
             
             
-        }
-    }
-    func menuReturnFunc(_ gesture: UIGestureRecognizer) {
-        if slideView.frame.origin.x != 0 {
-            
-            UIView.animate(withDuration: 0.5) {self.slideView.frame.origin.x -= 516*self.screenWidth/750}
+        } else if slideView.frame.origin.x == 516*self.screenWidth/750 {
+            UIView.animate(withDuration: 0.3) {self.slideView.frame.origin.x -= 516*self.screenWidth/750}
             slideView.removeGestureRecognizer(returnTap)
             slideView.removeGestureRecognizer(returnSwipe)
             slideView.removeGestureRecognizer(returnPan)
+            container.isUserInteractionEnabled = true
+        }
+    }
+    func menuReturnFunc(_ gesture: UIGestureRecognizer) {
+        if slideView.frame.origin.x == 516*self.screenWidth/750 {
             
+            UIView.animate(withDuration: 0.3) {self.slideView.frame.origin.x -= 516*self.screenWidth/750}
+            slideView.removeGestureRecognizer(returnTap)
+            slideView.removeGestureRecognizer(returnSwipe)
+            slideView.removeGestureRecognizer(returnPan)
+            container.isUserInteractionEnabled = true
         }
     }
     
     @objc private func addFunc(_ sender: UIButton) {
-        
+        self.performSegue(withIdentifier: "fromMainToAdd", sender: self)
         
     }
     
@@ -304,15 +316,58 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        if segue.identifier == "fromMainToGraph" {
         let graphView: GraphViewController = segue.destination as! GraphViewController
-        
+
         graphView.passedString = stringToPass
+        }
+        
         
     }
     
     @objc private func goToGraph() {
         self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
+        
     }
+    
+    func getOneMonthData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
+        print("stockname: \(stockName)")
+        BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
+   
+                var stockData = [Double]()
+           
+                stock.mapOneYearChartDataModule({
+          
+                        print("stockname: \(stockName)")
+                        
+                        for point in (stock.oneYearChartModule?.dataPoints)! {
+                            
+                           // stockData.dates.append(point.date)
+                            stockData.append(point.close)
+                            
+                            print("\(point.close!)" + ",")
+                        }
+          
+                    result(stockData, stockName)
+     
+                }, failure: { (error) in
+                    print(error)
+                    result(nil, stockName)
+                })
+            
+        }) { (error) in
+            print(error)
+            result(nil, stockName)
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
+    
+    
     
 }

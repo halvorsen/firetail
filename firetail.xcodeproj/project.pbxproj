@@ -26,6 +26,7 @@
 		069FD12F1E5382D4003BDFE2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */; };
 		069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1361E538926003BDFE2 /* ViewSetup.swift */; };
 		06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC27071E7319F700041D1F /* CompareScrollDot.swift */; };
+		06FC95B71E76E9F000DF7559 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FC95B61E76E9F000DF7559 /* AddViewController.swift */; };
 		06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */; };
 		06FDA8DC1E7094270043BC90 /* CompareScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8DB1E7094270043BC90 /* CompareScroll.swift */; };
 		06FDA8E01E71B9960043BC90 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8DF1E71B9960043BC90 /* Set.swift */; };
@@ -54,6 +55,7 @@
 		069FD1301E5382D4003BDFE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		069FD1361E538926003BDFE2 /* ViewSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewSetup.swift; sourceTree = "<group>"; };
 		06AC27071E7319F700041D1F /* CompareScrollDot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScrollDot.swift; sourceTree = "<group>"; };
+		06FC95B61E76E9F000DF7559 /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseOfGraphView.swift; sourceTree = "<group>"; };
 		06FDA8DB1E7094270043BC90 /* CompareScroll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScroll.swift; sourceTree = "<group>"; };
 		06FDA8DF1E71B9960043BC90 /* Set.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				06AC27071E7319F700041D1F /* CompareScrollDot.swift */,
 				06FDA8DF1E71B9960043BC90 /* Set.swift */,
 				0609E4CC1E649578005965C5 /* SignupViewController.swift */,
+				06FC95B61E76E9F000DF7559 /* AddViewController.swift */,
 				0609E4CE1E649596005965C5 /* LoginViewController.swift */,
 				0609E4A91E635226005965C5 /* AlertBlockView.swift */,
 				0672601A1E67BD5B00F54500 /* StockGraphView2.swift */,
@@ -281,6 +284,7 @@
 				0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */,
 				0609E4A81E632DF4005965C5 /* MainViewController.swift in Sources */,
 				069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */,
+				06FC95B71E76E9F000DF7559 /* AddViewController.swift in Sources */,
 				069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
