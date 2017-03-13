@@ -18,6 +18,7 @@ let customColor = CustomColor()
     var tapDown = UITapGestureRecognizer()
     var tapUp = UITapGestureRecognizer()
     let stockTitle = UILabel()
+    var container = UIScrollView()
     
     
     override func viewDidLoad() {
@@ -88,9 +89,10 @@ let customColor = CustomColor()
         mySwitchEmail.frame = CGRect(x: 27*screenWidth/375, y: 269*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchEmail.setOn(false, animated: false)
         mySwitchEmail.tintColor = customColor.white229
+        mySwitchEmail.layer.cornerRadius = 16
+        mySwitchEmail.backgroundColor = .white
         mySwitchEmail.onTintColor = customColor.yellow
-        mySwitchEmail.thumbTintColor = .white
-        mySwitchEmail.backgroundColor = .clear
+    //    mySwitchEmail.thumbTintColor = customColor.white229
         mySwitchEmail.addTarget(self, action: #selector(AddViewController.switchChanged(_:)), for: UIControlEvents.valueChanged)
         view.addSubview(mySwitchEmail)
         
@@ -98,9 +100,10 @@ let customColor = CustomColor()
         mySwitchSMS.frame = CGRect(x: 27*screenWidth/375, y: 317*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchSMS.setOn(false, animated: false)
         mySwitchSMS.tintColor = customColor.white229
+        mySwitchSMS.layer.cornerRadius = 16
+        mySwitchSMS.backgroundColor = .white
         mySwitchSMS.onTintColor = customColor.yellow
-        mySwitchSMS.thumbTintColor = .white
-        mySwitchSMS.backgroundColor = .clear
+   //     mySwitchSMS.thumbTintColor = customColor.white229
         mySwitchSMS.addTarget(self, action: #selector(AddViewController.switchChanged(_:)), for: UIControlEvents.valueChanged)
         view.addSubview(mySwitchSMS)
         
@@ -108,27 +111,39 @@ let customColor = CustomColor()
         mySwitchFlash.frame = CGRect(x: 27*screenWidth/375, y: 365*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchFlash.setOn(false, animated: false)
         mySwitchFlash.tintColor = customColor.white229
+        mySwitchFlash.layer.cornerRadius = 16
+        mySwitchFlash.backgroundColor = .white
         mySwitchFlash.onTintColor = customColor.yellow
-        mySwitchFlash.thumbTintColor = .white
-        mySwitchFlash.backgroundColor = .clear
+       // mySwitchFlash.thumbTintColor = customColor.white229
         mySwitchFlash.addTarget(self, action: #selector(AddViewController.switchChanged(_:)), for: UIControlEvents.valueChanged)
         view.addSubview(mySwitchFlash)
         
         let mySwitchUrgent = UISwitch()
         mySwitchUrgent.frame = CGRect(x: 27*screenWidth/375, y: 413*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchUrgent.setOn(false, animated: false)
-        mySwitchUrgent.tintColor = customColor.white229
+       // mySwitchUrgent.tintColor = .blue //customColor.white229
+
+        mySwitchUrgent.layer.cornerRadius = 16
+        mySwitchUrgent.layer.borderWidth = 1.5
+        mySwitchUrgent.layer.borderColor = customColor.white229.cgColor
+        mySwitchUrgent.backgroundColor = .white
         mySwitchUrgent.onTintColor = customColor.yellow
-        mySwitchUrgent.thumbTintColor = .white
-        mySwitchUrgent.backgroundColor = .clear
+      //  mySwitchUrgent.thumbTintColor = customColor.white229
         mySwitchUrgent.addTarget(self, action: #selector(AddViewController.switchChanged(_:)), for: UIControlEvents.valueChanged)
         view.addSubview(mySwitchUrgent)
         
         let backArrow = UIButton()
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
-
         
+        container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 230*screenHeight/667))
+        container.contentSize = CGSize(width: 4*screenWidth, height: container.bounds.height)
+        container.contentOffset = CGPoint(x: -3*screenWidth, y: 0)
+        view.addSubview(container)
+        
+
+        let graph = DailyGraphForAlertView(graphData: [8,2,6,4,13,6,7,8,9,30,1,2,13,4,5,16,11,9,9,10])
+        container.addSubview(graph)
         
         
     }
