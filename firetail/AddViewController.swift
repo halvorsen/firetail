@@ -132,19 +132,36 @@ let customColor = CustomColor()
         mySwitchUrgent.addTarget(self, action: #selector(AddViewController.switchChanged(_:)), for: UIControlEvents.valueChanged)
         view.addSubview(mySwitchUrgent)
         
-        let backArrow = UIButton()
-        addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.back(_:)), addSubview: true)
-        backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
+        
         
         container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 230*screenHeight/667))
-        container.contentSize = CGSize(width: 4*screenWidth, height: container.bounds.height)
-        container.contentOffset = CGPoint(x: -3*screenWidth, y: 0)
+        container.contentSize = CGSize(width: 3.8*screenWidth, height: container.bounds.height)
+     //   container.contentOffset = CGPoint(x: -3*screenWidth, y: 0)
         view.addSubview(container)
         
 
         let graph = DailyGraphForAlertView(graphData: [8,2,6,4,13,6,7,8,9,30,1,2,13,4,5,16,11,9,9,10])
         container.addSubview(graph)
         
+        
+        mask.frame = container.frame
+        mask.backgroundColor = customColor.black33
+        view.addSubview(mask)
+        container.contentOffset = CGPoint(x: 2.7*self.screenWidth, y: 0)
+        
+        let backArrow = UIButton()
+        addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.back(_:)), addSubview: true)
+        backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
+
+        
+        
+    }
+    let mask = UIView()
+    override func viewDidAppear(_ animated: Bool) {
+        UIView.animate(withDuration: 1.0) {
+            self.mask.frame.origin.x += self.screenWidth
+        }
+    
         
     }
     

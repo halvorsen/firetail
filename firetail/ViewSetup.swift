@@ -12,58 +12,59 @@ struct CustomColor {
     
 
     //yellow
-    var yellow = UIColor(red: 254/255, green: 203/255, blue: 9/255, alpha: 1.0)
+    let yellow = UIColor(red: 254/255, green: 203/255, blue: 9/255, alpha: 1.0)
     
     //gray
-    var gray = UIColor(red: 41/255, green: 41/255, blue: 41/255, alpha: 1.0)
+    let gray = UIColor(red: 41/255, green: 41/255, blue: 41/255, alpha: 1.0)
 
     //background
-    var background = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
+    let background = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
     
     //gridGray
-    var gridGray = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.05)
+    let gridGray = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.05)
     
     //black
-    var black = UIColor(red: 23/255, green: 23/255, blue: 23/255, alpha: 1.0)
+    let black = UIColor(red: 23/255, green: 23/255, blue: 23/255, alpha: 1.0)
     
     //white
-    var white = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
+    let white = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
     
     //white209
-    var white209 = UIColor(red: 209/255, green: 209/255, blue: 209/255, alpha: 1.0)
+    let white209 = UIColor(red: 209/255, green: 209/255, blue: 209/255, alpha: 1.0)
     //white128
-    var white128 = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0)
+    let white128 = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0)
     //white68
-    var white68 = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 1.0)
+    let white68 = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 1.0)
     //white77
-    var white77 = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1.0)
+    let white77 = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1.0)
     //white216
-    var white216 = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
+    let white216 = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
     //white153
-    var white153 = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
+    let white153 = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
     //white115
-    var white115 = UIColor(red: 115/255, green: 115/255, blue: 115/255, alpha: 1.0)
+    let white115 = UIColor(red: 115/255, green: 115/255, blue: 115/255, alpha: 1.0)
     //white229
-    var white229 = UIColor(red: 229/255, green: 229/255, blue: 229/255, alpha: 1.0)
-    
+    let white229 = UIColor(red: 229/255, green: 229/255, blue: 229/255, alpha: 1.0)
+    //whitealpha
+    let whiteAlpha = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.1)
     
     //labelGray
-    var labelGray = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
+    let labelGray = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
     
     //alertLines
-    var alertLines = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 0.1)
+    let alertLines = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 0.1)
     
     //fieldLines
-    var fieldLines = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 0.1)
+    let fieldLines = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 0.1)
     
     //black33
-    var black33 = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
+    let black33 = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
     //black42
-    var black42 = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
+    let black42 = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
     //black30
-    var black30 = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1.0)
+    let black30 = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1.0)
     //black24
-    var black24 = UIColor(red: 24/255, green: 24/255, blue: 24/255, alpha: 1.0)
+    let black24 = UIColor(red: 24/255, green: 24/255, blue: 24/255, alpha: 1.0)
 }
 
 class ViewSetup: UIViewController {

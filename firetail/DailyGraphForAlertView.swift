@@ -24,13 +24,15 @@ class DailyGraphForAlertView: UIView {
     let scale: CGFloat = 4
     var stock = ""
     var pointSet = [CGFloat]()
+    var labels = [UILabel]()
+    var allStockValues = [String]()
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
-    init(graphData: [Double], frame: CGRect = CGRect(x: 0, y:70*UIScreen.main.bounds.width/667, width: 4*UIScreen.main.bounds.width, height: 140*UIScreen.main.bounds.height/667)) {
+    init(graphData: [Double], frame: CGRect = CGRect(x: 0, y:70*UIScreen.main.bounds.width/667, width: 4*UIScreen.main.bounds.width, height: 160*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
         self.backgroundColor = .clear
-
+        
         var _set = [Double]()
         let max = graphData.max()!
         let min = graphData.min()!
@@ -43,7 +45,10 @@ class DailyGraphForAlertView: UIView {
         print("__set: \(__set)")
         //data = __set
         data = graphData.map {CGFloat($0)}
+        allStockValues = graphData.map {String($0)}
         print("HERE IS DATA POST PROCESS: \(data)")
+        
+        
         setNeedsDisplay()
         
     }
@@ -54,42 +59,46 @@ class DailyGraphForAlertView: UIView {
     
     override func draw(_ rect: CGRect) {
         let ctx = UIGraphicsGetCurrentContext()
-//        ctx!.translateBy(x: 0, y: 20)
-        ctx!.scaleBy(x: scale, y: scale)
+        ctx!.translateBy(x: 0, y: 5)
+        ctx!.scaleBy(x: scale, y: 0.9*scale)
         let path = quadCurvedPath()
-
+        path.addLine(to: CGPoint(x: points.last!.x + 20, y: points.last!.y))
+        path.addLine(to: CGPoint(x: points.last!.x + 20, y: 100))
+        path.addLine(to: CGPoint(x: 0, y: 100))
+        path.addLine(to: points.first!)
+        path.close()
         
-        UIColor.black.setStroke()
+        
+       // customColor.whiteAlpha.setStroke()
+        customColor.whiteAlpha.setFill()
         path.lineWidth = 1
-        path.stroke()
+        path.fill()
+       // path.stroke()
         
+        for i in 1..<points.count {
+            drawPoint(point: points[i], color: .white, radius: 1)
+            print("point \(point)")
+        }
         
     }
     
     var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
-    //        didSet {
-    //            setNeedsDisplay()
-    //        }
-    //  }
     
-    //    func coordXFor(index: Int) -> CGFloat {
-    //        let Yval = bounds.height/2 * data[index] / data.max()!
-    //        return   data[0]*(1-(1-Yval/data[0])*2)
-    //    }
     func coordXFor(index: Int) -> CGFloat {
         return bounds.height / scale - (bounds.height/scale) * data[index] / (data.max() ?? 0)
     }
     
     
-    
+    var points = [CGPoint]()
     func quadCurvedPath() -> UIBezierPath {
         let path = UIBezierPath()
         let step = bounds.width / CGFloat(data.count - 1) / (scale * 1.1)
         
         var p1 = CGPoint(x: 0, y: coordXFor(index: 0))
+        points.append(p1)
         path.move(to: p1)
         
-                drawPoint(point: p1, color: .clear, radius: 3)
+        //drawPoint(point: p1, color: .white, radius: 1)
         
         if (data.count == 2) {
             path.addLine(to: CGPoint(x: step, y: coordXFor(index: 1)))
@@ -100,7 +109,8 @@ class DailyGraphForAlertView: UIView {
         
         for i in 1..<data.count {
             let p2 = CGPoint(x: step * CGFloat(i), y: coordXFor(index: i))
-                        drawPoint(point: p2, color: customColor.fieldLines, radius: 3)
+            //     drawPoint(point: p2, color: .white, radius: 1)
+            points.append(p2)
             var p3: CGPoint?
             if i == data.count - 1 {
                 p3 = nil
@@ -114,7 +124,19 @@ class DailyGraphForAlertView: UIView {
             
             p1 = p2
             oldControlP = imaginFor(point1: newControlP, center: p2)
+            
         }
+        
+        for i in 1..<points.count {
+            let l = UILabel()
+            l.text = allStockValues[i]
+            l.frame = CGRect(x: scale*(points[i].x)-25*screenWidth/375, y: 0.9*scale*(points[i].y + 5) - 60*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
+            l.font = UIFont(name: "Roboto-Medium", size: 12*fontSizeMultiplier)
+            l.textAlignment = .center
+            self.addSubview(l)
+            labels.append(l)
+        }
+        
         return path;
     }
     
