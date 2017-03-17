@@ -19,7 +19,9 @@ let customColor = CustomColor()
     var tapUp = UITapGestureRecognizer()
     let stockTitle = UILabel()
     var container = UIScrollView()
-    
+    var graph = DailyGraphForAlertView()
+//    var topCover = UIView()
+    let backArrow = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,22 +73,22 @@ let customColor = CustomColor()
         add.titleLabel?.textAlignment = .center //this isnt working for some reason
         bottomBar.addSubview(add)
 
-        addLabel(name: stockTitle, text: "TSLA", textColor: .white, textAlignment: .left, fontName: "DroidSerif-Regular", fontSize: 20, x: 60, y: 1018, width: 140, height: 35, lines: 1)
+        addLabel(name: stockTitle, text: "TSLA", textColor: .white, textAlignment: .left, fontName: "DroidSerif-Regular", fontSize: 20, x: 60, y: 1218, width: 140, height: 35, lines: 1)
         view.addSubview(stockTitle)
         
-        let stockSymbol = UILabel()
-        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white153, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 1084, width: 300, height: 34, lines: 1)
-        view.addSubview(stockSymbol)
+//        let stockSymbol = UILabel()
+//        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white153, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 1084, width: 300, height: 34, lines: 1)
+//        view.addSubview(stockSymbol)
         
         for i in 0...3 {
             let l = UILabel()
             let name = ["Email","SMS","Flash","Urgent"]
-            addLabel(name: l, text: name[i], textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 212, y: 548 + CGFloat(i)*96, width: 150, height: 40, lines: 0)
+            addLabel(name: l, text: name[i], textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 212, y: 748 + CGFloat(i)*96, width: 150, height: 40, lines: 0)
             view.addSubview(l)
         }
         
         let mySwitchEmail = UISwitch()
-        mySwitchEmail.frame = CGRect(x: 27*screenWidth/375, y: 269*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
+        mySwitchEmail.frame = CGRect(x: 27*screenWidth/375, y: 369*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchEmail.setOn(false, animated: false)
         mySwitchEmail.tintColor = customColor.white229
         mySwitchEmail.layer.cornerRadius = 16
@@ -97,7 +99,7 @@ let customColor = CustomColor()
         view.addSubview(mySwitchEmail)
         
         let mySwitchSMS = UISwitch()
-        mySwitchSMS.frame = CGRect(x: 27*screenWidth/375, y: 317*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
+        mySwitchSMS.frame = CGRect(x: 27*screenWidth/375, y: 417*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchSMS.setOn(false, animated: false)
         mySwitchSMS.tintColor = customColor.white229
         mySwitchSMS.layer.cornerRadius = 16
@@ -108,7 +110,7 @@ let customColor = CustomColor()
         view.addSubview(mySwitchSMS)
         
         let mySwitchFlash = UISwitch()
-        mySwitchFlash.frame = CGRect(x: 27*screenWidth/375, y: 365*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
+        mySwitchFlash.frame = CGRect(x: 27*screenWidth/375, y: 465*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchFlash.setOn(false, animated: false)
         mySwitchFlash.tintColor = customColor.white229
         mySwitchFlash.layer.cornerRadius = 16
@@ -119,7 +121,7 @@ let customColor = CustomColor()
         view.addSubview(mySwitchFlash)
         
         let mySwitchUrgent = UISwitch()
-        mySwitchUrgent.frame = CGRect(x: 27*screenWidth/375, y: 413*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
+        mySwitchUrgent.frame = CGRect(x: 27*screenWidth/375, y: 513*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchUrgent.setOn(false, animated: false)
        // mySwitchUrgent.tintColor = .blue //customColor.white229
 
@@ -134,26 +136,27 @@ let customColor = CustomColor()
         
         
         
-        container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 230*screenHeight/667))
+        container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 260*screenHeight/667))
         container.contentSize = CGSize(width: 3.8*screenWidth, height: container.bounds.height)
-     //   container.contentOffset = CGPoint(x: -3*screenWidth, y: 0)
+        container.backgroundColor = customColor.black33
+        container.contentOffset =  CGPoint(x: 2.8*screenWidth, y: 0)
+        container.showsHorizontalScrollIndicator = false
+        container.showsVerticalScrollIndicator = false
         view.addSubview(container)
         
 
-        let graph = DailyGraphForAlertView(graphData: [8,2,6,4,13,6,7,8,9,30,1,2,13,4,5,16,11,9,9,10])
+        graph = DailyGraphForAlertView(graphData: [8,2,6,4,13,6,7,8,9,30,1,2,13,4,5,16,11,9,9,10])
         container.addSubview(graph)
+        var t = CGAffineTransform.identity
+        t = t.translatedBy(x: 0, y: -100)
+        t = t.scaledBy(x: 1.0, y: 0.01)
+        graph.transform = t
         
-        
-        mask.frame = container.frame
-        mask.backgroundColor = customColor.black33
-        view.addSubview(mask)
-        container.contentOffset = CGPoint(x: 2.7*self.screenWidth, y: 0)
-        
-        let backArrow = UIButton()
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
 
-        
+        print("count: \(graph.labels.count)")
+        //self.graph.labels[5].alpha = 1.0
         
     }
     let mask = UIView()
@@ -161,8 +164,32 @@ let customColor = CustomColor()
         UIView.animate(withDuration: 1.0) {
             self.mask.frame.origin.x += self.screenWidth
         }
-    
-        
+//        for grid in graph.grids {
+//            print("gridframe: \(grid.frame)")
+//            graph.addSubview(grid)
+//        }
+//        print("count again: \(graph.grids.count)")
+        //not sure i like how the grid lines look
+        UIView.animate(withDuration: 1.5) {
+            self.graph.transform = CGAffineTransform.identity
+            self.graph.frame.origin.y = 50*self.screenHeight/667
+            
+            
+        }
+        delay(bySeconds: 1.2) {
+            
+                for i in 0..<self.graph.labels.count {
+                    self.delay(bySeconds: 0.3) {
+                        UIView.animate(withDuration: 0.3*Double(i)) {
+                        self.graph.grids[self.graph.labels.count - i - 1].alpha = 1.0
+                            self.graph.labels[self.graph.labels.count - i - 1].alpha = 1.0
+                            self.graph.dayLabels[self.graph.labels.count - i - 1].alpha = 1.0
+                        }
+                    }
+                }
+            
+        }
+
     }
     
     @objc private func back(_ sender: UIButton) {

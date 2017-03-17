@@ -12,6 +12,8 @@
 
 import UIKit
 
+
+
 class DailyGraphForAlertView: UIView {
     
     let screenWidth = UIScreen.main.bounds.width
@@ -26,12 +28,16 @@ class DailyGraphForAlertView: UIView {
     var pointSet = [CGFloat]()
     var labels = [UILabel]()
     var allStockValues = [String]()
+    var grids = [GridLine]()
+    var dayLabelsText = ["1 jun", "2 jun", "3 jun", "4 jun", "5 jun", "6 jun", "7 jun", "8 jun", "9 jun", "10 jun", "11 jun", "12 jun", "13 jun", "14 jun", "15 jun", "16 jun", "17 jun", "18 jun", "19 jun","20 jun", "21 jun", "22 jun", "23 jun", "24 jun", "25 jun", "26 jun", "27 jun", "28 jun", "29 jun"]
+    var dayLabels = [UILabel]()
+    
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
-    init(graphData: [Double], frame: CGRect = CGRect(x: 0, y:70*UIScreen.main.bounds.width/667, width: 4*UIScreen.main.bounds.width, height: 160*UIScreen.main.bounds.height/667)) {
+    init(graphData: [Double], frame: CGRect = CGRect(x: 0, y:-10*UIScreen.main.bounds.height/667, width: 4*UIScreen.main.bounds.width, height: 210*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
-        self.backgroundColor = .clear
+        self.backgroundColor = customColor.black33
         
         var _set = [Double]()
         let max = graphData.max()!
@@ -47,10 +53,8 @@ class DailyGraphForAlertView: UIView {
         data = graphData.map {CGFloat($0)}
         allStockValues = graphData.map {String($0)}
         print("HERE IS DATA POST PROCESS: \(data)")
-        
-        
         setNeedsDisplay()
-        
+
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -62,15 +66,16 @@ class DailyGraphForAlertView: UIView {
         ctx!.translateBy(x: 0, y: 5)
         ctx!.scaleBy(x: scale, y: 0.9*scale)
         let path = quadCurvedPath()
-        path.addLine(to: CGPoint(x: points.last!.x + 20, y: points.last!.y))
-        path.addLine(to: CGPoint(x: points.last!.x + 20, y: 100))
-        path.addLine(to: CGPoint(x: 0, y: 100))
+        path.addLine(to: CGPoint(x: points.last!.x + 200, y: points.last!.y))
+        path.addLine(to: CGPoint(x: points.last!.x + 200, y: -10))
+        path.addLine(to: CGPoint(x: 0, y: -10))
+        path.addLine(to: CGPoint(x: 0, y: points.last!.y))
         path.addLine(to: points.first!)
         path.close()
         
         
        // customColor.whiteAlpha.setStroke()
-        customColor.whiteAlpha.setFill()
+        customColor.white153.setFill()
         path.lineWidth = 1
         path.fill()
        // path.stroke()
@@ -78,7 +83,9 @@ class DailyGraphForAlertView: UIView {
         for i in 1..<points.count {
             drawPoint(point: points[i], color: .white, radius: 1)
             print("point \(point)")
+
         }
+        
         
     }
     
@@ -126,6 +133,16 @@ class DailyGraphForAlertView: UIView {
             oldControlP = imaginFor(point1: newControlP, center: p2)
             
         }
+        let v = UIView(frame: CGRect(x: 0, y: -50*screenHeight/667, width: self.frame.width, height: 50*screenHeight/667))
+        v.backgroundColor = customColor.white153
+        self.addSubview(v)
+        let w = UIView(frame: CGRect(x: -400, y: -50*screenHeight/667, width: 400, height: 0.9*4*points.first!.y + 55*screenHeight/667))
+        w.backgroundColor = customColor.white153
+        self.addSubview(w)
+        let ww = UIView(frame: CGRect(x: self.frame.maxX, y: -50*screenHeight/667, width: 400, height: 0.9*4*points.last!.y + 55*screenHeight/667))
+        ww.backgroundColor = customColor.white153
+        self.addSubview(ww)
+        
         
         for i in 1..<points.count {
             let l = UILabel()
@@ -133,8 +150,27 @@ class DailyGraphForAlertView: UIView {
             l.frame = CGRect(x: scale*(points[i].x)-25*screenWidth/375, y: 0.9*scale*(points[i].y + 5) - 60*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
             l.font = UIFont(name: "Roboto-Medium", size: 12*fontSizeMultiplier)
             l.textAlignment = .center
+            l.alpha = 0.0
             self.addSubview(l)
             labels.append(l)
+            
+            let k = UILabel()
+            k.text = dayLabelsText[i]
+            k.frame = CGRect(x: scale*(points[i].x)-25*screenWidth/375, y: 180*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
+            k.font = UIFont(name: "Roboto-Light", size: 16*fontSizeMultiplier)
+            k.textColor = customColor.whiteAlpha30
+            k.textAlignment = .center
+            k.alpha = 0.0
+            self.addSubview(k)
+            dayLabels.append(k)
+            
+            
+            let grid = GridLine()
+            grid.frame = CGRect(x: 4*points[i].x, y: -100*screenWidth/667, width: screenWidth/375, height: 260*screenHeight/667)
+            // grid.frame = CGRect(x: 4*points[i].x, y: -100*screenWidth/667, width: screenWidth/375, height: 0.9*points[i].y*4 + 100*screenWidth/667)
+            self.addSubview(grid)
+            grids.append(grid)
+            print("grid Count: \(grids.count)")
         }
         
         return path;
