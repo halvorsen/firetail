@@ -13,6 +13,7 @@ import Charts
 class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     
     var myTextField = UITextField()
+    var addTextField = UITextField()
     var stringToPass = "Patriots"
     let customColor = CustomColor()
     var menu = UIButton()
@@ -44,6 +45,27 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     var svDot2 =  CompareScrollDot()
     var svsDot = [CompareScrollDot]()
     var myTimer = Timer()
+    //passing the new alert from add VC
+    var newAlertTicker = String()
+    var newAlertPrice = Double()
+    var newAlertBoolTuple = (false, false, false, false)
+    var previousViewContoller = ""
+    var amountOfBlocks = Int()
+    let loadsave = LoadSaveCoreData()
+    
+    override func viewWillAppear(_ animated: Bool) {
+
+        let (t,p,email,sms,flash,urgent) = loadsave.loadBlocks()
+        if amountOfBlocks > 0 {
+        for i in 0..<amountOfBlocks {
+            let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: t[i], currentPrice: String(p[i]), sms: sms[i], email: email[i], push: flash[i], urgent: urgent[i])
+            alertScroller.addSubview(block)
+            
+        }
+            print("amount of blocks: \(amountOfBlocks)")
+            alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -125,7 +147,27 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         myTextField.delegate = self
         myTextField.backgroundColor = customColor.background
         myTextField.textColor = customColor.white68
+        myTextField.tag = 0
+        
+        addTextField = UITextField(frame: CGRect(x: 0,y: 200,width: screenWidth ,height: 200*screenHeight/1334))
+        addTextField.placeholder = "   Enter Ticker"
+        addTextField.setValue(customColor.white68, forKeyPath: "_placeholderLabel.textColor")
+        addTextField.font = UIFont.systemFont(ofSize: 25)
+        //myTextField.borderStyle = UITextBorderStyle.roundedRect
+        addTextField.autocorrectionType = UITextAutocorrectionType.no
+        addTextField.keyboardType = UIKeyboardType.default
+        addTextField.returnKeyType = UIReturnKeyType.done
+        addTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
+        addTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        addTextField.delegate = self
+        addTextField.backgroundColor = customColor.background
+        addTextField.textColor = customColor.white68
+        addTextField.alpha = 0
+        addTextField.tag = 1
+        
+        
         slideView.addSubview(myTextField)
+       // slideView.addSubview(addTextField)
         addButton(name: menu, x: 0, y: 0, width: 116, height: 122, title: "", font: "", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.menuFunc), addSubview: false)
         slideView.addSubview(menu)
         addButton(name: add, x: 638, y: 0, width: 112, height: 120, title: "", font: "", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.addFunc(_:)), addSubview: false)
@@ -138,17 +180,13 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         addLabel(name: line, text: "", textColor: .clear, textAlignment: .center, fontName: "", fontSize: 1, x: 0, y: 968, width: 750, height: 2, lines: 0)
         line.backgroundColor = customColor.alertLines
         slideView.addSubview(line)
-        alertScroller.frame = CGRect(x: 0, y: 970*screenHeight/1334, width: screenWidth, height: (1334-750)*screenHeight/1334)
+        alertScroller.frame = CGRect(x: 0, y: 974*screenHeight/1334, width: screenWidth, height: 360*screenHeight/1334)
         alertScroller.contentSize = CGSize(width: screenWidth, height: alertCount*120*screenHeight/1334)
         slideView.addSubview(alertScroller)
         
-        let tslaBlock = AlertBlockView(y: 0, stockTicker: "TSLA", currentPrice: "257", sms: true, email: false, push: true, urgent: false)
-        alertScroller.addSubview(tslaBlock)
-        let fbBlock = AlertBlockView(y: 120, stockTicker: "FB", currentPrice: "135", sms: false, email: false, push: false, urgent: true)
-        alertScroller.addSubview(fbBlock)
-        let googBlock = AlertBlockView(y: 240, stockTicker: "GOOG", currentPrice: "828", sms: true, email: true, push: true, urgent: true)
+
         
-        alertScroller.addSubview(googBlock)
+        //alertScroller.addSubview(googBlock)
         slideView.layer.shadowColor = UIColor.black.cgColor
         slideView.layer.shadowOpacity = 1
         slideView.layer.shadowOffset = CGSize.zero
@@ -156,16 +194,6 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         returnTap = UITapGestureRecognizer(target: self, action: #selector(MainViewController.menuReturnFunc(_:)))
         returnPan = UIPanGestureRecognizer(target: self, action: #selector(MainViewController.menuReturnFunc(_:)))
         returnSwipe = UISwipeGestureRecognizer(target: self, action: #selector(MainViewController.menuReturnFunc(_:)))
-        
-        
-        
-        
-//        for i in 0...2 {
-//            let dot: Dot = Dot(frame: CGRect(x: 0, y: 0, width: indicatorDotWidth*screenWidth/750, height: indicatorDotWidth*screenWidth/750))
-//            dot.layer.zPosition = 12
-//            slideView.addSubview(dot)
-//            dots.append(dot)
-//        }
         
         container2.frame = CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667)
         container2.isUserInteractionEnabled = false
@@ -179,11 +207,11 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         mask.frame = container.frame
         mask.backgroundColor = customColor.black33
         slideView.addSubview(mask)
-        
+        amountOfBlocks = loadsave.amount()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset.x)
+       
         container2.setContentOffset(scrollView.contentOffset, animated: false)
         let months = ["March, 2016", "April, 2016", "May, 2016", "June, 2016", "July, 2016", "August, 2016", "September, 2016", "October, 2016", "November, 2016", "December, 2016", "January, 2017", "February, 2017"]
         for i in 1...12 {
@@ -231,7 +259,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     override func viewDidAppear(_ animated: Bool) {
         UIView.animate(withDuration: 2.0) {
             self.mask.frame.origin.x += 2.5*11*self.screenWidth/5; self.monthIndicator.alpha = 1.0; self.stock3.alpha = 1.0; self.stock2.alpha = 1.0; self.stock1.alpha = 1.0}
-        print(container.contentOffset.x)
+     
         runSearch()
         
         self.myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(MainViewController.updateDot), userInfo: nil, repeats: true)
@@ -298,18 +326,38 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     }
     
     @objc private func addFunc(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromMainToAdd", sender: self)
+        let cover = UIView(frame: view.frame)
+        cover.backgroundColor = customColor.black24
+        cover.alpha = 0.0
+        slideView.addSubview(cover)
+        slideView.addSubview(addTextField)
+        
+        UIView.animate(withDuration: 1.0) {
+            self.addTextField.alpha = 1.0
+            cover.alpha = 1.0
+        }
+        delay(bySeconds: 0.8) {
+           self.addTextField.becomeFirstResponder()
+        }
         
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
+        if textField.tag == 0 {
         self.view.endEditing(true)
         if myTextField.text != nil && myTextField.delegate != nil {
             
             stringToPass = myTextField.text!
             goToGraph()
+            }
+        } else if textField.tag == 1 {
+            if addTextField.text != nil && addTextField.delegate != nil {
+                
+                stringToPass = addTextField.text!
+                self.performSegue(withIdentifier: "fromMainToAdd", sender: self)
+            }
         }
+        
         return false
     }
     
@@ -320,6 +368,10 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         let graphView: GraphViewController = segue.destination as! GraphViewController
 
         graphView.passedString = stringToPass
+        } else if segue.identifier == "fromMainToAdd" {
+            let addView: AddViewController = segue.destination as! AddViewController
+            
+            addView.newAlertTicker = stringToPass.uppercased()
         }
         
         
@@ -331,21 +383,21 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     }
     
     func getOneMonthData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
-        print("stockname: \(stockName)")
+      
         BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
    
                 var stockData = [Double]()
            
                 stock.mapOneYearChartDataModule({
           
-                        print("stockname: \(stockName)")
+                    
                         
                         for point in (stock.oneYearChartModule?.dataPoints)! {
                             
                            // stockData.dates.append(point.date)
                             stockData.append(point.close)
                             
-                            print("\(point.close!)" + ",")
+               
                         }
           
                     result(stockData, stockName)

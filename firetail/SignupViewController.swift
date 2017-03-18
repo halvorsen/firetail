@@ -114,21 +114,20 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     }
     
     func getOneMonthData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
-        print("stockname: \(stockName)")
+  
         BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
             
             var stockData = [Double]()
             
             stock.mapOneYearChartDataModule({
                 
-                print("stockname: \(stockName)")
+            
                 
                 for point in (stock.oneYearChartModule?.dataPoints)! {
                     
                     // stockData.dates.append(point.date)
                     stockData.append(point.close)
-                    
-                    print("\(point.close!)" + ",")
+                   
                 }
                 
                 result(stockData, stockName)

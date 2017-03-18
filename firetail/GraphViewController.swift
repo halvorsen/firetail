@@ -216,7 +216,7 @@ class GraphViewController: ViewSetup {
     }
     
     func showGraph() {
-        print("SHOWGRAPH")
+  
         graphViews = ["1y":nil,"5y":nil,"Max":nil,"1d":nil,"5d":nil,"1m":nil,"3m":nil]
         
         self.view.endEditing(true)
@@ -339,7 +339,7 @@ class GraphViewController: ViewSetup {
     // let serialQueue = DispatchQueue(label: "queuename")
     var keys = [String]()
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
-        print("stockname: \(stockName)")
+      
         BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
             
             let list = ["1y","5y","Max","1d","5d","1m","3m"]
@@ -358,14 +358,13 @@ class GraphViewController: ViewSetup {
                     let asdf: BigBoardChartDataModule? = chartsModule[key]!
                     
                     if asdf != nil {
-                        print("key: \(key)")
+          
                    
                         for point in (asdf?.dataPoints)! {
                             
                             stockData.dates.append(point.date)
                             stockData.closingPrice.append(point.close)
-                            
-                            print("\(point.close!)" + ",")
+              
                         }
                         stockDatas.append(stockData)
                     }
