@@ -30,6 +30,27 @@
             </objects>
             <point key="canvasLocation" x="-1966" y="991"/>
         </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="ima-GP-eQY">
+            <objects>
+                <viewController id="hTR-Nv-iEl" customClass="SettingsViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ATA-z3-BXR"/>
+                        <viewControllerLayoutGuide type="bottom" id="fmT-Go-wQA"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2Ee-bB-mkW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="9Rf-87-nHj" kind="show" identifier="fromSettingsToMain" id="7KN-h2-kPs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qsJ-WB-oWX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1960" y="-628"/>
+        </scene>
         <!--Add View Controller-->
         <scene sceneID="CzO-Gj-xMU">
             <objects>
@@ -89,6 +110,7 @@
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="fromMainToGraph" id="Zxg-fl-6EZ"/>
                         <segue destination="VGb-5b-ve2" kind="show" identifier="fromMainToAdd" id="cxp-Cj-N2o"/>
+                        <segue destination="hTR-Nv-iEl" kind="show" identifier="fromMainToSettings" id="883-bY-VR1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hb6-AR-41S" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -118,6 +140,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="EQX-Ew-9w8"/>
+        <segue reference="7KN-h2-kPs"/>
     </inferredMetricsTieBreakers>
 </document>

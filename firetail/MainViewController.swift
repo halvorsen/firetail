@@ -250,13 +250,13 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         sender.setTitle("NOT SETUP YET", for: .normal)
     }
     @objc private func changeEmailFunc(_ sender: UIButton) {
-        sender.setTitle("NOT SETUP YET", for: .normal)
+        self.performSegue(withIdentifier: "fromMainToSettings", sender: self)
     }
     @objc private func addPhoneFunc(_ sender: UIButton) {
-        sender.setTitle("NOT SETUP YET", for: .normal)
+        self.performSegue(withIdentifier: "fromMainToSettings", sender: self)
     }
     @objc private func changeBrokerFunc(_ sender: UIButton) {
-        sender.setTitle("NOT SETUP YET", for: .normal)
+        self.performSegue(withIdentifier: "fromMainToSettings", sender: self)
     }
     @objc private func legalFunc(_ sender: UIButton) {
         sender.setTitle("NOT SETUP YET", for: .normal)
