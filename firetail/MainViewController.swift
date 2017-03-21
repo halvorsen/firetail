@@ -110,6 +110,9 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         slideView.addSubview(container)
         container.delegate = self
         if Set.ti.count > 2 {
+            print("BLAAAAA")
+            print(Set.oneYearDictionary)
+            print(Set.ti)
             sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
             sv1 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
             sv2 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)

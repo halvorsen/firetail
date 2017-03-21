@@ -55,8 +55,10 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 }
             }
         }
-        
+        if ti != [""] {
         Set.ti = ti
+        }
+
         
         view.backgroundColor = customColor.black33
         var logo = UIImageView(frame: CGRect(x: screenWidth/2 - 93*screenHeight/1334, y: 42*screenHeight/667, width: 93*screenHeight/667, height: 119*screenHeight/667))
