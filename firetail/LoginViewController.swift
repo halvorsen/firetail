@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import BigBoard
+import Firebase
+import FirebaseAuth
 
 class LoginViewController: ViewSetup, UITextFieldDelegate {
 
@@ -15,8 +18,46 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var continueB = UIButton()
     var createAccount = UIButton()
     var myTextFields = [UITextField]()
+    var progressHUD = ProgressHUD(text: "Loading")
+    var doneLoading = false
+    let loadsave = LoadSaveCoreData()
+    var myTimer = Timer()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        FIRAuth.auth()!.addStateDidChangeListener() { auth, user in
+            // 2
+            if user != nil {
+                // 3
+                self.cont()
+            }
+        }
+        
+        let (ti,_,_,_,_,_) = loadsave.loadBlocks()
+        
+        for ticker in ti {
+            getOneMonthData(stockName: ticker) {
+                
+                Set.oneYearDictionary[$1] = $0
+                if ticker == ti.last! {
+                    for ticker2 in ["TSLA","FIG","FB"] { //put these in dictionary as defaults in case user erases other alerts
+                        self.getOneMonthData(stockName: ticker2) {
+                            Set.oneYearDictionary[$1] = $0
+                            if ticker2 == "FB" {
+                            self.doneLoading = true
+                            self.myTimer.invalidate()
+                            }
+                        }
+                    } //or demo
+                    
+                }
+            }
+        }
+        
+        Set.ti = ti
+        
         view.backgroundColor = customColor.black33
         var logo = UIImageView(frame: CGRect(x: screenWidth/2 - 93*screenHeight/1334, y: 42*screenHeight/667, width: 93*screenHeight/667, height: 119*screenHeight/667))
         logo.image = #imageLiteral(resourceName: "logo93x119")
@@ -62,19 +103,42 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             view.addSubview(myTextField)
             myTextFields.append(myTextField)
         }
-        
-        
-        
     }
     
     @objc private func loginFunc(_ sender: UIButton) {
         self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
         
     }
-    @objc private func continueFunc(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
+    var oopsNotTwice = true
+    func checkIfDone() {
+        if doneLoading && oopsNotTwice {
+            oopsNotTwice = false
+            self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
+        }
         
     }
+    
+    @objc private func continueFunc(_ sender: UIButton) {
+        FIRAuth.auth()!.signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!)
+        
+        self.view.addSubview(progressHUD)
+        
+    }
+    
+    private func cont() {
+
+        if doneLoading { // check if alert stocks have loaded
+            
+                self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
+            
+        } else {
+            
+            myTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(LoginViewController.checkIfDone), userInfo: nil, repeats: true)
+        }
+        
+    }
+
+    
     @objc private func createAccountFunc(_ sender: UIButton) {
         self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
         

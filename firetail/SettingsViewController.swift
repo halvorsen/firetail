@@ -17,6 +17,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate {
     var myTextFields = [UITextField]()
     var doneLoading = false
     var progressHUD = ProgressHUD(text: "Loading")
+    var backArrow = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +69,14 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate {
             myTextField.font = UIFont(name: "Roboto-Italic", size: 15)
             view.addSubview(myTextField)
             myTextFields.append(myTextField)
+            
+            addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SettingsViewController.back(_:)), addSubview: true)
+            backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         }
+    }
+    
+    @objc private func back(_ sender: UIButton) {
+        self.performSegue(withIdentifier: "fromSettingsToMain", sender: self)
     }
     
     @objc private func loginFunc(_ sender: UIButton) {

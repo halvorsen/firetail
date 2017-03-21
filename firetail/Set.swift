@@ -15,5 +15,7 @@ public struct Set {
     public static var fb = [0.0]
     
     public static var tsla = [0.0]
+    
+    public static var ti = [String]()
  
 }

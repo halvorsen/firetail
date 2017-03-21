@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1212" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Vet-45-juL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1212" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XTk-aP-Bp1">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -24,11 +24,12 @@
                     </view>
                     <connections>
                         <segue destination="Vet-45-juL" kind="show" identifier="fromLoginToSignup" id="aWA-Zg-Qf7"/>
+                        <segue destination="9Rf-87-nHj" kind="show" identifier="fromLoginToMain" id="j56-Bz-xny"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V8G-bH-dK0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1966" y="991"/>
+            <point key="canvasLocation" x="-3238" y="1"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="ima-GP-eQY">
@@ -87,12 +88,11 @@
                     </view>
                     <connections>
                         <segue destination="9Rf-87-nHj" kind="show" identifier="fromSignupToMain" id="EgL-kb-EF7"/>
-                        <segue destination="XTk-aP-Bp1" kind="show" identifier="fromSignupToLogin" id="zPe-jC-xW4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KLW-oO-Py4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1922" y="122"/>
+            <point key="canvasLocation" x="-1918" y="543"/>
         </scene>
         <!--Main View Controller-->
         <scene sceneID="6zS-Et-ocD">
@@ -140,6 +140,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="7KN-h2-kPs"/>
+        <segue reference="j56-Bz-xny"/>
     </inferredMetricsTieBreakers>
 </document>

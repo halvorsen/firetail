@@ -51,20 +51,29 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     var newAlertBoolTuple = (false, false, false, false)
     var previousViewContoller = ""
     var amountOfBlocks = Int()
+    var blocks = [AlertBlockView]()
+    var newBlocks = [AlertBlockView]()
     let loadsave = LoadSaveCoreData()
+    // var ti = [String]()
     
     override func viewWillAppear(_ animated: Bool) {
-
+        
         let (t,p,email,sms,flash,urgent) = loadsave.loadBlocks()
         if amountOfBlocks > 0 {
-        for i in 0..<amountOfBlocks {
-            let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: t[i], currentPrice: String(p[i]), sms: sms[i], email: email[i], push: flash[i], urgent: urgent[i])
-            alertScroller.addSubview(block)
-            
-        }
+            for i in 0..<amountOfBlocks {
+                let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: t[i], currentPrice: p[i], sms: sms[i], email: email[i], flash: flash[i], urgent: urgent[i])
+                block.info.addTarget(self, action: #selector(MainViewController.act(_:)), for: .touchUpInside)
+                block.ex.addTarget(self, action: #selector(MainViewController.act(_:)), for: .touchUpInside)
+                block.up.addTarget(self, action: #selector(MainViewController.act(_:)), for: .touchUpInside)
+                blocks.append(block)
+                alertScroller.addSubview(block)
+                
+            }
             print("amount of blocks: \(amountOfBlocks)")
             alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
         }
+        
+        
     }
     
     override func viewDidLoad() {
@@ -100,12 +109,21 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         container.frame = CGRect(x: 0, y: 86*screenHeight/667, width: screenWidth, height: 259*screenHeight/667)
         slideView.addSubview(container)
         container.delegate = self
-        sv =  CompareScroll(graphData: Set.oneYearDictionary["t"]!, stockName: "T", color: customColor.white68)
-        sv1 =  CompareScroll(graphData: Set.oneYearDictionary["k"]!, stockName: "K", color: customColor.white128)
-        sv2 =  CompareScroll(graphData: Set.oneYearDictionary["fig"]!, stockName: "FIG", color: customColor.white209)
-        svDot =  CompareScrollDot(graphData: Set.oneYearDictionary["t"]!, stockName: "T", color: customColor.white68)
-        svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary["k"]!, stockName: "K", color: customColor.white128)
-        svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary["fig"]!, stockName: "FIG", color: customColor.white209)
+        if Set.ti.count > 2 {
+            sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
+            sv1 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
+            sv2 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
+            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
+            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
+            svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
+        } else { //demo the compare
+            sv =  CompareScroll(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
+            sv1 =  CompareScroll(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
+            sv2 =  CompareScroll(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
+            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
+            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
+            svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
+        }
         container.addSubview(sv)
         container.addSubview(sv1)
         container.addSubview(sv2)
@@ -117,16 +135,12 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         
         
         addLabel(name: monthIndicator, text: "March, 2016", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 22, lines: 1)
-        
-        addLabel(name: stock1, text: "\(sv.stock): 0.0%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 24, width: 352, height: 48, lines: 0)
-        addLabel(name: stock2, text: "\(sv1.stock): 0.0%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 72, width: 352, height: 48, lines: 0)
-        addLabel(name: stock3, text: "\(sv2.stock): 0.0%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 120, width: 352, height: 48, lines: 0)
+        addLabel(name: stock1, text: "\(sv.stock): \(sv.percentSet[1])%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 24, width: 352, height: 48, lines: 0)
+        addLabel(name: stock2, text: "\(sv1.stock): \(sv1.percentSet[1])%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 72, width: 352, height: 48, lines: 0)
+        addLabel(name: stock3, text: "\(sv2.stock): \(sv2.percentSet[1])%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 120, width: 352, height: 48, lines: 0)
         for label in [monthIndicator,stock1,stock2,stock3] {
             slideView.addSubview(label)
             label.alpha = 0.0
-
-            
-            
         }
         
         
@@ -135,7 +149,8 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         view.addSubview(slideView)
         slideView.backgroundColor = customColor.black33
         myTextField = UITextField(frame: CGRect(x: 0,y: 400,width: screenWidth ,height: 100*screenHeight/1334))
-        myTextField.placeholder = "   Search Ticker"
+        myTextField.placeholder = "Search Ticker."
+        myTextField.textAlignment = .center
         myTextField.setValue(customColor.white68, forKeyPath: "_placeholderLabel.textColor")
         myTextField.font = UIFont.systemFont(ofSize: 15)
         //myTextField.borderStyle = UITextBorderStyle.roundedRect
@@ -153,7 +168,6 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         addTextField.placeholder = "   Enter Ticker"
         addTextField.setValue(customColor.white68, forKeyPath: "_placeholderLabel.textColor")
         addTextField.font = UIFont.systemFont(ofSize: 25)
-        //myTextField.borderStyle = UITextBorderStyle.roundedRect
         addTextField.autocorrectionType = UITextAutocorrectionType.no
         addTextField.keyboardType = UIKeyboardType.default
         addTextField.returnKeyType = UIReturnKeyType.done
@@ -167,7 +181,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         
         
         slideView.addSubview(myTextField)
-       // slideView.addSubview(addTextField)
+        // slideView.addSubview(addTextField)
         addButton(name: menu, x: 0, y: 0, width: 116, height: 122, title: "", font: "", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.menuFunc), addSubview: false)
         slideView.addSubview(menu)
         addButton(name: add, x: 638, y: 0, width: 112, height: 120, title: "", font: "", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.addFunc(_:)), addSubview: false)
@@ -184,7 +198,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         alertScroller.contentSize = CGSize(width: screenWidth, height: alertCount*120*screenHeight/1334)
         slideView.addSubview(alertScroller)
         
-
+        
         
         //alertScroller.addSubview(googBlock)
         slideView.layer.shadowColor = UIColor.black.cgColor
@@ -210,47 +224,192 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         amountOfBlocks = loadsave.amount()
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-       
-        container2.setContentOffset(scrollView.contentOffset, animated: false)
-        let months = ["March, 2016", "April, 2016", "May, 2016", "June, 2016", "July, 2016", "August, 2016", "September, 2016", "October, 2016", "November, 2016", "December, 2016", "January, 2017", "February, 2017"]
-        for i in 1...12 {
-            if scrollView.contentSize.width*CGFloat(Double(i)-2.2)/12...scrollView.contentSize.width*CGFloat(Double(i)-1.2)/12 ~= scrollView.contentOffset.x {
-                stock1.text = "\(sv.stock): \(sv.percentSet[i-1])%"
-                stock2.text = "\(sv1.stock): \(sv1.percentSet[i-1])%"
-                stock3.text = "\(sv2.stock): \(sv2.percentSet[i-1])%"
-                monthIndicator.text = "\(months[i-1])"
+    @objc func act(_ button: UIButton) {
+        
+        switch button.tag {
+        case 0:
+            var check = false
+            var position: CGFloat = 1
+            Set.ti.removeAll()
+            for i in 0..<blocks.count {
                 
-                let array = [sv.percentSetVal[i-1],sv1.percentSetVal[i-1],sv2.percentSetVal[i-1]].sorted { $0 > $1 }
-                UIView.animate(withDuration: 0.5) {
-                if self.sv.percentSetVal[i-1] > self.sv1.percentSetVal[i-1] {
-                    if self.sv.percentSetVal[i-1] > self.sv2.percentSetVal[i-1] {
-                        self.stock1.frame.origin.y = 24*self.screenHeight/1334
-                        if self.sv1.percentSetVal[i-1] > self.sv2.percentSetVal[i-1] {
-                            self.stock2.frame.origin.y = 72*self.screenHeight/1334
-                            self.stock3.frame.origin.y = 120*self.screenHeight/1334
-                        } else {
-                            self.stock3.frame.origin.y = 72*self.screenHeight/1334
-                            self.stock2.frame.origin.y = 120*self.screenHeight/1334
-                        }
-                    } else {
-                        self.stock3.frame.origin.y = 24*self.screenHeight/1334
-                        self.stock1.frame.origin.y = 72*self.screenHeight/1334
-                        self.stock2.frame.origin.y = 120*self.screenHeight/1334
+                
+                if button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text {
+                    
+                    
+                    UIView.animate(withDuration: 0.6) {
+                        self.blocks[i].removeFromSuperview()
+                        self.blocks[i].slideView.frame.origin.x = 0
                     }
-                } else {
-                    if self.sv.percentSetVal[i-1] > self.sv2.percentSetVal[i-1] {
-                        self.stock1.frame.origin.y = 72*self.screenHeight/1334
-                        if self.sv1.percentSetVal[i-1] > self.sv2.percentSetVal[i-1] {
-                            self.stock2.frame.origin.y = 24*self.screenHeight/1334
-                            self.stock3.frame.origin.y = 120*self.screenHeight/1334
-                        } else {
-                            self.stock2.frame.origin.y = 120*self.screenHeight/1334
-                            self.stock3.frame.origin.y = 24*self.screenHeight/1334
+                    check = true
+                    for k in 0..<i {
+                        self.blocks[k].layer.zPosition = position; position += 1
+                        newBlocks.append(blocks[k])
+                        Set.ti.append(blocks[k].stockTickerGlobal)
+                        loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
+                    }
+                    if i != (blocks.count - 1) {
+                        for k in (i+1)..<blocks.count {
+                            self.blocks[k].layer.zPosition = position; position += 1
+                            newBlocks.append(blocks[k])
+                            Set.ti.append(blocks[k].stockTickerGlobal)
+                            loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
                         }
                     }
                 }
+                
+                if check {
+                    UIView.animate(withDuration: 0.6) { self.blocks[i].frame.origin.y -= 120*self.screenHeight/1334 }
+                }
+            }
+            
+            blocks = newBlocks
+            newBlocks.removeAll()
+            amountOfBlocks -= 1
+            alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
+            loadsave.saveBlockAmount(amount: amountOfBlocks)
+            
+            reboot()
+            
+        case 1:
+            
+            if blocks[0].stockTickerLabel.text == button.title(for: .disabled)! {break}
+            Set.ti.removeAll()
+            var check = true
+            var position: CGFloat = 1
+            for i in 0..<blocks.count {
+                if button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text {
+                    newBlocks.append(blocks[i])
+                    Set.ti.append(blocks[i].stockTickerGlobal)
+                    loadsave.saveBlock(stockTicker: blocks[i].stockTickerGlobal, currentPrice: blocks[i].currentPriceGlobal, sms: blocks[i].smsGlobal, email: blocks[i].emailGlobal, flash: blocks[i].flashGlobal, urgent: blocks[i].urgentGlobal)
+                    UIView.animate(withDuration: 0.6) {self.blocks[i].frame.origin.y = 0
+                        self.blocks[i].slideView.frame.origin.x = 0
+                        self.alertScroller.contentOffset = CGPoint(x: 0, y: 0)
                     }
+                    self.blocks[i].layer.zPosition = position; position += 1
+                    check = false
+                    for k in 0..<i {
+                        self.blocks[k].layer.zPosition = position; position += 1
+                        newBlocks.append(blocks[k])
+                        Set.ti.append(blocks[k].stockTickerGlobal)
+                        loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
+                    }
+                    if i != (blocks.count - 1) {
+                        for k in (i+1)..<blocks.count {
+                            self.blocks[k].layer.zPosition = position; position += 1
+                            newBlocks.append(blocks[k])
+                            Set.ti.append(blocks[k].stockTickerGlobal)
+                            loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
+                        }
+                    }
+                }
+                
+                if check {
+                    UIView.animate(withDuration: 0.6) { self.blocks[i].frame.origin.y += 120*self.screenHeight/1334 }
+                }
+            }
+            
+            blocks = newBlocks
+            newBlocks.removeAll()
+            
+            reboot()
+            
+        case 2:
+            
+            stringToPass = button.title(for: .disabled)!
+            self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
+        default:
+            break
+        }
+        print("Ti: \(Set.ti)")
+    }
+    func reboot() {
+        mask.frame = container.frame
+        print("TITITITITITTI")
+        print(Set.ti)
+        print(Set.oneYearDictionary)
+        for view in container.subviews{
+            view.removeFromSuperview()
+        }
+        for view in container2.subviews{
+            view.removeFromSuperview()
+        }
+        if Set.ti.count > 2 {
+            sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
+            sv1 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
+            sv2 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
+            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
+            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
+            svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
+
+        } else { //demo the compare
+            sv =  CompareScroll(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
+            sv1 =  CompareScroll(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
+            sv2 =  CompareScroll(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
+            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
+            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
+            svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
+        }
+        container.addSubview(sv)
+        container.addSubview(sv1)
+        container.addSubview(sv2)
+        container2.addSubview(svDot)
+        container2.addSubview(svDot1)
+        container2.addSubview(svDot2)
+        
+        whoseOnFirst(container)
+        
+        UIView.animate(withDuration: 2.0) {
+            self.mask.frame.origin.x += 2.5*11*self.screenWidth/5; self.monthIndicator.alpha = 1.0; self.stock3.alpha = 1.0; self.stock2.alpha = 1.0; self.stock1.alpha = 1.0}
+    }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        container2.setContentOffset(scrollView.contentOffset, animated: false)
+        
+        whoseOnFirst(scrollView)
+    }
+    
+    func whoseOnFirst(_ scrollView: UIScrollView) {
+        let months = ["March, 2016", "April, 2016", "May, 2016", "June, 2016", "July, 2016", "August, 2016", "September, 2016", "October, 2016", "November, 2016", "December, 2016", "January, 2017", "February, 2017"]
+        for i in 0...11 {
+            if scrollView.contentSize.width*CGFloat(Double(i+1)-2.2)/12...scrollView.contentSize.width*CGFloat(Double(i+1)-1.2)/12 ~= scrollView.contentOffset.x {
+                stock1.text = "\(sv.stock): \(sv.percentSet[i])%"
+                stock2.text = "\(sv1.stock): \(sv1.percentSet[i])%"
+                stock3.text = "\(sv2.stock): \(sv2.percentSet[i])%"
+                monthIndicator.text = "\(months[i])"
+                
+                let array = [sv.percentSetVal[i],sv1.percentSetVal[i],sv2.percentSetVal[i]].sorted { $0 > $1 }
+                UIView.animate(withDuration: 0.5) {
+                    if self.sv.percentSetVal[i] > self.sv1.percentSetVal[i] {
+                        if self.sv.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                            self.stock1.frame.origin.y = 24*self.screenHeight/1334
+                            if self.sv1.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                                self.stock2.frame.origin.y = 72*self.screenHeight/1334
+                                self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                            } else {
+                                self.stock3.frame.origin.y = 72*self.screenHeight/1334
+                                self.stock2.frame.origin.y = 120*self.screenHeight/1334
+                            }
+                        } else {
+                            self.stock3.frame.origin.y = 24*self.screenHeight/1334
+                            self.stock1.frame.origin.y = 72*self.screenHeight/1334
+                            self.stock2.frame.origin.y = 120*self.screenHeight/1334
+                        }
+                    } else {
+                        if self.sv.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                            self.stock1.frame.origin.y = 72*self.screenHeight/1334
+                            self.stock2.frame.origin.y = 24*self.screenHeight/1334
+                            self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                        } else {
+                            self.stock1.frame.origin.y = 120*self.screenHeight/1334
+                            self.stock2.frame.origin.y = 72*self.screenHeight/1334
+                            self.stock3.frame.origin.y = 24*self.screenHeight/1334
+                        }
+                    }
+                    
+                }
                 break
             }
         }
@@ -259,7 +418,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     override func viewDidAppear(_ animated: Bool) {
         UIView.animate(withDuration: 2.0) {
             self.mask.frame.origin.x += 2.5*11*self.screenWidth/5; self.monthIndicator.alpha = 1.0; self.stock3.alpha = 1.0; self.stock2.alpha = 1.0; self.stock1.alpha = 1.0}
-     
+        
         runSearch()
         
         self.myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(MainViewController.updateDot), userInfo: nil, repeats: true)
@@ -337,18 +496,18 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
             cover.alpha = 1.0
         }
         delay(bySeconds: 0.8) {
-           self.addTextField.becomeFirstResponder()
+            self.addTextField.becomeFirstResponder()
         }
         
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField.tag == 0 {
-        self.view.endEditing(true)
-        if myTextField.text != nil && myTextField.delegate != nil {
-            
-            stringToPass = myTextField.text!
-            goToGraph()
+            self.view.endEditing(true)
+            if myTextField.text != nil && myTextField.delegate != nil {
+                
+                stringToPass = myTextField.text!
+                goToGraph()
             }
         } else if textField.tag == 1 {
             if addTextField.text != nil && addTextField.delegate != nil {
@@ -365,9 +524,9 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "fromMainToGraph" {
-        let graphView: GraphViewController = segue.destination as! GraphViewController
-
-        graphView.passedString = stringToPass
+            let graphView: GraphViewController = segue.destination as! GraphViewController
+            
+            graphView.passedString = stringToPass
         } else if segue.identifier == "fromMainToAdd" {
             let addView: AddViewController = segue.destination as! AddViewController
             
@@ -381,45 +540,5 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
         
     }
-    
-    func getOneMonthData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
-      
-        BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
-   
-                var stockData = [Double]()
-           
-                stock.mapOneYearChartDataModule({
-          
-                    
-                        
-                        for point in (stock.oneYearChartModule?.dataPoints)! {
-                            
-                           // stockData.dates.append(point.date)
-                            stockData.append(point.close)
-                            
-               
-                        }
-          
-                    result(stockData, stockName)
-     
-                }, failure: { (error) in
-                    print(error)
-                    result(nil, stockName)
-                })
-            
-        }) { (error) in
-            print(error)
-            result(nil, stockName)
-        }
-        
-        
-        
-    }
-    
-    
-    
-    
-    
-    
     
 }

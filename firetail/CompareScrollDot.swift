@@ -51,7 +51,7 @@ class CompareScrollDot: UIView {
     
     override func draw(_ rect: CGRect) {
         let ctx = UIGraphicsGetCurrentContext()
-        ctx!.translateBy(x: 0, y: (self.bounds.height/2 - (__set.last! - __set.first!)*45))   ///need to figure out what is conroling the scaling to do it automatically
+        ctx!.translateBy(x: 0, y: (self.bounds.height/2 - (__set.max()! - __set.first!)*45))   ///need to figure out what is conroling the scaling to do it automatically
         ctx!.scaleBy(x: scale, y: scale)
         let path = quadCurvedPath()
                

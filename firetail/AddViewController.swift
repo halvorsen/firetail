@@ -187,23 +187,27 @@ class AddViewController: ViewSetup {
    
         }
         prepareGraph() {result in
-            
-            
-            
+
         }
         
         
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         
+        
+        
+            
+        
+        
     }
     let mask = UIView()
-    override func viewDidAppear(_ animated: Bool) {
-//        UIView.animate(withDuration: 1.0) {
-//            self.mask.frame.origin.x += self.screenWidth
-//        }
-        
-        
+
+    override func viewWillAppear(_ animated: Bool) {
+        getOneMonthData(stockName: newAlertTicker) {
+            
+            Set.oneYearDictionary[$1] = $0
+            
+        }
     }
     
     @objc private func back(_ sender: UIButton) {
@@ -243,6 +247,7 @@ class AddViewController: ViewSetup {
     
     
     @objc private func add(_ button: UIButton) {
+        Set.ti.append(newAlertTicker)
         loadsave.saveBlockAmount(amount: amountOfBlocksOld + 1)
         loadsave.saveBlock(stockTicker: newAlertTicker, currentPrice: alertPrice, sms: newAlertBoolTuple.0, email: newAlertBoolTuple.1, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3)
         self.performSegue(withIdentifier: "fromAddToMain", sender: self)
@@ -305,6 +310,8 @@ class AddViewController: ViewSetup {
         let mainView: MainViewController = segue.destination as! MainViewController
         mainView.previousViewContoller = "Add"
         mainView.amountOfBlocks = amountOfBlocksOld + 1
+        print("SETCOUNT")
+        print(Set.ti.count)
     }
 
     private func prepareGraph(result: @escaping (_ dateArray: [Date]?,_ closings: [Double]?) -> Void) {

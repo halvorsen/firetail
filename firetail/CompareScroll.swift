@@ -57,7 +57,7 @@ class CompareScroll: UIView {
     
     override func draw(_ rect: CGRect) {
         let ctx = UIGraphicsGetCurrentContext()
-        ctx!.translateBy(x: 0, y: (self.bounds.height/2 - (__set.last! - __set.first!)*45))   ///need to figure out what is conroling the scaling to do it automatically
+        ctx!.translateBy(x: 0, y: (self.bounds.height/2 - (__set.max()! - __set.first!)*45))   ///need to figure out what is conroling the scaling to do it automatically
         ctx!.scaleBy(x: scale, y: scale)
         let path = quadCurvedPath()
         
@@ -74,15 +74,7 @@ class CompareScroll: UIView {
     }
     
     var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
-    //        didSet {
-    //            setNeedsDisplay()
-    //        }
-    //  }
-    
-    //    func coordXFor(index: Int) -> CGFloat {
-    //        let Yval = bounds.height/2 * data[index] / data.max()!
-    //        return   data[0]*(1-(1-Yval/data[0])*2)
-    //    }
+
     func coordXFor(index: Int) -> CGFloat {
         return bounds.height - bounds.height * data[index] / (data.max() ?? 0)
     }
