@@ -1,1 +1,3 @@
-# firetail
+# Firetail Mobile
+
+Firetail iOS App
