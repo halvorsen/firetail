@@ -19,7 +19,7 @@ public struct MyVariables {
 public var gingerBreadMan = CGMutablePath()
 
 class GraphViewController: ViewSetup {
-    var myTimer = Timer()
+   // var myTimer = Timer()
     let customColor = CustomColor()
     var enter = UIButton()
     var graphViewSeen = StockGraphView2()
@@ -38,7 +38,7 @@ class GraphViewController: ViewSetup {
     var currentTextKey = "1y"
     let layer = CAShapeLayer()
     
-    //var progressHUD = ProgressHUD(text: "Loading")
+    var progressHUD = ProgressHUD(text: "")
     var start = CGFloat()
     var switchable = true
     var first = true
@@ -80,16 +80,20 @@ class GraphViewController: ViewSetup {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        progressHUD = ProgressHUD(text: stockName)
         view.addSubview(graphViewSeen)
         graphViewSeen.alpha = 0.0
-        self.graphViewSeen.bounce()
-        //  progressHUD = ProgressHUD(text: passedString.uppercased())
-        //  progressHUD.layer.zPosition = 5
-        
-        //   self.view.addSubview(progressHUD)
+       // self.graphViewSeen.bounce()
+          progressHUD = ProgressHUD(text: passedString.uppercased())
+          progressHUD.layer.zPosition = 5
+        progressHUD.alpha = 0.0
+        view.addSubview(progressHUD)
         self.view.backgroundColor = UIColor.black
+        UIView.animate(withDuration: 3.0) {
+            self.progressHUD.alpha = 1.0
+        }
         showGraph()
-        graphViewSeen.animateIt()
+       // graphViewSeen.animateIt()
         
     }
     
@@ -176,12 +180,27 @@ class GraphViewController: ViewSetup {
          let serialQueue = DispatchQueue(label: "queuename", qos: DispatchQoS.userInitiated)
       //  serialQueue.async {
         if stockData.1[self.i] != nil {
+//            if stockData.0[self.i] == "1m" {
+//                print("EEEEK")
+//                print(stockData.1[self.i]!.closingPrice)
+//                print(stockData.1[self.i]!.dates)
+//                print("LAST")
+//                print(stockData.1[self.i]!.closingPrice.last!)
+//                
+//               // let z = stockData.1[self.i]!.closingPrice.count - 1
+//               Set.yesterday = stockData.1[self.i]!.closingPrice.last!
+//            }
             
-                let graphView = StockGraphView2(stockData: stockData.1[self.i]!, key: stockData.0[self.i], cubic: true)
             
-            let ma = stockData.1[self.i]!.closingPrice.max()!
-            let mi = stockData.1[self.i]!.closingPrice.min()!
-            self.yVals[stockData.0[self.i]] = (String(format: "%.1f", ma)+"0", String(format: "%.1f", mi + 3*(ma-mi)/4)+"0", String(format: "%.1f", mi + 2*(ma-mi)/4)+"0",String(format: "%.1f", mi + (ma-mi)/4)+"0",String(format: "%.1f", mi)+"0")
+            let graphView = StockGraphView2(stockData: stockData.1[self.i]!, key: stockData.0[self.i], cubic: true)
+            
+            let ma = stockData.1[self.i]!.closingPrice.max()! //from unfiltered highs and lows
+            let mi = stockData.1[self.i]!.closingPrice.min()! //from unfiltered
+            let ma2 = graphView._outputValues.max()! //from averages for middle of graph
+            let mi2 = graphView._outputValues.min()!// from averages for middle of graph
+            
+            //basically what this does to the yellow detailed graphs is gives the actual max and min values as the top and bottom y labels. the graph is all averages execpt for the current price, last point on graph, which is the current prices. As you can imagine this makes for a graph that isn't totally lined up with it's legends but gives you a good point at the end and top and bottom, then everything else is approximation curve through averaged prices
+            self.yVals[stockData.0[self.i]] = (String(format: "%.1f", ma)+"0", String(format: "%.1f", mi2 + 3*(ma2-mi2)/4)+"0", String(format: "%.1f", mi2 + 2*(ma2-mi2)/4)+"0",String(format: "%.1f", mi2 + (ma2-mi2)/4)+"0",String(format: "%.1f", mi)+"0")
             
             
                 graphView.isUserInteractionEnabled = false
@@ -197,8 +216,9 @@ class GraphViewController: ViewSetup {
                     self.currentPrice.text = String(format: "%.2f", stockData.1[self.i]!.closingPrice.last!)
                 } else if stockData.0[self.i] == "3m" {
                     
-                    self.graphViewSeen.countinueBouncing = false
-                    self.myTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(GraphViewController.checkDoneSquashing), userInfo: nil, repeats: true)
+                    delay(bySeconds: 1.0) {
+                        self.checkDoneSquashing()} //bypasses animation
+                   // self.myTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(GraphViewController.checkDoneSquashing), userInfo: nil, repeats: true)
                 }
                 
                 if self.i < 6 {
@@ -229,17 +249,18 @@ class GraphViewController: ViewSetup {
             
             callCorrectGraph2(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
                 
-                if stockData.0.count == 7 { //temp fix, need to fix callcorrectgraph2 to only send once
+                if stockData.0.count == 7 {
                     
                     for i in 0..<stockData.0.count {
                         self.orderOfGraphs[stockData.0[i]] = i
                         self.orderofGraphsInverse[i] = stockData.0[i]
                     }
-                    
-                    //    self.delay(bySeconds: 0.3){
+
                     self.implementDrawSubviews(stockData: stockData)}
+ 
                 
-                //    }
+
+                
             }
         }
     }
@@ -247,16 +268,17 @@ class GraphViewController: ViewSetup {
     
     
     func checkDoneSquashing() {
-        if graphViewSeen.doneSquashing {
+       // if graphViewSeen.doneSquashing {
             loading.removeFromSuperview()
             add1YGraph()
-            myTimer.invalidate()
+         //   myTimer.invalidate()
+            progressHUD.removeFromSuperview()
             for (_,graph) in self.graphViews {
                 if graph != nil && (graph?.isDescendant(of: self.view))! {
                     graph!.removeFromSuperview()
                 }
             }
-        }
+       // }
     }
     
     
@@ -286,6 +308,7 @@ class GraphViewController: ViewSetup {
             graphViewSeen.layerView.clipsToBounds = true
             
             graphViewSeen.layerView.layer.addSublayer(layer)
+           
             graphViewSeen.change.text = Label.changeValues[orderOfGraphs["1y"]!]
             graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs["1y"]!]
             trade.alpha = 0.0
@@ -366,6 +389,22 @@ class GraphViewController: ViewSetup {
                             stockData.closingPrice.append(point.close)
               
                         }
+                        
+                                        print("EEEEK")
+                                        print(key)
+//                                        print(stockData.closingPrice)
+//                                        print(stockData.dates)
+//                                        print("LAST")
+//                                        print(stockData.closingPrice.last!)
+                        if key == "1m" {
+                                       // let z = stockData.1[self.i]!.closingPrice.count - 1
+                                       Set.yesterday = stockData.closingPrice.last!
+                                    }
+                        
+                        if key == "1d" {
+                            Set.currentPrice = stockData.closingPrice.last!
+                        }
+                        
                         stockDatas.append(stockData)
                     }
                                   //      self.delay(bySeconds: 0.3) {

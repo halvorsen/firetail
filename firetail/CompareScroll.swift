@@ -22,7 +22,7 @@ class CompareScroll: UIView {
     var __set = [CGFloat]()
     var passedColor = UIColor()
     let rangeMultiplier: CGFloat = 10
-    let scale: CGFloat = 2.5
+    let scale: CGFloat = 2.0
     var stock = ""
     var percentSet = [String]()
     var percentSetVal = [CGFloat]()
@@ -35,9 +35,12 @@ class CompareScroll: UIView {
         self.backgroundColor = .clear
         passedColor = color
         var _set = [CGFloat]()
-        for i in 0...11 {
+        _set.append(CGFloat(graphData.first!))
+        for i in 1...10 {
             _set.append(CGFloat(graphData[Int(21*i)]))
         }
+        _set.append(CGFloat(graphData.last!))
+        print(stockName)
         print("_set: \(_set)")
         
         _set = _set.map { $0 * rangeMultiplier / _set.first! }
@@ -45,6 +48,8 @@ class CompareScroll: UIView {
         percentSetVal = _set.map { $0 * 10 - 100 }
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
         print("__set: \(__set)")
+        print("COUNT2")
+        print(__set.count)
         data = __set
         print("HERE IS DATA POST PROCESS: \(data)")
         setNeedsDisplay()
@@ -57,9 +62,15 @@ class CompareScroll: UIView {
     
     override func draw(_ rect: CGRect) {
         let ctx = UIGraphicsGetCurrentContext()
-        ctx!.translateBy(x: 0, y: (self.bounds.height/2 - (__set.max()! - __set.first!)*45))   ///need to figure out what is conroling the scaling to do it automatically
-        ctx!.scaleBy(x: scale, y: scale)
         let path = quadCurvedPath()
+        let diff = path.bounds.height * scale
+        let m = __set.max()!
+        let n = __set.min()!
+        let f = __set.first!
+        let diff2 = (m-f)/(m-n)
+        ctx!.translateBy(x: 0, y: self.bounds.height/2 - diff2*diff)
+        ctx!.scaleBy(x: scale, y: scale)
+        
         
         
         customColor.black33.setStroke()

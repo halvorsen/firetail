@@ -81,7 +81,7 @@ class ViewSetup: UIViewController {
         return true
     }
     
-    func getOneMonthData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
+    func getOneYearData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
         
         BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
             
@@ -96,6 +96,30 @@ class ViewSetup: UIViewController {
                     // stockData.dates.append(point.date)
                     stockData.append(point.close)
                     
+                    
+                }
+                let mo = ["","January","Febrary","March","April","May","June","July","August","September","October","November","December"]
+                if Set.month.count < 2 {
+                    var i = 0
+                    var _month = [String]()
+                for point in (stock.oneYearChartModule?.dataPoints)! {
+                    let y = point.date.year
+                    print("y: \(y)")
+                    let m = point.date.month
+                    print("m \(m)")
+                  
+                    if i%21 == 20 {
+                    _month.append("\(mo[m]), \(y)")
+                    }
+                    i += 1
+                    
+                }
+                    print("COUNT")
+                    
+                    
+                    Set.month = _month
+                    print(Set.month.count)
+                    print(Set.month)
                 }
                 
                 result(stockData, stockName)

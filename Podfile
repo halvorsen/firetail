@@ -10,5 +10,7 @@ target 'firetail' do
   pod ‘BigBoard’
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
+  pod 'Firebase/Database'
+  pod 'SwiftyStoreKit'
 
 end

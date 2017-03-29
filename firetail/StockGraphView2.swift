@@ -37,6 +37,7 @@ class StockGraphView2: UIView {
     var countinueBouncing = true
     var doneSquashing = false
     var graphAppearsInView = true
+    var g = String()
     
     
     
@@ -103,60 +104,60 @@ class StockGraphView2: UIView {
     }
 
     
-    func squash() {
-        baseOfGraphView.baseLayer.add(baseOfGraphView.layerAnimation, forKey: nil)
-        self.delay(bySeconds: 0.3) {
-            self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation2, forKey: nil)
-            self.delay(bySeconds: 0.05) {
-                self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation5, forKey: nil)
-                self.delay(bySeconds: 0.05) {
-                    self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation6, forKey: nil)
-                   // self.delay(bySeconds: 0.05) {
-                        self.doneSquashing = true
-                   // }
-                }
-            }
-            
-        }
-    }
+//    func squash() {
+//        baseOfGraphView.baseLayer.add(baseOfGraphView.layerAnimation, forKey: nil)
+//        self.delay(bySeconds: 0.3) {
+//            self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation2, forKey: nil)
+//            self.delay(bySeconds: 0.05) {
+//                self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation5, forKey: nil)
+//                self.delay(bySeconds: 0.05) {
+//                    self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation6, forKey: nil)
+//                   // self.delay(bySeconds: 0.05) {
+//                        self.doneSquashing = true
+//                   // }
+//                }
+//            }
+//            
+//        }
+//    }
     
-    func bounce() {
-        //     DispatchQueue.global(qos: .userInteractive).async {
-        self.delay(bySeconds: 0.0) {
-            self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation, forKey: nil)
-            self.delay(bySeconds: 0.4) {
-                self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation2, forKey: nil)
-                self.delay(bySeconds: 0.1) {
-                    self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation3, forKey: nil)
-                    self.delay(bySeconds: 0.1) {
-                        self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation4, forKey: nil)
-                        self.delay(bySeconds: 0.4) {
-                            
-                            if self.countinueBouncing == true {
-                                self.bounce()
-                            } else {
-                                self.squash()
-                            }
-                            
-                        }
-                    }
-                }
-                
-            }
-        }
-        //  }
-        
-    }
+//    func bounce() {
+//        //     DispatchQueue.global(qos: .userInteractive).async {
+//        self.delay(bySeconds: 0.0) {
+//            self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation, forKey: nil)
+//            self.delay(bySeconds: 0.4) {
+//                self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation2, forKey: nil)
+//                self.delay(bySeconds: 0.1) {
+//                    self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation3, forKey: nil)
+//                    self.delay(bySeconds: 0.1) {
+//                        self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation4, forKey: nil)
+//                        self.delay(bySeconds: 0.4) {
+//                            
+//                            if self.countinueBouncing == true {
+//                                self.bounce()
+//                            } else {
+//                                self.squash()
+//                            }
+//                            
+//                        }
+//                    }
+//                }
+//                
+//            }
+//        }
+//        //  }
+//        
+//    }
+//    
     
-    
-    
+    var _outputValues = [Double]()
     
     func reduceDataPoints(original: [Double]) -> [Double] {
         let originalAmount = original.count
         var _original = original
         
         let last = original.last! //<--added to get the last value equal to last closing price and not average
-        print("last: \(last)")
+        
         let setAmount: Int = originalAmount/15
         var outputValues = [Double](repeating: 0, count: 15)
         
@@ -173,18 +174,25 @@ class StockGraphView2: UIView {
             outputValues[j] += _original[i]
             }
         }
-        outputValues[14] += Double(setAmount)*last //<--added to get the last value equal to last closing price and not average
-        print("!!!!!!!!")
-        print(outputValues)
-        let _outputValues = outputValues.map { $0 / Double(setAmount) }
-        print("?????????")
+        outputValues[14] += Double(setAmount)*Set.currentPrice //<--added to get the last value equal to last closing price and not average
+        //outputValues.append(Double(setAmount)*Set.currentPrice)
+        print("YIKES")
+        print(Set.currentPrice)
+        if g == "1d" {
+            print("Last2")
+            print(Set.yesterday)
+            outputValues[0] = Double(setAmount)*Set.yesterday
+            
+        }
+   
+        _outputValues = outputValues.map { $0 / Double(setAmount) }
+        print("GETOUT!")
+        print()
         print(_outputValues)
                return _outputValues
         
     }
-    
-    
-    
+
     func animateIt() {
         self.baseOfGraphView.alpha = 1.0
         self.baseOfGraphView.frame = CGRect(x: 0, y: 565*self.bounds.height/636, width: self.bounds.width, height: 70*self.bounds.height/636)
@@ -255,7 +263,7 @@ class StockGraphView2: UIView {
         base.alpha = 0.0
         base.layer.zPosition = 5
         self.addSubview(base)
-        
+        g = key
         
         
 
@@ -263,6 +271,7 @@ class StockGraphView2: UIView {
         if stockData.closingPrice.count <= 15 {
             fillChartViewWithSetsOfData(dataPoints: stockData.closingPrice, cubic: cubic)
         } else {
+           // if
             fillChartViewWithSetsOfData(dataPoints: reduceDataPoints(original: stockData.closingPrice), cubic: cubic)
         }
         if cubic {
@@ -334,7 +343,9 @@ class StockGraphView2: UIView {
             let yY = (1111.66-222.33*CGFloat(i))*graphHeight/screenHeight - 9
             addLabel(name: ys[i], text: yLabels[i], textColor: customColor.labelGray, textAlignment: .right, fontName: "Roboto-Regular", fontSize: 12, x: 0, y: yY, width: 85, height: 18, lines: 1)
             ys[i].layer.zPosition = 7
+           // if i == 0 || i == 4 { // leave the middle graph labels out
             self.addSubview(ys[i])
+           // }
         }
         
         //make a switch for different graph ranges

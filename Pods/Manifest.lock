@@ -17,6 +17,9 @@ PODS:
   - Firebase/Core (3.13.0):
     - FirebaseAnalytics (= 3.7.0)
     - FirebaseCore (= 3.5.0)
+  - Firebase/Database (3.13.0):
+    - Firebase/Core
+    - FirebaseDatabase (= 3.1.2)
   - FirebaseAnalytics (3.7.0):
     - FirebaseCore (~> 3.5)
     - FirebaseInstanceID (~> 1.0)
@@ -27,6 +30,8 @@ PODS:
     - GTMSessionFetcher/Core (~> 1.1)
   - FirebaseCore (3.5.0):
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+  - FirebaseDatabase (3.1.2):
+    - FirebaseAnalytics (~> 3.7)
   - FirebaseInstanceID (1.0.9)
   - GoogleToolboxForMac/DebugUtils (2.1.1):
     - GoogleToolboxForMac/Defines (= 2.1.1)
@@ -41,13 +46,16 @@ PODS:
   - GTMSessionFetcher/Core (1.1.8)
   - ObjectMapper (2.2.2)
   - SwiftCharts (0.5.1)
+  - SwiftyStoreKit (0.7.1)
 
 DEPENDENCIES:
   - BigBoard
   - Charts
   - Firebase/Auth
   - Firebase/Core
+  - Firebase/Database
   - SwiftCharts (~> 0.2)
+  - SwiftyStoreKit
 
 SPEC CHECKSUMS:
   Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
@@ -59,12 +67,14 @@ SPEC CHECKSUMS:
   FirebaseAnalytics: 0d1b7d81d5021155be37702a94ba1ec16d45365d
   FirebaseAuth: cc8a1824170adbd351edb7f994490a3fb5c18be6
   FirebaseCore: 1c0a13bf59bb95cdd19577252499f0ec6a03e999
+  FirebaseDatabase: 05c96d7b43a7368dc91c07791adb49683e1738d1
   FirebaseInstanceID: 2d0518b1378fe9d685ef40cbdd63d2fdc1125339
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   GTMSessionFetcher: 6f8d8b28b7e345549ac471071608170b31cb4977
   ObjectMapper: 9e385c2295bcc4e16eabbcfc85db801442bba545
   SwiftCharts: d263289cdc7fc955fef54ae3bc6529f696e69933
+  SwiftyStoreKit: 3db119f5c6fcb8c36c7b4e8ac703a5319dc2bcfe
 
-PODFILE CHECKSUM: 103facf8f6a912df38956ebbb0cbd3e0c746f783
+PODFILE CHECKSUM: 00cf789ad88b70a6707a01b32692f46b0ddfe83d
 
 COCOAPODS: 1.1.1

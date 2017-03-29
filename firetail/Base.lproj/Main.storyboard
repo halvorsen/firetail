@@ -25,11 +25,12 @@
                     <connections>
                         <segue destination="Vet-45-juL" kind="show" identifier="fromLoginToSignup" id="aWA-Zg-Qf7"/>
                         <segue destination="9Rf-87-nHj" kind="show" identifier="fromLoginToMain" id="j56-Bz-xny"/>
+                        <segue destination="VGb-5b-ve2" kind="show" identifier="fromLoginToAdd" id="S7Y-sp-YOE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V8G-bH-dK0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3238" y="1"/>
+            <point key="canvasLocation" x="-3244" y="0.0"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="ima-GP-eQY">
@@ -50,7 +51,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qsJ-WB-oWX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1960" y="-628"/>
+            <point key="canvasLocation" x="-2634" y="-817"/>
         </scene>
         <!--Add View Controller-->
         <scene sceneID="CzO-Gj-xMU">
@@ -97,7 +98,7 @@
         <!--Main View Controller-->
         <scene sceneID="6zS-Et-ocD">
             <objects>
-                <viewController id="9Rf-87-nHj" customClass="MainViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalTransitionStyle="crossDissolve" id="9Rf-87-nHj" customClass="MainViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hhA-t2-69E"/>
                         <viewControllerLayoutGuide type="bottom" id="Kz2-9G-dId"/>
@@ -141,5 +142,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="j56-Bz-xny"/>
+        <segue reference="cxp-Cj-N2o"/>
     </inferredMetricsTieBreakers>
 </document>

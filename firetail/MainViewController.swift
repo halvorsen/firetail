@@ -9,9 +9,12 @@
 import UIKit
 import BigBoard
 import Charts
+import SwiftyStoreKit
+import StoreKit
 
 class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
-    
+    var progressHUD = ProgressHUD(text: "Premium")
+    var premiumMember = false
     var myTextField = UITextField()
     var addTextField = UITextField()
     var stringToPass = "Patriots"
@@ -62,9 +65,10 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         if amountOfBlocks > 0 {
             for i in 0..<amountOfBlocks {
                 let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: t[i], currentPrice: p[i], sms: sms[i], email: email[i], flash: flash[i], urgent: urgent[i])
-                block.info.addTarget(self, action: #selector(MainViewController.act(_:)), for: .touchUpInside)
+                //   block.info.addTarget(self, action: #selector(MainViewController.act(_:)), for: .touchUpInside)
                 block.ex.addTarget(self, action: #selector(MainViewController.act(_:)), for: .touchUpInside)
-                block.up.addTarget(self, action: #selector(MainViewController.act(_:)), for: .touchUpInside)
+                //  block.up.addTarget(self, action: #selector(MainViewController.act(_:)), for: .touchUpInside)
+                
                 blocks.append(block)
                 alertScroller.addSubview(block)
                 
@@ -72,30 +76,33 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
             print("amount of blocks: \(amountOfBlocks)")
             alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
         }
-        
+        let alertTap = UITapGestureRecognizer(target: self, action: #selector(MainViewController.detail(_:)))
+        view.addGestureRecognizer(alertTap)
         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        premiumMember = loadsave.loadPremiumAccess()
         
         self.view.backgroundColor = customColor.black33
         svs = [sv,sv1,sv2]
-        addLabel(name: date, text: "12 June", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 124, width: 150, height: 32, lines: 1)
+        let d = Date()
+        let m = ["","January","February","March","April","May","June","July","August","September","October","November","December"]
+        addLabel(name: date, text: "\(d.day) \(m[d.month])", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 124, width: 150, height: 32, lines: 1)
         view.addSubview(date)
-        addLabel(name: alertAmount, text: "24", textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
+        addLabel(name: alertAmount, text: String(Set.alertCount), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
         view.addSubview(alertAmount)
-        addLabel(name: alerts1102, text: "Alerts    $1102", textColor: customColor.alertLines, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 324, width: 260, height: 28, lines: 1)
+        addLabel(name: alerts1102, text: "Alerts", textColor: customColor.alertLines, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 324, width: 260, height: 28, lines: 1)
         view.addSubview(alerts1102)
-        addLabel(name: daysOfTheWeek, text: "M  T  W  T  F  S  S", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 506, width: 260, height: 28, lines: 1)
+        addLabel(name: daysOfTheWeek, text: "M  T  W  T  F", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 506, width: 260, height: 28, lines: 1)
         view.addSubview(daysOfTheWeek)
         var bar1 = UILabel(frame: CGRect(x: 92*screenWidth/750, y: 406*screenHeight/1334, width: 6*screenWidth/750, height: 74*screenHeight/1334))
         bar1.backgroundColor = customColor.yellow
-        view.addSubview(bar1)
+        // view.addSubview(bar1)
         var bar2 = UILabel(frame: CGRect(x: 130*screenWidth/750, y: 446*screenHeight/1334, width: 6*screenWidth/750, height: 34*screenHeight/1334))
         bar2.backgroundColor = customColor.yellow
-        view.addSubview(bar2)
+        //  view.addSubview(bar2)
         addButton(name: alerts, x: 82, y: 680, width: 280, height: 25, title: "ALERTS", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.alertsFunc(_:)), addSubview: true)
         addButton(name: changeEmail, x: 82, y: 760, width: 280, height: 25, title: "CHANGE EMAIL", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.changeEmailFunc(_:)), addSubview: true)
         addButton(name: addPhone, x: 82, y: 840, width: 280, height: 25, title: "ADD PHONE", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.addPhoneFunc(_:)), addSubview: true)
@@ -109,49 +116,62 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         container.frame = CGRect(x: 0, y: 86*screenHeight/667, width: screenWidth, height: 259*screenHeight/667)
         slideView.addSubview(container)
         container.delegate = self
-        if Set.ti.count > 2 {
-            print("BLAAAAA")
-            print(Set.oneYearDictionary)
-            print(Set.ti)
-            sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
-            sv1 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
-            sv2 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
-            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
-            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
-            svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
-        } else { //demo the compare
-            sv =  CompareScroll(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
-            sv1 =  CompareScroll(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
-            sv2 =  CompareScroll(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
-            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
-            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
-            svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
-        }
-        container.addSubview(sv)
-        container.addSubview(sv1)
-        container.addSubview(sv2)
+        container2.frame = CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667)
+        container2.isUserInteractionEnabled = false
+        container2.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
+        slideView.addSubview(container2)
+        
+        populateCompareGraph()
+        
+        print("BLAAAAA")
+        print(Set.oneYearDictionary)
+        print(Set.ti)
+        
+        //
+        //            sv =  CompareScroll(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
+        //            sv1 =  CompareScroll(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
+        //            sv2 =  CompareScroll(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
+        //            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
+        //            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
+        //            svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
+        
+        
         
         
         container.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
         
+        addLabel(name: monthIndicator, text: Set.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 22, lines: 1)
         
-        addLabel(name: monthIndicator, text: "March, 2016", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 22, lines: 1)
-        addLabel(name: stock1, text: "\(sv.stock): \(sv.percentSet[1])%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 24, width: 352, height: 48, lines: 0)
-        addLabel(name: stock2, text: "\(sv1.stock): \(sv1.percentSet[1])%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 72, width: 352, height: 48, lines: 0)
-        addLabel(name: stock3, text: "\(sv2.stock): \(sv2.percentSet[1])%", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 120, width: 352, height: 48, lines: 0)
+        addLabel(name: stock1, text: "", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 24, width: 352, height: 48, lines: 0)
+        addLabel(name: stock2, text: "", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 72, width: 352, height: 48, lines: 0)
+        addLabel(name: stock3, text: "", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 120, width: 352, height: 48, lines: 0)
+        
+        switch Set.alertCount {
+        case 0:
+            break
+        case 1:
+            stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
+        case 2:
+            stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
+            stock2.text = "\(sv1.stock): \(sv1.percentSet[1])%"
+        default:
+            stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
+            stock2.text = "\(sv1.stock): \(sv1.percentSet[1])%"
+            stock3.text = "\(sv2.stock): \(sv2.percentSet[1])%"
+        }
+        
         for label in [monthIndicator,stock1,stock2,stock3] {
             slideView.addSubview(label)
             label.alpha = 0.0
         }
         
-        
         //slideview stuff//
         slideView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         view.addSubview(slideView)
         slideView.backgroundColor = customColor.black33
-        myTextField = UITextField(frame: CGRect(x: 0,y: 400,width: screenWidth ,height: 100*screenHeight/1334))
+        myTextField = UITextField(frame: CGRect(x: 0,y: 400*screenHeight/667,width: screenWidth ,height: 100*screenHeight/1334))
         myTextField.placeholder = "Search Ticker."
         myTextField.textAlignment = .center
         myTextField.setValue(customColor.white68, forKeyPath: "_placeholderLabel.textColor")
@@ -182,7 +202,6 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         addTextField.alpha = 0
         addTextField.tag = 1
         
-        
         slideView.addSubview(myTextField)
         // slideView.addSubview(addTextField)
         addButton(name: menu, x: 0, y: 0, width: 116, height: 122, title: "", font: "", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(MainViewController.menuFunc), addSubview: false)
@@ -201,8 +220,6 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         alertScroller.contentSize = CGSize(width: screenWidth, height: alertCount*120*screenHeight/1334)
         slideView.addSubview(alertScroller)
         
-        
-        
         //alertScroller.addSubview(googBlock)
         slideView.layer.shadowColor = UIColor.black.cgColor
         slideView.layer.shadowOpacity = 1
@@ -212,123 +229,133 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         returnPan = UIPanGestureRecognizer(target: self, action: #selector(MainViewController.menuReturnFunc(_:)))
         returnSwipe = UISwipeGestureRecognizer(target: self, action: #selector(MainViewController.menuReturnFunc(_:)))
         
-        container2.frame = CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667)
-        container2.isUserInteractionEnabled = false
-        container2.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
-        slideView.addSubview(container2)
-        container2.addSubview(svDot)
-        container2.addSubview(svDot1)
-        container2.addSubview(svDot2)
+        
         
         
         mask.frame = container.frame
         mask.backgroundColor = customColor.black33
         slideView.addSubview(mask)
         amountOfBlocks = loadsave.amount()
+        
+        whoseOnFirst(container)
     }
     
     @objc func act(_ button: UIButton) {
-        
-        switch button.tag {
-        case 0:
-            var check = false
-            var position: CGFloat = 1
-            Set.ti.removeAll()
-            for i in 0..<blocks.count {
+        stock1.text = ""
+        stock2.text = ""
+        stock3.text = ""
+        var check = false
+        var position: CGFloat = 1
+        Set.ti.removeAll()
+        print("CCCCCCC")
+        print(blocks.count)
+        for i in 0..<blocks.count {
+            
+            
+            if button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text {
                 
                 
-                if button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text {
-                    
-                    
-                    UIView.animate(withDuration: 0.6) {
-                        self.blocks[i].removeFromSuperview()
-                        self.blocks[i].slideView.frame.origin.x = 0
-                    }
-                    check = true
-                    for k in 0..<i {
+                UIView.animate(withDuration: 0.6) {
+                    self.blocks[i].removeFromSuperview()
+                    self.blocks[i].slideView.frame.origin.x = 0
+                }
+                check = true
+                for k in 0..<i {
+                    self.blocks[k].layer.zPosition = position; position += 1
+                    newBlocks.append(blocks[k])
+                    Set.ti.append(blocks[k].stockTickerGlobal)
+                    loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
+                }
+                if i != (blocks.count - 1) {
+                    for k in (i+1)..<blocks.count {
                         self.blocks[k].layer.zPosition = position; position += 1
                         newBlocks.append(blocks[k])
                         Set.ti.append(blocks[k].stockTickerGlobal)
                         loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
                     }
-                    if i != (blocks.count - 1) {
-                        for k in (i+1)..<blocks.count {
-                            self.blocks[k].layer.zPosition = position; position += 1
-                            newBlocks.append(blocks[k])
-                            Set.ti.append(blocks[k].stockTickerGlobal)
-                            loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
-                        }
-                    }
-                }
-                
-                if check {
-                    UIView.animate(withDuration: 0.6) { self.blocks[i].frame.origin.y -= 120*self.screenHeight/1334 }
                 }
             }
             
-            blocks = newBlocks
-            newBlocks.removeAll()
-            amountOfBlocks -= 1
-            alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
-            loadsave.saveBlockAmount(amount: amountOfBlocks)
-            
-            reboot()
-            
-        case 1:
-            
-            if blocks[0].stockTickerLabel.text == button.title(for: .disabled)! {break}
-            Set.ti.removeAll()
-            var check = true
-            var position: CGFloat = 1
-            for i in 0..<blocks.count {
-                if button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text {
-                    newBlocks.append(blocks[i])
-                    Set.ti.append(blocks[i].stockTickerGlobal)
-                    loadsave.saveBlock(stockTicker: blocks[i].stockTickerGlobal, currentPrice: blocks[i].currentPriceGlobal, sms: blocks[i].smsGlobal, email: blocks[i].emailGlobal, flash: blocks[i].flashGlobal, urgent: blocks[i].urgentGlobal)
-                    UIView.animate(withDuration: 0.6) {self.blocks[i].frame.origin.y = 0
-                        self.blocks[i].slideView.frame.origin.x = 0
-                        self.alertScroller.contentOffset = CGPoint(x: 0, y: 0)
-                    }
-                    self.blocks[i].layer.zPosition = position; position += 1
-                    check = false
-                    for k in 0..<i {
-                        self.blocks[k].layer.zPosition = position; position += 1
-                        newBlocks.append(blocks[k])
-                        Set.ti.append(blocks[k].stockTickerGlobal)
-                        loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
-                    }
-                    if i != (blocks.count - 1) {
-                        for k in (i+1)..<blocks.count {
-                            self.blocks[k].layer.zPosition = position; position += 1
-                            newBlocks.append(blocks[k])
-                            Set.ti.append(blocks[k].stockTickerGlobal)
-                            loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
-                        }
-                    }
-                }
-                
-                if check {
-                    UIView.animate(withDuration: 0.6) { self.blocks[i].frame.origin.y += 120*self.screenHeight/1334 }
-                }
+            if check {
+                UIView.animate(withDuration: 0.6) { self.blocks[i].frame.origin.y -= 120*self.screenHeight/1334 }
             }
-            
-            blocks = newBlocks
-            newBlocks.removeAll()
-            
-            reboot()
-            
-        case 2:
-            
-            stringToPass = button.title(for: .disabled)!
-            self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
-        default:
-            break
         }
+        
+        blocks = newBlocks
+        newBlocks.removeAll()
+        amountOfBlocks -= 1
+        alertAmount.text = String(amountOfBlocks)
+        alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
+        loadsave.saveBlockAmount(amount: amountOfBlocks)
+        Set.alertCount = amountOfBlocks
+        print("WWWWWWW")
+        print(Set.ti)
+        reboot()
+        
+        //        case 1:
+        //
+        //            if blocks[0].stockTickerLabel.text == button.title(for: .disabled)! {break}
+        //            Set.ti.removeAll()
+        //            var check = true
+        //            var position: CGFloat = 1
+        //            for i in 0..<blocks.count {
+        //                if button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text {
+        //                    newBlocks.append(blocks[i])
+        //                    Set.ti.append(blocks[i].stockTickerGlobal)
+        //                    loadsave.saveBlock(stockTicker: blocks[i].stockTickerGlobal, currentPrice: blocks[i].currentPriceGlobal, sms: blocks[i].smsGlobal, email: blocks[i].emailGlobal, flash: blocks[i].flashGlobal, urgent: blocks[i].urgentGlobal)
+        //                    UIView.animate(withDuration: 0.6) {self.blocks[i].frame.origin.y = 0
+        //                        self.blocks[i].slideView.frame.origin.x = 0
+        //                        self.alertScroller.contentOffset = CGPoint(x: 0, y: 0)
+        //                    }
+        //                    self.blocks[i].layer.zPosition = position; position += 1
+        //                    check = false
+        //                    for k in 0..<i {
+        //                        self.blocks[k].layer.zPosition = position; position += 1
+        //                        newBlocks.append(blocks[k])
+        //                        Set.ti.append(blocks[k].stockTickerGlobal)
+        //                        loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
+        //                    }
+        //                    if i != (blocks.count - 1) {
+        //                        for k in (i+1)..<blocks.count {
+        //                            self.blocks[k].layer.zPosition = position; position += 1
+        //                            newBlocks.append(blocks[k])
+        //                            Set.ti.append(blocks[k].stockTickerGlobal)
+        //                            loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
+        //                        }
+        //                    }
+        //                }
+        //
+        //                if check {
+        //                    UIView.animate(withDuration: 0.6) { self.blocks[i].frame.origin.y += 120*self.screenHeight/1334 }
+        //                }
+        //            }
+        //
+        //            blocks = newBlocks
+        //            newBlocks.removeAll()
+        //
+        //            reboot()
+        
+        
         print("Ti: \(Set.ti)")
     }
+    
+    
+    @objc private func detail(_ gesture: UIGestureRecognizer) {
+        for block in blocks {
+            print("EEEEEEE")
+            let frame = view.convert(block.frame, from:alertScroller)
+            if frame.contains(gesture.location(in: view)) {
+                print("FFFFFF")
+                stringToPass = block.stockTickerGlobal
+                self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
+            }
+        }
+        
+        
+    }
+    
     func reboot() {
         mask.frame = container.frame
-        print("TITITITITITTI")
         print(Set.ti)
         print(Set.oneYearDictionary)
         for view in container.subviews{
@@ -337,33 +364,49 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         for view in container2.subviews{
             view.removeFromSuperview()
         }
-        if Set.ti.count > 2 {
+        
+        populateCompareGraph()
+        
+        whoseOnFirst(container)
+        
+        UIView.animate(withDuration: 2.0) {
+            self.mask.frame.origin.x += 2.5*11*self.screenWidth/5; self.monthIndicator.alpha = 1.0; self.stock3.alpha = 1.0; self.stock2.alpha = 1.0; self.stock1.alpha = 1.0}
+    }
+    
+    private func populateCompareGraph() {
+        switch Set.alertCount {
+        case 0:
+            break
+        case 1:
+            sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
+            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
+            container.addSubview(sv)
+            container2.addSubview(svDot)
+            
+        case 2:
+            sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
+            sv1 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
+            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
+            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
+            container.addSubview(sv)
+            container.addSubview(sv1)
+            container2.addSubview(svDot)
+            container2.addSubview(svDot1)
+            
+        default:
             sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
             sv1 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
             sv2 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
             svDot =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
             svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
             svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
-
-        } else { //demo the compare
-            sv =  CompareScroll(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
-            sv1 =  CompareScroll(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
-            sv2 =  CompareScroll(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
-            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
-            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
-            svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
+            container.addSubview(sv)
+            container.addSubview(sv1)
+            container.addSubview(sv2)
+            container2.addSubview(svDot)
+            container2.addSubview(svDot1)
+            container2.addSubview(svDot2)
         }
-        container.addSubview(sv)
-        container.addSubview(sv1)
-        container.addSubview(sv2)
-        container2.addSubview(svDot)
-        container2.addSubview(svDot1)
-        container2.addSubview(svDot2)
-        
-        whoseOnFirst(container)
-        
-        UIView.animate(withDuration: 2.0) {
-            self.mask.frame.origin.x += 2.5*11*self.screenWidth/5; self.monthIndicator.alpha = 1.0; self.stock3.alpha = 1.0; self.stock2.alpha = 1.0; self.stock1.alpha = 1.0}
     }
     
     
@@ -375,43 +418,87 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     }
     
     func whoseOnFirst(_ scrollView: UIScrollView) {
-        let months = ["March, 2016", "April, 2016", "May, 2016", "June, 2016", "July, 2016", "August, 2016", "September, 2016", "October, 2016", "November, 2016", "December, 2016", "January, 2017", "February, 2017"]
+        
         for i in 0...11 {
             if scrollView.contentSize.width*CGFloat(Double(i+1)-2.2)/12...scrollView.contentSize.width*CGFloat(Double(i+1)-1.2)/12 ~= scrollView.contentOffset.x {
-                stock1.text = "\(sv.stock): \(sv.percentSet[i])%"
-                stock2.text = "\(sv1.stock): \(sv1.percentSet[i])%"
-                stock3.text = "\(sv2.stock): \(sv2.percentSet[i])%"
-                monthIndicator.text = "\(months[i])"
+                switch Set.alertCount {
+                case 0:
+                    break
+                case 1:
+                    stock1.text = "\(sv.stock): \(sv.percentSet[i])%"
+                case 2:
+                    stock1.text = "\(sv.stock): \(sv.percentSet[i])%"
+                    stock2.text = "\(sv1.stock): \(sv1.percentSet[i])%"
+                default:
+                    stock1.text = "\(sv.stock): \(sv.percentSet[i])%"
+                    stock2.text = "\(sv1.stock): \(sv1.percentSet[i])%"
+                    stock3.text = "\(sv2.stock): \(sv2.percentSet[i])%"
+                }
                 
-                let array = [sv.percentSetVal[i],sv1.percentSetVal[i],sv2.percentSetVal[i]].sorted { $0 > $1 }
-                UIView.animate(withDuration: 0.5) {
-                    if self.sv.percentSetVal[i] > self.sv1.percentSetVal[i] {
-                        if self.sv.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                monthIndicator.text = Set.month[i]
+                
+                //                switch Set.alertCount {
+                //                case 0:
+                //                    break
+                //                case 1:
+                //                    let array = [sv.percentSetVal[i]]
+                //                case 2:
+                //                    let array = [sv.percentSetVal[i],sv1.percentSetVal[i]].sorted { $0 > $1 }
+                //                default:
+                //                    let array = [sv.percentSetVal[i],sv1.percentSetVal[i],sv2.percentSetVal[i]].sorted { $0 > $1 }
+                //                }
+                
+                switch Set.alertCount {
+                case 0:
+                    break
+                case 1:
+                    self.stock1.frame.origin.y = 24*self.screenHeight/1334
+                    self.stock2.frame.origin.y = 72*self.screenHeight/1334
+                    self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                case 2:
+                    UIView.animate(withDuration: 0.5) {
+                        if self.sv.percentSetVal[i] > self.sv1.percentSetVal[i] {
+                            
                             self.stock1.frame.origin.y = 24*self.screenHeight/1334
-                            if self.sv1.percentSetVal[i] > self.sv2.percentSetVal[i] {
-                                self.stock2.frame.origin.y = 72*self.screenHeight/1334
-                                self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                            self.stock2.frame.origin.y = 72*self.screenHeight/1334
+                            self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                        } else {
+                            self.stock1.frame.origin.y = 72*self.screenHeight/1334
+                            self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                            self.stock2.frame.origin.y = 24*self.screenHeight/1334
+                        }
+                        
+                    }
+                default:
+                    UIView.animate(withDuration: 0.5) {
+                        if self.sv.percentSetVal[i] > self.sv1.percentSetVal[i] {
+                            if self.sv.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                                self.stock1.frame.origin.y = 24*self.screenHeight/1334
+                                if self.sv1.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                                    self.stock2.frame.origin.y = 72*self.screenHeight/1334
+                                    self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                                } else {
+                                    self.stock3.frame.origin.y = 72*self.screenHeight/1334
+                                    self.stock2.frame.origin.y = 120*self.screenHeight/1334
+                                }
                             } else {
-                                self.stock3.frame.origin.y = 72*self.screenHeight/1334
+                                self.stock3.frame.origin.y = 24*self.screenHeight/1334
+                                self.stock1.frame.origin.y = 72*self.screenHeight/1334
                                 self.stock2.frame.origin.y = 120*self.screenHeight/1334
                             }
                         } else {
-                            self.stock3.frame.origin.y = 24*self.screenHeight/1334
-                            self.stock1.frame.origin.y = 72*self.screenHeight/1334
-                            self.stock2.frame.origin.y = 120*self.screenHeight/1334
+                            if self.sv.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                                self.stock1.frame.origin.y = 72*self.screenHeight/1334
+                                self.stock2.frame.origin.y = 24*self.screenHeight/1334
+                                self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                            } else {
+                                self.stock1.frame.origin.y = 120*self.screenHeight/1334
+                                self.stock2.frame.origin.y = 72*self.screenHeight/1334
+                                self.stock3.frame.origin.y = 24*self.screenHeight/1334
+                            }
                         }
-                    } else {
-                        if self.sv.percentSetVal[i] > self.sv2.percentSetVal[i] {
-                            self.stock1.frame.origin.y = 72*self.screenHeight/1334
-                            self.stock2.frame.origin.y = 24*self.screenHeight/1334
-                            self.stock3.frame.origin.y = 120*self.screenHeight/1334
-                        } else {
-                            self.stock1.frame.origin.y = 120*self.screenHeight/1334
-                            self.stock2.frame.origin.y = 72*self.screenHeight/1334
-                            self.stock3.frame.origin.y = 24*self.screenHeight/1334
-                        }
+                        
                     }
-                    
                 }
                 break
             }
@@ -437,7 +524,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     }
     
     @objc private func alertsFunc(_ sender: UIButton) {
-        sender.setTitle("NOT SETUP YET", for: .normal)
+        menuFunc()
     }
     @objc private func changeEmailFunc(_ sender: UIButton) {
         self.performSegue(withIdentifier: "fromMainToSettings", sender: self)
@@ -455,7 +542,44 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         sender.setTitle("NOT SETUP YET", for: .normal)
     }
     @objc private func goPremiumFunc(_ sender: UIButton) {
-        sender.setTitle("NOT SETUP YET", for: .normal)
+        // Create the alert controller
+        let alertController = UIAlertController(title: "Go Premium", message: "Unlimited Alerts for $2.99", preferredStyle: .alert)
+        
+        // Create the actions
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
+            UIAlertAction in
+            self.purchase()
+            print("OK Pressed")
+        }
+        let restoreAction = UIAlertAction(title: "Restore Purchase", style: UIAlertActionStyle.default) {
+            UIAlertAction in
+            
+            SwiftyStoreKit.restorePurchases(atomically: true) { results in
+                if results.restoreFailedProducts.count > 0 {
+                    print("Restore Failed: \(results.restoreFailedProducts)")
+                }
+                else if results.restoredProducts.count > 0 {
+                    self.loadsave.savePurchase(purchase: "firetail.iap.premium")
+                    self.premiumMember = true
+                }
+                else {
+                    print("Nothing to Restore")
+                }
+            }
+        } 
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) {
+            UIAlertAction in
+            print("Cancel Pressed")
+        }
+        
+        // Add the actions
+        alertController.addAction(okAction)
+        alertController.addAction(restoreAction)
+        alertController.addAction(cancelAction)
+        
+        // Present the controller
+        self.present(alertController, animated: true, completion: nil)
     }
     
     func menuFunc() {
@@ -488,20 +612,23 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     }
     
     @objc private func addFunc(_ sender: UIButton) {
-        let cover = UIView(frame: view.frame)
-        cover.backgroundColor = customColor.black24
-        cover.alpha = 0.0
-        slideView.addSubview(cover)
-        slideView.addSubview(addTextField)
-        
-        UIView.animate(withDuration: 1.0) {
-            self.addTextField.alpha = 1.0
-            cover.alpha = 1.0
+        if premiumMember || alertCount < 3 {
+            let cover = UIView(frame: view.frame)
+            cover.backgroundColor = customColor.black24
+            cover.alpha = 0.0
+            slideView.addSubview(cover)
+            slideView.addSubview(addTextField)
+            
+            UIView.animate(withDuration: 1.0) {
+                self.addTextField.alpha = 1.0
+                cover.alpha = 1.0
+            }
+            delay(bySeconds: 0.8) {
+                self.addTextField.becomeFirstResponder()
+            }
+        } else if !premiumMember {
+            purchase()
         }
-        delay(bySeconds: 0.8) {
-            self.addTextField.becomeFirstResponder()
-        }
-        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -541,6 +668,29 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     
     @objc private func goToGraph() {
         self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
+        
+    }
+    
+    func purchase(productId: String = "firetail.iap.premium") {
+        view.addSubview(progressHUD)
+        SwiftyStoreKit.purchaseProduct(productId) { result in
+            switch result {
+            case .success( _):
+                print("enter1")
+                
+                self.loadsave.savePurchase(purchase: productId)
+                self.premiumMember = true
+                self.progressHUD.removeFromSuperview()
+                
+                
+                
+            case .error(let error):
+                print("error: \(error)")
+                print("Purchase Failed: \(error)")
+                print("enter5")
+                self.progressHUD.removeFromSuperview()
+            }
+        }
         
     }
     

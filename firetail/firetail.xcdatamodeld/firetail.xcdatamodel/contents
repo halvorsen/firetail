@@ -11,8 +11,12 @@
     <entity name="BlockAmount" representedClassName="BlockAmount" syncable="YES" codeGenerationType="class">
         <attribute name="value" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
+    <entity name="Purchase" representedClassName="Purchase" syncable="YES" codeGenerationType="class">
+        <attribute name="premium" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Block" positionX="-63" positionY="-18" width="128" height="135"/>
         <element name="BlockAmount" positionX="-54" positionY="36" width="128" height="60"/>
+        <element name="Purchase" positionX="-54" positionY="27" width="128" height="60"/>
     </elements>
 </model>

@@ -29,14 +29,13 @@ class DailyGraphForAlertView: UIView {
     var labels = [UILabel]()
     var allStockValues = [String]()
     var grids = [GridLine]()
-    var dayLabelsText = ["1 jun", "2 jun", "3 jun", "4 jun", "5 jun", "6 jun", "7 jun", "8 jun", "9 jun", "10 jun", "11 jun", "12 jun", "13 jun", "14 jun", "15 jun", "16 jun", "17 jun", "18 jun", "19 jun","20 jun", "21 jun", "22 jun", "23 jun", "24 jun", "25 jun", "26 jun", "27 jun", "28 jun", "29 jun"]
     var dayLabels = [UILabel]()
     var date = [Date]()
     
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
-    init(graphData: [Double], dateArray: [Date], frame: CGRect = CGRect(x: 0, y:-10*UIScreen.main.bounds.height/667, width: 4*UIScreen.main.bounds.width, height: 210*UIScreen.main.bounds.height/667)) {
+    init(graphData: [Double], dateArray: [Date], frame: CGRect = CGRect(x: 0, y:0*UIScreen.main.bounds.height/667, width: 4*UIScreen.main.bounds.width, height: 210*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
         self.backgroundColor = customColor.black33
         date = dateArray
@@ -161,9 +160,9 @@ class DailyGraphForAlertView: UIView {
             
             let k = UILabel()
             //k.text = dayLabelsText[i]
-            k.text = "\(monthString[monthInt]) \(dayInt)"
-            k.frame = CGRect(x: scale*(points[i].x)-25*screenWidth/375, y: 180*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
-            k.font = UIFont(name: "Roboto-Light", size: 16*fontSizeMultiplier)
+            k.text = "\(dayInt) \(monthString[monthInt])"
+            k.frame = CGRect(x: scale*(points[i].x)-25*screenWidth/375, y: 190*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
+            k.font = UIFont(name: "Roboto-Light", size: 14*fontSizeMultiplier)
             k.textColor = customColor.whiteAlpha30
             k.textAlignment = .center
             k.alpha = 0.0

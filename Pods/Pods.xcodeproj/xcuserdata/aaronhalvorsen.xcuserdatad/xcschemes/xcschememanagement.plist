@@ -54,6 +54,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SwiftyStoreKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -62,12 +67,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2F5622F3B18DF497981AB58C6D1FC72F</key>
+		<key>113DEE5CC0F84B535029765CBC4C09AE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>36A21DFE538E6B05E2592E2E94C21953</key>
+		<key>23BE819357FB0E487346A1A67474CA4A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2F5622F3B18DF497981AB58C6D1FC72F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -87,6 +97,11 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>9C227734E3FF9B6889E8D3AE42185BE6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>9EFE4C70245EE2857D336B8B9FA4E825</key>
 		<dict>
 			<key>primary</key>
@@ -98,11 +113,6 @@
 			<true/>
 		</dict>
 		<key>F307B842FF76B2DE6C55DB67C0885325</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>FF252836CE839902A103A11AD4A255AA</key>
 		<dict>
 			<key>primary</key>
 			<true/>

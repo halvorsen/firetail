@@ -40,15 +40,9 @@ class AlertBlockView: UIView {
         urgentGlobal = urgent
         let t = stockTicker
         self.backgroundColor = customColor.white153
-        let symbol = ["x","\u{2191}","\u{00F4}"]
-        let button = [ex,up,info]
-        let color = [customColor.white115, customColor.white128, customColor.white153]
-        for i in 0...2 {
-            let b: UIButton = button[i]
-            addButton(name: b, x: 750 - CGFloat(i+1)*83.3, y: 0, width: 83.3, height: 120, title: symbol[i], font: "HelveticalNeue-Bold", fontSize: 20, titleColor: .white, bgColor: color[i], cornerRad: 0, boarderW: 0, boarderColor: .clear, addSubview: true)
-                b.tag = i
-                b.setTitle(stockTicker, for: .disabled)
-            }
+        
+        addButton(name: ex, x: 750 - 83.3, y: 0, width: 83.3, height: 120, title: "x", font: "HelveticalNeue-Bold", fontSize: 20, titleColor: .white, bgColor: customColor.white115, cornerRad: 0, boarderW: 0, boarderColor: .clear, addSubview: true)
+        ex.setTitle(stockTicker, for: .disabled)
         slideView.backgroundColor = customColor.background
         slideView.frame = self.bounds
         slideView.layer.shadowColor = UIColor.black.cgColor
@@ -56,8 +50,17 @@ class AlertBlockView: UIView {
         slideView.layer.shadowOffset = CGSize(width: 1, height: 1)
         slideView.layer.shadowRadius = 1
         self.addSubview(slideView)
-        tap = UITapGestureRecognizer(target: self, action: #selector(AlertBlockView.slide(_:)))
-        slideView.addGestureRecognizer(tap)
+        
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slide(_:)))
+        swipe.direction = .left
+        slideView.addGestureRecognizer(swipe)
+        
+        let swipeR = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slideR(_:)))
+        swipeR.direction = .right
+        slideView.addGestureRecognizer(swipeR)
+        
+        let pan = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.move(_:)))
+        slideView.addGestureRecognizer(pan)
         let _stockTicker = stockTicker.uppercased()
         addLabel(name: stockTickerLabel, text: _stockTicker, textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 60, y: 70, width: 100, height: 36, lines: 1, alpha: 0.5)
         slideView.addSubview(stockTickerLabel)
@@ -96,22 +99,36 @@ class AlertBlockView: UIView {
         line.backgroundColor = customColor.alertLines
         
         slideView.addSubview(line)
+  
     
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 
+    @objc private func move(_ gesture: UIGestureRecognizer) {
+        
+    }
     
     @objc private func slide(_ gesture: UIGestureRecognizer) {
         UIView.animate(withDuration: 0.6) {
         if self.slideView.frame.origin.x == 0 {
-            self.slideView.frame.origin.x = -self.screenWidth/3 - 1
+            self.slideView.frame.origin.x = -self.screenWidth/9 - 1
+            let swipeR = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slideR(_:)))
+            swipeR.direction = .right
+            self.slideView.addGestureRecognizer(swipeR)
         } else {
             self.slideView.frame.origin.x = 0
         }
+        }
+    }
+    
+    @objc private func slideR(_ gesture: UIGestureRecognizer) {
+        UIView.animate(withDuration: 0.6) {
+            
+                self.slideView.frame.origin.x = 0
+            
         }
     }
  

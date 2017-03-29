@@ -9,7 +9,8 @@
 import UIKit
 import BigBoard
 
-class AddViewController: ViewSetup {
+class AddViewController: ViewSetup, UITextFieldDelegate {
+    var myTextField = UITextField()
     let customColor = CustomColor()
     let alertLabel2 = UILabel()
     var alertChangeTimer = Timer()
@@ -18,19 +19,22 @@ class AddViewController: ViewSetup {
     var touchUp = UILongPressGestureRecognizer()
     var tapDown = UITapGestureRecognizer()
     var tapUp = UITapGestureRecognizer()
-    let stockTitle = UILabel()
+    let stockTitle = UIButton()
     var container = UIScrollView()
     var graph = DailyGraphForAlertView()
-    var newAlertTicker = String()
+    var newAlertTicker = "TSLA"
     var newAlertPrice = Double()
     var newAlertBoolTuple = (false, false, false, false)
     let backArrow = UIButton()
     var amountOfBlocksOld = Int()
     let loadsave = LoadSaveCoreData()
+    let stockSymbol = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 1082, width: 240, height: 80, lines: 1)
+        view.addSubview(stockSymbol)
         amountOfBlocksOld = loadsave.amount()
         
         view.backgroundColor = customColor.black33
@@ -81,18 +85,19 @@ class AddViewController: ViewSetup {
         add.titleLabel?.textAlignment = .center //this isnt working for some reason
         bottomBar.addSubview(add)
         
-        addLabel(name: stockTitle, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 40, x: 60, y: 600, width: 240, height: 80, lines: 1)
+        addButton(name: stockTitle, x: 60, y: 1014, width: 240, height: 80, title: newAlertTicker, font: "Roboto-Medium", fontSize: 20, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.changeTicker(_:)), addSubview: true)
+        
         view.addSubview(stockTitle)
         
         for i in 0...3 {
             let l = UILabel()
             let name = ["Email","SMS","Flash","Urgent"]
-            addLabel(name: l, text: name[i], textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 212, y: 748 + CGFloat(i)*96, width: 150, height: 40, lines: 0)
+            addLabel(name: l, text: name[i], textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 212, y: 608 + CGFloat(i)*96, width: 150, height: 40, lines: 0)
             view.addSubview(l)
         }
         
         let mySwitchEmail = UISwitch()
-        mySwitchEmail.frame = CGRect(x: 27*screenWidth/375, y: 369*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
+        mySwitchEmail.frame = CGRect(x: 27*screenWidth/375, y: 299*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchEmail.setOn(false, animated: false)
         mySwitchEmail.tintColor = customColor.white229
         mySwitchEmail.layer.cornerRadius = 16
@@ -104,7 +109,7 @@ class AddViewController: ViewSetup {
         view.addSubview(mySwitchEmail)
         
         let mySwitchSMS = UISwitch()
-        mySwitchSMS.frame = CGRect(x: 27*screenWidth/375, y: 417*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
+        mySwitchSMS.frame = CGRect(x: 27*screenWidth/375, y: 347*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchSMS.setOn(false, animated: false)
         mySwitchSMS.tintColor = customColor.white229
         mySwitchSMS.layer.cornerRadius = 16
@@ -116,7 +121,7 @@ class AddViewController: ViewSetup {
         view.addSubview(mySwitchSMS)
         
         let mySwitchFlash = UISwitch()
-        mySwitchFlash.frame = CGRect(x: 27*screenWidth/375, y: 465*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
+        mySwitchFlash.frame = CGRect(x: 27*screenWidth/375, y: 395*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchFlash.setOn(false, animated: false)
         mySwitchFlash.tintColor = customColor.white229
         mySwitchFlash.layer.cornerRadius = 16
@@ -128,7 +133,7 @@ class AddViewController: ViewSetup {
         view.addSubview(mySwitchFlash)
         
         let mySwitchUrgent = UISwitch()
-        mySwitchUrgent.frame = CGRect(x: 27*screenWidth/375, y: 513*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
+        mySwitchUrgent.frame = CGRect(x: 27*screenWidth/375, y: 443*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchUrgent.setOn(false, animated: false)
         // mySwitchUrgent.tintColor = .blue //customColor.white229
         
@@ -147,7 +152,8 @@ class AddViewController: ViewSetup {
         container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 260*screenHeight/667))
         container.contentSize = CGSize(width: 3.8*screenWidth, height: container.bounds.height)
         container.backgroundColor = customColor.black33
-        container.contentOffset =  CGPoint(x: 2.8*screenWidth, y: 0)
+        container.contentOffset =  CGPoint(x: 2.7*screenWidth, y: 0)
+        container.clipsToBounds = false
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
         view.addSubview(container)
@@ -186,15 +192,28 @@ class AddViewController: ViewSetup {
             }
    
         }
-        prepareGraph() {result in
-
-        }
+//        prepareGraph() {result in
+//
+//        }
         
         
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         
-        
+        myTextField = UITextField(frame: CGRect(x: 0,y: 200,width: screenWidth ,height: 200*screenHeight/1334))
+        myTextField.placeholder = "   Enter Ticker"
+        myTextField.setValue(customColor.white68, forKeyPath: "_placeholderLabel.textColor")
+        myTextField.font = UIFont.systemFont(ofSize: 25)
+        myTextField.autocorrectionType = UITextAutocorrectionType.no
+        myTextField.keyboardType = UIKeyboardType.default
+        myTextField.returnKeyType = UIReturnKeyType.done
+        myTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
+        myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        myTextField.delegate = self
+        myTextField.backgroundColor = customColor.background
+        myTextField.textColor = customColor.white68
+        myTextField.alpha = 0
+        myTextField.tag = 1
         
             
         
@@ -203,7 +222,7 @@ class AddViewController: ViewSetup {
     let mask = UIView()
 
     override func viewWillAppear(_ animated: Bool) {
-        getOneMonthData(stockName: newAlertTicker) {
+        getOneYearData(stockName: newAlertTicker) {
             
             Set.oneYearDictionary[$1] = $0
             
@@ -278,7 +297,66 @@ class AddViewController: ViewSetup {
     @objc private func bumpDown() {
         alertPrice -= 0.01
     }
-    
+    @objc func changeTicker(_ button: UIButton) {
+        view.addSubview(myTextField)
+        
+        UIView.animate(withDuration: 1.0) {
+            self.myTextField.alpha = 1.0
+        }
+        delay(bySeconds: 0.8) {
+            self.myTextField.becomeFirstResponder()
+        }
+        
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+            if myTextField.text != nil && myTextField.delegate != nil {
+               
+                newAlertTicker = myTextField.text!.uppercased()
+                stockTitle.setTitle(myTextField.text!.uppercased(), for: .normal)
+                myTextField.removeFromSuperview()
+                myTextField.text = ""
+            
+        graph.removeFromSuperview()
+        graph = DailyGraphForAlertView()
+        prepareGraph() {(_ dateArray: [Date]?,_ closings: [Double]?) -> Void in
+            if closings != nil && dateArray != nil {
+                self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)
+                self.container.addSubview(self.graph)
+                var t = CGAffineTransform.identity
+                t = t.translatedBy(x: 0, y: -100)
+                t = t.scaledBy(x: 1.0, y: 0.01)
+                self.graph.transform = t
+                
+                UIView.animate(withDuration: 1.5) {
+                    self.graph.transform = CGAffineTransform.identity
+                    self.graph.frame.origin.y = 50*self.screenHeight/667
+                }
+                self.delay(bySeconds: 1.2) {
+                    
+                    for i in 0..<self.graph.labels.count {
+                        self.delay(bySeconds: 0.3) {
+                            UIView.animate(withDuration: 0.3*Double(i)) {
+                                self.graph.grids[self.graph.labels.count - i - 1].alpha = 1.0
+                                self.graph.labels[self.graph.labels.count - i - 1].alpha = 1.0
+                                self.graph.dayLabels[self.graph.labels.count - i - 1].alpha = 1.0
+                            }
+                        }
+                    }
+                    
+                }
+                
+                
+                self.alertPrice = closings!.last!
+            }
+            
+        }
+        
+        }
+        
+        return false
+    }
+
     
     var timerInterval = 0.1
     @objc func changeAlertPriceUp(_ gesture: UILongPressGestureRecognizer) {
@@ -310,6 +388,7 @@ class AddViewController: ViewSetup {
         let mainView: MainViewController = segue.destination as! MainViewController
         mainView.previousViewContoller = "Add"
         mainView.amountOfBlocks = amountOfBlocksOld + 1
+        Set.alertCount += 1
         print("SETCOUNT")
         print(Set.ti.count)
     }
