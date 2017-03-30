@@ -19,7 +19,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var createAccount = UIButton()
     var myTextFields = [UITextField]()
     var progressHUD = ProgressHUD(text: "Loading")
-    var doneLoading = false
+    //var doneLoading = false
     let loadsave = LoadSaveCoreData()
     var myTimer = Timer()
     var ti = [String]()
@@ -27,6 +27,10 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     let imageView = UIImageView()
     let coverView = UIView()
     var retry = false
+    var authenticated = false
+    var noNils = true
+    var tiLast = String()
+    var _ti = [String]()
     
     
     override func viewDidLoad() {
@@ -42,65 +46,73 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         imageView.layer.zPosition = 11
         view.addSubview(imageView)
         
-        
         FIRAuth.auth()!.addStateDidChangeListener() { auth, user in
             // 2
-            if user != nil {
+            if user != nil && !self.continueB.isDescendant(of: self.view) {
                 // 3
                 self.alreadyAUser = true
-                self.cont()
+                self.authenticated = true
+                
+                (self.ti,_,_,_,_,_) = self.loadsave.loadBlocks()
+                print(self.ti)
+                if self.ti != [""] {
+                    Set.ti = self.ti
+                    //                        if self.ti.count > 0 {
+                    //                            self.tiLast = self.ti.last!
+                    //                        }
+                    self.fetch()
+                } else {
+                    self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
+                }
             } else {
                 UIView.animate(withDuration: 1.0) {
-                self.imageView.alpha = 0.0
-                self.coverView.alpha = 0.0
+                    self.imageView.alpha = 0.0
+                    self.coverView.alpha = 0.0
                 }
-                self.populateView()
+                if !self.continueB.isDescendant(of: self.view) {
+                    self.populateView()
+                }
             }
         }
-        
-        (ti,_,_,_,_,_) = loadsave.loadBlocks()
-        if ti != [""] {
-            Set.ti = ti
-            if ti.count > 0 {
-                tiLast = ti.last!
-            }
-        }
-        
-       fetch()
-        
-        
-        
     }
     
-    var tiLast = String()
-    var _ti = [String]()
     private func fetch() {
+        noNils = true
+        retry = false
         var stockStrings = [String]()
         if ti.count > 0 {
-          
+            var j = 0
             for i in 0..<ti.count {
                 getOneYearData(stockName: ti[i]) {
-                 
+                    
                     if $0 == nil {
+                        print("NIL-HERE")
                         self._ti.append($1)
-                 
                         self.retry = true
+                        self.noNils = false
                     }
-                    if !stockStrings.contains($1) && !Set.oneYearDictionary.keys.contains($1) {
+                    if !stockStrings.contains($1) && $0 != nil {
                         print("STOCKSWHAT")
-                       
+                        print(" sWww1: \($1)")
+                        print(" sWww2: \($0)")
                         stockStrings.append($1)
-                      
+                        
                         Set.oneYearDictionary[$1] = $0
                     }
-                
-                    if $1 == self.tiLast {
+                    
+                    j += 1
+                    print("ti.count: \(self.ti.count)")
+                    print("j: \(j)")
+                    if j == self.ti.count && self.noNils {
+                        
+                        self.cont()
+                        
+                    } else if !self.noNils {
                         self.ti = self._ti
-                        self.delay(bySeconds: 0.5) {
-                            
-                            self.doneLoading = true
-                            self.myTimer.invalidate()
-                        }
+                        self.fetch()
+                    } else {
+                        
+                        //self.myTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(LoginViewController.checkIfDone), userInfo: nil, repeats: true)
                     }
                 }
             }
@@ -161,26 +173,26 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
         
     }
-    var oopsNotTwice = true
-    func checkIfDone() {
-        if doneLoading && oopsNotTwice && !retry {
-            oopsNotTwice = false
-            if ti == [""] {
-                self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
-            } else {
-                print("!!!!!!")
-                print(ti)
-                print(ti.count)
-                self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
-            }
-        } else if retry {
-            doneLoading = false
-            retry = false
-            fetch()
-            
-        }
-        
-    }
+    //    var oopsNotTwice = true
+    //    func checkIfDone() {
+    //        if doneLoading && oopsNotTwice && !retry {
+    //            oopsNotTwice = false
+    //            if ti == [""] {
+    //                self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
+    //            } else {
+    //                print("!!!!!!")
+    //                print(ti)
+    //                print(ti.count)
+    //                self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
+    //            }
+    //        } else if retry {
+    //            doneLoading = false
+    //            retry = false
+    //            fetch()
+    //
+    //        }
+    //
+    //    }
     
     @objc private func continueFunc(_ sender: UIButton) {
         FIRAuth.auth()!.signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!)
@@ -191,20 +203,17 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     private func cont() {
         
-        if doneLoading { // check if alert stocks have loaded
-            if ti == [""] {
-                self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
-            } else {
-                print("!!!!!!")
-                print(ti)
-                print(ti.count)
-                self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
-            }
-            
+        //  if doneLoading && !retry { // check if alert stocks have loaded
+        if ti == [""] {
+            self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
         } else {
-            
-            myTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(LoginViewController.checkIfDone), userInfo: nil, repeats: true)
+            print("!!!!!!")
+            print(ti)
+            print(ti.count)
+            self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
         }
+        
+        //  }
         
     }
     

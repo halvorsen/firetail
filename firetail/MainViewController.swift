@@ -338,10 +338,10 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, 
                     self.alertScroller.isScrollEnabled = true
                 }
                 print("SAM")
-                var i = CGFloat(2)
+                var i = CGFloat(0)
                 for block in blocks {
                     Set.ti[Int(i)] = block.stockTickerLabel.text!
-                    block.layer.zPosition = i
+                    block.layer.zPosition = i + 2
                     i += 1
                     print(block.stockTickerLabel.text)
                 }
@@ -355,6 +355,13 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, 
                 reboot()
                 delay(bySeconds: 0.5) {
                     self.longpressOnce = true
+                }
+                print("aaaachoooo")
+                print(alertScroller.contentOffset.y)
+                if alertScroller.contentOffset.y < 0 {
+                    UIView.animate(withDuration: 0.5) {
+                    self.alertScroller.contentOffset.y = 0
+                    }
                 }
             }
         }
