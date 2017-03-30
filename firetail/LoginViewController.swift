@@ -26,6 +26,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var alreadyAUser = false
     let imageView = UIImageView()
     let coverView = UIView()
+    var retry = false
     
     
     override func viewDidLoad() {
@@ -58,28 +59,52 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         }
         
         (ti,_,_,_,_,_) = loadsave.loadBlocks()
+        if ti != [""] {
+            Set.ti = ti
+            if ti.count > 0 {
+                tiLast = ti.last!
+            }
+        }
+        
+       fetch()
         
         
-        for i in 0..<ti.count {
-            getOneYearData(stockName: ti[i]) {
-             print("WEEEEE")
-                print($1)
-                print($0)
-                Set.oneYearDictionary[$1] = $0
-                if i >= self.ti.count - 1 {
-                    
-                    self.delay(bySeconds: 0.5) {
-                    self.doneLoading = true
-                    self.myTimer.invalidate()
+        
+    }
+    
+    var tiLast = String()
+    var _ti = [String]()
+    private func fetch() {
+        var stockStrings = [String]()
+        if ti.count > 0 {
+          
+            for i in 0..<ti.count {
+                getOneYearData(stockName: ti[i]) {
+                 
+                    if $0 == nil {
+                        self._ti.append($1)
+                 
+                        self.retry = true
+                    }
+                    if !stockStrings.contains($1) && !Set.oneYearDictionary.keys.contains($1) {
+                        print("STOCKSWHAT")
+                       
+                        stockStrings.append($1)
+                      
+                        Set.oneYearDictionary[$1] = $0
+                    }
+                
+                    if $1 == self.tiLast {
+                        self.ti = self._ti
+                        self.delay(bySeconds: 0.5) {
+                            
+                            self.doneLoading = true
+                            self.myTimer.invalidate()
+                        }
                     }
                 }
             }
         }
-        if ti != [""] {
-            Set.ti = ti
-        }
-        
-        
     }
     
     private func populateView() {
@@ -138,7 +163,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     var oopsNotTwice = true
     func checkIfDone() {
-        if doneLoading && oopsNotTwice {
+        if doneLoading && oopsNotTwice && !retry {
             oopsNotTwice = false
             if ti == [""] {
                 self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
@@ -148,6 +173,11 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 print(ti.count)
                 self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
             }
+        } else if retry {
+            doneLoading = false
+            retry = false
+            fetch()
+            
         }
         
     }

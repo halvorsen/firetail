@@ -126,11 +126,13 @@ class ViewSetup: UIViewController {
                 
             }, failure: { (error) in
                 print(error)
+                print("OOOPS!")
                 result(nil, stockName)
             })
             
         }) { (error) in
             print(error)
+            print("OOOOPS2!")
             result(nil, stockName)
         }
         

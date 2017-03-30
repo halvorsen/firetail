@@ -63,7 +63,7 @@ class GraphViewController: ViewSetup {
         view.addGestureRecognizer(tap)
         addLabel(name: stockHeader, text: "", textColor: .white, textAlignment: .center, fontName: "Roboto-Bold", fontSize: 18, x: 0, y: 0, width: 750, height: 136, lines: 1)
         addLabel(name: currentPrice, text: "", textColor: .white, textAlignment: .left, fontName: "Roboto-Light", fontSize: 40, x: 60, y: 180, width: 400, height: 106, lines: 1)
-        addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.back(_:)), addSubview: true)
+        addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.back(_:)), addSubview: false)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         addLabel(name: loading, text: "Loading...", textColor: .white, textAlignment: .center, fontName: "Roboto-Bold", fontSize: 20, x: 0, y: (1334-150), width: 750, height: 150, lines: 1)
         loading.layer.zPosition = 15
@@ -258,9 +258,6 @@ class GraphViewController: ViewSetup {
 
                     self.implementDrawSubviews(stockData: stockData)}
  
-                
-
-                
             }
         }
     }
@@ -273,6 +270,11 @@ class GraphViewController: ViewSetup {
             add1YGraph()
          //   myTimer.invalidate()
             progressHUD.removeFromSuperview()
+        backArrow.alpha = 0.0
+        view.addSubview(backArrow) //this is because the way the graphs load app can crash if push back button before they load
+        UIView.animate(withDuration: 0.3) {
+            self.backArrow.alpha = 1.0
+        }
             for (_,graph) in self.graphViews {
                 if graph != nil && (graph?.isDescendant(of: self.view))! {
                     graph!.removeFromSuperview()

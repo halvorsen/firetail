@@ -12,7 +12,7 @@ import Charts
 import SwiftyStoreKit
 import StoreKit
 
-class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
+class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate {
     var progressHUD = ProgressHUD(text: "Premium")
     var premiumMember = false
     var myTextField = UITextField()
@@ -57,7 +57,17 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     var blocks = [AlertBlockView]()
     var newBlocks = [AlertBlockView]()
     let loadsave = LoadSaveCoreData()
-    // var ti = [String]()
+    var longPress = UILongPressGestureRecognizer()
+    var pan = UIPanGestureRecognizer()
+    var canIScroll = true
+    var myTimer2 = Timer()
+    
+    var savedFrameOrigin = CGPoint()
+    var l = 1
+    var k = 10000
+    var movingAlert = 9999
+    var longpressOnce = true
+    var alertInMotion = AlertBlockView()
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -84,7 +94,11 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         premiumMember = loadsave.loadPremiumAccess()
-        
+        longPress = UILongPressGestureRecognizer(target: self, action: #selector(MainViewController.longPress(_:)))
+        view.addGestureRecognizer(longPress)
+        longPress.delegate = self
+        pan = UIPanGestureRecognizer(target: self, action: #selector(MainViewController.pan(_:)))
+        view.addGestureRecognizer(pan)
         self.view.backgroundColor = customColor.black33
         svs = [sv,sv1,sv2]
         let d = Date()
@@ -122,21 +136,6 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         slideView.addSubview(container2)
         
         populateCompareGraph()
-        
-        print("BLAAAAA")
-        print(Set.oneYearDictionary)
-        print(Set.ti)
-        
-        //
-        //            sv =  CompareScroll(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
-        //            sv1 =  CompareScroll(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
-        //            sv2 =  CompareScroll(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
-        //            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary["TSLA"]!, stockName: "TSLA", color: customColor.white68)
-        //            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary["FIG"]!, stockName: "FIG", color: customColor.white128)
-        //            svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary["FB"]!, stockName: "FB", color: customColor.white209)
-        
-        
-        
         
         container.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
         container.showsHorizontalScrollIndicator = false
@@ -229,9 +228,6 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         returnPan = UIPanGestureRecognizer(target: self, action: #selector(MainViewController.menuReturnFunc(_:)))
         returnSwipe = UISwipeGestureRecognizer(target: self, action: #selector(MainViewController.menuReturnFunc(_:)))
         
-        
-        
-        
         mask.frame = container.frame
         mask.backgroundColor = customColor.black33
         slideView.addSubview(mask)
@@ -240,6 +236,130 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         whoseOnFirst(container)
     }
     
+    
+    @objc private func longPress(_ gesture: UIGestureRecognizer) {
+        print("longpress!!!")
+        startedPan = false
+        alertScroller.isScrollEnabled = false
+        if longpressOnce {
+            for i in 0..<blocks.count {
+                
+                if blocks[i].frame.contains(gesture.location(in: alertScroller)) {
+                    savedFrameOrigin = blocks[i].frame.origin
+                    print("longpress2!!!")
+                    blocks[i].frame.origin.y -= 6*screenHeight/667
+                    blocks[i].frame.origin.x -= 6*screenHeight/667
+                    movingAlert = i
+                    longpressOnce = false
+                    l = i - 1
+                    k = i + 1
+                    blocks[i].slideView.backgroundColor = customColor.black42
+                    alertScroller.backgroundColor = customColor.white115
+                    alertInMotion = blocks[i]
+                    alertInMotion.layer.zPosition = 1000
+                }
+            }
+        }
+        if gesture.state == UIGestureRecognizerState.ended {
+            if !startedPan {
+                alertInMotion.frame.origin = savedFrameOrigin
+                alertScroller.backgroundColor = self.customColor.black33
+                alertInMotion.slideView.backgroundColor = self.customColor.black33
+                var i = CGFloat(2)
+                for block in blocks {
+                    block.layer.zPosition = i
+                    i += 1
+                }
+                movingAlert = 9999
+                alertScroller.isScrollEnabled = true
+                longpressOnce = true
+            }
+        }
+        
+    }
+    var startedPan = false
+    var q = Int()
+    @objc private func pan(_ gesture: UIPanGestureRecognizer) {
+        startedPan = true
+        if movingAlert != 9999 {
+            print("pan2!!!")
+            if gesture.state == UIGestureRecognizerState.changed {
+                
+                let translation = gesture.translation(in: view)
+                
+                if alertScroller.contentOffset.y > -100*screenHeight/667 && alertScroller.contentOffset.y < alertScroller.contentSize.height - 130*screenHeight/667 {
+                    alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(3*alertScroller.contentSize.height/alertScroller.frame.height))
+                    alertScroller.contentOffset.y += translation.y*CGFloat(2*alertScroller.contentSize.height/alertScroller.frame.height)
+                } else if alertScroller.contentOffset.y < -100*screenHeight/667 {
+                    alertScroller.contentOffset.y += 1
+                } else if alertScroller.contentOffset.y > alertScroller.contentSize.height - 130*screenHeight/667 {
+                    alertScroller.contentOffset.y -= 1
+                }
+                gesture.setTranslation(CGPoint(x:0,y:0), in: self.view)
+                if l > -1 {
+                    if alertInMotion.center.y < blocks[l].center.y {
+                        savedFrameOrigin = blocks[l].frame.origin
+                        blocks[l].frame.origin.y += 120*screenHeight/1334
+                        
+                        blocks[l+1] = blocks[l]
+                        blocks[l] = alertInMotion
+                        q = l
+                        l -= 1
+                        k -= 1
+                    }
+                }
+                if k < blocks.count {
+                    if alertInMotion.center.y > blocks[k].center.y {
+                        savedFrameOrigin = blocks[k].frame.origin
+                        UIView.animate(withDuration: 0.3) {
+                            self.blocks[self.k].frame.origin.y -= 120*self.screenHeight/1334
+                        }
+                        blocks[k-1] = blocks[k]
+                        blocks[k] = alertInMotion
+                        
+                        q = k
+                        k += 1
+                        l += 1
+                    }
+                }
+                
+            }
+            
+            if gesture.state == UIGestureRecognizerState.ended {
+                
+                UIView.animate(withDuration: 0.5) {
+                    
+                    self.alertInMotion.frame.origin = CGPoint(x: 0, y: CGFloat(self.q)*120*self.screenHeight/1334)
+                }
+                p = Int(savedFrameOrigin.y/120)
+                
+                movingAlert = 9999
+                delay(bySeconds: 0.3) {
+                    self.alertScroller.isScrollEnabled = true
+                }
+                print("SAM")
+                var i = CGFloat(2)
+                for block in blocks {
+                    Set.ti[Int(i)] = block.stockTickerLabel.text!
+                    block.layer.zPosition = i
+                    i += 1
+                    print(block.stockTickerLabel.text)
+                }
+                delay(bySeconds: 0.5) {
+                    self.alertScroller.backgroundColor = self.customColor.black33
+                    self.alertInMotion.slideView.backgroundColor = self.customColor.black33
+                }
+                
+                myTimer2.invalidate()
+                
+                reboot()
+                delay(bySeconds: 0.5) {
+                    self.longpressOnce = true
+                }
+            }
+        }
+    }
+    var p = Int()
     @objc func act(_ button: UIButton) {
         stock1.text = ""
         stock2.text = ""
@@ -252,7 +372,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
         for i in 0..<blocks.count {
             
             
-            if button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text {
+            if (button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text) {
                 
                 
                 UIView.animate(withDuration: 0.6) {
@@ -356,8 +476,6 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     
     func reboot() {
         mask.frame = container.frame
-        print(Set.ti)
-        print(Set.oneYearDictionary)
         for view in container.subviews{
             view.removeFromSuperview()
         }
@@ -394,6 +512,13 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
             container2.addSubview(svDot1)
             
         default:
+            print("WTF")
+            print(Set.ti[0])
+            print(Set.oneYearDictionary[Set.ti[0]])
+            print(Set.ti[1])
+            print(Set.oneYearDictionary[Set.ti[1]])
+            print(Set.ti[2])
+            print(Set.oneYearDictionary[Set.ti[2]])
             sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
             sv1 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
             sv2 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
@@ -566,7 +691,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
                     print("Nothing to Restore")
                 }
             }
-        } 
+        }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) {
             UIAlertAction in
@@ -612,7 +737,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
     }
     
     @objc private func addFunc(_ sender: UIButton) {
-        if premiumMember || alertCount < 3 {
+        if premiumMember || alertCount < 3 || true { //hack
             let cover = UIView(frame: view.frame)
             cover.backgroundColor = customColor.black24
             cover.alpha = 0.0
@@ -692,6 +817,14 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate {
             }
         }
         
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is UIPanGestureRecognizer || gestureRecognizer is UILongPressGestureRecognizer {
+            return true
+        } else {
+            return false
+        }
     }
     
 }
