@@ -215,8 +215,7 @@ class StockGraphView2: UIView {
             horizontalGridPath.addLine(to: CGPoint(x: 80*self.screenWidth/750, y: self.graphHeight/6*CGFloat(i)))
             horizontalGridPath.addLine(to: CGPoint(x: 80*self.screenWidth/750, y: self.graphHeight/6*CGFloat(i) - 1))
             horizontalGridPath.close()
-           // customColor.gridGray.setStroke()
-         //   horizontalGridPath.stroke()
+
         }
         let gridShape = CAShapeLayer()
         gridShape.zPosition = 7
@@ -230,11 +229,7 @@ class StockGraphView2: UIView {
             vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 + self.screenWidth/750, y: 0))
             vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: 0))
             vGridPath.close()
-          //  UIColor.red.setStroke()
-            
-         //   vGridPath.stroke()
-            
-            
+  
         }
         
         let gridShape2 = CAShapeLayer()
@@ -318,21 +313,42 @@ class StockGraphView2: UIView {
         
         
         
-        var yLabels: [String] {
-            get {
-                var _yLabels = [String]()
-                for i in 0...4 {
-                    let atom = Float(i)*Float(dataEntries.yMaximum - dataEntries.yMinimum)/4
-                    if i != 0 && i != 4 {
-                        _yLabels.append(String(format: "%.1f", Float(dataEntries.yMinimum) + atom) + "0")
-                        // _yLabels.append(String(Int(Float(dataEntries.yMinimum) + atom)) + ".00")
-                    } else {
-                        _yLabels.append(String(format: "%.2f", Float(dataEntries.yMinimum) + atom))
-                    }
-                }
-                return _yLabels
-            }
-        }
+//        var yLabels: [String] {
+//            get {
+//                var _yLabels = [String]()
+//                var largeRange = true
+//                let range = dataEntries.yMaximum - dataEntries.yMinimum
+//                print("Peanut Butter")
+//                print(range)
+//                print(dataEntries.yMaximum)
+//                print(dataEntries.yMinimum)
+//                if range < 7 {
+//                    largeRange = false
+//                }
+//                print("RANCH DRESSING!!!!")
+//                print(largeRange)
+//                for i in 0...4 {
+//                    let atom = Float(i)*Float(dataEntries.yMaximum - dataEntries.yMinimum)/4
+//                    if i != 0 && i != 4 {
+//                        if !largeRange {
+//                        _yLabels.append(String(format: "%.1f", Float(dataEntries.yMinimum) + atom) + "0")
+//                        } else {
+//                            _yLabels.append(String(Int(dataEntries.yMinimum + CGFloat(atom))))
+//                            
+//                        }
+//                    } else {
+//                        if !largeRange {
+//                        _yLabels.append(String(format: "%.2f", Float(dataEntries.yMinimum) + atom))
+//                        } else {
+//                            _yLabels.append(String(Int(dataEntries.yMinimum + CGFloat(atom))))
+//                        }
+//                    }
+//                }
+//                print("Jelly Man")
+//                print(_yLabels)
+//                return _yLabels
+//            }
+//        }
         var xLabels: [String] {
             get {
                 var _xLabels = ["Max","5y","1y","3m","1m","5d","1d"]
@@ -341,7 +357,7 @@ class StockGraphView2: UIView {
         }
         for i in 0...4 {
             let yY = (1111.66-222.33*CGFloat(i))*graphHeight/screenHeight - 9
-            addLabel(name: ys[i], text: yLabels[i], textColor: customColor.labelGray, textAlignment: .right, fontName: "Roboto-Regular", fontSize: 12, x: 0, y: yY, width: 85, height: 18, lines: 1)
+            addLabel(name: ys[i], text: "", textColor: customColor.labelGray, textAlignment: .right, fontName: "Roboto-Regular", fontSize: 12, x: 0, y: yY, width: 85, height: 20, lines: 1)
             ys[i].layer.zPosition = 7
            // if i == 0 || i == 4 { // leave the middle graph labels out
             self.addSubview(ys[i])

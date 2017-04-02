@@ -27,7 +27,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate {
         logo.image = #imageLiteral(resourceName: "logo50x64")
         view.addSubview(logo)
         
-        addButton(name: continueB, x: 0, y: 1194, width: 750, height: 140, title: "SAVE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: customColor.black24, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SettingsViewController.saveFunc(_:)), addSubview: true, alignment: .center)
+        addButton(name: continueB, x: 0, y: 1194, width: 750, height: 140, title: "SAVE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: customColor.black42, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SettingsViewController.saveFunc(_:)), addSubview: true, alignment: .center)
                 addButton(name: getSupport, x: 0, y: 982, width: 750, height: 212, title: "Get Support.", font: "Roboto-Regular", fontSize: 15, titleColor: customColor.white115, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SettingsViewController.supportFunc(_:)), addSubview: true, alignment: .center)
 
         addLabel(name: accountSettings, text: "ACCOUNT SETTINGS", textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 80, y: 334, width: 360, height: 30, lines: 1)
@@ -51,7 +51,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate {
             case 0:
                 myTextField.placeholder = "email@address.com"
             case 1:
-                myTextField.placeholder = "(615) 435-3245"
+                myTextField.placeholder = "(000) 000-0000"
             case 2:
                 myTextField.placeholder = "Scottade"
             default:
@@ -87,6 +87,13 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate {
 
             self.performSegue(withIdentifier: "fromSettingsToMain", sender: self)
 
+    }
+    
+    func textFieldDidBeginEditing(_ textField : UITextField)
+    {
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
+        textField.spellCheckingType = .no
     }
     
     @objc private func supportFunc(_ sender: UIButton) {

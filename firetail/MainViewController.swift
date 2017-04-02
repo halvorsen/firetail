@@ -93,6 +93,10 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+
+        
+        
         premiumMember = loadsave.loadPremiumAccess()
         longPress = UILongPressGestureRecognizer(target: self, action: #selector(MainViewController.longPress(_:)))
         view.addGestureRecognizer(longPress)
@@ -107,7 +111,8 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, 
         view.addSubview(date)
         addLabel(name: alertAmount, text: String(Set.alertCount), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
         view.addSubview(alertAmount)
-        addLabel(name: alerts1102, text: "Alerts", textColor: customColor.alertLines, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 324, width: 260, height: 28, lines: 1)
+        addLabel(name: alerts1102, text: "Alerts", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 324, width: 260, height: 28, lines: 1)
+        alerts1102.alpha = 0.5
         view.addSubview(alerts1102)
         addLabel(name: daysOfTheWeek, text: "M  T  W  T  F", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 506, width: 260, height: 28, lines: 1)
         view.addSubview(daysOfTheWeek)
@@ -143,9 +148,9 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, 
         
         addLabel(name: monthIndicator, text: Set.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 22, lines: 1)
         
-        addLabel(name: stock1, text: "", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 24, width: 352, height: 48, lines: 0)
-        addLabel(name: stock2, text: "", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 72, width: 352, height: 48, lines: 0)
-        addLabel(name: stock3, text: "", textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 120, width: 352, height: 48, lines: 0)
+        addLabel(name: stock1, text: "", textColor: customColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 24, width: 352, height: 48, lines: 0)
+        addLabel(name: stock2, text: "", textColor: customColor.white128, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 72, width: 352, height: 48, lines: 0)
+        addLabel(name: stock3, text: "", textColor: customColor.white209, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 120, width: 352, height: 48, lines: 0)
         
         switch Set.alertCount {
         case 0:
@@ -170,6 +175,17 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, 
         slideView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         view.addSubview(slideView)
         slideView.backgroundColor = customColor.black33
+        
+        for i in 0...4 {
+            let line = UIView()
+            line.backgroundColor = .white
+            line.alpha = 0.05
+            line.frame.size = CGSize(width: screenWidth/375, height: 260*screenHeight/667)
+            line.frame.origin.y = 84*screenHeight/667
+            line.frame.origin.x = 27*screenWidth/375 + CGFloat(i)*80*screenWidth/375
+            slideView.addSubview(line)
+        }
+        
         myTextField = UITextField(frame: CGRect(x: 0,y: 400*screenHeight/667,width: screenWidth ,height: 100*screenHeight/1334))
         myTextField.placeholder = "Search Ticker."
         myTextField.textAlignment = .center
@@ -419,48 +435,6 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, 
         print(Set.ti)
         reboot()
         
-        //        case 1:
-        //
-        //            if blocks[0].stockTickerLabel.text == button.title(for: .disabled)! {break}
-        //            Set.ti.removeAll()
-        //            var check = true
-        //            var position: CGFloat = 1
-        //            for i in 0..<blocks.count {
-        //                if button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text {
-        //                    newBlocks.append(blocks[i])
-        //                    Set.ti.append(blocks[i].stockTickerGlobal)
-        //                    loadsave.saveBlock(stockTicker: blocks[i].stockTickerGlobal, currentPrice: blocks[i].currentPriceGlobal, sms: blocks[i].smsGlobal, email: blocks[i].emailGlobal, flash: blocks[i].flashGlobal, urgent: blocks[i].urgentGlobal)
-        //                    UIView.animate(withDuration: 0.6) {self.blocks[i].frame.origin.y = 0
-        //                        self.blocks[i].slideView.frame.origin.x = 0
-        //                        self.alertScroller.contentOffset = CGPoint(x: 0, y: 0)
-        //                    }
-        //                    self.blocks[i].layer.zPosition = position; position += 1
-        //                    check = false
-        //                    for k in 0..<i {
-        //                        self.blocks[k].layer.zPosition = position; position += 1
-        //                        newBlocks.append(blocks[k])
-        //                        Set.ti.append(blocks[k].stockTickerGlobal)
-        //                        loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
-        //                    }
-        //                    if i != (blocks.count - 1) {
-        //                        for k in (i+1)..<blocks.count {
-        //                            self.blocks[k].layer.zPosition = position; position += 1
-        //                            newBlocks.append(blocks[k])
-        //                            Set.ti.append(blocks[k].stockTickerGlobal)
-        //                            loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
-        //                        }
-        //                    }
-        //                }
-        //
-        //                if check {
-        //                    UIView.animate(withDuration: 0.6) { self.blocks[i].frame.origin.y += 120*self.screenHeight/1334 }
-        //                }
-        //            }
-        //
-        //            blocks = newBlocks
-        //            newBlocks.removeAll()
-        //
-        //            reboot()
         
         
         print("Ti: \(Set.ti)")
@@ -541,6 +515,13 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, 
         }
     }
     
+    func textFieldDidBeginEditing(_ textField : UITextField)
+    {
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
+        textField.spellCheckingType = .no
+    }
+    
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
@@ -553,6 +534,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, 
         
         for i in 0...11 {
             if scrollView.contentSize.width*CGFloat(Double(i+1)-2.2)/12...scrollView.contentSize.width*CGFloat(Double(i+1)-1.2)/12 ~= scrollView.contentOffset.x {
+                print("Set.alertCount: \(Set.alertCount)")
                 switch Set.alertCount {
                 case 0:
                     break
@@ -568,18 +550,7 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, 
                 }
                 
                 monthIndicator.text = Set.month[i]
-                
-                //                switch Set.alertCount {
-                //                case 0:
-                //                    break
-                //                case 1:
-                //                    let array = [sv.percentSetVal[i]]
-                //                case 2:
-                //                    let array = [sv.percentSetVal[i],sv1.percentSetVal[i]].sorted { $0 > $1 }
-                //                default:
-                //                    let array = [sv.percentSetVal[i],sv1.percentSetVal[i],sv2.percentSetVal[i]].sorted { $0 > $1 }
-                //                }
-                
+
                 switch Set.alertCount {
                 case 0:
                     break
@@ -625,8 +596,13 @@ class MainViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, 
                                 self.stock3.frame.origin.y = 120*self.screenHeight/1334
                             } else {
                                 self.stock1.frame.origin.y = 120*self.screenHeight/1334
-                                self.stock2.frame.origin.y = 72*self.screenHeight/1334
-                                self.stock3.frame.origin.y = 24*self.screenHeight/1334
+                                if self.sv1.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                                self.stock2.frame.origin.y = 24*self.screenHeight/1334
+                                self.stock3.frame.origin.y = 72*self.screenHeight/1334
+                                } else {
+                                    self.stock2.frame.origin.y = 72*self.screenHeight/1334
+                                    self.stock3.frame.origin.y = 24*self.screenHeight/1334
+                                }
                             }
                         }
                         

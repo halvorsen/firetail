@@ -52,8 +52,10 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             case 0:
                 myTextField.placeholder = "email@address.com"
             case 1:
+                myTextField.isSecureTextEntry = true
                 myTextField.placeholder = "Password"
             default:
+                myTextField.isSecureTextEntry = true
                 myTextField.placeholder = "Confirm Password"
             }
             myTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
@@ -75,26 +77,40 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         self.performSegue(withIdentifier: "fromSignupToLogin", sender: self)
         
     }
-   
+    
+    func textFieldDidBeginEditing(_ textField : UITextField)
+    {
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
+        textField.spellCheckingType = .no
+    }
+    
     @objc private func continueFunc(_ sender: UIButton) {
         
         // 1
         let emailField = textFields[0].text
         let passwordField = textFields[1].text
+        let passwordfield2 = textFields[2].text
         
         // 2
-        if emailField != nil && passwordField != nil {
-            FIRAuth.auth()!.createUser(withEmail: emailField!, password: passwordField!) {
-                user, error in
-                if error == nil {
-                    // 3
-                    FIRAuth.auth()!.signIn(withEmail: emailField!, password: passwordField!) //adds user and pass
-                    self.username.text = emailField!
-                    FIRAuth.auth()!.signIn(withEmail: emailField!, password: passwordField!) //adds authentication
+        if passwordField == passwordField {
+            if emailField != nil && passwordField != nil {
+                FIRAuth.auth()!.createUser(withEmail: emailField!, password: passwordField!) {
+                    user, error in
+                    if error == nil {
+                        // 3
+                        FIRAuth.auth()!.signIn(withEmail: emailField!, password: passwordField!) //adds user and pass
+                        self.username.text = emailField!
+                        FIRAuth.auth()!.signIn(withEmail: emailField!, password: passwordField!) //adds authentication
+                    }
                 }
             }
+        } else {
+            let alert = UIAlertController(title: "Warning", message: "Passwords Do Not Match", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
-
+        
         delay(bySeconds: 1.5) {
             self.performSegue(withIdentifier: "fromSignupToMain", sender: self)
         }

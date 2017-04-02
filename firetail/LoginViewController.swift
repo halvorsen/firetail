@@ -18,7 +18,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var continueB = UIButton()
     var createAccount = UIButton()
     var myTextFields = [UITextField]()
-    var progressHUD = ProgressHUD(text: "Loading")
+    var progressHUD = ProgressHUD(text: "Authenticating")
     //var doneLoading = false
     let loadsave = LoadSaveCoreData()
     var myTimer = Timer()
@@ -31,7 +31,8 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var noNils = true
     var tiLast = String()
     var _ti = [String]()
-    
+    let firetail = UILabel()
+    //var check = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,41 +40,73 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         coverView.backgroundColor = customColor.black33
         coverView.layer.zPosition = 10
         view.addSubview(coverView)
-        imageView.frame = CGRect(x: 141, y: 274, width: 93, height: 119)
-        imageView.image = #imageLiteral(resourceName: "logo93x119")
-        imageView.frame.origin.x = view.frame.midX - 93/2
-        imageView.frame.origin.y = view.frame.midY - 119/2
+        imageView.frame.size = CGSize(width: 161, height: 207)
+        imageView.image = #imageLiteral(resourceName: "logo161x207")
+        imageView.frame.origin.x = view.frame.midX - 161/2
+        imageView.frame.origin.y = view.frame.midY - 220
         imageView.layer.zPosition = 11
         view.addSubview(imageView)
+        firetail.frame = CGRect(x: 0, y: view.frame.midY - 10, width: screenWidth, height: 65*screenHeight/667)
+        firetail.text = "FIRETAIL"
+        firetail.font = UIFont(name: "Roboto-Bold", size: 27*fontSizeMultiplier)
+        firetail.textAlignment = .center
+        firetail.textColor = .white
+        firetail.backgroundColor = .clear
+        firetail.layer.zPosition = 11
+        view.addSubview(firetail)
+        
+        // (check,_,_,_,_,_) = self.loadsave.loadBlocks()
+        
         
         FIRAuth.auth()!.addStateDidChangeListener() { auth, user in
             // 2
-            if user != nil && !self.continueB.isDescendant(of: self.view) {
+            if user != nil {
                 // 3
                 self.alreadyAUser = true
                 self.authenticated = true
                 
                 (self.ti,_,_,_,_,_) = self.loadsave.loadBlocks()
                 print(self.ti)
-                if self.ti != [""] {
-                    Set.ti = self.ti
-                    //                        if self.ti.count > 0 {
-                    //                            self.tiLast = self.ti.last!
-                    //                        }
-                    self.fetch()
-                } else {
-                    self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
+                self.delay(bySeconds: 5.0) {
+                    if self.ti != [""] {
+                        Set.ti = self.ti
+                        self.fetch()
+                        
+                    } else {
+                        self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
+                    }
                 }
             } else {
                 UIView.animate(withDuration: 1.0) {
                     self.imageView.alpha = 0.0
                     self.coverView.alpha = 0.0
+                    self.firetail.alpha = 0.0
                 }
                 if !self.continueB.isDescendant(of: self.view) {
                     self.populateView()
                 }
             }
         }
+        
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        //        if check == [""] {
+        //            UIView.animate(withDuration: 1.0) {
+        //                self.imageView.alpha = 0.0
+        //                self.coverView.alpha = 0.0
+        //                self.firetail.alpha = 0.0
+        //            }
+        //            if !self.continueB.isDescendant(of: self.view) {
+        //                self.populateView()
+        //            }
+        //        }
+    }
+    
+    func textFieldDidBeginEditing(_ textField : UITextField)
+    {
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
+        textField.spellCheckingType = .no
     }
     
     private func fetch() {
@@ -147,6 +180,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 case 0:
                     myTextField.placeholder = "email@address.com"
                 case 1:
+                    myTextField.isSecureTextEntry = true
                     myTextField.placeholder = "Password"
                 default:
                     break
@@ -196,7 +230,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     @objc private func continueFunc(_ sender: UIButton) {
         FIRAuth.auth()!.signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!)
-        
+        progressHUD.frame.size.width += 100*screenWidth/750
         self.view.addSubview(progressHUD)
         
     }

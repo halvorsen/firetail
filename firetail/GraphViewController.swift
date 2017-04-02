@@ -55,7 +55,7 @@ class GraphViewController: ViewSetup {
         PodVariable.gingerBreadMan.removeAll()
         Label.changeValues.removeAll()
         Label.percentageValues.removeAll()
-        self.view.backgroundColor = customColor.background
+        self.view.backgroundColor = customColor.black33
         //        pan = UIPanGestureRecognizer(target: self, action: #selector(GraphViewController.respondToPan(_:)))
         //        view.addGestureRecognizer(pan)
         addLabelsAndButtons()
@@ -88,7 +88,7 @@ class GraphViewController: ViewSetup {
           progressHUD.layer.zPosition = 5
         progressHUD.alpha = 0.0
         view.addSubview(progressHUD)
-        self.view.backgroundColor = UIColor.black
+        //self.view.backgroundColor = UIColor.black
         UIView.animate(withDuration: 3.0) {
             self.progressHUD.alpha = 1.0
         }
@@ -178,20 +178,9 @@ class GraphViewController: ViewSetup {
     
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
          let serialQueue = DispatchQueue(label: "queuename", qos: DispatchQoS.userInitiated)
-      //  serialQueue.async {
+ 
         if stockData.1[self.i] != nil {
-//            if stockData.0[self.i] == "1m" {
-//                print("EEEEK")
-//                print(stockData.1[self.i]!.closingPrice)
-//                print(stockData.1[self.i]!.dates)
-//                print("LAST")
-//                print(stockData.1[self.i]!.closingPrice.last!)
-//                
-//               // let z = stockData.1[self.i]!.closingPrice.count - 1
-//               Set.yesterday = stockData.1[self.i]!.closingPrice.last!
-//            }
-            
-            
+
             let graphView = StockGraphView2(stockData: stockData.1[self.i]!, key: stockData.0[self.i], cubic: true)
             
             let ma = stockData.1[self.i]!.closingPrice.max()! //from unfiltered highs and lows
@@ -200,7 +189,20 @@ class GraphViewController: ViewSetup {
             let mi2 = graphView._outputValues.min()!// from averages for middle of graph
             
             //basically what this does to the yellow detailed graphs is gives the actual max and min values as the top and bottom y labels. the graph is all averages execpt for the current price, last point on graph, which is the current prices. As you can imagine this makes for a graph that isn't totally lined up with it's legends but gives you a good point at the end and top and bottom, then everything else is approximation curve through averaged prices
-            self.yVals[stockData.0[self.i]] = (String(format: "%.1f", ma)+"0", String(format: "%.1f", mi2 + 3*(ma2-mi2)/4)+"0", String(format: "%.1f", mi2 + 2*(ma2-mi2)/4)+"0",String(format: "%.1f", mi2 + (ma2-mi2)/4)+"0",String(format: "%.1f", mi)+"0")
+
+            let range = ma - mi
+            
+            switch range {
+            case 0...0.06:
+                self.yVals[stockData.0[self.i]] = (String(format: "%.2f", ma),"","","",String(format: "%.2f", mi))
+            case 0.061...0.6:
+                self.yVals[stockData.0[self.i]] = (String(format: "%.2f", ma), String(format: "%.2f", mi2 + 3*(ma2-mi2)/4), String(format: "%.2f", mi2 + 2*(ma2-mi2)/4),String(format: "%.2f", mi2 + (ma2-mi2)/4),String(format: "%.2f", mi))
+            case 0.61...7:
+                self.yVals[stockData.0[self.i]] = (String(format: "%.1f", ma)+"0", String(format: "%.1f", mi2 + 3*(ma2-mi2)/4)+"0", String(format: "%.1f", mi2 + 2*(ma2-mi2)/4)+"0",String(format: "%.1f", mi2 + (ma2-mi2)/4)+"0",String(format: "%.1f", mi)+"0")
+            default:
+                 self.yVals[stockData.0[self.i]] = (String(Int(ma)), String(Int(mi2 + 3*(ma2-mi2)/4)), String(Int(mi2 + 2*(ma2-mi2)/4)),String(Int(mi2 + (ma2-mi2)/4)),String(Int(mi)))
+            }
+
             
             
                 graphView.isUserInteractionEnabled = false

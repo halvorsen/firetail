@@ -228,7 +228,12 @@ class AddViewController: ViewSetup, UITextFieldDelegate {
             
         }
     }
-    
+    func textFieldDidBeginEditing(_ textField : UITextField)
+    {
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
+        textField.spellCheckingType = .no
+    }
     @objc private func back(_ sender: UIButton) {
         self.performSegue(withIdentifier: "fromAddToMain", sender: self)
     }

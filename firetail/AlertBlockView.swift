@@ -45,10 +45,10 @@ class AlertBlockView: UIView {
         ex.setTitle(stockTicker, for: .disabled)
         slideView.backgroundColor = customColor.background
         slideView.frame = self.bounds
-        slideView.layer.shadowColor = UIColor.black.cgColor
-        slideView.layer.shadowOpacity = 0.7
-        slideView.layer.shadowOffset = CGSize(width: 1, height: 1)
-        slideView.layer.shadowRadius = 1
+//        slideView.layer.shadowColor = UIColor.black.cgColor
+//        slideView.layer.shadowOpacity = 0.7
+//        slideView.layer.shadowOffset = CGSize(width: 1, height: 1)
+//        slideView.layer.shadowRadius = 1
         self.addSubview(slideView)
         
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slide(_:)))
