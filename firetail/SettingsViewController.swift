@@ -9,7 +9,7 @@
 import UIKit
 import BigBoard
 
-class SettingsViewController: ViewSetup, UITextFieldDelegate {
+class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     var customColor = CustomColor()
     var continueB = UIButton()
     var getSupport = UIButton()
@@ -17,6 +17,9 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate {
     var myTextFields = [UITextField]()
     var doneLoading = false
     var backArrow = UIButton()
+    var pickerData = ["Broker1","Broker2","Broker3","Broker4","Broker5"]
+    var myPicker = UIPickerView()
+    let toolBar = UIToolbar()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +75,53 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate {
             addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SettingsViewController.back(_:)), addSubview: true)
             backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         }
+        
+        
+        myPicker.dataSource = self
+        myPicker.delegate = self
+        myPicker.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 177*screenHeight/667)
+        myPicker.backgroundColor = .white
+        myPicker.showsSelectionIndicator = true
+        
+        
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor(red: 21/255, green: 127/255, blue: 249/255, alpha: 1)
+        toolBar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(AddViewController.donePicker))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(AddViewController.donePicker))
+        
+        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        
+        myTextFields[2].inputView = myPicker
+        myTextFields[2].inputAccessoryView = toolBar
+    }
+    
+    func donePicker() {
+        
+        view.frame.origin.y = 0
+        myPicker.removeFromSuperview()
+        toolBar.removeFromSuperview()
+        
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+            return pickerData.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+            return pickerData[row]
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        myTextFields[2].text = pickerData[row]
     }
     
     @objc private func back(_ sender: UIButton) {

@@ -215,8 +215,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
 
 
         myPicker.dataSource = self
-        //myPicker.layer.zPosition = 1000000
-            myPicker.delegate = self
+        myPicker.delegate = self
         myPicker.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 177*screenHeight/667)
         myPicker.backgroundColor = .white
         myPicker.showsSelectionIndicator = true
@@ -241,12 +240,12 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     }
 
 
-func tapFunction(sender:UITapGestureRecognizer) {
-    print("tap working")
-    view.addSubview(myPicker)
-    view.frame.origin.y = 446-667
-    
-}
+//func tapFunction(sender:UITapGestureRecognizer) {
+//    print("tap working")
+//    view.addSubview(myPicker)
+//    view.frame.origin.y = 446-667
+//    
+//}
     func donePicker() {
         
         view.frame.origin.y = 0
