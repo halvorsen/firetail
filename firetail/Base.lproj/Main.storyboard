@@ -95,10 +95,10 @@
             </objects>
             <point key="canvasLocation" x="-1918" y="543"/>
         </scene>
-        <!--Main View Controller-->
+        <!--Dashboard View Controller-->
         <scene sceneID="6zS-Et-ocD">
             <objects>
-                <viewController modalTransitionStyle="crossDissolve" id="9Rf-87-nHj" customClass="MainViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalTransitionStyle="crossDissolve" id="9Rf-87-nHj" customClass="DashboardViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hhA-t2-69E"/>
                         <viewControllerLayoutGuide type="bottom" id="Kz2-9G-dId"/>

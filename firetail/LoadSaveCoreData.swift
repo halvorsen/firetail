@@ -17,6 +17,39 @@ import Firebase
 
 class LoadSaveCoreData {
     
+    private func deleteAllData(entity: String) {
+        let appDel = (UIApplication.shared.delegate as! AppDelegate)
+        let context = appDel.persistentContainer.viewContext
+        let ReqVar = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+        let DelAllReqVar = NSBatchDeleteRequest(fetchRequest: ReqVar)
+        do { try context.execute(DelAllReqVar) }
+        catch { print(error) }
+    }
+    
+    func resaveBlocks(blocks: [AlertBlockView]) {
+        deleteAllData(entity: "Block")
+        let appDel = UIApplication.shared.delegate as! AppDelegate
+        let context = appDel.persistentContainer.viewContext
+        for block in blocks {
+        let entity = NSEntityDescription.insertNewObject(forEntityName: "Block", into: context)
+        entity.setValue(block.stockTickerGlobal, forKey: "ticker")
+        entity.setValue(block.currentPriceGlobal, forKey: "alertPrice")
+        entity.setValue(block.emailGlobal, forKey: "alertEmail")
+        entity.setValue(block.smsGlobal, forKey: "alertSMS")
+        entity.setValue(block.flashGlobal, forKey: "alertFlash")
+        entity.setValue(block.urgentGlobal, forKey: "alertUrgent")
+        
+        do {
+            try context.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        }
+    }
+    
     
     func savePurchase(purchase: String) {
         let appDel = UIApplication.shared.delegate as! AppDelegate

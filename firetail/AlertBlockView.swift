@@ -20,8 +20,6 @@ class AlertBlockView: UIView {
     var slideView = UIView()
     var tap = UITapGestureRecognizer()
     var ex = UIButton()
-    var up = UIButton()
-    var info = UIButton()
     var stockTickerGlobal: String = ""
     var currentPriceGlobal: Double = 0.0
     var smsGlobal: Bool = false
@@ -41,7 +39,13 @@ class AlertBlockView: UIView {
         let t = stockTicker
         self.backgroundColor = customColor.white153
         
-        addButton(name: ex, x: 750 - 83.3, y: 0, width: 83.3, height: 120, title: "x", font: "HelveticalNeue-Bold", fontSize: 20, titleColor: .white, bgColor: customColor.white115, cornerRad: 0, boarderW: 0, boarderColor: .clear, addSubview: true)
+        addButton(name: ex, x: 750 - 120, y: 0, width: 120, height: 120, title: "", font: "HelveticaNeue-light", fontSize: 40, titleColor: customColor.black33, bgColor: customColor.white249, cornerRad: 0, boarderW: 0, boarderColor: .clear, addSubview: true)
+        let x = UIImageView()
+        x.image = #imageLiteral(resourceName: "ex")
+        x.frame.size = CGSize(width: 16*screenWidth/375, height: 16*screenWidth/375)
+        x.frame.origin = CGPoint(x: 44*screenWidth/750, y: 44*screenWidth/750)
+        ex.addSubview(x)
+        //x.center = ex.center
         ex.setTitle(stockTicker, for: .disabled)
         slideView.backgroundColor = customColor.background
         slideView.frame = self.bounds

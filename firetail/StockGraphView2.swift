@@ -13,6 +13,7 @@ import Charts
 public struct Label {
     public static var percentageValues = [String]()
     public static var changeValues = [String]()
+    public static var percentageValuesIsPositive = [Bool]()
 }
 
 class StockGraphView2: UIView {
@@ -38,6 +39,7 @@ class StockGraphView2: UIView {
     var doneSquashing = false
     var graphAppearsInView = true
     var g = String()
+    var upDownArrowView = UIImageView()
     
     
     
@@ -63,7 +65,6 @@ class StockGraphView2: UIView {
         for i in 0..<dataPoints.count {
             let dataEntry = ChartDataEntry(x: Double(i), y: dataPoints[i])
             yVal1.append(dataEntry)
-            
         }
         
         let set1 = LineChartDataSet(values: yVal1, label: "")
@@ -259,8 +260,6 @@ class StockGraphView2: UIView {
         base.layer.zPosition = 5
         self.addSubview(base)
         g = key
-        
-        
 
         var dataEntries = GraphSet2()
         if stockData.closingPrice.count <= 15 {
@@ -290,10 +289,12 @@ class StockGraphView2: UIView {
                 get {
                     var _changeValue = String()
                     if (stockData.closingPrice.last! - stockData.closingPrice.first!) > 0 {
-                        _changeValue = "\u{2191}" + String(format: "%.2f", Float(100*(stockData.closingPrice.last! - stockData.closingPrice.first!)/stockData.closingPrice.first!)) + "%"
+                        Label.percentageValuesIsPositive.append(true)
+                        _changeValue = String(format: "%.2f", Float(100*(stockData.closingPrice.last! - stockData.closingPrice.first!)/stockData.closingPrice.first!)) + "%"
                         
                     } else {
-                        _changeValue = "\u{2193}" + String(format: "%.2f", Float(100*(stockData.closingPrice.first! - stockData.closingPrice.last!)/stockData.closingPrice.first!)) + "%"
+                        Label.percentageValuesIsPositive.append(false)
+                        _changeValue = String(format: "%.2f", Float(100*(stockData.closingPrice.first! - stockData.closingPrice.last!)/stockData.closingPrice.first!)) + "%"
                     }
                     return _changeValue
                 }
@@ -302,14 +303,17 @@ class StockGraphView2: UIView {
         }
         
         
-        addLabel(name: change, text: "", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 70, y: -86, width: 120, height: 32, lines: 1)
+        addLabel(name: change, text: "", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 66, y: -86, width: 120, height: 32, lines: 1)
         self.addSubview(change)
-        addLabel(name: percentChange, text: "", textColor: customColor.yellow, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 184, y: -86, width: 300, height: 32, lines: 1)
+        addLabel(name: percentChange, text: "", textColor: customColor.yellow, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 220, y: -86, width: 300, height: 32, lines: 1)
         self.addSubview(percentChange)
+        upDownArrowView.frame = CGRect(x: 188*screenWidth/750, y: -44*screenHeight/667, width: 10*screenWidth/375, height: 11*screenWidth/375)
+        self.addSubview(upDownArrowView)
         
         self.backgroundColor = customColor.gray
         layerView.frame = self.bounds
         self.addSubview(layerView)
+        
         
         
         

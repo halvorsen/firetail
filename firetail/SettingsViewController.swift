@@ -16,7 +16,6 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate {
     var accountSettings = UILabel()
     var myTextFields = [UITextField]()
     var doneLoading = false
-    var progressHUD = ProgressHUD(text: "Loading")
     var backArrow = UIButton()
     
     override func viewDidLoad() {

@@ -18,8 +18,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var continueB = UIButton()
     var createAccount = UIButton()
     var myTextFields = [UITextField]()
-    var progressHUD = ProgressHUD(text: "Authenticating")
-    //var doneLoading = false
+    var activityView = UIActivityIndicatorView()
     let loadsave = LoadSaveCoreData()
     var myTimer = Timer()
     var ti = [String]()
@@ -230,8 +229,11 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     @objc private func continueFunc(_ sender: UIButton) {
         FIRAuth.auth()!.signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!)
-        progressHUD.frame.size.width += 100*screenWidth/750
-        self.view.addSubview(progressHUD)
+        activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityView.center = self.view.center
+        activityView.startAnimating()
+        self.view.addSubview(activityView)
+     
         
     }
     

@@ -99,7 +99,7 @@ class CompareScroll: UIView {
         var p1 = CGPoint(x: 0, y: coordXFor(index: 0))
         path.move(to: p1)
         
-//        drawPoint(point: p1, color: .clear, radius: 3)
+ //       drawPoint(point: p1, color: .green, radius: 3)
         
         if (data.count == 2) {
             path.addLine(to: CGPoint(x: step, y: coordXFor(index: 1)))
@@ -110,7 +110,7 @@ class CompareScroll: UIView {
         
         for i in 1..<data.count {
             let p2 = CGPoint(x: step * CGFloat(i), y: coordXFor(index: i))
-//            drawPoint(point: p2, color: customColor.fieldLines, radius: 3)
+//            drawPoint(point: p2, color: .red, radius: 3)
             var p3: CGPoint?
             if i == data.count - 1 {
                 p3 = nil
@@ -195,7 +195,7 @@ class CompareScroll: UIView {
     }
     
     func drawPoint(point: CGPoint, color: UIColor, radius: CGFloat) {
-        let ovalPath = UIBezierPath(ovalIn: CGRect(x: point.x - radius, y: point.y - radius, width: radius * 2, height: radius * 2))
+        let ovalPath = UIBezierPath(ovalIn: CGRect(x: scale*(point.x - radius), y: point.y - radius, width: radius * 2, height: radius * 2))
         color.setFill()
         ovalPath.fill()
     }

@@ -71,15 +71,7 @@ class CompareScrollDot: UIView {
     }
     
     var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
-    //        didSet {
-    //            setNeedsDisplay()
-    //        }
-    //  }
-    
-    //    func coordXFor(index: Int) -> CGFloat {
-    //        let Yval = bounds.height/2 * data[index] / data.max()!
-    //        return   data[0]*(1-(1-Yval/data[0])*2)
-    //    }
+
     func coordXFor(index: Int) -> CGFloat {
         return bounds.height - bounds.height * data[index] / (data.max() ?? 0)
     }
