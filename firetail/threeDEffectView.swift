@@ -40,7 +40,7 @@ class threeDEffectView: UIView {
         pathPoly.addLine(to: CGPoint(x: 0, y: 0))
         pathPoly.closeSubpath()
         
-        layerAnimation.duration = 1.0
+        layerAnimation.duration = 1.5
         layerAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
         layerAnimation.fillMode = kCAFillModeBoth
         layerAnimation.isRemovedOnCompletion = false
