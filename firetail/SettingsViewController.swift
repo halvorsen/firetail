@@ -57,6 +57,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             case 2:
                 myTextField.placeholder = "Scottade"
             default:
+                myTextField.isSecureTextEntry = true
                 myTextField.placeholder = "***********"
             }
             myTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")

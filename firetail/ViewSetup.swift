@@ -70,6 +70,8 @@ struct CustomColor {
     let black30 = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1.0)
     //black24
     let black24 = UIColor(red: 24/255, green: 24/255, blue: 24/255, alpha: 1.0)
+    //black14
+    let black14 = UIColor(red: 14/255, green: 14/255, blue: 14/255, alpha: 1.0)
 }
 
 class ViewSetup: UIViewController {

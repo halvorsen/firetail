@@ -35,9 +35,9 @@ class DailyGraphForAlertView: UIView {
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
-    init(graphData: [Double], dateArray: [Date], frame: CGRect = CGRect(x: 0, y:0*UIScreen.main.bounds.height/667, width: 4*UIScreen.main.bounds.width, height: 210*UIScreen.main.bounds.height/667)) {
+    init(graphData: [Double], dateArray: [Date], frame: CGRect = CGRect(x: 0, y:0*UIScreen.main.bounds.height/667, width: 4*UIScreen.main.bounds.width, height: 160*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
-        self.backgroundColor = customColor.black33
+        self.backgroundColor = customColor.black42
         date = dateArray
         var _set = [Double]()
         let max = graphData.max()!
@@ -76,7 +76,7 @@ class DailyGraphForAlertView: UIView {
         
         
        // customColor.whiteAlpha.setStroke()
-        customColor.white153.setFill()
+        customColor.black33.setFill()
         path.lineWidth = 1
         path.fill()
        // path.stroke()
@@ -135,14 +135,17 @@ class DailyGraphForAlertView: UIView {
             
         }
         let v = UIView(frame: CGRect(x: 0, y: -50*screenHeight/667, width: self.frame.width, height: 50*screenHeight/667))
-        v.backgroundColor = customColor.white153
+        v.backgroundColor = customColor.black33
         self.addSubview(v)
         let w = UIView(frame: CGRect(x: -400, y: -50*screenHeight/667, width: 400, height: 0.9*4*points.first!.y + 55*screenHeight/667))
-        w.backgroundColor = customColor.white153
+        w.backgroundColor = customColor.black33
         self.addSubview(w)
         let ww = UIView(frame: CGRect(x: self.frame.maxX, y: -50*screenHeight/667, width: 400, height: 0.9*4*points.last!.y + 55*screenHeight/667))
-        ww.backgroundColor = customColor.white153
+        ww.backgroundColor = customColor.black33
         self.addSubview(ww)
+        let extraBottomGray = UIView(frame: CGRect(x: 0, y: 160*screenHeight/667, width: screenWidth*5, height: 30*screenHeight/667))
+        extraBottomGray.backgroundColor = customColor.black42
+        self.addSubview(extraBottomGray)
         
         let monthString = ["","jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
         for i in 1..<points.count {
@@ -153,6 +156,7 @@ class DailyGraphForAlertView: UIView {
             l.text = allStockValues[i]
             l.frame = CGRect(x: scale*(points[i].x)-25*screenWidth/375, y: 0.9*scale*(points[i].y + 5) - 60*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
             l.font = UIFont(name: "Roboto-Medium", size: 12*fontSizeMultiplier)
+            l.textColor = .white
             l.textAlignment = .center
             l.alpha = 0.0
             self.addSubview(l)
@@ -161,8 +165,8 @@ class DailyGraphForAlertView: UIView {
             let k = UILabel()
             //k.text = dayLabelsText[i]
             k.text = "\(dayInt) \(monthString[monthInt])"
-            k.frame = CGRect(x: scale*(points[i].x)-25*screenWidth/375, y: 190*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
-            k.font = UIFont(name: "Roboto-Light", size: 14*fontSizeMultiplier)
+            k.frame = CGRect(x: scale*(points[i].x)-22*screenWidth/375, y: 155*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
+            k.font = UIFont(name: "Roboto-Regular", size: 13*fontSizeMultiplier)
             k.textColor = customColor.whiteAlpha30
             k.textAlignment = .center
             k.alpha = 0.0
@@ -171,8 +175,8 @@ class DailyGraphForAlertView: UIView {
             
             
             let grid = GridLine()
-            grid.frame = CGRect(x: 4*points[i].x, y: -100*screenWidth/667, width: screenWidth/375, height: 260*screenHeight/667)
-            // grid.frame = CGRect(x: 4*points[i].x, y: -100*screenWidth/667, width: screenWidth/375, height: 0.9*points[i].y*4 + 100*screenWidth/667)
+            grid.frame = CGRect(x: 4*points[i].x, y: -100*screenWidth/667, width: screenWidth/375, height: 245*screenHeight/667)
+            grid.backgroundColor = customColor.whiteAlpha
             self.addSubview(grid)
             grids.append(grid)
             print("grid Count: \(grids.count)")

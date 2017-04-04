@@ -17,7 +17,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var activityView = UIActivityIndicatorView()
     var premiumMember = false
     var addTextField = UITextField()
-    var stringToPass = "Patriots"
+    var stringToPass = "#@$%"
     let customColor = CustomColor()
     var menu = UIButton()
     var add = UIButton()
@@ -755,19 +755,20 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     @objc private func addFunc(_ sender: UIButton) {
         if premiumMember || alertCount < 3 || true { //hack
-            let cover = UIView(frame: view.frame)
-            cover.backgroundColor = customColor.black24
-            cover.alpha = 0.0
-            slideView.addSubview(cover)
-            slideView.addSubview(addTextField)
-            
-            UIView.animate(withDuration: 1.0) {
-                self.addTextField.alpha = 1.0
-                cover.alpha = 1.0
-            }
-            delay(bySeconds: 0.8) {
-                self.addTextField.becomeFirstResponder()
-            }
+            self.performSegue(withIdentifier: "fromMainToAdd", sender: self)
+//            let cover = UIView(frame: view.frame)
+//            cover.backgroundColor = customColor.black24
+//            cover.alpha = 0.0
+//            slideView.addSubview(cover)
+//            slideView.addSubview(addTextField)
+//            
+//            UIView.animate(withDuration: 1.0) {
+//                self.addTextField.alpha = 1.0
+//                cover.alpha = 1.0
+//            }
+//            delay(bySeconds: 0.8) {
+//                self.addTextField.becomeFirstResponder()
+//            }
         } else if !premiumMember {
             purchase()
         }

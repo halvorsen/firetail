@@ -8,6 +8,7 @@
 
 import UIKit
 import BigBoard
+import QuartzCore
 
 class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     var myTextField = UITextField()
@@ -58,13 +59,13 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         view.addSubview(bottomBar)
         
         let alertLabel = UILabel()
-        addLabel(name: alertLabel, text: "Price Alert", textColor: customColor.white216, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 64, y: 1252, width: 240, height: 40, lines: 0)
+        addLabel(name: alertLabel, text: "Price Alert", textColor: customColor.white216, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 64, y: 1242, width: 240, height: 40, lines: 0)
         view.addSubview(alertLabel)
         
         //addLabel(name: alertLabel2, text: "$", textColor: customColor.white216, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 17, x: 256, y: 1252, width: 240, height: 40, lines: 0)
         //view.addSubview(alertLabel2)
         
-        textField2 = UITextField(frame: CGRect(x: 256*screenWidth/750,y: 1252*screenHeight/1334,width: 240*screenWidth/750 ,height: 40*screenHeight/1334))
+        textField2 = UITextField(frame: CGRect(x: 256*screenWidth/750,y: 1242*screenHeight/1334,width: 240*screenWidth/750 ,height: 40*screenHeight/1334))
         //textField.placeholder = newAlertTicker
         textField2.textAlignment = .left
         textField2.setValue(customColor.white216, forKeyPath: "_placeholderLabel.textColor")
@@ -72,28 +73,28 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         textField2.autocorrectionType = UITextAutocorrectionType.no
         textField2.keyboardType = UIKeyboardType.default
         textField2.returnKeyType = UIReturnKeyType.done
-        //myTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
+        textField2.clearsOnBeginEditing = true
         textField2.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         textField2.delegate = self
         textField2.backgroundColor = .clear
         textField2.textColor = customColor.white216
         textField2.tag = 0
-        myTextField.tag = 1
         view.addSubview(textField2)
         
         myTextField = UITextField(frame: CGRect(x: 60*screenWidth/750,y: 1014*screenHeight/1334,width: 240*screenWidth/750 ,height: 80*screenHeight/1334))
         myTextField.placeholder = newAlertTicker
         myTextField.textAlignment = .left
+        myTextField.clearsOnBeginEditing = true
         myTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
         myTextField.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
         myTextField.autocorrectionType = UITextAutocorrectionType.no
         myTextField.keyboardType = UIKeyboardType.default
         myTextField.returnKeyType = UIReturnKeyType.done
-        //myTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
         myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         myTextField.delegate = self
         myTextField.backgroundColor = .clear
         myTextField.textColor = .white
+        myTextField.tag = 1
         view.addSubview(myTextField)
 
         var add = UIButton()
@@ -184,8 +185,18 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 t = t.translatedBy(x: 0, y: -100)
                 t = t.scaledBy(x: 1.0, y: 0.01)
                 self.graph.transform = t
-                
+                let effectView = threeDEffectView(frame: CGRect(x: 0, y: -8*self.screenHeight/667, width: self.screenWidth, height: self.screenWidth/2))
+                effectView.clipsToBounds = true
+                    self.view.addSubview(effectView)
+                    effectView.layer3d.add(effectView.layerAnimation, forKey: nil)
+                effectView.layer3d.add(effectView.animcolor, forKey: "fillColor")
+                effectView.alpha = 0.0
+                UIView.animate(withDuration: 1.0) {
+                    effectView.alpha = 1.0
+                }
                 UIView.animate(withDuration: 1.5) {
+               
+                    effectView.frame = CGRect(x: 0, y: 240*self.screenHeight/667, width: self.screenWidth, height: 0)
                     self.graph.transform = CGAffineTransform.identity
                     self.graph.frame.origin.y = 50*self.screenHeight/667
                 }
@@ -375,6 +386,9 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
 
     func textFieldDidBeginEditing(_ textField : UITextField)
     {
+        if textField.tag == 1 {
+            textField.text = ""
+        }
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .allCharacters
         textField.spellCheckingType = .no
@@ -410,63 +424,76 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("EEEEW")
+        print(textField.tag)
         if textField.tag == 0 {
             UIView.animate(withDuration: 0.6) {
-            self.view.frame.origin.y = 0
+                self.view.frame.origin.y = 0
             }
             textField2.tintColor = .clear
         } else {
-        
-        if myTextField.text != nil && myTextField.delegate != nil {
-            
-            getOneYearData(stockName: myTextField.text!.uppercased()) {
+            print("WAAAAA")
+            if myTextField.text != nil && myTextField.delegate != nil {
                 
-                Set.oneYearDictionary[$1] = $0
-                
-            }
-            
-            newAlertTicker = myTextField.text!.uppercased()
-            myTextField.text = myTextField.text!.uppercased()
-            myTextField.tintColor = .clear
-            
-            graph.removeFromSuperview()
-            graph = DailyGraphForAlertView()
-            prepareGraph() {(_ dateArray: [Date]?,_ closings: [Double]?) -> Void in
-                if closings != nil && dateArray != nil {
-                    self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)
-                    self.container.addSubview(self.graph)
-                    var t = CGAffineTransform.identity
-                    t = t.translatedBy(x: 0, y: -100)
-                    t = t.scaledBy(x: 1.0, y: 0.01)
-                    self.graph.transform = t
+                getOneYearData(stockName: myTextField.text!.uppercased()) {
                     
-                    UIView.animate(withDuration: 1.5) {
-                        self.graph.transform = CGAffineTransform.identity
-                        self.graph.frame.origin.y = 50*self.screenHeight/667
-                    }
-                    self.delay(bySeconds: 1.2) {
-                        
-                        for i in 0..<self.graph.labels.count {
-                            self.delay(bySeconds: 0.3) {
-                                UIView.animate(withDuration: 0.3*Double(i)) {
-                                    self.graph.grids[self.graph.labels.count - i - 1].alpha = 1.0
-                                    self.graph.labels[self.graph.labels.count - i - 1].alpha = 1.0
-                                    self.graph.dayLabels[self.graph.labels.count - i - 1].alpha = 1.0
-                                }
-                            }
-                        }
-                        
-                    }
+                    Set.oneYearDictionary[$1] = $0
                     
-                    
-                    self.alertPrice = closings!.last!
                 }
                 
+                newAlertTicker = myTextField.text!.uppercased()
+                myTextField.text = myTextField.text!.uppercased()
+                myTextField.tintColor = .clear
+                
+                graph.removeFromSuperview()
+                graph = DailyGraphForAlertView()
+                prepareGraph() {(_ dateArray: [Date]?,_ closings: [Double]?) -> Void in
+                    if closings != nil && dateArray != nil {
+                        self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)
+                        self.container.addSubview(self.graph)
+                        var t = CGAffineTransform.identity
+                        t = t.translatedBy(x: 0, y: -100)
+                        t = t.scaledBy(x: 1.0, y: 0.01)
+                        self.graph.transform = t
+                        let effectView = threeDEffectView(frame: CGRect(x: 0, y: -8*self.screenHeight/667, width: self.screenWidth, height: self.screenWidth/2))
+                        effectView.clipsToBounds = true
+                        self.view.addSubview(effectView)
+                        effectView.layer3d.add(effectView.layerAnimation, forKey: nil)
+                        effectView.layer3d.add(effectView.animcolor, forKey: "fillColor")
+                        effectView.alpha = 0.0
+                        UIView.animate(withDuration: 1.0) {
+                            effectView.alpha = 1.0
+                        }
+                        UIView.animate(withDuration: 1.5) {
+                            
+                            effectView.frame = CGRect(x: 0, y: 240*self.screenHeight/667, width: self.screenWidth, height: 0)
+                            self.graph.transform = CGAffineTransform.identity
+                            self.graph.frame.origin.y = 50*self.screenHeight/667
+                        }
+
+                        self.delay(bySeconds: 1.2) {
+                            
+                            for i in 0..<self.graph.labels.count {
+                                self.delay(bySeconds: 0.3) {
+                                    UIView.animate(withDuration: 0.3*Double(i)) {
+                                        self.graph.grids[self.graph.labels.count - i - 1].alpha = 1.0
+                                        self.graph.labels[self.graph.labels.count - i - 1].alpha = 1.0
+                                        self.graph.dayLabels[self.graph.labels.count - i - 1].alpha = 1.0
+                                    }
+                                }
+                            }
+                            
+                        }
+                        
+                        
+                        self.alertPrice = closings!.last!
+                    }
+                    
+                }
+                self.view.frame.origin.y = 0
             }
-            self.view.frame.origin.y = 0
         }
-        }
-        return true
+        return false
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
