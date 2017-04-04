@@ -284,17 +284,65 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         if gesture.state == UIGestureRecognizerState.ended {
             if !startedPan {
+                
+                
                 alertInMotion.frame.origin = savedFrameOrigin
                 alertScroller.backgroundColor = self.customColor.black33
                 alertInMotion.slideView.backgroundColor = self.customColor.black33
-                var i = CGFloat(2)
+                var j = CGFloat(2)
                 for block in blocks {
-                    block.layer.zPosition = i
-                    i += 1
+                    block.layer.zPosition = j
+                    j += 1
                 }
                 movingAlert = 9999
                 alertScroller.isScrollEnabled = true
                 longpressOnce = true
+                
+                
+                
+                loadsave.resaveBlocks(blocks: blocks)
+                if blocks.count > 3 {
+                    val = blocks[amountOfBlocks - 2].frame.maxY
+                } else {
+                    val = 0
+                }
+                
+                UIView.animate(withDuration: 0.5) {
+                    
+                    self.alertInMotion.frame.origin = CGPoint(x: 0, y: CGFloat(self.q)*120*self.screenHeight/1334)
+                }
+                p = Int(savedFrameOrigin.y/120)
+                
+                movingAlert = 9999
+                delay(bySeconds: 0.3) {
+                    self.alertScroller.isScrollEnabled = true
+                }
+                print("SAM")
+                var i = CGFloat(0)
+                for block in blocks {
+                    Set.ti[Int(i)] = block.stockTickerLabel.text!
+                    block.layer.zPosition = i + 2
+                    i += 1
+                    print(block.stockTickerLabel.text)
+                }
+                delay(bySeconds: 0.5) {
+                    self.alertScroller.backgroundColor = self.customColor.black33
+                    self.alertInMotion.slideView.backgroundColor = self.customColor.black33
+                }
+                
+                myTimer2.invalidate()
+                print("CALLED REBOOT")
+                reboot()
+                delay(bySeconds: 0.5) {
+                    self.longpressOnce = true
+                }
+                print("aaaachoooo")
+                print(alertScroller.contentOffset.y)
+                if alertScroller.contentOffset.y < 0 {
+                    UIView.animate(withDuration: 0.5) {
+                        self.alertScroller.contentOffset.y = 0
+                    }
+                }
             }
         }
         
@@ -387,7 +435,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 }
                 
                 myTimer2.invalidate()
-                
+                print("CALLED REBOOT")
                 reboot()
                 delay(bySeconds: 0.5) {
                     self.longpressOnce = true
@@ -491,6 +539,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     func reboot() {
         mask.frame = container.frame
+        mask.alpha = 1.0
         for view in container.subviews{
             view.removeFromSuperview()
         }
