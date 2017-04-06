@@ -13,6 +13,7 @@ import QuartzCore
 class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     var myTextField = UITextField()
     var textField2 = UITextField()
+    var phoneTextField = UITextField()
     let customColor = CustomColor()
     //let alertLabel2 = UILabel()
     var alertChangeTimer = Timer()
@@ -96,6 +97,23 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         myTextField.textColor = .white
         myTextField.tag = 1
         view.addSubview(myTextField)
+        
+        phoneTextField = UITextField(frame: CGRect(x: 375*screenWidth/750,y: 800*screenHeight/1334,width: 375*screenWidth/750 ,height: 80*screenHeight/1334))
+        phoneTextField.placeholder = "(000) 000-0000"
+        phoneTextField.textAlignment = .left
+        phoneTextField.clearsOnBeginEditing = true
+        phoneTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
+        phoneTextField.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
+        phoneTextField.autocorrectionType = UITextAutocorrectionType.no
+        phoneTextField.keyboardType = UIKeyboardType.default
+        phoneTextField.returnKeyType = UIReturnKeyType.done
+        phoneTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        phoneTextField.delegate = self
+        phoneTextField.backgroundColor = .clear
+        phoneTextField.textColor = .white
+        phoneTextField.tag = 2
+        view.addSubview(phoneTextField)
+        phoneTextField.alpha = 0.0
 
         var add = UIButton()
         addButton(name: add, x: 610, y: 0, width: 140, height: 140, title: "  +", font: "Roboto-Light", fontSize: 45, titleColor: customColor.black33, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.add(_:)), addSubview: false)
@@ -191,10 +209,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                     effectView.layer3d.add(effectView.layerAnimation, forKey: nil)
                 effectView.layer3d.add(effectView.animcolor, forKey: "fillColor")
                 effectView.alpha = 0.0
-                UIView.animate(withDuration: 1.0) {
+                UIView.animate(withDuration: 0.2) {
                     effectView.alpha = 1.0
                 }
-                UIView.animate(withDuration: 1.5) {
+                UIView.animate(withDuration: 2.0) {
                
                     effectView.frame = CGRect(x: 0, y: 240*self.screenHeight/667, width: self.screenWidth, height: 0)
                     self.graph.transform = CGAffineTransform.identity
@@ -250,13 +268,6 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         
     }
 
-
-//func tapFunction(sender:UITapGestureRecognizer) {
-//    print("tap working")
-//    view.addSubview(myPicker)
-//    view.frame.origin.y = 446-667
-//    
-//}
     func donePicker() {
         
         view.frame.origin.y = 0
@@ -338,6 +349,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         
     }
     
+    
     @objc private func back(_ sender: UIButton) {
         self.performSegue(withIdentifier: "fromAddToMain", sender: self)
     }
@@ -348,7 +360,12 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             case 0:
                 newAlertBoolTuple.0 = true
             case 1:
+                if Set.phoneNumber == "none" {
+                    phoneTextField.alpha = 1.0
+                    phoneTextField.becomeFirstResponder()
+                } else {
                 newAlertBoolTuple.1 = true
+                }
             case 2:
                 newAlertBoolTuple.2 = true
             case 3:
@@ -373,19 +390,63 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         print("Switch value is \(sender.isOn)")
     }
     
-    
+    let myloadsave = LoadSaveCoreData()
     @objc private func add(_ button: UIButton) {
         Set.ti.append(newAlertTicker)
         loadsave.saveBlockAmount(amount: amountOfBlocksOld + 1)
         loadsave.saveBlock(stockTicker: newAlertTicker, currentPrice: alertPrice, sms: newAlertBoolTuple.0, email: newAlertBoolTuple.1, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3)
+        myloadsave.saveAlertToFirebase(username: "aaronhalvorsengmailcom", ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false)
         self.performSegue(withIdentifier: "fromAddToMain", sender: self)
     }
     
- 
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if textField == phoneTextField {
+            
+            let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+            let components = (newString as NSString).components(separatedBy: NSCharacterSet.decimalDigits.inverted)
+            
+            let decimalString = components.joined(separator: "") as NSString
+            let length = decimalString.length
+            let hasLeadingOne = length > 0 && decimalString.character(at: 0) == (1 as unichar)
+            
+            if length == 0 || (length > 10 && !hasLeadingOne) || length > 11 {
+                let newLength = (textField.text! as NSString).length + (string as NSString).length - range.length as Int
+                
+                return (newLength > 10) ? false : true
+            }
+            var index = 0 as Int
+            let formattedString = NSMutableString()
+            
+            if hasLeadingOne {
+                formattedString.append("1 ")
+                index += 1
+            }
+            if (length - index) > 3 {
+                let areaCode = decimalString.substring(with: NSMakeRange(index, 3))
+                formattedString.appendFormat("(%@) ", areaCode)
+                index += 3
+            }
+            if length - index > 3 {
+                let prefix = decimalString.substring(with: NSMakeRange(index, 3))
+                formattedString.appendFormat("%@-", prefix)
+                index += 3
+            }
+            
+            let remainder = decimalString.substring(from: index)
+            formattedString.append(remainder)
+            textField.text = formattedString as String
+            return false
+            
+        } else {
+            return true
+        }
+    }
 
 
-    func textFieldDidBeginEditing(_ textField : UITextField)
-    {
+    func textFieldDidBeginEditing(_ textField : UITextField) {
+        if textField.tag == 2 {
+        } else {
         if textField.tag == 1 {
             textField.text = ""
         }
@@ -393,8 +454,12 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         textField.autocapitalizationType = .allCharacters
         textField.spellCheckingType = .no
     }
+    }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        
+        if textField.tag == 2 {
+        } else {
         if textField.tag == 0 {
             var row0 = Int()
             var row1 = Int()
@@ -420,13 +485,23 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         } else {
         self.view.frame.origin.y = -135*screenHeight/667
         }
+        }
         return true
+    
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         print("EEEEW")
         print(textField.tag)
-        if textField.tag == 0 {
+        
+        if textField.tag == 2 {
+            phoneTextField.alpha = 0.0
+            if phoneTextField.text != nil {
+            Set.phoneNumber = phoneTextField.text!
+            }
+            
+            //check if phone number is valid then turn on switch else send invalid alert
+        } else if textField.tag == 0 {
             UIView.animate(withDuration: 0.6) {
                 self.view.frame.origin.y = 0
             }
@@ -461,10 +536,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                         effectView.layer3d.add(effectView.layerAnimation, forKey: nil)
                         effectView.layer3d.add(effectView.animcolor, forKey: "fillColor")
                         effectView.alpha = 0.0
-                        UIView.animate(withDuration: 1.0) {
+                        UIView.animate(withDuration: 0.2) {
                             effectView.alpha = 1.0
                         }
-                        UIView.animate(withDuration: 1.5) {
+                        UIView.animate(withDuration: 2.0) {
                             
                             effectView.frame = CGRect(x: 0, y: 240*self.screenHeight/667, width: self.screenWidth, height: 0)
                             self.graph.transform = CGAffineTransform.identity
@@ -523,11 +598,25 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 result(dates, stockData)
                 
             }, failure: { (error) in
+                if self.newAlertTicker != "#@$%" {
+                    var des = error.description
+                    for i in 0...14 {
+                        des.remove(at: des.startIndex)
+                    }
+                self.userWarning(title: "", message: des)
+                }
                 print(error)
                 result(nil, nil)
             })
             
         }) { (error) in
+            if self.newAlertTicker != "#@$%" {
+                var des = error.description
+                for i in 0...14 {
+                    des.remove(at: des.startIndex)
+                }
+                self.userWarning(title: "", message: des)
+            }
             print(error)
             result(nil, nil)
         }

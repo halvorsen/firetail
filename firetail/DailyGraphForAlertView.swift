@@ -55,6 +55,10 @@ class DailyGraphForAlertView: UIView {
         //allStockValues = __set.map {String(Double($0))}
         print("HERE IS DATA POST PROCESS: \(data)")
         setNeedsDisplay()
+        let l = UILabel()
+        l.frame = CGRect(x: 0, y: 160*screenHeight/667, width: 4*screenWidth, height: 4)
+        l.backgroundColor = customColor.black33
+        self.addSubview(l)
 
     }
     

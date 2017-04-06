@@ -399,11 +399,13 @@ class GraphViewController: ViewSetup {
                     
                     // oneMonthChartModule is now mapped to the stock
                 }, { (error) in
+                    self.userWarning(title: "", message: error.description)
                     print(error)
                     result(([""],[nil]))
                 })
             }
         }) { (error) in
+            self.userWarning(title: "", message: error.description)
             print(error)
             result(([""],[nil]))
         }

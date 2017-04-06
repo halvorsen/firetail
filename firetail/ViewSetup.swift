@@ -265,6 +265,17 @@ class ViewSetup: UIViewController {
             self.isHidden = true
         }
     }
+    
+    func userWarning(title: String, message: String, answer: String = "Okay") {
+        let refreshAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        
+        refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            print("Handle Ok logic here")
+        }))
+        
+        
+        present(refreshAlert, animated: true, completion: nil)
+    }
 
 }
 

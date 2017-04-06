@@ -31,7 +31,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var tiLast = String()
     var _ti = [String]()
     let firetail = UILabel()
-    //var check = [String]()
+    let myLoadSaveCoreData = LoadSaveCoreData()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,10 +67,11 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 (self.ti,_,_,_,_,_) = self.loadsave.loadBlocks()
                 print(self.ti)
                 self.delay(bySeconds: 5.0) {
+                    
                     if self.ti != [""] {
                         Set.ti = self.ti
                         self.fetch()
-                        
+                        print(self.myLoadSaveCoreData.loadUserAlertsFromFirebase(alerts: self.ti))
                     } else {
                         self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
                     }
@@ -236,7 +237,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
      
         
     }
-    
+    var isFirstTimeSeguing = true
     private func cont() {
         
         //  if doneLoading && !retry { // check if alert stocks have loaded
@@ -246,7 +247,10 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             print("!!!!!!")
             print(ti)
             print(ti.count)
+            if isFirstTimeSeguing {
+                isFirstTimeSeguing = false
             self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
+            }
         }
         
         //  }

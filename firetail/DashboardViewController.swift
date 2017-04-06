@@ -358,7 +358,20 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 let translation = gesture.translation(in: view)
                 print(alertScroller.contentOffset.y)
                 if alertScroller.contentOffset.y > -20*screenHeight/667 && alertScroller.contentOffset.y < val - 130*screenHeight/667 {
-                    alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(3*alertScroller.contentSize.height/alertScroller.frame.height))
+                    switch alertInMotion.center.y - alertScroller.contentOffset.y {
+                    case -100...0:
+                        if translation.y > 0 {
+                            alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(2.5*alertScroller.contentSize.height/alertScroller.frame.height))
+                        }
+                    case 0...360*screenHeight/1334:
+                        alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(2.5*alertScroller.contentSize.height/alertScroller.frame.height))
+                    case 360*screenHeight/1334...5000:
+                        
+                        if translation.y < 0 {
+                            alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(2.5*alertScroller.contentSize.height/alertScroller.frame.height))
+                        }
+                    default: break
+                    }
                     alertScroller.contentOffset.y += translation.y*CGFloat(2*alertScroller.contentSize.height/alertScroller.frame.height)
                 } else {
                     alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(3*alertScroller.contentSize.height/alertScroller.frame.height))
@@ -368,11 +381,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                         alertScroller.contentOffset.y -= 40*screenHeight/667
                     }
                 }
-//                else if alertScroller.contentOffset.y < -100*screenHeight/667 {
-//                    alertScroller.contentOffset.y += 1
-//                } else if alertScroller.contentOffset.y > alertScroller.contentSize.height - 130*screenHeight/667 {
-//                    alertScroller.contentOffset.y -= 1
-//                }
                 gesture.setTranslation(CGPoint(x:0,y:0), in: self.view)
                 if l > -1 {
                     if alertInMotion.center.y < blocks[l].center.y {
@@ -881,6 +889,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
                 
             case .error(let error):
+                self.userWarning(title: "", message: "Purchase Failed: \(error)")
                 print("error: \(error)")
                 print("Purchase Failed: \(error)")
                 print("enter5")

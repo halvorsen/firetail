@@ -40,20 +40,20 @@ class threeDEffectView: UIView {
         pathPoly.addLine(to: CGPoint(x: 0, y: 0))
         pathPoly.closeSubpath()
         
-        layerAnimation.duration = 1.5
+        layerAnimation.duration = 1.7
         layerAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
         layerAnimation.fillMode = kCAFillModeBoth
         layerAnimation.isRemovedOnCompletion = false
         layerAnimation.fromValue = pathSquare
         layerAnimation.toValue = pathPoly
         
-        animcolor.fromValue         = customColor.black33.cgColor
+        animcolor.fromValue         = customColor.black42.cgColor
         animcolor.toValue           = customColor.black14.cgColor
-        animcolor.duration          = 1.5
+        animcolor.duration          = 2.0
         animcolor.isRemovedOnCompletion = false
         
         layer3d.path = pathSquare
-        layer3d.fillColor = customColor.black33.cgColor
+        layer3d.fillColor = customColor.black42.cgColor
         self.layer.addSublayer(layer3d)
     }
     

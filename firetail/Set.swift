@@ -25,5 +25,7 @@ public struct Set {
     public static var ti = [String]()
     
     public static var month = [String]()
+    
+    public static var phoneNumber = "none"
  
 }

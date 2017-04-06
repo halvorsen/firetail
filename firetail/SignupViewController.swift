@@ -87,12 +87,11 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     
     @objc private func continueFunc(_ sender: UIButton) {
         
-        // 1
+      
         let emailField = textFields[0].text
         let passwordField = textFields[1].text
         let passwordfield2 = textFields[2].text
-        
-        // 2
+
         if passwordField == passwordField {
             if emailField != nil && passwordField != nil {
                 FIRAuth.auth()!.createUser(withEmail: emailField!, password: passwordField!) {
@@ -102,6 +101,9 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                         FIRAuth.auth()!.signIn(withEmail: emailField!, password: passwordField!) //adds user and pass
                         self.username.text = emailField!
                         FIRAuth.auth()!.signIn(withEmail: emailField!, password: passwordField!) //adds authentication
+                    } else {
+                        self.userWarning(title: "", message: (error!.localizedDescription))
+                        print("firebase error local desc: \(error?.localizedDescription)")
                     }
                 }
             }
