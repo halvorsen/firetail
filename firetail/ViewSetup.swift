@@ -102,6 +102,7 @@ class ViewSetup: UIViewController {
                     
                     
                 }
+                
                 let mo = ["","January","Febrary","March","April","May","June","July","August","September","October","November","December"]
                 if Set.month.count < 2 {
                     var i = 0
@@ -131,12 +132,14 @@ class ViewSetup: UIViewController {
             }, failure: { (error) in
                 print(error)
                 print("OOOPS!")
+              
                 result(nil, stockName)
             })
             
         }) { (error) in
             print(error)
             print("OOOOPS2!")
+      
             result(nil, stockName)
         }
         

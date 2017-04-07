@@ -20,7 +20,7 @@ public struct Set {
     
     public static var ti = [String]()
     
-    public static var month = [String]()
+    public static var month = ["January","Febrary","March","April","May","June","July","August","September","October","November","December"]
     
     public static var phone = "none"
     

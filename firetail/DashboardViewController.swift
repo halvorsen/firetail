@@ -90,6 +90,18 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
       //  let (t,p,email,sms,flash,urgent) = loadsave.loadBlocks()
         if Set.alertCount > 0 {
             for i in 0..<Set.alertCount {
+                print("Baseball")
+                print(Set.userAlerts)
+                print("1")
+                print(Set.alerts)
+                print("2")
+                print(alertID[i])
+                print("3")
+                print(Set.alerts[alertID[i]])
+                print("4")
+                print(Set.userAlerts[alertID[i]]!)
+                print("5")
+                  
                 let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: Set.alerts[Set.userAlerts[alertID[i]]!]!.ticker, currentPrice: Set.alerts[Set.userAlerts[alertID[i]]!]!.price, sms: Set.alerts[Set.userAlerts[alertID[i]]!]!.sms, email: Set.alerts[Set.userAlerts[alertID[i]]!]!.email, flash: Set.alerts[Set.userAlerts[alertID[i]]!]!.flash, urgent: Set.alerts[Set.userAlerts[alertID[i]]!]!.urgent, longName: Set.userAlerts[alertID[i]]!)
                
                 block.ex.addTarget(self, action: #selector(DashboardViewController.act(_:)), for: .touchUpInside)
@@ -180,7 +192,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         container.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
-        
+        print("baaaa")
+        print(Set.month)
         addLabel(name: monthIndicator, text: Set.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 22, lines: 1)
         
         addLabel(name: stock1, text: "", textColor: customColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 24, width: 352, height: 48, lines: 0)

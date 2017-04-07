@@ -412,16 +412,22 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         Set.ti.append(newAlertTicker)
         print("WWWWWW")
         print(Set.ti)
+        
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID = newAlertTicker.lowercased() + timestamp
-        
+        print(newAlertLongID)
+        print(Set.alertCount)
+        print(alertID[Set.alertCount])
         Set.userAlerts[alertID[Set.alertCount]] = newAlertLongID
+        print(Set.userAlerts[alertID[Set.alertCount]])
         Set.alertCount += 1
         Set.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, newAlertBoolTuple.1, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3)
         //loadsave.saveBlockAmount(amount: amountOfBlocksOld + 1)
        // loadsave.saveBlock(stockTicker: newAlertTicker, currentPrice: alertPrice, sms: newAlertBoolTuple.0, email: newAlertBoolTuple.1, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3)
         myloadsave.saveAlertToFirebase(username: Set.username, ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
+        if newAlertTicker != "#@$%" {
         self.performSegue(withIdentifier: "fromAddToMain", sender: self)
+        }
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

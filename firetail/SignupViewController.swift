@@ -118,7 +118,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         }
         
         delay(bySeconds: 1.5) {
-            self.performSegue(withIdentifier: "fromSignupToMain", sender: self)
+            self.performSegue(withIdentifier: "fromSignupToAdd", sender: self)
         }
     }
     

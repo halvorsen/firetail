@@ -88,7 +88,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="9Rf-87-nHj" kind="show" identifier="fromSignupToMain" id="EgL-kb-EF7"/>
+                        <segue destination="VGb-5b-ve2" kind="show" identifier="fromSignupToAdd" id="se2-yd-rfk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KLW-oO-Py4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -142,6 +142,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="j56-Bz-xny"/>
-        <segue reference="cxp-Cj-N2o"/>
+        <segue reference="se2-yd-rfk"/>
     </inferredMetricsTieBreakers>
 </document>

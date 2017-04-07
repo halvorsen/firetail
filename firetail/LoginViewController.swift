@@ -88,14 +88,14 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         
     }
     
-    func loadUserInfoFromFirebase(firebaseUsername: String){
+    func loadUserInfoFromFirebase(firebaseUsername: String) {
         
         let ref = FIRDatabase.database().reference()
         
         ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             let value = snapshot.value as? NSDictionary
-           // Set.username = value?["username"] as? String ?? "none"
+            // Set.username = value?["username"] as? String ?? "none"
             Set.fullName = value?["fullName"] as? String ?? "none"
             Set.email = value?["email"] as? String ?? "none"
             Set.phone = value?["phone"] as? String ?? "none"
@@ -105,63 +105,69 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             Set.brokerURL = value?["brokerURL"] as? String ?? "none"
             Set.weeklyAlerts = value?["weeklyAlerts"] as? [String:Int] ?? ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
             if Set.alertCount > 0 {
-            Set.userAlerts = value?["userAlerts"] as! [String:String]
+                Set.userAlerts = value?["userAlerts"] as! [String:String]
             }
             
             if Set.userAlerts.count > 0 {
                 print("COWGIRL")
                 print(Set.userAlerts.count)
                 print(Set.userAlerts)
-            for _alert in Set.userAlerts {
-                ref.child("alerts").child(_alert.value).observeSingleEvent(of: .value, with: { (snapshot) in
-                    
-                    let _deleted = value?["deleted"] as? Bool ?? false
-                    
-                    if !_deleted {
+                
+                for _alert in Set.userAlerts {
+                    ref.child("alerts").child(_alert.value).observeSingleEvent(of: .value, with: { (snapshot) in
                         
-                        let _name = _alert.value
-                        let value = snapshot.value as? NSDictionary
-                        let _isGreaterThan = value?["isGreaterThan"] as? Bool ?? false
-                        //   isGreaterThan.append(_isGreaterThan)
-                        let _price = value?["price"] as? Double ?? 0.0
-                        // price.append(_price)
+                        let _deleted = value?["deleted"] as? Bool ?? false
                         
-                        //   deleted.append(_deleted)
-                        let _email = value?["email"] as? Bool ?? false
-                        //   email.append(_email)
-                        let _flash = value?["flash"] as? Bool ?? false
-                        //  flash.append(_flash)
-                        let _sms = value?["sms"] as? Bool ?? false
-                        //  sms.append(_sms)
-                        let _ticker = value?["ticker"] as? String ?? ""
-                        Set.ti.append(_ticker)
-                        //   ticker.append(_ticker)
-                        let _push = value?["push"] as? Bool ?? false
-                        //   push.append(_push)
-                        let _urgent = value?["urgent"] as? Bool ?? false
-                        //   urgent.append(_urgent)
-                        let _triggered = value?["triggered"] as? Bool ?? false
-                        //   triggered.append(_triggered)
-                        Set.alerts[_alert.key] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent)
+                        if !_deleted {
+                            
+                            let _name = _alert.value
+                            let value = snapshot.value as? NSDictionary
+                            let _isGreaterThan = value?["isGreaterThan"] as? Bool ?? false
+                            //   isGreaterThan.append(_isGreaterThan)
+                            let _price = value?["price"] as? Double ?? 0.0
+                            // price.append(_price)
+                            
+                            //   deleted.append(_deleted)
+                            let _email = value?["email"] as? Bool ?? false
+                            //   email.append(_email)
+                            let _flash = value?["flash"] as? Bool ?? false
+                            //  flash.append(_flash)
+                            let _sms = value?["sms"] as? Bool ?? false
+                            //  sms.append(_sms)
+                            let _ticker = value?["ticker"] as? String ?? ""
+                            Set.ti.append(_ticker)
+                            //   ticker.append(_ticker)
+                            let _push = value?["push"] as? Bool ?? false
+                            //   push.append(_push)
+                            let _urgent = value?["urgent"] as? Bool ?? false
+                            //   urgent.append(_urgent)
+                            let _triggered = value?["triggered"] as? Bool ?? false
+                            //   triggered.append(_triggered)
+                            Set.alerts[_alert.value] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent)
+                        }
+                        self.ti = Set.ti
+                        print("COWBOY")
+                        print(Set.ti)
+                        if self.ti.count != 0 {
+                            
+                            self.fetch()
+                            
+                        } else {
+                            if self.isFirstTimeSeguing {
+                                self.isFirstTimeSeguing = false
+                                self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
+                            }
+                        }
+                        
+                    }) { (error) in
+                        print(error.localizedDescription)
                     }
                     
-                }) { (error) in
-                    print(error.localizedDescription)
                 }
-                
-            }
-            }
-            self.ti = Set.ti
-            if self.ti.count != 0 {
-   
-                self.fetch()
-              
             } else {
-                if self.isFirstTimeSeguing {
-                    self.isFirstTimeSeguing = false
                 self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
-                }
             }
+            
             
         }) { (error) in
             print(error.localizedDescription)
@@ -171,7 +177,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     
     override func viewWillAppear(_ animated: Bool) {
-
+        
     }
     
     func textFieldDidBeginEditing(_ textField : UITextField)
@@ -298,7 +304,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         if ti == [""] {
             if isFirstTimeSeguing {
                 isFirstTimeSeguing = false
-            self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
+                self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
             }
         } else {
             print("!!!!!!")
