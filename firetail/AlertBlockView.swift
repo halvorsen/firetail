@@ -26,10 +26,12 @@ class AlertBlockView: UIView {
     var emailGlobal: Bool = false
     var flashGlobal: Bool = false
     var urgentGlobal: Bool = false
+    var blockLongName = String()
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
-    init(y: CGFloat, stockTicker: String, currentPrice: Double, sms: Bool = false, email: Bool = false, flash: Bool = false, urgent: Bool = false) {
+    init(y: CGFloat, stockTicker: String, currentPrice: Double, sms: Bool = false, email: Bool = false, flash: Bool = false, urgent: Bool = false, longName: String) {
         super.init(frame: CGRect(x: 0, y: y*screenHeight/1334, width: screenWidth, height: 120*screenHeight/1334))
+        blockLongName = longName
         stockTickerGlobal = stockTicker
         currentPriceGlobal = currentPrice
         smsGlobal = sms

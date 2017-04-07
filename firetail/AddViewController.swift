@@ -36,7 +36,6 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     var newAlertPrice = Double()
     var newAlertBoolTuple = (false, false, false, false)
     let backArrow = UIButton()
-    var amountOfBlocksOld = Int()
     let loadsave = LoadSaveCoreData()
     let stockSymbol = UILabel()
     let toolBar = UIToolbar()
@@ -45,13 +44,31 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     var myPicker = UIPickerView()
     var myLabel = UILabel()
     let mask = UIView()
+    var alertID: [String] {
+        var aaa = [String]()
+        for i in 0...Set.alertCount {
+            switch i {
+            case 0...9:
+                aaa.append("alert00" + String(i))
+            case 10...99:
+                aaa.append("alert0" + String(i))
+            case 100...999:
+                aaa.append("alert" + String(i))
+            default:
+                break
+            }
+        }
+        return aaa
+    }
+    var newAlertLongID = String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 1082, width: 240, height: 80, lines: 1)
         view.addSubview(stockSymbol)
-        amountOfBlocksOld = loadsave.amount()
+        //amountOfBlocksOld = Set.alertCount
+        //amountOfBlocksOld = loadsave.amount()
         
         view.backgroundColor = customColor.black33
         let bottomBar = UIView()
@@ -319,7 +336,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             Set.oneYearDictionary[$1] = $0
             
         }
-       // getPickerData()
+       print("AlertID: \(alertID)")
     }
     
     private func getPickerData() {
@@ -360,7 +377,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             case 0:
                 newAlertBoolTuple.0 = true
             case 1:
-                if Set.phoneNumber == "none" {
+                if Set.phone == "none" {
                     phoneTextField.alpha = 1.0
                     phoneTextField.becomeFirstResponder()
                 } else {
@@ -393,9 +410,17 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     let myloadsave = LoadSaveCoreData()
     @objc private func add(_ button: UIButton) {
         Set.ti.append(newAlertTicker)
-        loadsave.saveBlockAmount(amount: amountOfBlocksOld + 1)
-        loadsave.saveBlock(stockTicker: newAlertTicker, currentPrice: alertPrice, sms: newAlertBoolTuple.0, email: newAlertBoolTuple.1, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3)
-        myloadsave.saveAlertToFirebase(username: "aaronhalvorsengmailcom", ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false)
+        print("WWWWWW")
+        print(Set.ti)
+        let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
+        newAlertLongID = newAlertTicker.lowercased() + timestamp
+        
+        Set.userAlerts[alertID[Set.alertCount]] = newAlertLongID
+        Set.alertCount += 1
+        Set.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, newAlertBoolTuple.1, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3)
+        //loadsave.saveBlockAmount(amount: amountOfBlocksOld + 1)
+       // loadsave.saveBlock(stockTicker: newAlertTicker, currentPrice: alertPrice, sms: newAlertBoolTuple.0, email: newAlertBoolTuple.1, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3)
+        myloadsave.saveAlertToFirebase(username: Set.username, ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
         self.performSegue(withIdentifier: "fromAddToMain", sender: self)
     }
     
@@ -497,7 +522,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         if textField.tag == 2 {
             phoneTextField.alpha = 0.0
             if phoneTextField.text != nil {
-            Set.phoneNumber = phoneTextField.text!
+            Set.phone = phoneTextField.text!
             }
             
             //check if phone number is valid then turn on switch else send invalid alert
@@ -574,8 +599,8 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let mainView: DashboardViewController = segue.destination as! DashboardViewController
         mainView.previousViewContoller = "Add"
-        mainView.amountOfBlocks = amountOfBlocksOld + 1
-        Set.alertCount += 1
+     
+        
         print("SETCOUNT")
         print(Set.ti.count)
     }

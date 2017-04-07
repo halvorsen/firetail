@@ -18,6 +18,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     var continueB = UIButton()
     var createAccount = UILabel()
     var textFields = [UITextField]()
+    let loadsave = LoadSaveCoreData()
     
     //var ti = [String]()
     override func viewDidLoad() {
@@ -86,7 +87,10 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func continueFunc(_ sender: UIButton) {
-        
+        let firstTwo = textFields[0].text![0...1]
+        let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
+        loadsave.saveUsername(username: firstTwo + timestamp)
+        Set.username = firstTwo + timestamp
       
         let emailField = textFields[0].text
         let passwordField = textFields[1].text

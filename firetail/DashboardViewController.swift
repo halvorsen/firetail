@@ -68,16 +68,32 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var longpressOnce = true
     var alertInMotion = AlertBlockView()
     var val = CGFloat()
+    var alertID: [String] {
+        var aaa = [String]()
+        for i in 0..<Set.alertCount {
+            switch i {
+            case 0...9:
+                aaa.append("alert00" + String(i))
+            case 10...99:
+                aaa.append("alert0" + String(i))
+            case 100...999:
+                aaa.append("alert" + String(i))
+            default:
+                break
+            }
+        }
+        return aaa
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         
-        let (t,p,email,sms,flash,urgent) = loadsave.loadBlocks()
-        if amountOfBlocks > 0 {
-            for i in 0..<amountOfBlocks {
-                let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: t[i], currentPrice: p[i], sms: sms[i], email: email[i], flash: flash[i], urgent: urgent[i])
-                //   block.info.addTarget(self, action: #selector(MainViewController.act(_:)), for: .touchUpInside)
+      //  let (t,p,email,sms,flash,urgent) = loadsave.loadBlocks()
+        if Set.alertCount > 0 {
+            for i in 0..<Set.alertCount {
+                let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: Set.alerts[Set.userAlerts[alertID[i]]!]!.ticker, currentPrice: Set.alerts[Set.userAlerts[alertID[i]]!]!.price, sms: Set.alerts[Set.userAlerts[alertID[i]]!]!.sms, email: Set.alerts[Set.userAlerts[alertID[i]]!]!.email, flash: Set.alerts[Set.userAlerts[alertID[i]]!]!.flash, urgent: Set.alerts[Set.userAlerts[alertID[i]]!]!.urgent, longName: Set.userAlerts[alertID[i]]!)
+               
                 block.ex.addTarget(self, action: #selector(DashboardViewController.act(_:)), for: .touchUpInside)
-                //  block.up.addTarget(self, action: #selector(MainViewController.act(_:)), for: .touchUpInside)
+               
                 
                 blocks.append(block)
                 alertScroller.addSubview(block)
@@ -94,6 +110,19 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             val = 0
         }
         
+        print("Kawabunga")
+        print("Set.username: \(Set.username)")
+        print(Set.email)
+        print(Set.phone)
+        print(Set.premium)
+        print(Set.alertCount)
+        print(Set.brokerName)
+        print(Set.brokerURL)
+        print(Set.weeklyAlerts)
+        print(Set.userAlerts)
+        
+        
+        loadsave.saveUserInfoToFirebase(username: Set.username, fullName: "none", email: Set.email, phone: Set.phone, premium: Set.premium, numOfAlerts: Set.alertCount, brokerName: Set.brokerName, brokerURL: Set.brokerURL, weeklyAlerts: Set.weeklyAlerts, userAlerts: Set.userAlerts)
     }
     
     override func viewDidLoad() {
@@ -101,8 +130,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
 
         
-        
-        premiumMember = loadsave.loadPremiumAccess()
+       // premiumMember = loadsave.loadPremiumAccess()
+        premiumMember = Set.premium
         longPress = UILongPressGestureRecognizer(target: self, action: #selector(DashboardViewController.longPress(_:)))
         view.addGestureRecognizer(longPress)
         longPress.delegate = self
@@ -253,8 +282,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         mask.frame = container.frame
         mask.backgroundColor = customColor.black33
         slideView.addSubview(mask)
-        amountOfBlocks = loadsave.amount()
-        
+        //amountOfBlocks = loadsave.amount()
+        amountOfBlocks = Set.alertCount
         whoseOnFirst(container)
     }
     
@@ -412,6 +441,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             }
             
             if gesture.state == UIGestureRecognizerState.ended {
+                
                 loadsave.resaveBlocks(blocks: blocks)
                 if blocks.count > 3 {
                     val = blocks[amountOfBlocks - 2].frame.maxY
@@ -489,21 +519,23 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
                 UIView.animate(withDuration: 0.6) {
                     self.blocks[i].removeFromSuperview()
-                    self.blocks[i].slideView.frame.origin.x = 0
+                   // self.blocks[i].slideView.frame.origin.x = 0
                 }
                 check = true
                 for k in 0..<i {
                     self.blocks[k].layer.zPosition = position; position += 1
                     newBlocks.append(blocks[k])
                     Set.ti.append(blocks[k].stockTickerGlobal)
-                    loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
+               
+//                    loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
                 }
                 if i != (blocks.count - 1) {
                     for k in (i+1)..<blocks.count {
                         self.blocks[k].layer.zPosition = position; position += 1
                         newBlocks.append(blocks[k])
                         Set.ti.append(blocks[k].stockTickerGlobal)
-                        loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
+                       
+//                        loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
                     }
                 }
             }
@@ -518,7 +550,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         amountOfBlocks -= 1
         alertAmount.text = String(amountOfBlocks)
         alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
-        loadsave.saveBlockAmount(amount: amountOfBlocks)
+        
+        Set.alertCount = amountOfBlocks
+       // loadsave.saveBlockAmount(amount: amountOfBlocks)
         loadsave.resaveBlocks(blocks: blocks)
         Set.alertCount = amountOfBlocks
         print("WWWWWWW")
@@ -564,6 +598,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     private func populateCompareGraph() {
+        print("Set.alertCount: \(Set.alertCount)")
+        print("Set.ti: \(Set.ti)")
         switch Set.alertCount {
         case 0:
             break
@@ -758,7 +794,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     print("Restore Failed: \(results.restoreFailedProducts)")
                 }
                 else if results.restoredProducts.count > 0 {
-                    self.loadsave.savePurchase(purchase: "firetail.iap.premium")
+                 
+                    Set.premium = true
+                    //self.loadsave.savePurchase(purchase: "firetail.iap.premium")
                     self.premiumMember = true
                 }
                 else {
@@ -881,8 +919,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             switch result {
             case .success( _):
                 print("enter1")
-                
-                self.loadsave.savePurchase(purchase: productId)
+        
+             //   self.loadsave.savePurchase(purchase: productId)
                 self.premiumMember = true
                 self.activityView.removeFromSuperview()
                 

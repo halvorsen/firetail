@@ -47,6 +47,27 @@ class GraphViewController: ViewSetup {
     var orderofGraphsInverse = [Int:String]()
     let orderOfLabels = ["Max":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
     var loading = UILabel()
+    let brokersDictionary: [String:String] = [
+        "Ameritrade":"https://invest.ameritrade.com/grid/p/site",
+        "Etrade":"https://us.etrade.com/e/t/user/login",
+        "Scottrade":"https://trading.scottrade.com/",
+        "Schwab":"https://client.schwab.com/Login/SignOn/CustomerCenterLogin.aspx",
+        "Merrill Edge":"https://olui2.fs.ml.com/login/login.aspx?sgt=3",
+        "Trademonster":"https://www.trademonster.com/login.jsp",
+        "Capital One Investing":"https://www.capitaloneinvesting.com/main/authentication/signin.aspx",
+        "eOption":"http://www.eoption.com/client-login/",
+        "Interactive Brokers":"https://gdcdyn.interactivebrokers.com/sso/Login",
+        "Kapitall":"https://landing.kapitall.com/home/",
+        "Lightspeed":"https://www.lightspeed.com/login/",
+        "optionsXpress":"https://www.optionsxpress.com/login/login.aspx?r=1",
+        "Zacks":"http://www.zackstrade.com/login/",
+        "Trade King":"https://investor.tradeking.com/account-login",
+        "Sogo Trade":"https://account.sogotrade.com/Account/Login.aspx",
+        "Trading Block":"https://www.tradingblock.com/account/securitieslogin.aspx",
+        "USAA":"https://www.usaa.com/inet/wc/investing-stocks-bonds-brokerage-main?akredirect=true",
+        "Vangaurd":"https://investor.vanguard.com/my-account/log-on",
+        "Wells Fargo":"https://connect.secure.wellsfargo.com/auth/login/present?origin=cob&LOB=CONS",
+        "Robinhood":"https://www.robinhood.com/signup/login/"]
     
     
     
@@ -65,7 +86,7 @@ class GraphViewController: ViewSetup {
         addLabel(name: currentPrice, text: "", textColor: .white, textAlignment: .left, fontName: "Roboto-Light", fontSize: 40, x: 60, y: 180, width: 400, height: 106, lines: 1)
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.back(_:)), addSubview: false)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
-        addLabel(name: loading, text: "TRADE", textColor: .white, textAlignment: .center, fontName: "Roboto-Bold", fontSize: 20, x: 0, y: (1334-150), width: 750, height: 150, lines: 1)
+        addLabel(name: loading, text: "", textColor: .white, textAlignment: .center, fontName: "Roboto-Bold", fontSize: 20, x: 0, y: (1334-150), width: 750, height: 150, lines: 1)
         loading.layer.zPosition = 15
         loading.alpha = 0.0
         view.addSubview(loading)
@@ -103,10 +124,8 @@ class GraphViewController: ViewSetup {
     }
     
     @objc private func trade(_ sender: UIButton) {
-        if trade.title(for: .normal) == "TRADE" {
-            trade.setTitle("Not Connected", for: .normal)
-        } else {
-            trade.setTitle("TRADE", for: .normal)
+        if Set.brokerName != "none" {
+        UIApplication.shared.openURL(URL(string: brokersDictionary[Set.brokerName]!)!)
         }
     }
     
@@ -155,7 +174,7 @@ class GraphViewController: ViewSetup {
     
     private func addLabelsAndButtons() {
         
-        addButton(name: trade, x: 0, y: 1194, width: 750, height: 1334-1194, title: "", font: "HelveticaNeue-Bold", fontSize: 18, titleColor: customColor.white, bgColor: customColor.black, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.trade(_:)), addSubview: false, alignment: .center)
+        addButton(name: trade, x: 0, y: 1194, width: 750, height: 1334-1194, title: "TRADE", font: "HelveticaNeue-Bold", fontSize: 18, titleColor: customColor.white, bgColor: customColor.black, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.trade(_:)), addSubview: false, alignment: .center)
         
     }
     var i = 0

@@ -17,9 +17,9 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
     var myTextFields = [UITextField]()
     var doneLoading = false
     var backArrow = UIButton()
-    var pickerData = ["Broker1","Broker2","Broker3","Broker4","Broker5"]
     var myPicker = UIPickerView()
     let toolBar = UIToolbar()
+    let pickerData = ["Ameritrade", "Etrade", "Scottrade", "Schwab", "Merrill Edge", "Trademonster", "Capital One Investing", "eOption", "Interactive Brokers", "Kapitall", "Lightspeed", "optionsXpress", "Zacks", "Trade King", "Sogo Trade", "Trading Block", "USAA", "Vangaurd", "Wells Fargo", "Robinhood"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,7 +55,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             case 1:
                 myTextField.placeholder = "(000) 000-0000"
             case 2:
-                myTextField.placeholder = "Scottade"
+                myTextField.placeholder = "scottade"
             default:
                 myTextField.isSecureTextEntry = true
                 myTextField.placeholder = "***********"
@@ -69,6 +69,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             myTextField.delegate = self
             myTextField.backgroundColor = .clear
             myTextField.textColor = .white
+            myTextField.tag = i
             myTextField.font = UIFont(name: "Roboto-Italic", size: 15)
             view.addSubview(myTextField)
             myTextFields.append(myTextField)
@@ -139,8 +140,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
 
     }
     
-    func textFieldDidBeginEditing(_ textField : UITextField)
-    {
+    func textFieldDidBeginEditing(_ textField : UITextField) {
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
@@ -149,17 +149,29 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
     @objc private func supportFunc(_ sender: UIButton) {
       
     }
-
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         self.view.endEditing(true)
         if textField.text != nil && textField.delegate != nil {
             
-            //do something with the --> textField.text!
-            
-        }
+                switch textField.tag {
+                case 0:
+                    Set.email = myTextFields[0].text!
+                    //change email with firebase
+                case 1:
+                    Set.phone = myTextFields[1].text!
+                    
+                case 2:
+                    Set.brokerName = myTextFields[2].text!
+                default:
+                 // change password with firebase:   myTextFields[2].text!
+                    break
+                }
+            }
+        
         return false
     }
+    
     
 }
