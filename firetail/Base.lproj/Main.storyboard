@@ -89,6 +89,7 @@
                     </view>
                     <connections>
                         <segue destination="VGb-5b-ve2" kind="show" identifier="fromSignupToAdd" id="se2-yd-rfk"/>
+                        <segue destination="XTk-aP-Bp1" kind="show" identifier="fromSignupToLogin" id="Nux-za-Mvu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KLW-oO-Py4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -142,6 +143,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="j56-Bz-xny"/>
-        <segue reference="se2-yd-rfk"/>
+        <segue reference="S7Y-sp-YOE"/>
     </inferredMetricsTieBreakers>
 </document>

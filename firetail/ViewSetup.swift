@@ -11,13 +11,13 @@ import BigBoard
 
 struct CustomColor {
     
-
+    
     //yellow
     let yellow = UIColor(red: 254/255, green: 203/255, blue: 9/255, alpha: 1.0)
     
     //gray
     let gray = UIColor(red: 41/255, green: 41/255, blue: 41/255, alpha: 1.0)
-
+    
     //background
     let background = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
     
@@ -72,6 +72,8 @@ struct CustomColor {
     let black24 = UIColor(red: 24/255, green: 24/255, blue: 24/255, alpha: 1.0)
     //black14
     let black14 = UIColor(red: 14/255, green: 14/255, blue: 14/255, alpha: 1.0)
+    //black21
+    let black21 = UIColor(red: 21/255, green: 21/255, blue: 21/255, alpha: 1.0)
 }
 
 class ViewSetup: UIViewController {
@@ -104,21 +106,21 @@ class ViewSetup: UIViewController {
                 }
                 
                 let mo = ["","January","Febrary","March","April","May","June","July","August","September","October","November","December"]
-                if Set.month.count < 2 {
-                    var i = 0
-                    var _month = [String]()
+                //  if Set.month.count < 2 {
+                var i = 0
+                var _month = [String]()
                 for point in (stock.oneYearChartModule?.dataPoints)! {
                     let y = point.date.year
                     print("y: \(y)")
                     let m = point.date.month
                     print("m \(m)")
-                  
+                    
                     if i%21 == 20 {
-                    _month.append("\(mo[m]), \(y)")
+                        _month.append("\(mo[m]), \(y)")
                     }
                     i += 1
                     
-                }
+                    //  }
                     print("COUNT")
                     
                     
@@ -132,21 +134,21 @@ class ViewSetup: UIViewController {
             }, failure: { (error) in
                 print(error)
                 print("OOOPS!")
-              
+                
                 result(nil, stockName)
             })
             
         }) { (error) in
             print(error)
             print("OOOOPS2!")
-      
+            
             result(nil, stockName)
         }
         
         
         
     }
-
+    
     func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor, act:
         Selector, addSubview: Bool, alignment: UIControlContentHorizontalAlignment = .left) {
         name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: width*screenWidth/750, height: height*screenWidth/750)
@@ -279,7 +281,7 @@ class ViewSetup: UIViewController {
         
         present(refreshAlert, animated: true, completion: nil)
     }
-
+    
 }
 
 extension String {

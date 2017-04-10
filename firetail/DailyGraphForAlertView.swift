@@ -37,7 +37,7 @@ class DailyGraphForAlertView: UIView {
     
     init(graphData: [Double], dateArray: [Date], frame: CGRect = CGRect(x: 0, y:0*UIScreen.main.bounds.height/667, width: 4*UIScreen.main.bounds.width, height: 160*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
-        self.backgroundColor = customColor.black42
+        self.backgroundColor = customColor.black24
         date = dateArray
         var _set = [Double]()
         let max = graphData.max()!
@@ -55,10 +55,7 @@ class DailyGraphForAlertView: UIView {
         //allStockValues = __set.map {String(Double($0))}
         print("HERE IS DATA POST PROCESS: \(data)")
         setNeedsDisplay()
-        let l = UILabel()
-        l.frame = CGRect(x: 0, y: 160*screenHeight/667, width: 4*screenWidth, height: 4)
-        l.backgroundColor = customColor.black33
-        self.addSubview(l)
+
 
     }
     
@@ -80,7 +77,7 @@ class DailyGraphForAlertView: UIView {
         
         
        // customColor.whiteAlpha.setStroke()
-        customColor.black33.setFill()
+        customColor.black21.setFill()
         path.lineWidth = 1
         path.fill()
        // path.stroke()
@@ -139,16 +136,16 @@ class DailyGraphForAlertView: UIView {
             
         }
         let v = UIView(frame: CGRect(x: 0, y: -50*screenHeight/667, width: self.frame.width, height: 50*screenHeight/667))
-        v.backgroundColor = customColor.black33
+        v.backgroundColor = customColor.black21
         self.addSubview(v)
         let w = UIView(frame: CGRect(x: -400, y: -50*screenHeight/667, width: 400, height: 0.9*4*points.first!.y + 55*screenHeight/667))
-        w.backgroundColor = customColor.black33
+        w.backgroundColor = customColor.black21
         self.addSubview(w)
         let ww = UIView(frame: CGRect(x: self.frame.maxX, y: -50*screenHeight/667, width: 400, height: 0.9*4*points.last!.y + 55*screenHeight/667))
-        ww.backgroundColor = customColor.black33
+        ww.backgroundColor = customColor.black21
         self.addSubview(ww)
         let extraBottomGray = UIView(frame: CGRect(x: 0, y: 160*screenHeight/667, width: screenWidth*5, height: 30*screenHeight/667))
-        extraBottomGray.backgroundColor = customColor.black42
+        extraBottomGray.backgroundColor = customColor.black24
         self.addSubview(extraBottomGray)
         
         let monthString = ["","jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]

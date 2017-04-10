@@ -69,16 +69,16 @@ class GraphViewController: ViewSetup {
         "Wells Fargo":"https://connect.secure.wellsfargo.com/auth/login/present?origin=cob&LOB=CONS",
         "Robinhood":"https://www.robinhood.com/signup/login/"]
     
+
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         PodVariable.gingerBreadMan.removeAll()
         Label.changeValues.removeAll()
         Label.percentageValues.removeAll()
         self.view.backgroundColor = customColor.black33
-        //        pan = UIPanGestureRecognizer(target: self, action: #selector(GraphViewController.respondToPan(_:)))
-        //        view.addGestureRecognizer(pan)
         addLabelsAndButtons()
         tap = UITapGestureRecognizer(target: self, action: #selector(GraphViewController.pickGraph(_:)))
         view.addGestureRecognizer(tap)
@@ -392,13 +392,7 @@ class GraphViewController: ViewSetup {
                             stockData.closingPrice.append(point.close)
                             
                         }
-                        
-                        print("EEEEK")
-                        print(key)
-                        //                                        print(stockData.closingPrice)
-                        //                                        print(stockData.dates)
-                        //                                        print("LAST")
-                        //                                        print(stockData.closingPrice.last!)
+
                         if key == "1m" {
                             // let z = stockData.1[self.i]!.closingPrice.count - 1
                             Set.yesterday = stockData.closingPrice.last!
@@ -410,13 +404,11 @@ class GraphViewController: ViewSetup {
                         
                         stockDatas.append(stockData)
                     }
-                    //      self.delay(bySeconds: 0.3) {
+          
                     
                     self.keys.append(key)
                     result((self.keys,stockDatas))
-                    //       }
-                    
-                    // oneMonthChartModule is now mapped to the stock
+
                 }, { (error) in
                     self.userWarning(title: "", message: error.description)
                     print(error)

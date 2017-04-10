@@ -21,7 +21,6 @@
 		0617DFA51E7DBDC7006D73C5 /* LoadSaveCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */; };
 		0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0672601A1E67BD5B00F54500 /* StockGraphView2.swift */; };
 		068D8D251E72F0D700E422DB /* Dot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068D8D241E72F0D700E422DB /* Dot.swift */; };
-		069B06441E92F7CF00A4E35B /* threeDEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069B06431E92F7CF00A4E35B /* threeDEffectView.swift */; };
 		069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1211E5382D4003BDFE2 /* AppDelegate.swift */; };
 		069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1231E5382D4003BDFE2 /* GraphViewController.swift */; };
 		069FD1271E5382D4003BDFE2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD1251E5382D4003BDFE2 /* Main.storyboard */; };
@@ -54,7 +53,6 @@
 		0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadSaveCoreData.swift; sourceTree = "<group>"; };
 		0672601A1E67BD5B00F54500 /* StockGraphView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView2.swift; sourceTree = "<group>"; };
 		068D8D241E72F0D700E422DB /* Dot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dot.swift; sourceTree = "<group>"; };
-		069B06431E92F7CF00A4E35B /* threeDEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = threeDEffectView.swift; sourceTree = "<group>"; };
 		069FD11E1E5382D4003BDFE2 /* firetail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = firetail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		069FD1211E5382D4003BDFE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		069FD1231E5382D4003BDFE2 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
@@ -118,7 +116,6 @@
 				06FDA8DB1E7094270043BC90 /* CompareScroll.swift */,
 				06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */,
 				06FC95B61E76E9F000DF7559 /* AddViewController.swift */,
-				069B06431E92F7CF00A4E35B /* threeDEffectView.swift */,
 				0617DFA01E7B6F81006D73C5 /* GridLine.swift */,
 				06AC27071E7319F700041D1F /* CompareScrollDot.swift */,
 				06FDA8DF1E71B9960043BC90 /* Set.swift */,
@@ -313,7 +310,6 @@
 				0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */,
 				0609E4A81E632DF4005965C5 /* DashboardViewController.swift in Sources */,
 				069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */,
-				069B06441E92F7CF00A4E35B /* threeDEffectView.swift in Sources */,
 				06FC95B71E76E9F000DF7559 /* AddViewController.swift in Sources */,
 				069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */,
 				0617DFA31E7C7E7F006D73C5 /* SettingsViewController.swift in Sources */,

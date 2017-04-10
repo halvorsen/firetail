@@ -20,7 +20,7 @@ public struct Set {
     
     public static var ti = [String]()
     
-    public static var month = ["January","Febrary","March","April","May","June","July","August","September","October","November","December"]
+    public static var month = ["","","","","","","","","","","",""]
     
     public static var phone = "none"
     
@@ -45,5 +45,9 @@ public struct Set {
     public static var userAlerts = [String:String]()
     
     public static var alerts = [String:(name:String,isGreaterThan:Bool,price:Double,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:Bool,push:Bool,urgent:Bool)]()
+    
+    public static func saveUserInfo() {
+    LoadSaveCoreData.saveUserInfoToFirebase(username: Set.username, fullName: fullName, email: Set.email, phone: Set.phone, premium: Set.premium, numOfAlerts: Set.alertCount, brokerName: Set.brokerName, brokerURL: Set.brokerURL, weeklyAlerts: Set.weeklyAlerts, userAlerts: Set.userAlerts)
  
+    }
 }

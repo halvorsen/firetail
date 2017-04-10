@@ -134,15 +134,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         print(Set.userAlerts)
         
         
-        loadsave.saveUserInfoToFirebase(username: Set.username, fullName: "none", email: Set.email, phone: Set.phone, premium: Set.premium, numOfAlerts: Set.alertCount, brokerName: Set.brokerName, brokerURL: Set.brokerURL, weeklyAlerts: Set.weeklyAlerts, userAlerts: Set.userAlerts)
+        Set.saveUserInfo()
     }
+   
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
 
-        
-       // premiumMember = loadsave.loadPremiumAccess()
         premiumMember = Set.premium
         longPress = UILongPressGestureRecognizer(target: self, action: #selector(DashboardViewController.longPress(_:)))
         view.addGestureRecognizer(longPress)
@@ -152,7 +152,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         self.view.backgroundColor = customColor.black33
         svs = [sv,sv1,sv2]
         let d = Date()
-        let m = ["","January","February","March","April","May","June","July","August","September","October","November","December"]
+        let m = ["","JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"]
         addLabel(name: date, text: "\(d.day) \(m[d.month])", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 124, width: 150, height: 32, lines: 1)
         view.addSubview(date)
         
@@ -163,9 +163,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         view.addSubview(alerts1102)
         addLabel(name: daysOfTheWeek, text: "M  T  W  T  F", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 506, width: 260, height: 28, lines: 1)
         view.addSubview(daysOfTheWeek)
+        daysOfTheWeek.alpha = 0.0
+        //need to add bars when alerts are triggered
         var bar1 = UILabel(frame: CGRect(x: 92*screenWidth/750, y: 406*screenHeight/1334, width: 6*screenWidth/750, height: 74*screenHeight/1334))
         bar1.backgroundColor = customColor.yellow
-        // view.addSubview(bar1)
         var bar2 = UILabel(frame: CGRect(x: 130*screenWidth/750, y: 446*screenHeight/1334, width: 6*screenWidth/750, height: 34*screenHeight/1334))
         bar2.backgroundColor = customColor.yellow
         //  view.addSubview(bar2)
@@ -386,6 +387,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     }
                 }
             }
+             Set.saveUserInfo()
         }
         
     }
@@ -521,14 +523,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         stock3.text = ""
         var check = false
         var position: CGFloat = 1
-        Set.ti.removeAll()
+        
         print("CCCCCCC")
         print(blocks.count)
         for i in 0..<blocks.count {
             
             
             if (button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text) {
-                
+             Set.ti.removeAll()
                 
                 UIView.animate(withDuration: 0.6) {
                     self.blocks[i].removeFromSuperview()
@@ -539,16 +541,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     self.blocks[k].layer.zPosition = position; position += 1
                     newBlocks.append(blocks[k])
                     Set.ti.append(blocks[k].stockTickerGlobal)
-               
-//                    loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
+
                 }
                 if i != (blocks.count - 1) {
                     for k in (i+1)..<blocks.count {
                         self.blocks[k].layer.zPosition = position; position += 1
                         newBlocks.append(blocks[k])
                         Set.ti.append(blocks[k].stockTickerGlobal)
-                       
-//                        loadsave.saveBlock(stockTicker: blocks[k].stockTickerGlobal, currentPrice: blocks[k].currentPriceGlobal, sms: blocks[k].smsGlobal, email: blocks[k].emailGlobal, flash: blocks[k].flashGlobal, urgent: blocks[k].urgentGlobal)
+
                     }
                 }
             }
@@ -565,16 +565,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
         
         Set.alertCount = amountOfBlocks
-       // loadsave.saveBlockAmount(amount: amountOfBlocks)
+      
         loadsave.resaveBlocks(blocks: blocks)
         Set.alertCount = amountOfBlocks
-        print("WWWWWWW")
-        print(Set.ti)
+
         reboot()
-        
-        
-        
-        print("Ti: \(Set.ti)")
+        Set.saveUserInfo()
     }
     
     
@@ -911,7 +907,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         } else if segue.identifier == "fromMainToAdd" {
             let addView: AddViewController = segue.destination as! AddViewController
             
-            addView.newAlertTicker = stringToPass.uppercased()
+            addView.newAlertTicker = "TICKER"
+            addView.isSeguedFromDashboard = true
         }
         
         

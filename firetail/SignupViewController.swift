@@ -68,6 +68,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             myTextField.delegate = self
             myTextField.backgroundColor = .clear
             myTextField.textColor = .white
+            myTextField.tag = i
             myTextField.font = UIFont(name: "Roboto-Italic", size: 15)
             view.addSubview(myTextField)
             textFields.append(myTextField)
@@ -81,6 +82,17 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField : UITextField)
     {
+        switch textField.tag {
+        case 0:
+            view.frame.origin.y = -50*screenHeight/1334
+        case 1:
+            view.frame.origin.y = -170*screenHeight/1334
+        case 2:
+            view.frame.origin.y = -170*screenHeight/1334
+        default:
+            break
+        }
+        
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
@@ -94,9 +106,9 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
       
         let emailField = textFields[0].text
         let passwordField = textFields[1].text
-        let passwordfield2 = textFields[2].text
+        let passwordField2 = textFields[2].text
 
-        if passwordField == passwordField {
+        if passwordField == passwordField2 {
             if emailField != nil && passwordField != nil {
                 FIRAuth.auth()!.createUser(withEmail: emailField!, password: passwordField!) {
                     user, error in
@@ -105,6 +117,9 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                         FIRAuth.auth()!.signIn(withEmail: emailField!, password: passwordField!) //adds user and pass
                         self.username.text = emailField!
                         FIRAuth.auth()!.signIn(withEmail: emailField!, password: passwordField!) //adds authentication
+                        self.delay(bySeconds: 1.5) {
+                            self.performSegue(withIdentifier: "fromSignupToAdd", sender: self)
+                        }
                     } else {
                         self.userWarning(title: "", message: (error!.localizedDescription))
                         print("firebase error local desc: \(error?.localizedDescription)")
@@ -117,9 +132,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             self.present(alert, animated: true, completion: nil)
         }
         
-        delay(bySeconds: 1.5) {
-            self.performSegue(withIdentifier: "fromSignupToAdd", sender: self)
-        }
+        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -129,6 +142,18 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             
             //do something with the --> textField.text!
             
+        }
+        
+        switch textField.tag {
+        case 0:
+            textFields[1].becomeFirstResponder()
+        case 1:
+            textFields[2].becomeFirstResponder()
+        case 2:
+            view.frame.origin.y = 0
+            continueFunc(continueB)
+        default:
+            break
         }
         return false
     }

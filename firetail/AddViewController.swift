@@ -23,7 +23,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         if c[c.count-2] == "." {
             textField2.text = s + "0"
         }
-
+        
         }}
     var touchDown = UILongPressGestureRecognizer()
     var touchUp = UILongPressGestureRecognizer()
@@ -61,6 +61,14 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         return aaa
     }
     var newAlertLongID = String()
+    var isSeguedFromDashboard = false
+    var activityView = UIActivityIndicatorView()
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if isSeguedFromDashboard {
+            myTextField.becomeFirstResponder()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +78,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         //amountOfBlocksOld = Set.alertCount
         //amountOfBlocksOld = loadsave.amount()
         
-        view.backgroundColor = customColor.black33
+        view.backgroundColor = customColor.black24
         let bottomBar = UIView()
         bottomBar.frame = CGRect(x: 0, y: 597*screenHeight/667, width: screenWidth, height: 70*screenHeight/667)
         bottomBar.backgroundColor = customColor.black24
@@ -131,7 +139,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         phoneTextField.tag = 2
         view.addSubview(phoneTextField)
         phoneTextField.alpha = 0.0
-
+        
         var add = UIButton()
         addButton(name: add, x: 610, y: 0, width: 140, height: 140, title: "  +", font: "Roboto-Light", fontSize: 45, titleColor: customColor.black33, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.add(_:)), addSubview: false)
         add.titleLabel?.textAlignment = .center //this isnt working for some reason
@@ -203,7 +211,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         
         container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 260*screenHeight/667))
         container.contentSize = CGSize(width: 3.8*screenWidth, height: container.bounds.height)
-        container.backgroundColor = customColor.black33
+        container.backgroundColor = customColor.black24
         container.contentOffset =  CGPoint(x: 2.7*screenWidth, y: 0)
         container.clipsToBounds = false
         container.showsHorizontalScrollIndicator = false
@@ -220,18 +228,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 t = t.translatedBy(x: 0, y: -100)
                 t = t.scaledBy(x: 1.0, y: 0.01)
                 self.graph.transform = t
-                let effectView = threeDEffectView(frame: CGRect(x: 0, y: -8*self.screenHeight/667, width: self.screenWidth, height: self.screenWidth/2))
-                effectView.clipsToBounds = true
-                    self.view.addSubview(effectView)
-                    effectView.layer3d.add(effectView.layerAnimation, forKey: nil)
-                effectView.layer3d.add(effectView.animcolor, forKey: "fillColor")
-                effectView.alpha = 0.0
-                UIView.animate(withDuration: 0.2) {
-                    effectView.alpha = 1.0
-                }
+
+    
                 UIView.animate(withDuration: 2.0) {
-               
-                    effectView.frame = CGRect(x: 0, y: 240*self.screenHeight/667, width: self.screenWidth, height: 0)
+             
                     self.graph.transform = CGAffineTransform.identity
                     self.graph.frame.origin.y = 50*self.screenHeight/667
                 }
@@ -254,12 +254,12 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             }
             
         }
-
+        
         
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
-
-
+        
+        
         myPicker.dataSource = self
         myPicker.delegate = self
         myPicker.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 177*screenHeight/667)
@@ -284,7 +284,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         
         
     }
-
+    
     func donePicker() {
         
         view.frame.origin.y = 0
@@ -318,7 +318,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     var dd = "$1"
     var cc = ".00"
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-
+        
         switch component {
         case 0:
             dd = pickerData[row]
@@ -336,7 +336,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             Set.oneYearDictionary[$1] = $0
             
         }
-       print("AlertID: \(alertID)")
+        print("AlertID: \(alertID)")
     }
     
     private func getPickerData() {
@@ -381,7 +381,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                     phoneTextField.alpha = 1.0
                     phoneTextField.becomeFirstResponder()
                 } else {
-                newAlertBoolTuple.1 = true
+                    newAlertBoolTuple.1 = true
                 }
             case 2:
                 newAlertBoolTuple.2 = true
@@ -421,12 +421,19 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         Set.userAlerts[alertID[Set.alertCount]] = newAlertLongID
         print(Set.userAlerts[alertID[Set.alertCount]])
         Set.alertCount += 1
-        Set.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, newAlertBoolTuple.1, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3)
-        //loadsave.saveBlockAmount(amount: amountOfBlocksOld + 1)
-       // loadsave.saveBlock(stockTicker: newAlertTicker, currentPrice: alertPrice, sms: newAlertBoolTuple.0, email: newAlertBoolTuple.1, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3)
-        myloadsave.saveAlertToFirebase(username: Set.username, ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
-        if newAlertTicker != "#@$%" {
-        self.performSegue(withIdentifier: "fromAddToMain", sender: self)
+        if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 {
+            Set.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, true, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3) }
+        else {
+            Set.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, newAlertBoolTuple.1, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3)
+        }
+        if newAlertTicker != "TICKER" {
+            if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 {
+                myloadsave.saveAlertToFirebase(username: Set.username, ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: true, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
+            } else {
+                myloadsave.saveAlertToFirebase(username: Set.username, ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
+            }
+            
+            self.performSegue(withIdentifier: "fromAddToMain", sender: self)
         }
     }
     
@@ -473,52 +480,52 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             return true
         }
     }
-
-
+    
+    
     func textFieldDidBeginEditing(_ textField : UITextField) {
         if textField.tag == 2 {
         } else {
-        if textField.tag == 1 {
-            textField.text = ""
+            if textField.tag == 1 {
+                textField.text = ""
+            }
+            textField.autocorrectionType = .no
+            textField.autocapitalizationType = .allCharacters
+            textField.spellCheckingType = .no
         }
-        textField.autocorrectionType = .no
-        textField.autocapitalizationType = .allCharacters
-        textField.spellCheckingType = .no
-    }
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         
         if textField.tag == 2 {
         } else {
-        if textField.tag == 0 {
-            var row0 = Int()
-            var row1 = Int()
-            for i in 0..<pickerData.count {
-                if pickerData[i] == apDollarString {
-                   row0 = i
+            if textField.tag == 0 {
+                var row0 = Int()
+                var row1 = Int()
+                for i in 0..<pickerData.count {
+                    if pickerData[i] == apDollarString {
+                        row0 = i
+                    }
                 }
-            }
-            for i in 0..<pickerData2.count {
-                print("apCentString \(apCentString)")
-                if pickerData2[i] == apCentString {
-                    row1 = i
+                for i in 0..<pickerData2.count {
+                    print("apCentString \(apCentString)")
+                    if pickerData2[i] == apCentString {
+                        row1 = i
+                    }
                 }
+                myPicker.selectRow(row0, inComponent: 0, animated: false)
+                pickerView(myPicker, didSelectRow: row0, inComponent: 0)
+                myPicker.selectRow(row1, inComponent: 1, animated: false)
+                pickerView(myPicker, didSelectRow: row1, inComponent: 1)
+                UIView.animate(withDuration: 0.3) {
+                    self.view.frame.origin.y = 446-667
+                    
+                }
+            } else {
+                self.view.frame.origin.y = -135*screenHeight/667
             }
-            myPicker.selectRow(row0, inComponent: 0, animated: false)
-            pickerView(myPicker, didSelectRow: row0, inComponent: 0)
-            myPicker.selectRow(row1, inComponent: 1, animated: false)
-            pickerView(myPicker, didSelectRow: row1, inComponent: 1)
-            UIView.animate(withDuration: 0.3) {
-            self.view.frame.origin.y = 446-667
-
-            }
-        } else {
-        self.view.frame.origin.y = -135*screenHeight/667
-        }
         }
         return true
-    
+        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -528,10 +535,12 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         if textField.tag == 2 {
             phoneTextField.alpha = 0.0
             if phoneTextField.text != nil {
-            Set.phone = phoneTextField.text!
+                Set.phone = phoneTextField.text!
             }
             
             //check if phone number is valid then turn on switch else send invalid alert
+            
+            self.view.endEditing(true)
         } else if textField.tag == 0 {
             UIView.animate(withDuration: 0.6) {
                 self.view.frame.origin.y = 0
@@ -540,6 +549,12 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         } else {
             print("WAAAAA")
             if myTextField.text != nil && myTextField.delegate != nil {
+                activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+                activityView.center.y = self.container.center.y
+                activityView.center.x = 3.2*screenWidth
+                activityView.startAnimating()
+                activityView.alpha = 1.0
+                self.container.addSubview(activityView)
                 
                 getOneYearData(stockName: myTextField.text!.uppercased()) {
                     
@@ -561,22 +576,14 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                         t = t.translatedBy(x: 0, y: -100)
                         t = t.scaledBy(x: 1.0, y: 0.01)
                         self.graph.transform = t
-                        let effectView = threeDEffectView(frame: CGRect(x: 0, y: -8*self.screenHeight/667, width: self.screenWidth, height: self.screenWidth/2))
-                        effectView.clipsToBounds = true
-                        self.view.addSubview(effectView)
-                        effectView.layer3d.add(effectView.layerAnimation, forKey: nil)
-                        effectView.layer3d.add(effectView.animcolor, forKey: "fillColor")
-                        effectView.alpha = 0.0
-                        UIView.animate(withDuration: 0.2) {
-                            effectView.alpha = 1.0
-                        }
+                        
+                        self.activityView.removeFromSuperview()
                         UIView.animate(withDuration: 2.0) {
                             
-                            effectView.frame = CGRect(x: 0, y: 240*self.screenHeight/667, width: self.screenWidth, height: 0)
                             self.graph.transform = CGAffineTransform.identity
                             self.graph.frame.origin.y = 50*self.screenHeight/667
                         }
-
+                        
                         self.delay(bySeconds: 1.2) {
                             
                             for i in 0..<self.graph.labels.count {
@@ -589,6 +596,8 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                                 }
                             }
                             
+                            
+                            
                         }
                         
                         
@@ -597,7 +606,9 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                     
                 }
                 self.view.frame.origin.y = 0
+                textField.resignFirstResponder()
             }
+            
         }
         return false
     }
@@ -605,7 +616,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let mainView: DashboardViewController = segue.destination as! DashboardViewController
         mainView.previousViewContoller = "Add"
-     
+        
         
         print("SETCOUNT")
         print(Set.ti.count)
@@ -629,19 +640,19 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 result(dates, stockData)
                 
             }, failure: { (error) in
-                if self.newAlertTicker != "#@$%" {
+                if self.newAlertTicker != "TICKER" {
                     var des = error.description
                     for i in 0...14 {
                         des.remove(at: des.startIndex)
                     }
-                self.userWarning(title: "", message: des)
+                    self.userWarning(title: "", message: des)
                 }
                 print(error)
                 result(nil, nil)
             })
             
         }) { (error) in
-            if self.newAlertTicker != "#@$%" {
+            if self.newAlertTicker != "TICKER" {
                 var des = error.description
                 for i in 0...14 {
                     des.remove(at: des.startIndex)

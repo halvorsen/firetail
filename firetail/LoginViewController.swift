@@ -33,6 +33,8 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var _ti = [String]()
     let firetail = UILabel()
     let myLoadSaveCoreData = LoadSaveCoreData()
+    var isFirstLoading = true
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +63,14 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         
         // (check,_,_,_,_,_) = self.loadsave.loadBlocks()
         
+        let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
+        if launchedBefore  {
+            print("Not first launch.")
+        } else {
+            do {try FIRAuth.auth()?.signOut()}catch { }
+            UserDefaults.standard.set(true, forKey: "launchedBefore")
+        }
+        
         
         FIRAuth.auth()!.addStateDidChangeListener() { auth, user in
             // 2
@@ -69,13 +79,13 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 self.alreadyAUser = true
                 self.authenticated = true
                 if Set.username != "none" {
+                   if self.isFirstLoading {
                     self.loadUserInfoFromFirebase(firebaseUsername: Set.username)
-                    
-                }
-                
-                
+                        self.isFirstLoading = false
+                    }
+                }    
             } else {
-                UIView.animate(withDuration: 1.0) {
+                UIView.animate(withDuration: 0.2) {
                     self.imageView.alpha = 0.0
                     self.coverView.alpha = 0.0
                     self.firetail.alpha = 0.0
@@ -109,18 +119,36 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             }
             
             if Set.userAlerts.count > 0 {
-                print("COWGIRL")
+             
                 print(Set.userAlerts.count)
                 print(Set.userAlerts)
                 
-                for _alert in Set.userAlerts {
-                    ref.child("alerts").child(_alert.value).observeSingleEvent(of: .value, with: { (snapshot) in
+                var alertID: [String] {
+                    var aaa = [String]()
+                    for i in 0..<Set.alertCount {
+                        switch i {
+                        case 0...9:
+                            aaa.append("alert00" + String(i))
+                        case 10...99:
+                            aaa.append("alert0" + String(i))
+                        case 100...999:
+                            aaa.append("alert" + String(i))
+                        default:
+                            break
+                        }
+                    }
+                    return aaa
+                }
+                let uA = Set.userAlerts
+                for i in 0..<Set.userAlerts.count {
+                    if uA[alertID[i]] != nil {
+                    ref.child("alerts").child(uA[alertID[i]]!).observeSingleEvent(of: .value, with: { (snapshot) in
                         
                         let _deleted = value?["deleted"] as? Bool ?? false
                         
                         if !_deleted {
                             
-                            let _name = _alert.value
+                            let _name = uA[alertID[i]]!
                             let value = snapshot.value as? NSDictionary
                             let _isGreaterThan = value?["isGreaterThan"] as? Bool ?? false
                             //   isGreaterThan.append(_isGreaterThan)
@@ -143,7 +171,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                             //   urgent.append(_urgent)
                             let _triggered = value?["triggered"] as? Bool ?? false
                             //   triggered.append(_triggered)
-                            Set.alerts[_alert.value] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent)
+                            Set.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent)
                         }
                         self.ti = Set.ti
                         print("COWBOY")
@@ -162,7 +190,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     }) { (error) in
                         print(error.localizedDescription)
                     }
-                    
+                    }
                 }
             } else {
                 self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
