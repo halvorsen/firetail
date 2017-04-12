@@ -308,7 +308,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     @objc private func loginFunc(_ sender: UIButton) {
         self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
-        
     }
     
     @objc private func continueFunc(_ sender: UIButton) {
@@ -317,14 +316,23 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         //In this instance we need to load an already existing username and not creating a new one!!! WARNING WARNING!!!!
         loadsave.saveUsername(username: firstTwo + timestamp)
         Set.username = firstTwo + timestamp
-        FIRAuth.auth()!.signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!)
+        
+        FIRAuth.auth()!.signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!, completion: { (user, error) in
+            if error != nil{
+                print("Incorrect")
+                let alert = UIAlertController(title: "Warning", message: "Incorrect Email or Password.", preferredStyle: UIAlertControllerStyle.alert)
+                let action = UIAlertAction(title: "Okay", style: .default, handler: nil)
+                alert.addAction(action)
+                self.present(alert, animated: true, completion: nil)
+            }
+        })
+       // FIRAuth.auth()!.signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!)
         activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         activityView.center = self.view.center
         activityView.startAnimating()
         self.view.addSubview(activityView)
-        
-        
     }
+    
     var isFirstTimeSeguing = true
     private func cont() {
         
@@ -343,9 +351,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
             }
         }
-        
     }
-    
     
     @objc private func createAccountFunc(_ sender: UIButton) {
         self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
@@ -370,9 +376,5 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             
             addView.newAlertTicker = "TSLA"
         }
-        
-        
     }
-    
-    
 }

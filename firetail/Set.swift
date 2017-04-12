@@ -7,8 +7,17 @@
 //
 
 import Foundation
+import Firebase
 
 public struct Set {
+    
+    public static var token: String {
+        if let refreshedToken = FIRInstanceID.instanceID().token() {
+            return refreshedToken
+        } else {
+            return "none"
+        }
+    }
     
     public static var currentPrice: Double = 0.0
     
@@ -47,7 +56,7 @@ public struct Set {
     public static var alerts = [String:(name:String,isGreaterThan:Bool,price:Double,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:Bool,push:Bool,urgent:Bool)]()
     
     public static func saveUserInfo() {
-    LoadSaveCoreData.saveUserInfoToFirebase(username: Set.username, fullName: fullName, email: Set.email, phone: Set.phone, premium: Set.premium, numOfAlerts: Set.alertCount, brokerName: Set.brokerName, brokerURL: Set.brokerURL, weeklyAlerts: Set.weeklyAlerts, userAlerts: Set.userAlerts)
+        LoadSaveCoreData.saveUserInfoToFirebase(username: Set.username, fullName: fullName, email: Set.email, phone: Set.phone, premium: Set.premium, numOfAlerts: Set.alertCount, brokerName: Set.brokerName, brokerURL: Set.brokerURL, weeklyAlerts: Set.weeklyAlerts, userAlerts: Set.userAlerts, token: Set.token)
  
     }
 }

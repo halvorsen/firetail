@@ -20,6 +20,9 @@ PODS:
   - Firebase/Database (3.13.0):
     - Firebase/Core
     - FirebaseDatabase (= 3.1.2)
+  - Firebase/Messaging (3.13.0):
+    - Firebase/Core
+    - FirebaseMessaging (= 1.2.2)
   - FirebaseAnalytics (3.7.0):
     - FirebaseCore (~> 3.5)
     - FirebaseInstanceID (~> 1.0)
@@ -33,9 +36,16 @@ PODS:
   - FirebaseDatabase (3.1.2):
     - FirebaseAnalytics (~> 3.7)
   - FirebaseInstanceID (1.0.9)
+  - FirebaseMessaging (1.2.2):
+    - FirebaseAnalytics (~> 3.7)
+    - FirebaseInstanceID (~> 1.0)
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - Protobuf (~> 3.1)
   - GoogleToolboxForMac/DebugUtils (2.1.1):
     - GoogleToolboxForMac/Defines (= 2.1.1)
   - GoogleToolboxForMac/Defines (2.1.1)
+  - GoogleToolboxForMac/Logger (2.1.1):
+    - GoogleToolboxForMac/Defines (= 2.1.1)
   - GoogleToolboxForMac/NSData+zlib (2.1.1):
     - GoogleToolboxForMac/Defines (= 2.1.1)
   - GoogleToolboxForMac/NSDictionary+URLArguments (2.1.1):
@@ -45,6 +55,7 @@ PODS:
   - GoogleToolboxForMac/NSString+URLArguments (2.1.1)
   - GTMSessionFetcher/Core (1.1.8)
   - ObjectMapper (2.2.2)
+  - Protobuf (3.2.0)
   - SwiftCharts (0.5.1)
   - SwiftyStoreKit (0.7.1)
 
@@ -54,6 +65,7 @@ DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
+  - Firebase/Messaging
   - SwiftCharts (~> 0.2)
   - SwiftyStoreKit
 
@@ -69,12 +81,14 @@ SPEC CHECKSUMS:
   FirebaseCore: 1c0a13bf59bb95cdd19577252499f0ec6a03e999
   FirebaseDatabase: 05c96d7b43a7368dc91c07791adb49683e1738d1
   FirebaseInstanceID: 2d0518b1378fe9d685ef40cbdd63d2fdc1125339
+  FirebaseMessaging: df8267f378580a24174ce7861233aa11d5c90109
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   GTMSessionFetcher: 6f8d8b28b7e345549ac471071608170b31cb4977
   ObjectMapper: 9e385c2295bcc4e16eabbcfc85db801442bba545
+  Protobuf: 745f59e122e5de98d4d7ef291e264a0eef80f58e
   SwiftCharts: d263289cdc7fc955fef54ae3bc6529f696e69933
   SwiftyStoreKit: 3db119f5c6fcb8c36c7b4e8ac703a5319dc2bcfe
 
-PODFILE CHECKSUM: 00cf789ad88b70a6707a01b32692f46b0ddfe83d
+PODFILE CHECKSUM: 1e5710d8fdb532d7057b4235b44886c48c8a82ae
 
 COCOAPODS: 1.1.1

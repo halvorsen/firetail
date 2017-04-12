@@ -9,8 +9,16 @@
 import UIKit
 import BigBoard
 import QuartzCore
+import Firebase
+import FirebaseMessaging
+import UserNotifications
 
-class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UNUserNotificationCenterDelegate, FIRMessagingDelegate, UIApplicationDelegate
+{
+   // The callback to handle data message received via FCM for devices running iOS 10 or above.
+    public func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
+        print("")
+    }
     var myTextField = UITextField()
     var textField2 = UITextField()
     var phoneTextField = UITextField()
@@ -366,6 +374,29 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         
     }
     
+    private func registerForPushNotifications() {
+        if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+            
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+                options: authOptions,
+                completionHandler: {_, _ in })
+            
+            // For iOS 10 data message (sent via FCM)
+            FIRMessaging.messaging().remoteMessageDelegate = self
+            
+        } else {
+            let settings: UIUserNotificationSettings =
+                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            UIApplication.shared.registerUserNotificationSettings(settings)
+            //application.registerUserNotificationSettings(settings)
+        }
+        UIApplication.shared.registerForRemoteNotifications()
+        //application.registerForRemoteNotifications()
+    }
+    
     
     @objc private func back(_ sender: UIButton) {
         self.performSegue(withIdentifier: "fromAddToMain", sender: self)
@@ -385,8 +416,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 }
             case 2:
                 newAlertBoolTuple.2 = true
+                registerForPushNotifications()
             case 3:
                 newAlertBoolTuple.3 = true
+                registerForPushNotifications()
             default:
                 break
             }

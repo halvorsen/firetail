@@ -103,36 +103,46 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         loadsave.saveUsername(username: firstTwo + timestamp)
         Set.username = firstTwo + timestamp
-      
+        
         let emailField = textFields[0].text
         let passwordField = textFields[1].text
         let passwordField2 = textFields[2].text
-
-        if passwordField == passwordField2 {
-            if emailField != nil && passwordField != nil {
-                FIRAuth.auth()!.createUser(withEmail: emailField!, password: passwordField!) {
-                    user, error in
-                    if error == nil {
-                        // 3
-                        FIRAuth.auth()!.signIn(withEmail: emailField!, password: passwordField!) //adds user and pass
-                        self.username.text = emailField!
-                        FIRAuth.auth()!.signIn(withEmail: emailField!, password: passwordField!) //adds authentication
-                        self.delay(bySeconds: 1.5) {
-                            self.performSegue(withIdentifier: "fromSignupToAdd", sender: self)
-                        }
-                    } else {
-                        self.userWarning(title: "", message: (error!.localizedDescription))
-                        print("firebase error local desc: \(error?.localizedDescription)")
-                    }
-                }
-            }
-        } else {
+        
+        guard let email = emailField else {return}
+        guard let password1 = passwordField else {return}
+        guard let password2 = passwordField2 else {return}
+        guard password1 == password2 else {
             let alert = UIAlertController(title: "Warning", message: "Passwords Do Not Match", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
+            return
+        }
+        guard email.isEmail == true else {
+            let alert = UIAlertController(title: "Warning", message: "Enter Valid Email Address", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        guard password1.isValidPassword == true else {
+            let alert = UIAlertController(title: "Invalid Password", message: "6-20 Characters", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
         }
         
-        
+        FIRAuth.auth()!.createUser(withEmail: email, password: password1) {
+            user, error in
+            if error == nil {
+                self.username.text = email
+                FIRAuth.auth()!.signIn(withEmail: email, password: password1) //adds authentication
+                self.delay(bySeconds: 1.5) {
+                    self.performSegue(withIdentifier: "fromSignupToAdd", sender: self)
+                }
+            } else {
+                self.userWarning(title: "", message: (error!.localizedDescription))
+                print("firebase error local desc: \(error?.localizedDescription)")
+            }
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -157,9 +167,4 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         }
         return false
     }
-    
-    
-    
-    
-    
 }

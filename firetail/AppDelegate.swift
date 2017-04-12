@@ -9,9 +9,14 @@
 import UIKit
 import CoreData
 import Firebase
+import UserNotifications
+
+
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+
+
 
     var window: UIWindow?
 
@@ -19,6 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FIRApp.configure()
         // Override point for customization after application launch.
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotification(_:)),
+                                                         name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)
+        
         return true
     }
 
@@ -30,6 +39,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        FIRMessaging.messaging().disconnect()
+        print("Disconnected from FCM.")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -38,6 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        connectToFcm()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -90,6 +102,67 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
+    @objc private func tokenRefreshNotification(_ notification: Notification) {
+        if let refreshedToken = FIRInstanceID.instanceID().token() {
+            print("InstanceID token: \(refreshedToken)")
+        }
+        
+        // Connect to FCM since connection may have failed when attempted before having a token.
+        connectToFcm()
+    }
+    func connectToFcm() {
+        // Won't connect since there is no token
+        guard FIRInstanceID.instanceID().token() != nil else {
+            return
+        }
+        
+        // Disconnect previous FCM connection if it exists.
+        FIRMessaging.messaging().disconnect()
+        
+        FIRMessaging.messaging().connect { (error) in
+            if error != nil {
+                print("Unable to connect with FCM. \(error?.localizedDescription ?? "")")
+            } else {
+                print("Connected to FCM.")
+            }
+        }
+    }
+    
+    public func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
+        print("Minnesota")
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        // If you are receiving a notification message while your app is in the background,
+        // this callback will not be fired till the user taps on the notification launching the application.
+        // TODO: Handle data of notification
+        
+        // Print message ID.
+        let gcmMessageIDKey = "blah"
+        if let messageID = userInfo[gcmMessageIDKey] {
+            print("Message ID: \(messageID)")
+        }
+        
+        // Print full message.
+        print(userInfo)
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        // If you are receiving a notification message while your app is in the background,
+        // this callback will not be fired till the user taps on the notification launching the application.
+        // TODO: Handle data of notification
+        
+        // Print message ID.
+        let gcmMessageIDKey = "blah"
+        if let messageID = userInfo[gcmMessageIDKey] {
+            print("Message ID: \(messageID)")
+        }
+        
+        // Print full message.
+        print(userInfo)
+        
+        completionHandler(UIBackgroundFetchResult.newData)
+    }
 }
 
