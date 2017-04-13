@@ -334,6 +334,8 @@ class StockGraphView2: UIView {
             self.addSubview(xs[i])
         }
         
+        
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -156,12 +156,19 @@ class GraphViewController: ViewSetup {
                 currentTextKey = newTextKey
                 layer.add(layerAnimation, forKey: nil)
                 graphViewSeen.change.text = Label.changeValues[orderOfGraphs[newTextKey]!]
-                graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs[newTextKey]!]
-                if Label.percentageValuesIsPositive[orderOfGraphs[newTextKey]!] {
-                    graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
-                } else {
-                    graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
+                if let symbol = Label.changeValues[orderOfGraphs[newTextKey]!].characters.first {
+                    if symbol == "-" {
+                        graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
+                    } else {
+                        graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
+                    }
                 }
+                graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs[newTextKey]!]
+//                if Label.percentageValuesIsPositive[orderOfGraphs[newTextKey]!] {
+//                    graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
+//                } else {
+//                    graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
+//                }
                 for i in 0..<graphViewSeen.ys.count {
                     switch i {
                     case 0: graphViewSeen.ys[i].text = yVals[newTextKey]!.4
@@ -316,11 +323,18 @@ class GraphViewController: ViewSetup {
             
             graphViewSeen.change.text = Label.changeValues[orderOfGraphs["1y"]!]
             graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs["1y"]!]
-            if Label.percentageValuesIsPositive[orderOfGraphs["1y"]!] {
-                graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
-            } else {
-                graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
+            if let symbol = Label.changeValues[orderOfGraphs["1y"]!].characters.first {
+                if symbol == "-" {
+                    graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
+                } else {
+                    graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
+                }
             }
+//            if Label.percentageValuesIsPositive[orderOfGraphs["1y"]!] {
+//                graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
+//            } else {
+//                graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
+//            }
             trade.alpha = 0.0
             stockHeader.alpha = 0.0
             currentPrice.alpha = 0.0

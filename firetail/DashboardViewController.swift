@@ -360,38 +360,24 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var startedPan = false
     var q = Int()
     @objc private func pan(_ gesture: UIPanGestureRecognizer) {
-        guard amountOfBlocks > 3 else {return}
+        
         startedPan = true
         if movingAlert != 9999 {
-            
+            guard amountOfBlocks > 3 else {return}
             if gesture.state == UIGestureRecognizerState.changed {
                 
                 let translation = gesture.translation(in: view)
                 
-                if alertScroller.contentOffset.y > -20*screenHeight/667 && alertScroller.contentOffset.y < val - 130*screenHeight/667 {
-                    switch alertInMotion.center.y - alertScroller.contentOffset.y {
-                    case -100...0:
-                        if translation.y > 0 {
-                            alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(2.5*alertScroller.contentSize.height/alertScroller.frame.height))
-                        }
-                    case 0...360*screenHeight/1334:
-                        alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(2.5*alertScroller.contentSize.height/alertScroller.frame.height))
-                    case 360*screenHeight/1334...5000:
-                        
-                        if translation.y < 0 {
-                            alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(2.5*alertScroller.contentSize.height/alertScroller.frame.height))
-                        }
-                    default: break
-                    }
-                    alertScroller.contentOffset.y += translation.y*CGFloat(2*alertScroller.contentSize.height/alertScroller.frame.height)
-                } else {
-                    alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(3*alertScroller.contentSize.height/alertScroller.frame.height))
-                    if alertScroller.contentOffset.y < -20*screenHeight/667 && translation.y > 0 {
-                        alertScroller.contentOffset.y += 40*screenHeight/667
-                    } else if alertScroller.contentOffset.y > val - 130*screenHeight/667 && translation.y < 0 {
-                        alertScroller.contentOffset.y -= 40*screenHeight/667
-                    }
+                if alertInMotion.center.y < alertScroller.contentOffset.y + 300*screenHeight/1334 && alertInMotion.center.y > alertScroller.contentOffset.y + 90*screenHeight/1334 {
+                    alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(2*alertScroller.contentSize.height/alertScroller.frame.height))
+                } else if translation.y < 0 && alertInMotion.center.y >= alertScroller.contentOffset.y + 300*screenHeight/1334 {
+                    alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertScroller.contentOffset.y + 299*screenHeight/1334)
+                } else if translation.y > 0 && alertInMotion.center.y <= alertScroller.contentOffset.y + 90*screenHeight/1334 {
+                    alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertScroller.contentOffset.y + 99*screenHeight/1334)
                 }
+                
+                alertScroller.contentOffset.y = alertScroller.contentOffset.y + translation.y*CGFloat(alertScroller.contentSize.height/alertScroller.frame.height)
+                
                 gesture.setTranslation(CGPoint(x:0,y:0), in: self.view)
                 if l > -1 {
                     if alertInMotion.center.y < blocks[l].center.y {
@@ -896,7 +882,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     func populateAlertBars() {
-       //TEST Set.weeklyAlerts = ["mon":1,"tues":2,"wed":3,"thur":10,"fri":1]
+        //TEST Set.weeklyAlerts = ["mon":1,"tues":2,"wed":3,"thur":10,"fri":1]
         let monday = Set.weeklyAlerts["mon"] ?? 0
         let tuesday = Set.weeklyAlerts["tues"] ?? 0
         let wednesday = Set.weeklyAlerts["wed"] ?? 0
