@@ -111,9 +111,9 @@ class ViewSetup: UIViewController {
                 var _month = [String]()
                 for point in (stock.oneYearChartModule?.dataPoints)! {
                     let y = point.date.year
-                    print("y: \(y)")
+                 
                     let m = point.date.month
-                    print("m \(m)")
+               
                     
                     if i%21 == 20 {
                         _month.append("\(mo[m]), \(y)")
@@ -121,26 +121,22 @@ class ViewSetup: UIViewController {
                     i += 1
                     
                     //  }
-                    print("COUNT")
+         
                     
                     
                     Set.month = _month
-                    print(Set.month.count)
-                    print(Set.month)
+
                 }
                 
                 result(stockData, stockName)
                 
             }, failure: { (error) in
                 print(error)
-                print("OOOPS!")
-                
                 result(nil, stockName)
             })
             
         }) { (error) in
             print(error)
-            print("OOOOPS2!")
             
             result(nil, stockName)
         }

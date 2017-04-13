@@ -17,7 +17,6 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
 {
    // The callback to handle data message received via FCM for devices running iOS 10 or above.
     public func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
-        print("")
     }
     var myTextField = UITextField()
     var textField2 = UITextField()
@@ -148,7 +147,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         view.addSubview(phoneTextField)
         phoneTextField.alpha = 0.0
         
-        var add = UIButton()
+        let add = UIButton()
         addButton(name: add, x: 610, y: 0, width: 140, height: 140, title: "  +", font: "Roboto-Light", fontSize: 45, titleColor: customColor.black33, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.add(_:)), addSubview: false)
         add.titleLabel?.textAlignment = .center //this isnt working for some reason
         bottomBar.addSubview(add)
@@ -203,11 +202,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         let mySwitchUrgent = UISwitch()
         mySwitchUrgent.frame = CGRect(x: 27*screenWidth/375, y: 443*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
         mySwitchUrgent.setOn(false, animated: false)
-        // mySwitchUrgent.tintColor = .blue //customColor.white229
-        
+        mySwitchUrgent.tintColor = customColor.white229
         mySwitchUrgent.layer.cornerRadius = 16
-        mySwitchUrgent.layer.borderWidth = 1.5
-        mySwitchUrgent.layer.borderColor = customColor.white229.cgColor
+        //mySwitchUrgent.layer.borderWidth = 1.5
+        //mySwitchUrgent.layer.borderColor = customColor.white229.cgColor
         mySwitchUrgent.backgroundColor = .white
         mySwitchUrgent.onTintColor = customColor.yellow
         //  mySwitchUrgent.thumbTintColor = customColor.white229
@@ -351,12 +349,12 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         pickerData.removeAll()
         let ap = alertPrice
         apDollar = Int(alertPrice)
-        print("apDollar \(apDollar)")
+
         apDollarString = String(apDollar)
         var apCent: String {
-            var a = textField2.text!
+            let a = textField2.text!
             var last3 = a.substring(from:a.index(a.endIndex, offsetBy: -3))
-            let last2 = a.substring(from:a.index(a.endIndex, offsetBy: -2))
+        //    let last2 = a.substring(from:a.index(a.endIndex, offsetBy: -2))
             let last1 = a.substring(from:a.index(a.endIndex, offsetBy: -1))
             switch last1 {
             case "1","2","3","4":last3.remove(at: last3.index(before: last3.endIndex)); last3 += "0"
@@ -437,22 +435,19 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 break
             }
         }
-        print("Switch value is \(sender.isOn)")
+ 
     }
     
     let myloadsave = LoadSaveCoreData()
     @objc private func add(_ button: UIButton) {
+        guard isStock == true else {return}
+        guard myTextField.text != nil else {return}
+        guard textField2.text != nil else {return}
         Set.ti.append(newAlertTicker)
-        print("WWWWWW")
-        print(Set.ti)
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID = newAlertTicker.lowercased() + timestamp
-        print(newAlertLongID)
-        print(Set.alertCount)
-        print(alertID[Set.alertCount])
         Set.userAlerts[alertID[Set.alertCount]] = newAlertLongID
-        print(Set.userAlerts[alertID[Set.alertCount]])
         Set.alertCount += 1
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 {
             Set.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, true, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3) }
@@ -540,7 +535,6 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                     }
                 }
                 for i in 0..<pickerData2.count {
-                    print("apCentString \(apCentString)")
                     if pickerData2[i] == apCentString {
                         row1 = i
                     }
@@ -562,8 +556,6 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("EEEEW")
-        print(textField.tag)
         
         if textField.tag == 2 {
             phoneTextField.alpha = 0.0
@@ -580,7 +572,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             }
             textField2.tintColor = .clear
         } else {
-            print("WAAAAA")
+            container.contentOffset =  CGPoint(x: 2.7*screenWidth, y: 0)
             if myTextField.text != nil && myTextField.delegate != nil {
                 activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
                 activityView.center.y = self.container.center.y
@@ -651,11 +643,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         mainView.previousViewContoller = "Add"
         
         
-        print("SETCOUNT")
-        print(Set.ti.count)
     }
-    
+    var isStock = false
     private func prepareGraph(result: @escaping (_ dateArray: [Date]?,_ closings: [Double]?) -> Void) {
+        guard myTextField.text != nil else {return}
         BigBoard.stockWithSymbol(symbol: newAlertTicker, success: { (stock) in
             
             var stockData = [Double]()
@@ -663,7 +654,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             
             stock.mapOneMonthChartDataModule({
                 
-                
+                self.isStock = true
                 for point in (stock.oneMonthChartModule?.dataPoints)! {
                     
                     dates.append(point.date)
@@ -673,24 +664,34 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 result(dates, stockData)
                 
             }, failure: { (error) in
+                self.isStock = false
+                self.activityView.removeFromSuperview()
                 if self.newAlertTicker != "TICKER" {
                     var des = error.description
-                    for i in 0...14 {
+                    for _ in 0...14 {
                         des.remove(at: des.startIndex)
                     }
+                    print(des)
+                    if des == "The request timed out" || des == self.myTextField.text! + " is not a real stock." {
                     self.userWarning(title: "", message: des)
+                    }
                 }
                 print(error)
                 result(nil, nil)
             })
             
         }) { (error) in
+            self.isStock = false
+            self.activityView.removeFromSuperview()
             if self.newAlertTicker != "TICKER" {
                 var des = error.description
-                for i in 0...14 {
+                for _ in 0...14 {
                     des.remove(at: des.startIndex)
                 }
+                let des2 = self.myTextField.text! + " is not a real stock."
+                if des == "The request timed out." || des == self.myTextField.text! + " is not a real stock." {
                 self.userWarning(title: "", message: des)
+                }
             }
             print(error)
             result(nil, nil)

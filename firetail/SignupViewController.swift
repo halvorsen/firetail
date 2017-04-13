@@ -140,7 +140,6 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                 }
             } else {
                 self.userWarning(title: "", message: (error!.localizedDescription))
-                print("firebase error local desc: \(error?.localizedDescription)")
             }
         }
     }

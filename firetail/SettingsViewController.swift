@@ -25,7 +25,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
         super.viewDidLoad()
         
         view.backgroundColor = customColor.black33
-        var logo = UIImageView(frame: CGRect(x: 28*screenWidth/375, y: 75*screenHeight/667, width: 50*screenWidth/375, height: 64*screenWidth/375))
+        let logo = UIImageView(frame: CGRect(x: 28*screenWidth/375, y: 75*screenHeight/667, width: 50*screenWidth/375, height: 64*screenWidth/375))
         logo.image = #imageLiteral(resourceName: "logo50x64")
         view.addSubview(logo)
         

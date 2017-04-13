@@ -40,8 +40,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         super.viewDidLoad()
         
         loadsave.loadUsername()
-        print("USA!")
-        print(Set.username)
         coverView.frame = view.frame
         coverView.backgroundColor = customColor.black33
         coverView.layer.zPosition = 10
@@ -119,10 +117,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             }
             
             if Set.userAlerts.count > 0 {
-             
-                print(Set.userAlerts.count)
-                print(Set.userAlerts)
-                
+
                 var alertID: [String] {
                     var aaa = [String]()
                     for i in 0..<Set.alertCount {
@@ -174,8 +169,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                             Set.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent)
                         }
                         self.ti = Set.ti
-                        print("COWBOY")
-                        print(Set.ti)
                         if self.ti.count != 0 {
                             
                             self.fetch()
@@ -225,23 +218,17 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 getOneYearData(stockName: ti[i]) {
                     
                     if $0 == nil {
-                        print("NIL-HERE")
                         self._ti.append($1)
                         self.retry = true
                         self.noNils = false
                     }
                     if !stockStrings.contains($1) && $0 != nil {
-                        print("STOCKSWHAT")
-                        print(" sWww1: \($1)")
-                        print(" sWww2: \($0)")
                         stockStrings.append($1)
                         
                         Set.oneYearDictionary[$1] = $0
                     }
                     
                     j += 1
-                    print("ti.count: \(self.ti.count)")
-                    print("j: \(j)")
                     if j == self.ti.count && self.noNils {
                         
                         self.cont()
@@ -319,7 +306,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         
         FIRAuth.auth()!.signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!, completion: { (user, error) in
             if error != nil{
-                print("Incorrect")
+          
                 let alert = UIAlertController(title: "Warning", message: "Incorrect Email or Password.", preferredStyle: UIAlertControllerStyle.alert)
                 let action = UIAlertAction(title: "Okay", style: .default, handler: nil)
                 alert.addAction(action)
@@ -343,9 +330,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
             }
         } else {
-            print("!!!!!!")
-            print(ti)
-            print(ti.count)
+    
             if isFirstTimeSeguing {
                 isFirstTimeSeguing = false
                 self.performSegue(withIdentifier: "fromLoginToMain", sender: self)

@@ -12,8 +12,9 @@ import BigBoard
 import Charts
 import SwiftyStoreKit
 import StoreKit
+import MessageUI
 
-class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate {
+class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate {
     var activityView = UIActivityIndicatorView()
     var premiumMember = false
     var addTextField = UITextField()
@@ -87,62 +88,34 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     override func viewWillAppear(_ animated: Bool) {
         
-      //  let (t,p,email,sms,flash,urgent) = loadsave.loadBlocks()
         if Set.alertCount > 0 {
             for i in 0..<Set.alertCount {
-                print("Baseball")
-                print(Set.userAlerts)
-                print("1")
-                print(Set.alerts)
-                print("2")
-                print(alertID[i])
-                print("3")
-                print(Set.alerts[alertID[i]])
-                print("4")
-                print(Set.userAlerts[alertID[i]]!)
-                print("5")
-                  
+                
                 let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: Set.alerts[Set.userAlerts[alertID[i]]!]!.ticker, currentPrice: Set.alerts[Set.userAlerts[alertID[i]]!]!.price, sms: Set.alerts[Set.userAlerts[alertID[i]]!]!.sms, email: Set.alerts[Set.userAlerts[alertID[i]]!]!.email, flash: Set.alerts[Set.userAlerts[alertID[i]]!]!.flash, urgent: Set.alerts[Set.userAlerts[alertID[i]]!]!.urgent, longName: Set.userAlerts[alertID[i]]!)
-               
+                
                 block.ex.addTarget(self, action: #selector(DashboardViewController.act(_:)), for: .touchUpInside)
-               
+                
                 
                 blocks.append(block)
                 alertScroller.addSubview(block)
                 
             }
-            print("amount of blocks: \(amountOfBlocks)")
             alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
         }
         let alertTap = UITapGestureRecognizer(target: self, action: #selector(DashboardViewController.detail(_:)))
         view.addGestureRecognizer(alertTap)
         if blocks.count > 3 {
-        val = blocks[amountOfBlocks - 2].frame.maxY
+            val = blocks[amountOfBlocks - 2].frame.maxY
         } else {
             val = 0
         }
         
-        print("Kawabunga")
-        print("Set.username: \(Set.username)")
-        print(Set.email)
-        print(Set.phone)
-        print(Set.premium)
-        print(Set.alertCount)
-        print(Set.brokerName)
-        print(Set.brokerURL)
-        print(Set.weeklyAlerts)
-        print(Set.userAlerts)
-        
-        
         Set.saveUserInfo()
     }
-   
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         premiumMember = Set.premium
         longPress = UILongPressGestureRecognizer(target: self, action: #selector(DashboardViewController.longPress(_:)))
         view.addGestureRecognizer(longPress)
@@ -164,12 +137,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addLabel(name: daysOfTheWeek, text: "M  T  W  T  F", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 506, width: 260, height: 28, lines: 1)
         view.addSubview(daysOfTheWeek)
         daysOfTheWeek.alpha = 0.0
-        //need to add bars when alerts are triggered
-        var bar1 = UILabel(frame: CGRect(x: 92*screenWidth/750, y: 406*screenHeight/1334, width: 6*screenWidth/750, height: 74*screenHeight/1334))
-        bar1.backgroundColor = customColor.yellow
-        var bar2 = UILabel(frame: CGRect(x: 130*screenWidth/750, y: 446*screenHeight/1334, width: 6*screenWidth/750, height: 34*screenHeight/1334))
-        bar2.backgroundColor = customColor.yellow
-        //  view.addSubview(bar2)
+        populateAlertBars()
         addButton(name: alerts, x: 82, y: 680, width: 280, height: 25, title: "ALERTS", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.alertsFunc(_:)), addSubview: true)
         addButton(name: changeEmail, x: 82, y: 760, width: 280, height: 25, title: "CHANGE EMAIL", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.changeEmailFunc(_:)), addSubview: true)
         addButton(name: addPhone, x: 82, y: 840, width: 280, height: 25, title: "ADD PHONE", font: "Roboto-Medium", fontSize: 14, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.addPhoneFunc(_:)), addSubview: true)
@@ -193,8 +161,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         container.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
-        print("baaaa")
-        print(Set.month)
         addLabel(name: monthIndicator, text: Set.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 22, lines: 1)
         
         addLabel(name: stock1, text: "", textColor: customColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 24, width: 352, height: 48, lines: 0)
@@ -235,21 +201,21 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             slideView.addSubview(line)
         }
         
-//        myTextField = UITextField(frame: CGRect(x: 0,y: 400*screenHeight/667,width: screenWidth ,height: 100*screenHeight/1334))
-//        myTextField.placeholder = "Search Ticker."
-//        myTextField.textAlignment = .center
-//        myTextField.setValue(customColor.white68, forKeyPath: "_placeholderLabel.textColor")
-//        myTextField.font = UIFont.systemFont(ofSize: 15)
-//        //myTextField.borderStyle = UITextBorderStyle.roundedRect
-//        myTextField.autocorrectionType = UITextAutocorrectionType.no
-//        myTextField.keyboardType = UIKeyboardType.default
-//        myTextField.returnKeyType = UIReturnKeyType.done
-//        myTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
-//        myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-//        myTextField.delegate = self
-//        myTextField.backgroundColor = customColor.background
-//        myTextField.textColor = customColor.white68
-//        myTextField.tag = 0
+        //        myTextField = UITextField(frame: CGRect(x: 0,y: 400*screenHeight/667,width: screenWidth ,height: 100*screenHeight/1334))
+        //        myTextField.placeholder = "Search Ticker."
+        //        myTextField.textAlignment = .center
+        //        myTextField.setValue(customColor.white68, forKeyPath: "_placeholderLabel.textColor")
+        //        myTextField.font = UIFont.systemFont(ofSize: 15)
+        //        //myTextField.borderStyle = UITextBorderStyle.roundedRect
+        //        myTextField.autocorrectionType = UITextAutocorrectionType.no
+        //        myTextField.keyboardType = UIKeyboardType.default
+        //        myTextField.returnKeyType = UIReturnKeyType.done
+        //        myTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
+        //        myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        //        myTextField.delegate = self
+        //        myTextField.backgroundColor = customColor.background
+        //        myTextField.textColor = customColor.white68
+        //        myTextField.tag = 0
         
         addTextField = UITextField(frame: CGRect(x: 0,y: 200,width: screenWidth ,height: 200*screenHeight/1334))
         addTextField.placeholder = "   Enter Ticker"
@@ -266,7 +232,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addTextField.alpha = 0
         addTextField.tag = 1
         
-    //    slideView.addSubview(myTextField)
+        //    slideView.addSubview(myTextField)
         // slideView.addSubview(addTextField)
         addButton(name: menu, x: 0, y: 0, width: 116, height: 122, title: "", font: "", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.menuFunc), addSubview: false)
         slideView.addSubview(menu)
@@ -299,11 +265,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         //amountOfBlocks = loadsave.amount()
         amountOfBlocks = Set.alertCount
         whoseOnFirst(container)
+        
     }
     
     
     @objc private func longPress(_ gesture: UIGestureRecognizer) {
-        print("longpress!!!")
+        guard amountOfBlocks > 3 else {return}
         startedPan = false
         alertScroller.isScrollEnabled = false
         if longpressOnce {
@@ -311,7 +278,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
                 if blocks[i].frame.contains(gesture.location(in: alertScroller)) {
                     savedFrameOrigin = blocks[i].frame.origin
-                    print("longpress2!!!")
                     blocks[i].frame.origin.y -= 6*screenHeight/667
                     blocks[i].frame.origin.x -= 6*screenHeight/667
                     movingAlert = i
@@ -360,13 +326,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 delay(bySeconds: 0.3) {
                     self.alertScroller.isScrollEnabled = true
                 }
-                print("SAM")
+                
                 var i = CGFloat(0)
                 for block in blocks {
                     Set.ti[Int(i)] = block.stockTickerLabel.text!
                     block.layer.zPosition = i + 2
                     i += 1
-                    print(block.stockTickerLabel.text)
+                    
                 }
                 delay(bySeconds: 0.5) {
                     self.alertScroller.backgroundColor = self.customColor.black33
@@ -374,33 +340,34 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 }
                 
                 myTimer2.invalidate()
-                print("CALLED REBOOT")
+                
                 reboot()
                 delay(bySeconds: 0.5) {
                     self.longpressOnce = true
                 }
-                print("aaaachoooo")
-                print(alertScroller.contentOffset.y)
+                
+                
                 if alertScroller.contentOffset.y < 0 {
                     UIView.animate(withDuration: 0.5) {
                         self.alertScroller.contentOffset.y = 0
                     }
                 }
             }
-             Set.saveUserInfo()
+            Set.saveUserInfo()
         }
         
     }
     var startedPan = false
     var q = Int()
     @objc private func pan(_ gesture: UIPanGestureRecognizer) {
+        guard amountOfBlocks > 3 else {return}
         startedPan = true
         if movingAlert != 9999 {
-            print("pan2!!!")
+            
             if gesture.state == UIGestureRecognizerState.changed {
                 
                 let translation = gesture.translation(in: view)
-                print(alertScroller.contentOffset.y)
+                
                 if alertScroller.contentOffset.y > -20*screenHeight/667 && alertScroller.contentOffset.y < val - 130*screenHeight/667 {
                     switch alertInMotion.center.y - alertScroller.contentOffset.y {
                     case -100...0:
@@ -474,13 +441,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 delay(bySeconds: 0.3) {
                     self.alertScroller.isScrollEnabled = true
                 }
-                print("SAM")
+                
                 var i = CGFloat(0)
                 for block in blocks {
                     Set.ti[Int(i)] = block.stockTickerLabel.text!
                     block.layer.zPosition = i + 2
                     i += 1
-                    print(block.stockTickerLabel.text)
                 }
                 delay(bySeconds: 0.5) {
                     self.alertScroller.backgroundColor = self.customColor.black33
@@ -488,16 +454,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 }
                 
                 myTimer2.invalidate()
-                print("CALLED REBOOT")
+                
                 reboot()
                 delay(bySeconds: 0.5) {
                     self.longpressOnce = true
                 }
-                print("aaaachoooo")
-                print(alertScroller.contentOffset.y)
                 if alertScroller.contentOffset.y < 0 {
                     UIView.animate(withDuration: 0.5) {
-                    self.alertScroller.contentOffset.y = 0
+                        self.alertScroller.contentOffset.y = 0
                     }
                 }
             }
@@ -509,7 +473,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     }
                 } else if gesture.translation(in: view).x > 0 && self.blocks[i].slideView.frame.origin.x != 0 {
                     UIView.animate(withDuration: 0.6) {
-                    self.blocks[i].slideView.frame.origin.x = 0
+                        self.blocks[i].slideView.frame.origin.x = 0
                     }
                 }
             }
@@ -524,31 +488,29 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         var check = false
         var position: CGFloat = 1
         
-        print("CCCCCCC")
-        print(blocks.count)
         for i in 0..<blocks.count {
             
             
             if (button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text) {
-             Set.ti.removeAll()
+                Set.ti.removeAll()
                 
                 UIView.animate(withDuration: 0.6) {
                     self.blocks[i].removeFromSuperview()
-                   // self.blocks[i].slideView.frame.origin.x = 0
+                    // self.blocks[i].slideView.frame.origin.x = 0
                 }
                 check = true
                 for k in 0..<i {
                     self.blocks[k].layer.zPosition = position; position += 1
                     newBlocks.append(blocks[k])
                     Set.ti.append(blocks[k].stockTickerGlobal)
-
+                    
                 }
                 if i != (blocks.count - 1) {
                     for k in (i+1)..<blocks.count {
                         self.blocks[k].layer.zPosition = position; position += 1
                         newBlocks.append(blocks[k])
                         Set.ti.append(blocks[k].stockTickerGlobal)
-
+                        
                     }
                 }
             }
@@ -565,10 +527,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
         
         Set.alertCount = amountOfBlocks
-      
+        
         loadsave.resaveBlocks(blocks: blocks)
         Set.alertCount = amountOfBlocks
-
+        
         reboot()
         Set.saveUserInfo()
     }
@@ -576,10 +538,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     @objc private func detail(_ gesture: UIGestureRecognizer) {
         for block in blocks {
-            print("EEEEEEE")
+            
             let frame = view.convert(block.frame, from:alertScroller)
             if frame.contains(gesture.location(in: view)) {
-                print("FFFFFF")
+                
                 stringToPass = block.stockTickerGlobal
                 self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
             }
@@ -607,8 +569,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     private func populateCompareGraph() {
-        print("Set.alertCount: \(Set.alertCount)")
-        print("Set.ti: \(Set.ti)")
+        
         switch Set.alertCount {
         case 0:
             break
@@ -629,13 +590,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             container2.addSubview(svDot1)
             
         default:
-            print("WTF")
-            print(Set.ti[0])
-            print(Set.oneYearDictionary[Set.ti[0]])
-            print(Set.ti[1])
-            print(Set.oneYearDictionary[Set.ti[1]])
-            print(Set.ti[2])
-            print(Set.oneYearDictionary[Set.ti[2]])
             sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
             sv1 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
             sv2 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
@@ -670,7 +624,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         for i in 0...11 {
             if scrollView.contentSize.width*CGFloat(Double(i+1)-2.05)/12...scrollView.contentSize.width*CGFloat(Double(i+1)-2.0)/12 ~= scrollView.contentOffset.x {
-                print("Set.alertCount: \(Set.alertCount)")
+                
                 switch Set.alertCount {
                 case 0:
                     break
@@ -686,7 +640,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 }
                 
                 monthIndicator.text = Set.month[i]
-
+                
                 switch Set.alertCount {
                 case 0:
                     break
@@ -733,8 +687,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                             } else {
                                 self.stock1.frame.origin.y = 120*self.screenHeight/1334
                                 if self.sv1.percentSetVal[i] > self.sv2.percentSetVal[i] {
-                                self.stock2.frame.origin.y = 24*self.screenHeight/1334
-                                self.stock3.frame.origin.y = 72*self.screenHeight/1334
+                                    self.stock2.frame.origin.y = 24*self.screenHeight/1334
+                                    self.stock3.frame.origin.y = 72*self.screenHeight/1334
                                 } else {
                                     self.stock2.frame.origin.y = 72*self.screenHeight/1334
                                     self.stock3.frame.origin.y = 24*self.screenHeight/1334
@@ -780,10 +734,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         self.performSegue(withIdentifier: "fromMainToSettings", sender: self)
     }
     @objc private func legalFunc(_ sender: UIButton) {
-        sender.setTitle("NOT SETUP YET", for: .normal)
+        UIApplication.shared.openURL(URL(string: "http://firetailapp.com/legal")!)
     }
     @objc private func supportFunc(_ sender: UIButton) {
-        sender.setTitle("NOT SETUP YET", for: .normal)
+        sendEmail()
     }
     @objc private func goPremiumFunc(_ sender: UIButton) {
         // Create the alert controller
@@ -793,7 +747,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
             UIAlertAction in
             self.purchase()
-            print("OK Pressed")
+            
         }
         let restoreAction = UIAlertAction(title: "Restore Purchase", style: UIAlertActionStyle.default) {
             UIAlertAction in
@@ -803,7 +757,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     print("Restore Failed: \(results.restoreFailedProducts)")
                 }
                 else if results.restoredProducts.count > 0 {
-                 
+                    
                     Set.premium = true
                     //self.loadsave.savePurchase(purchase: "firetail.iap.premium")
                     self.premiumMember = true
@@ -860,19 +814,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     @objc private func addFunc(_ sender: UIButton) {
         if premiumMember || alertCount < 3 || true { //hack
             self.performSegue(withIdentifier: "fromMainToAdd", sender: self)
-//            let cover = UIView(frame: view.frame)
-//            cover.backgroundColor = customColor.black24
-//            cover.alpha = 0.0
-//            slideView.addSubview(cover)
-//            slideView.addSubview(addTextField)
-//            
-//            UIView.animate(withDuration: 1.0) {
-//                self.addTextField.alpha = 1.0
-//                cover.alpha = 1.0
-//            }
-//            delay(bySeconds: 0.8) {
-//                self.addTextField.becomeFirstResponder()
-//            }
+            
         } else if !premiumMember {
             purchase()
         }
@@ -880,12 +822,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField.tag == 0 {
-//            self.view.endEditing(true)
-//            if myTextField.text != nil && myTextField.delegate != nil {
-//                
-//                stringToPass = myTextField.text!
-//                goToGraph()
-//            }
+            
         } else if textField.tag == 1 {
             if addTextField.text != nil && addTextField.delegate != nil {
                 
@@ -896,8 +833,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         return false
     }
-    
-    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "fromMainToGraph" {
@@ -910,13 +845,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             addView.newAlertTicker = "TICKER"
             addView.isSeguedFromDashboard = true
         }
-        
-        
     }
     
     @objc private func goToGraph() {
         self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
-        
     }
     
     func purchase(productId: String = "firetail.iap.premium") {
@@ -928,19 +860,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         SwiftyStoreKit.purchaseProduct(productId) { result in
             switch result {
             case .success( _):
-                print("enter1")
-        
-             //   self.loadsave.savePurchase(purchase: productId)
                 self.premiumMember = true
                 self.activityView.removeFromSuperview()
-                
-                
-                
             case .error(let error):
                 self.userWarning(title: "", message: "Purchase Failed: \(error)")
                 print("error: \(error)")
                 print("Purchase Failed: \(error)")
-                print("enter5")
                 self.activityView.removeFromSuperview()
             }
         }
@@ -953,6 +878,64 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         } else {
             return false
         }
+    }
+    
+    func sendEmail() {
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setToRecipients(["support@firetailapp.com"])
+            present(mail, animated: true)
+        } else {
+            // show failure alert
+        }
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+    }
+    
+    func populateAlertBars() {
+       //TEST Set.weeklyAlerts = ["mon":1,"tues":2,"wed":3,"thur":10,"fri":1]
+        let monday = Set.weeklyAlerts["mon"] ?? 0
+        let tuesday = Set.weeklyAlerts["tues"] ?? 0
+        let wednesday = Set.weeklyAlerts["wed"] ?? 0
+        let thursday = Set.weeklyAlerts["thur"] ?? 0
+        let friday = Set.weeklyAlerts["fri"] ?? 0
+        let sum = monday + tuesday + wednesday + thursday + friday
+        if sum > 0 {
+            daysOfTheWeek.alpha = 1.0
+        }
+        print("DOTW")
+        print(Set.weeklyAlerts)
+        //need to add bars when alerts are triggered
+        var i = 0
+        for day in [monday,tuesday,wednesday,thursday,friday] {
+            var bar = UILabel()
+            if day > 1 {
+                bar = UILabel(frame: CGRect(x: 93*screenWidth/750, y: 406*screenHeight/1334, width: 6*screenWidth/750, height: 74*screenHeight/1334))
+                bar.backgroundColor = customColor.yellow
+                view.addSubview(bar)
+            } else if day == 1 {
+                bar = UILabel(frame: CGRect(x: 93*screenWidth/750, y: 446*screenHeight/1334, width: 6*screenWidth/750, height: 34*screenHeight/1334))
+                bar.backgroundColor = customColor.yellow
+                view.addSubview(bar)
+            }
+            switch i {
+            case 1:
+                bar.frame.origin.x += 35*screenWidth/750
+            case 2:
+                bar.frame.origin.x += 69*screenWidth/750
+            case 3:
+                bar.frame.origin.x += 104*screenWidth/750
+            case 4:
+                bar.frame.origin.x += 134*screenWidth/750
+            default:
+                break
+            }
+            i += 1
+        }
+        
     }
     
 }

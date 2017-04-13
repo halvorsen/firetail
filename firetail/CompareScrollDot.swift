@@ -36,13 +36,12 @@ class CompareScrollDot: UIView {
             _set.append(CGFloat(graphData[Int(21*i)]))
         }
         _set.append(CGFloat(graphData.last!))
-        print("_set: \(_set)")
         
         _set = _set.map { $0 * rangeMultiplier / _set.first! }
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
-        print("__set: \(__set)")
+
         data = __set
-        print("HERE IS DATA POST PROCESS: \(data)")
+
         setNeedsDisplay()
         
     }

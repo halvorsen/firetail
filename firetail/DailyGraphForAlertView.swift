@@ -48,12 +48,9 @@ class DailyGraphForAlertView: UIView {
         _set = graphData.map {1 - ($0 - min / range) } // values go from 0 to 1
         pointSet = _set.map { CGFloat(x + CGFloat($0)*y) }
         __set = [pointSet.first!] + pointSet + [pointSet.last!] //adds extra datapoint to make quadratic curves look good on ends
-        print("__set: \(__set)")
-        //data = __set
+
         data = graphData.map {CGFloat(($0-min)/range)}
         allStockValues = graphData.map {String($0)}
-        //allStockValues = __set.map {String(Double($0))}
-        print("HERE IS DATA POST PROCESS: \(data)")
         setNeedsDisplay()
 
 
@@ -84,7 +81,6 @@ class DailyGraphForAlertView: UIView {
         
         for i in 1..<points.count {
             drawPoint(point: points[i], color: .white, radius: 1)
-            print("point \(point)")
 
         }
         
@@ -180,7 +176,7 @@ class DailyGraphForAlertView: UIView {
             grid.backgroundColor = customColor.whiteAlpha
             self.addSubview(grid)
             grids.append(grid)
-            print("grid Count: \(grids.count)")
+
         }
         
         return path;

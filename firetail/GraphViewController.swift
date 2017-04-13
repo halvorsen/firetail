@@ -116,7 +116,7 @@ class GraphViewController: ViewSetup {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let mainView: DashboardViewController = segue.destination as! DashboardViewController
+   //     let mainView: DashboardViewController = segue.destination as! DashboardViewController
     }
     
     @objc private func back(_ sender: UIButton) {
@@ -126,12 +126,17 @@ class GraphViewController: ViewSetup {
     @objc private func trade(_ sender: UIButton) {
         if Set.brokerName != "none" {
         UIApplication.shared.openURL(URL(string: brokersDictionary[Set.brokerName]!)!)
+        } else {
+            let alert = UIAlertController(title: "Error", message: "Add Broker in Firetail Settings", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
+    
     @objc private func pickGraph(_ tap: UITapGestureRecognizer) {
         
-        var layerAnimation = CABasicAnimation(keyPath: "path")
+        let layerAnimation = CABasicAnimation(keyPath: "path")
         layerAnimation.duration = 0.7
         layerAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         layerAnimation.fillMode = kCAFillModeBoth
@@ -181,7 +186,6 @@ class GraphViewController: ViewSetup {
     var yVals = [String:(l1:String,l2:String,l3:String,l4:String,l5:String)]()
     
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
-        let serialQueue = DispatchQueue(label: "queuename", qos: DispatchQoS.userInitiated)
         
         if stockData.1[self.i] != nil {
             

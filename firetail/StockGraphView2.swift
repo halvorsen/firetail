@@ -157,7 +157,7 @@ class StockGraphView2: UIView {
         let originalAmount = original.count
         var _original = original
         
-        let last = original.last! //<--added to get the last value equal to last closing price and not average
+      //  let last = original.last! //<--added to get the last value equal to last closing price and not average
         
         let setAmount: Int = originalAmount/15
         var outputValues = [Double](repeating: 0, count: 15)
@@ -177,19 +177,15 @@ class StockGraphView2: UIView {
         }
         outputValues[14] += Double(setAmount)*Set.currentPrice //<--added to get the last value equal to last closing price and not average
         //outputValues.append(Double(setAmount)*Set.currentPrice)
-        print("YIKES")
-        print(Set.currentPrice)
+
         if g == "1d" {
-            print("Last2")
-            print(Set.yesterday)
+ 
             outputValues[0] = Double(setAmount)*Set.yesterday
             
         }
    
         _outputValues = outputValues.map { $0 / Double(setAmount) }
-        print("GETOUT!")
-        print()
-        print(_outputValues)
+
                return _outputValues
         
     }
@@ -313,49 +309,9 @@ class StockGraphView2: UIView {
         self.backgroundColor = customColor.gray
         layerView.frame = self.bounds
         self.addSubview(layerView)
-        
-        
-        
-        
-//        var yLabels: [String] {
-//            get {
-//                var _yLabels = [String]()
-//                var largeRange = true
-//                let range = dataEntries.yMaximum - dataEntries.yMinimum
-//                print("Peanut Butter")
-//                print(range)
-//                print(dataEntries.yMaximum)
-//                print(dataEntries.yMinimum)
-//                if range < 7 {
-//                    largeRange = false
-//                }
-//                print("RANCH DRESSING!!!!")
-//                print(largeRange)
-//                for i in 0...4 {
-//                    let atom = Float(i)*Float(dataEntries.yMaximum - dataEntries.yMinimum)/4
-//                    if i != 0 && i != 4 {
-//                        if !largeRange {
-//                        _yLabels.append(String(format: "%.1f", Float(dataEntries.yMinimum) + atom) + "0")
-//                        } else {
-//                            _yLabels.append(String(Int(dataEntries.yMinimum + CGFloat(atom))))
-//                            
-//                        }
-//                    } else {
-//                        if !largeRange {
-//                        _yLabels.append(String(format: "%.2f", Float(dataEntries.yMinimum) + atom))
-//                        } else {
-//                            _yLabels.append(String(Int(dataEntries.yMinimum + CGFloat(atom))))
-//                        }
-//                    }
-//                }
-//                print("Jelly Man")
-//                print(_yLabels)
-//                return _yLabels
-//            }
-//        }
-        var xLabels: [String] {
+         var xLabels: [String] {
             get {
-                var _xLabels = ["Max","5y","1y","3m","1m","5d","1d"]
+                let _xLabels = ["Max","5y","1y","3m","1m","5d","1d"]
                 return _xLabels
             }
         }

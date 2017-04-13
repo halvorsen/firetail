@@ -15,7 +15,6 @@ class Dot: UIView {
     // An empty implementation adversely affects performance during animation.
     
     override func draw(_ rect: CGRect) {
-        let ctx = UIGraphicsGetCurrentContext()
         let path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height))
         UIColor.white.setFill()
         path.fill()

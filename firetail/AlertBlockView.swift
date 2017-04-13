@@ -38,7 +38,6 @@ class AlertBlockView: UIView {
         emailGlobal = email
         flashGlobal = flash
         urgentGlobal = urgent
-        let t = stockTicker
         self.backgroundColor = customColor.white153
         
         addButton(name: ex, x: 750 - 120, y: 0, width: 120, height: 120, title: "", font: "HelveticaNeue-light", fontSize: 40, titleColor: customColor.black33, bgColor: customColor.white249, cornerRad: 0, boarderW: 0, boarderColor: .clear, addSubview: true)

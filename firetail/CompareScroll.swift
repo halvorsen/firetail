@@ -40,18 +40,12 @@ class CompareScroll: UIView {
             _set.append(CGFloat(graphData[Int(21*i)]))
         }
         _set.append(CGFloat(graphData.last!))
-        print(stockName)
-        print("_set: \(_set)")
-        
+
         _set = _set.map { $0 * rangeMultiplier / _set.first! }
         percentSet = _set.map { String(format: "%.1f", $0 * 10 - 100 ) }
         percentSetVal = _set.map { $0 * 10 - 100 }
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
-        print("__set: \(__set)")
-        print("COUNT2")
-        print(__set.count)
         data = __set
-        print("HERE IS DATA POST PROCESS: \(data)")
         setNeedsDisplay()
         
     }

@@ -86,11 +86,11 @@ class LoadSaveCoreData {
 
     public static func saveUserInfoToFirebase(username:String,fullName:String,email:String,phone:String,premium:Bool,numOfAlerts:Int,brokerName:String,brokerURL:String,weeklyAlerts:[String:Int],userAlerts:[String:String], token: String) {
         
-        let ref = FIRDatabase.database().reference(withPath: "users")
+      //  let ref = FIRDatabase.database().reference(withPath: "users")
 
         let rootRef = FIRDatabase.database().reference()
 
-        let childRef = FIRDatabase.database().reference(withPath: "users")
+      //  let childRef = FIRDatabase.database().reference(withPath: "users")
 
         let itemsRef = rootRef.child("users")
 
@@ -110,15 +110,14 @@ class LoadSaveCoreData {
     
     func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: Bool, push: Bool, alertLongName: String) {
         
-        let ref = FIRDatabase.database().reference(withPath: "alerts")
+     //   let ref = FIRDatabase.database().reference(withPath: "alerts")
         
         let rootRef = FIRDatabase.database().reference()
         
-        let childRef = FIRDatabase.database().reference(withPath: "alerts")
+     //   let childRef = FIRDatabase.database().reference(withPath: "alerts")
         
         let itemsRef = rootRef.child("alerts")
 
-        print("Timestamp Alert Name: \(alertLongName)")
         let alertRef = itemsRef.child(alertLongName)
         let dict = ["isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker,"push":push, "urgent":urgent,"triggered":triggered] as [String : Any]
         alertRef.setValue(dict)
