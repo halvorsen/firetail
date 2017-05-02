@@ -82,11 +82,16 @@ class ViewSetup: UIViewController {
     var screenHeight: CGFloat {get{return UIScreen.main.bounds.height}}
     var fontSizeMultiplier: CGFloat {get{return UIScreen.main.bounds.width / 375}}
     var topMargin: CGFloat {get{return (269/1332)*UIScreen.main.bounds.height}}
-    let cover = UIView()
+    
     
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
+    
+    
+    
+    
     
     func getOneYearData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
         
@@ -279,6 +284,8 @@ class ViewSetup: UIViewController {
         present(refreshAlert, animated: true, completion: nil)
     }
     
+    
+    
 }
 
 extension String {
@@ -328,5 +335,7 @@ extension String {
             return false
         }
     }
+    
+    
 }
 

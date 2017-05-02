@@ -13,5 +13,6 @@ target 'firetail' do
   pod 'Firebase/Database'
   pod 'Firebase/Messaging'
   pod 'SwiftyStoreKit'
+  pod 'ReachabilitySwift', '~> 3'
 
 end

@@ -11,9 +11,12 @@ import BigBoard
 import Firebase
 import FirebaseAuth
 import FirebaseCore
+import ReachabilitySwift
+
 
 class LoginViewController: ViewSetup, UITextFieldDelegate {
-    
+    let coverInternet = UIView()
+    let reachability = Reachability()!
     var customColor = CustomColor()
     var login = UIButton()
     var continueB = UIButton()
@@ -34,11 +37,13 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     let firetail = UILabel()
     let myLoadSaveCoreData = LoadSaveCoreData()
     var isFirstLoading = true
-    
-    
+    //FIXIT some reason adding the cover view crashes things
+    override func viewDidAppear(_ animated: Bool) {
+   //     reachabilityAddNotification()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        addNoInternetCover()
+        
         loadsave.loadUsername()
         coverView.frame = view.frame
         coverView.backgroundColor = customColor.black33
@@ -94,6 +99,20 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             }
         }
         
+    }
+    
+    func reachabilityAddNotification() {
+        //declare this property where it won't go out of scope relative to your listener
+        
+        
+        //declare this inside of viewWillAppear
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged),name: ReachabilityChangedNotification,object: reachability)
+        do{
+            try reachability.startNotifier()
+        }catch{
+            print("could not start reachability notifier")
+        }
     }
     
     func loadUserInfoFromFirebase(firebaseUsername: String) {
@@ -199,6 +218,41 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         
+    }
+    
+    func reachabilityChanged(note: NSNotification) {
+        
+        let reachability = note.object as! Reachability
+        
+        if reachability.isReachable {
+            if reachability.isReachableViaWiFi {
+                print("Reachable via WiFi")
+            } else {
+                print("Reachable via Cellular")
+            }
+        } else {
+            print("Network not reachable")
+            addNoInternetCover()
+        }
+    }
+    func removeNoInternetCover() {
+        coverInternet.removeFromSuperview()
+    }
+    func addNoInternetCover() {
+        coverInternet.frame = view.bounds
+        coverInternet.backgroundColor = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
+        view.addSubview(coverInternet)
+        let imageView = UIImageView()
+        imageView.frame = CGRect(x: 127*screenWidth/375, y:64*screenHeight/667, width: 122*screenWidth/375, height: 157*screenHeight/667)
+        imageView.image = #imageLiteral(resourceName: "flames")
+        coverInternet.addSubview(imageView)
+        let label = UILabel()
+        label.frame = CGRect(x: 0, y:290*screenHeight/667, width: screenWidth, height: 30*screenHeight/667)
+        label.text = "NO INTERNET"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont(name: "Roboto-Bold", size: fontSizeMultiplier*15)
+        coverInternet.addSubview(label)
     }
     
     func textFieldDidBeginEditing(_ textField : UITextField)

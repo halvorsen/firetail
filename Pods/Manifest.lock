@@ -57,6 +57,7 @@ PODS:
   - GTMSessionFetcher/Core (1.1.9)
   - ObjectMapper (2.2.6)
   - Protobuf (3.3.0)
+  - ReachabilitySwift (3)
   - SwiftCharts (0.6)
   - SwiftyStoreKit (0.8.6)
 
@@ -67,6 +68,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - Firebase/Messaging
+  - ReachabilitySwift (~> 3)
   - SwiftCharts (~> 0.2)
   - SwiftyStoreKit
 
@@ -87,9 +89,10 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5c046c76a1f859bc9c187e918f18e4fc7bb57b5e
   ObjectMapper: 042708195cc46c20871cbcbec0453826398273fd
   Protobuf: d582fecf68201eac3d79ed61369ef45734394b9c
+  ReachabilitySwift: f5b9bb30a0777fac8f09ce8b067e32faeb29bb64
   SwiftCharts: d8e6d60679bc982f48f8bea25cf5c1b94fcfec4f
   SwiftyStoreKit: 3cd98b53dc4ab9fd33c1023a8eae38225ebae312
 
-PODFILE CHECKSUM: 1e5710d8fdb532d7057b4235b44886c48c8a82ae
+PODFILE CHECKSUM: f7ad18fba8b598ac67652bd43cd91a63eb5c2db9
 
 COCOAPODS: 1.2.1
