@@ -53,7 +53,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     let mask = UIView()
     var alertID: [String] {
         var aaa = [String]()
-        for i in 0...Set.alertCount {
+        for i in 0...Set1.alertCount {
             switch i {
             case 0...9:
                 aaa.append("alert00" + String(i))
@@ -112,6 +112,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         textField2.backgroundColor = .clear
         textField2.textColor = customColor.white216
         textField2.tag = 0
+        textField2.keyboardAppearance = .dark
         view.addSubview(textField2)
         
         myTextField = UITextField(frame: CGRect(x: 60*screenWidth/750,y: 1014*screenHeight/1334,width: 240*screenWidth/750 ,height: 80*screenHeight/1334))
@@ -128,6 +129,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         myTextField.backgroundColor = .clear
         myTextField.textColor = .white
         myTextField.tag = 1
+        myTextField.keyboardAppearance = .dark
         view.addSubview(myTextField)
         
         phoneTextField = UITextField(frame: CGRect(x: 375*screenWidth/750,y: 800*screenHeight/1334,width: 375*screenWidth/750 ,height: 80*screenHeight/1334))
@@ -144,6 +146,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         phoneTextField.backgroundColor = .clear
         phoneTextField.textColor = .white
         phoneTextField.tag = 2
+        phoneTextField.keyboardAppearance = .dark
         view.addSubview(phoneTextField)
         phoneTextField.alpha = 0.0
         
@@ -339,7 +342,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     override func viewWillAppear(_ animated: Bool) {
         getOneYearData(stockName: newAlertTicker) {
             
-            Set.oneYearDictionary[$1] = $0
+            Set1.oneYearDictionary[$1] = $0
             
         }
         print("AlertID: \(alertID)")
@@ -406,7 +409,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             case 0:
                 newAlertBoolTuple.0 = true
             case 1:
-                if Set.phone == "none" {
+                if Set1.phone == "none" {
                     phoneTextField.alpha = 1.0
                     phoneTextField.becomeFirstResponder()
                 } else {
@@ -443,22 +446,22 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         guard isStock == true else {return}
         guard myTextField.text != nil else {return}
         guard textField2.text != nil else {return}
-        Set.ti.append(newAlertTicker)
+        Set1.ti.append(newAlertTicker)
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID = newAlertTicker.lowercased() + timestamp
-        Set.userAlerts[alertID[Set.alertCount]] = newAlertLongID
-        Set.alertCount += 1
+        Set1.userAlerts[alertID[Set1.alertCount]] = newAlertLongID
+        Set1.alertCount += 1
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 {
-            Set.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, true, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3) }
+            Set1.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, true, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3) }
         else {
-            Set.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, newAlertBoolTuple.1, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3)
+            Set1.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, newAlertBoolTuple.1, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3)
         }
         if newAlertTicker != "TICKER" {
             if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 {
-                myloadsave.saveAlertToFirebase(username: Set.username, ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: true, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
+                myloadsave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: true, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
             } else {
-                myloadsave.saveAlertToFirebase(username: Set.username, ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
+                myloadsave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
             }
             
             self.performSegue(withIdentifier: "fromAddToMain", sender: self)
@@ -560,7 +563,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         if textField.tag == 2 {
             phoneTextField.alpha = 0.0
             if phoneTextField.text != nil {
-                Set.phone = phoneTextField.text!
+                Set1.phone = phoneTextField.text!
             }
             
             //check if phone number is valid then turn on switch else send invalid alert
@@ -583,7 +586,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 
                 getOneYearData(stockName: myTextField.text!.uppercased()) {
                     
-                    Set.oneYearDictionary[$1] = $0
+                    Set1.oneYearDictionary[$1] = $0
                     
                 }
                 

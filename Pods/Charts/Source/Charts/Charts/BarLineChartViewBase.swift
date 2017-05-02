@@ -19,11 +19,6 @@ import CoreGraphics
 /// Base-class of LineChart, BarChart, ScatterChart and CandleStickChart.
 open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartDataProvider, NSUIGestureRecognizerDelegate
 {
-    //aaron halvorsen edit
-    open var globalPathInBase: CGMutablePath? = nil
-    //aaron halvorsen end
-    
-    
     /// the maximum number of entries to which values will be drawn
     /// (entry numbers greater than this value will cause value-labels to disappear)
     internal var _maxVisibleCount = 100
@@ -179,14 +174,22 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         // execute all drawing commands
         drawGridBackground(context: context)
         
+
+        if _autoScaleMinMaxEnabled
+        {
+            autoScale()
+        }
+
         if _leftAxis.isEnabled
         {
             _leftYAxisRenderer?.computeAxis(min: _leftAxis._axisMinimum, max: _leftAxis._axisMaximum, inverted: _leftAxis.isInverted)
         }
+        
         if _rightAxis.isEnabled
         {
             _rightYAxisRenderer?.computeAxis(min: _rightAxis._axisMinimum, max: _rightAxis._axisMaximum, inverted: _rightAxis.isInverted)
         }
+        
         if _xAxis.isEnabled
         {
             _xAxisRenderer?.computeAxis(min: _xAxis._axisMinimum, max: _xAxis._axisMaximum, inverted: false)
@@ -196,25 +199,22 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         _leftYAxisRenderer?.renderAxisLine(context: context)
         _rightYAxisRenderer?.renderAxisLine(context: context)
 
-        if _autoScaleMinMaxEnabled
-        {
-            autoScale()
-        }
-        
         // The renderers are responsible for clipping, to account for line-width center etc.
         _xAxisRenderer?.renderGridLines(context: context)
         _leftYAxisRenderer?.renderGridLines(context: context)
         _rightYAxisRenderer?.renderGridLines(context: context)
         
-        if _xAxis.isDrawLimitLinesBehindDataEnabled
+        if _xAxis.isEnabled && _xAxis.isDrawLimitLinesBehindDataEnabled
         {
             _xAxisRenderer?.renderLimitLines(context: context)
         }
-        if _leftAxis.isDrawLimitLinesBehindDataEnabled
+        
+        if _leftAxis.isEnabled && _leftAxis.isDrawLimitLinesBehindDataEnabled
         {
             _leftYAxisRenderer?.renderLimitLines(context: context)
         }
-        if _rightAxis.isDrawLimitLinesBehindDataEnabled
+        
+        if _rightAxis.isEnabled && _rightAxis.isDrawLimitLinesBehindDataEnabled
         {
             _rightYAxisRenderer?.renderLimitLines(context: context)
         }
@@ -234,15 +234,17 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         
         renderer!.drawExtras(context: context)
         
-        if !_xAxis.isDrawLimitLinesBehindDataEnabled
+        if _xAxis.isEnabled && !_xAxis.isDrawLimitLinesBehindDataEnabled
         {
             _xAxisRenderer?.renderLimitLines(context: context)
         }
-        if !_leftAxis.isDrawLimitLinesBehindDataEnabled
+        
+        if _leftAxis.isEnabled && !_leftAxis.isDrawLimitLinesBehindDataEnabled
         {
             _leftYAxisRenderer?.renderLimitLines(context: context)
         }
-        if !_rightAxis.isDrawLimitLinesBehindDataEnabled
+        
+        if _rightAxis.isEnabled && !_rightAxis.isDrawLimitLinesBehindDataEnabled
         {
             _rightYAxisRenderer?.renderLimitLines(context: context)
         }
@@ -286,8 +288,16 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         _xAxis.calculate(min: data.xMin, max: data.xMax)
         
         // calculate axis range (min / max) according to provided data
-        _leftAxis.calculate(min: data.getYMin(axis: .left), max: data.getYMax(axis: .left))
-        _rightAxis.calculate(min: data.getYMin(axis: .right), max: data.getYMax(axis: .right))
+        
+        if _leftAxis.isEnabled
+        {
+            _leftAxis.calculate(min: data.getYMin(axis: .left), max: data.getYMax(axis: .left))
+        }
+        
+        if _rightAxis.isEnabled
+        {
+            _rightAxis.calculate(min: data.getYMin(axis: .right), max: data.getYMax(axis: .right))
+        }
         
         calculateOffsets()
     }
@@ -949,7 +959,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     
     /// MARK: Viewport modifiers
     
-    /// Zooms in by 1.4, into the charts center. center.
+    /// Zooms in by 1.4, into the charts center.
     open func zoomIn()
     {
         let center = _viewPortHandler.contentCenter
@@ -962,7 +972,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         setNeedsDisplay()
     }
 
-    /// Zooms out by 0.7, from the charts center. center.
+    /// Zooms out by 0.7, from the charts center.
     open func zoomOut()
     {
         let center = _viewPortHandler.contentCenter
@@ -970,6 +980,17 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         let matrix = _viewPortHandler.zoomOut(x: center.x, y: -center.y)
         let _ = _viewPortHandler.refresh(newMatrix: matrix, chart: self, invalidate: false)
 
+        // Range might have changed, which means that Y-axis labels could have changed in size, affecting Y-axis size. So we need to recalculate offsets.
+        calculateOffsets()
+        setNeedsDisplay()
+    }
+    
+    /// Zooms out to original size.
+    open func resetZoom()
+    {
+        let matrix = _viewPortHandler.resetZoom()
+        let _ = _viewPortHandler.refresh(newMatrix: matrix, chart: self, invalidate: false)
+        
         // Range might have changed, which means that Y-axis labels could have changed in size, affecting Y-axis size. So we need to recalculate offsets.
         calculateOffsets()
         setNeedsDisplay()

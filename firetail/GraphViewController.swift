@@ -124,12 +124,13 @@ class GraphViewController: ViewSetup {
     }
     
     @objc private func trade(_ sender: UIButton) {
-        if Set.brokerName != "none" {
-        UIApplication.shared.openURL(URL(string: brokersDictionary[Set.brokerName]!)!)
+        if Set1.brokerName != "none" {
+        UIApplication.shared.openURL(URL(string: brokersDictionary[Set1.brokerName]!)!)
         } else {
-            let alert = UIAlertController(title: "Error", message: "Add Broker in Firetail Settings", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            self.userWarning(title: "", message: "Add Broker in Firetail Settings")
+//            let alert = UIAlertController(title: "Error", message: "Add Broker in Firetail Settings", preferredStyle: UIAlertControllerStyle.alert)
+//            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+//            self.present(alert, animated: true, completion: nil)
         }
     }
     
@@ -413,11 +414,11 @@ class GraphViewController: ViewSetup {
 
                         if key == "1m" {
                             // let z = stockData.1[self.i]!.closingPrice.count - 1
-                            Set.yesterday = stockData.closingPrice.last!
+                            Set1.yesterday = stockData.closingPrice.last!
                         }
                         
                         if key == "1d" {
-                            Set.currentPrice = stockData.closingPrice.last!
+                            Set1.currentPrice = stockData.closingPrice.last!
                         }
                         
                         stockDatas.append(stockData)

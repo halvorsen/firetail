@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1212" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XTk-aP-Bp1">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XTk-aP-Bp1">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -32,6 +32,27 @@
             </objects>
             <point key="canvasLocation" x="-3244" y="0.0"/>
         </scene>
+        <!--Change Password View Controller-->
+        <scene sceneID="g2J-ei-aa6">
+            <objects>
+                <viewController id="012-vx-pdX" customClass="ChangePasswordViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vnh-Ju-fPe"/>
+                        <viewControllerLayoutGuide type="bottom" id="ZY3-mp-x0W"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Nfl-NE-hYQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="hTR-Nv-iEl" kind="show" identifier="fromChangePasswordToSettings" id="8EG-cA-84j"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d4c-TI-sWK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2486" y="-1811"/>
+        </scene>
         <!--Settings View Controller-->
         <scene sceneID="ima-GP-eQY">
             <objects>
@@ -47,6 +68,7 @@
                     </view>
                     <connections>
                         <segue destination="9Rf-87-nHj" kind="show" identifier="fromSettingsToMain" id="7KN-h2-kPs"/>
+                        <segue destination="012-vx-pdX" kind="show" identifier="fromSettingsToChangePassword" id="Qxa-Im-Wul"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qsJ-WB-oWX" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -142,7 +164,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="j56-Bz-xny"/>
         <segue reference="S7Y-sp-YOE"/>
+        <segue reference="8EG-cA-84j"/>
+        <segue reference="7KN-h2-kPs"/>
     </inferredMetricsTieBreakers>
 </document>

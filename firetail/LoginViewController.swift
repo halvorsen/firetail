@@ -38,7 +38,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        addNoInternetCover()
         loadsave.loadUsername()
         coverView.frame = view.frame
         coverView.backgroundColor = customColor.black33
@@ -76,9 +76,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 // 3
                 self.alreadyAUser = true
                 self.authenticated = true
-                if Set.username != "none" {
+                if Set1.username != "none" {
                    if self.isFirstLoading {
-                    self.loadUserInfoFromFirebase(firebaseUsername: Set.username)
+                    self.loadUserInfoFromFirebase(firebaseUsername: Set1.username)
                         self.isFirstLoading = false
                     }
                 }    
@@ -104,23 +104,23 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             // Get user value
             let value = snapshot.value as? NSDictionary
             // Set.username = value?["username"] as? String ?? "none"
-            Set.fullName = value?["fullName"] as? String ?? "none"
-            Set.email = value?["email"] as? String ?? "none"
-            Set.phone = value?["phone"] as? String ?? "none"
-            Set.premium = value?["premium"] as? Bool ?? false
-            Set.alertCount = value?["numOfAlerts"] as? Int ?? 0
-            Set.brokerName = value?["brokerName"] as? String ?? "none"
-            Set.brokerURL = value?["brokerURL"] as? String ?? "none"
-            Set.weeklyAlerts = value?["weeklyAlerts"] as? [String:Int] ?? ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
-            if Set.alertCount > 0 {
-                Set.userAlerts = value?["userAlerts"] as! [String:String]
+            Set1.fullName = value?["fullName"] as? String ?? "none"
+            Set1.email = value?["email"] as? String ?? "none"
+            Set1.phone = value?["phone"] as? String ?? "none"
+            Set1.premium = value?["premium"] as? Bool ?? false
+            Set1.alertCount = value?["numOfAlerts"] as? Int ?? 0
+            Set1.brokerName = value?["brokerName"] as? String ?? "none"
+            Set1.brokerURL = value?["brokerURL"] as? String ?? "none"
+            Set1.weeklyAlerts = value?["weeklyAlerts"] as? [String:Int] ?? ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
+            if Set1.alertCount > 0 {
+                Set1.userAlerts = value?["userAlerts"] as! [String:String]
             }
             
-            if Set.userAlerts.count > 0 {
+            if Set1.userAlerts.count > 0 {
 
                 var alertID: [String] {
                     var aaa = [String]()
-                    for i in 0..<Set.alertCount {
+                    for i in 0..<Set1.alertCount {
                         switch i {
                         case 0...9:
                             aaa.append("alert00" + String(i))
@@ -134,8 +134,8 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     }
                     return aaa
                 }
-                let uA = Set.userAlerts
-                for i in 0..<Set.userAlerts.count {
+                let uA = Set1.userAlerts
+                for i in 0..<Set1.userAlerts.count {
                     if uA[alertID[i]] != nil {
                     ref.child("alerts").child(uA[alertID[i]]!).observeSingleEvent(of: .value, with: { (snapshot) in
                         
@@ -158,7 +158,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                             let _sms = value?["sms"] as? Bool ?? false
                             //  sms.append(_sms)
                             let _ticker = value?["ticker"] as? String ?? ""
-                            Set.ti.append(_ticker)
+                            Set1.ti.append(_ticker)
                             //   ticker.append(_ticker)
                             let _push = value?["push"] as? Bool ?? false
                             //   push.append(_push)
@@ -166,9 +166,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                             //   urgent.append(_urgent)
                             let _triggered = value?["triggered"] as? Bool ?? false
                             //   triggered.append(_triggered)
-                            Set.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent)
+                            Set1.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent)
                         }
-                        self.ti = Set.ti
+                        self.ti = Set1.ti
                         if self.ti.count != 0 {
                             
                             self.fetch()
@@ -225,7 +225,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     if !stockStrings.contains($1) && $0 != nil {
                         stockStrings.append($1)
                         
-                        Set.oneYearDictionary[$1] = $0
+                        Set1.oneYearDictionary[$1] = $0
                     }
                     
                     j += 1
@@ -287,6 +287,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 myTextField.backgroundColor = .clear
                 myTextField.textColor = .white
                 myTextField.font = UIFont(name: "Roboto-Italic", size: 15)
+                myTextField.keyboardAppearance = .dark
                 view.addSubview(myTextField)
                 myTextFields.append(myTextField)
             }
@@ -302,7 +303,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         //In this instance we need to load an already existing username and not creating a new one!!! WARNING WARNING!!!!
         loadsave.saveUsername(username: firstTwo + timestamp)
-        Set.username = firstTwo + timestamp
+        Set1.username = firstTwo + timestamp
         
         FIRAuth.auth()!.signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!, completion: { (user, error) in
             if error != nil{

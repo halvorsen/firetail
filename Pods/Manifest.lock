@@ -1,43 +1,44 @@
 PODS:
-  - Alamofire (4.3.0)
+  - Alamofire (4.4.0)
   - AlamofireImage (3.2.0):
     - Alamofire (~> 4.1)
-  - AlamofireObjectMapper (4.0.1):
+  - AlamofireObjectMapper (4.1.0):
     - Alamofire (~> 4.1)
     - ObjectMapper (~> 2.0)
-  - BigBoard (1.1.4):
+  - BigBoard (1.1.6):
     - AlamofireImage (~> 3.0)
     - AlamofireObjectMapper (~> 4.0)
-  - Charts (3.0.1):
-    - Charts/Core (= 3.0.1)
-  - Charts/Core (3.0.1)
-  - Firebase/Auth (3.13.0):
+  - Charts (3.0.2):
+    - Charts/Core (= 3.0.2)
+  - Charts/Core (3.0.2)
+  - Firebase/Auth (3.17.0):
     - Firebase/Core
     - FirebaseAuth (= 3.1.1)
-  - Firebase/Core (3.13.0):
-    - FirebaseAnalytics (= 3.7.0)
-    - FirebaseCore (= 3.5.0)
-  - Firebase/Database (3.13.0):
+  - Firebase/Core (3.17.0):
+    - FirebaseAnalytics (= 3.9.0)
+    - FirebaseCore (= 3.6.0)
+  - Firebase/Database (3.17.0):
     - Firebase/Core
     - FirebaseDatabase (= 3.1.2)
-  - Firebase/Messaging (3.13.0):
+  - Firebase/Messaging (3.17.0):
     - Firebase/Core
-    - FirebaseMessaging (= 1.2.2)
-  - FirebaseAnalytics (3.7.0):
-    - FirebaseCore (~> 3.5)
+    - FirebaseMessaging (= 1.2.3)
+  - FirebaseAnalytics (3.9.0):
+    - FirebaseCore (~> 3.6)
     - FirebaseInstanceID (~> 1.0)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
   - FirebaseAuth (3.1.1):
     - FirebaseAnalytics (~> 3.7)
     - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
     - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseCore (3.5.0):
+  - FirebaseCore (3.6.0):
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
   - FirebaseDatabase (3.1.2):
     - FirebaseAnalytics (~> 3.7)
-  - FirebaseInstanceID (1.0.9)
-  - FirebaseMessaging (1.2.2):
-    - FirebaseAnalytics (~> 3.7)
+  - FirebaseInstanceID (1.0.10):
+    - FirebaseCore (~> 3.6)
+  - FirebaseMessaging (1.2.3):
+    - FirebaseAnalytics (~> 3.8)
     - FirebaseInstanceID (~> 1.0)
     - GoogleToolboxForMac/Logger (~> 2.1)
     - Protobuf (~> 3.1)
@@ -53,11 +54,11 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.1.1)
     - GoogleToolboxForMac/NSString+URLArguments (= 2.1.1)
   - GoogleToolboxForMac/NSString+URLArguments (2.1.1)
-  - GTMSessionFetcher/Core (1.1.8)
-  - ObjectMapper (2.2.2)
-  - Protobuf (3.2.0)
-  - SwiftCharts (0.5.1)
-  - SwiftyStoreKit (0.7.1)
+  - GTMSessionFetcher/Core (1.1.9)
+  - ObjectMapper (2.2.6)
+  - Protobuf (3.3.0)
+  - SwiftCharts (0.6)
+  - SwiftyStoreKit (0.8.6)
 
 DEPENDENCIES:
   - BigBoard
@@ -70,25 +71,25 @@ DEPENDENCIES:
   - SwiftyStoreKit
 
 SPEC CHECKSUMS:
-  Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
   AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
-  AlamofireObjectMapper: 842d2eed43a4d0593ff0110d54ac86a170c4519c
-  BigBoard: d67b60e45121154be712706d026d09b23f941fa4
-  Charts: 0e84f4418e87dad6a9edde221fba37ebb51d3ba7
-  Firebase: 5bc34d7b5ff5792e3386c8b28dc6265deeab0da4
-  FirebaseAnalytics: 0d1b7d81d5021155be37702a94ba1ec16d45365d
+  AlamofireObjectMapper: 435adc82f5b367679bd9e71c4974a54efd0b2521
+  BigBoard: 96f35a69824d4ce42fe5040f5118a7cc7f5e4f8f
+  Charts: 236d6ccdd0ce6feae151d89e829a7397381a21fd
+  Firebase: 4b66b5b59c43edac745b87f0c87e42cdd0279c13
+  FirebaseAnalytics: e5fe8486efc01bec33f6bf82e2fa9fce4b124052
   FirebaseAuth: cc8a1824170adbd351edb7f994490a3fb5c18be6
-  FirebaseCore: 1c0a13bf59bb95cdd19577252499f0ec6a03e999
+  FirebaseCore: 9691ee2ade70c098d7cf92440f4303f16d83ca75
   FirebaseDatabase: 05c96d7b43a7368dc91c07791adb49683e1738d1
-  FirebaseInstanceID: 2d0518b1378fe9d685ef40cbdd63d2fdc1125339
-  FirebaseMessaging: df8267f378580a24174ce7861233aa11d5c90109
+  FirebaseInstanceID: b9eedd6846fb5e1f0f7279e1deaa7a7e4cf8392e
+  FirebaseMessaging: 753d05a925e9eb8eadd09a0ffc9b808578b72fac
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
-  GTMSessionFetcher: 6f8d8b28b7e345549ac471071608170b31cb4977
-  ObjectMapper: 9e385c2295bcc4e16eabbcfc85db801442bba545
-  Protobuf: 745f59e122e5de98d4d7ef291e264a0eef80f58e
-  SwiftCharts: d263289cdc7fc955fef54ae3bc6529f696e69933
-  SwiftyStoreKit: 3db119f5c6fcb8c36c7b4e8ac703a5319dc2bcfe
+  GTMSessionFetcher: 5c046c76a1f859bc9c187e918f18e4fc7bb57b5e
+  ObjectMapper: 042708195cc46c20871cbcbec0453826398273fd
+  Protobuf: d582fecf68201eac3d79ed61369ef45734394b9c
+  SwiftCharts: d8e6d60679bc982f48f8bea25cf5c1b94fcfec4f
+  SwiftyStoreKit: 3cd98b53dc4ab9fd33c1023a8eae38225ebae312
 
 PODFILE CHECKSUM: 1e5710d8fdb532d7057b4235b44886c48c8a82ae
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.1

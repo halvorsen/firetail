@@ -71,7 +71,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var val = CGFloat()
     var alertID: [String] {
         var aaa = [String]()
-        for i in 0..<Set.alertCount {
+        for i in 0..<Set1.alertCount {
             switch i {
             case 0...9:
                 aaa.append("alert00" + String(i))
@@ -88,10 +88,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     override func viewWillAppear(_ animated: Bool) {
         
-        if Set.alertCount > 0 {
-            for i in 0..<Set.alertCount {
+        if Set1.alertCount > 0 {
+            for i in 0..<Set1.alertCount {
                 
-                let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: Set.alerts[Set.userAlerts[alertID[i]]!]!.ticker, currentPrice: Set.alerts[Set.userAlerts[alertID[i]]!]!.price, sms: Set.alerts[Set.userAlerts[alertID[i]]!]!.sms, email: Set.alerts[Set.userAlerts[alertID[i]]!]!.email, flash: Set.alerts[Set.userAlerts[alertID[i]]!]!.flash, urgent: Set.alerts[Set.userAlerts[alertID[i]]!]!.urgent, longName: Set.userAlerts[alertID[i]]!)
+                let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.ticker, currentPrice: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.price, sms: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.sms, email: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.email, flash: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.flash, urgent: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.urgent, longName: Set1.userAlerts[alertID[i]]!)
                 
                 block.ex.addTarget(self, action: #selector(DashboardViewController.act(_:)), for: .touchUpInside)
                 
@@ -110,13 +110,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             val = 0
         }
         
-        Set.saveUserInfo()
+        Set1.saveUserInfo()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        premiumMember = Set.premium
+        premiumMember = Set1.premium
         longPress = UILongPressGestureRecognizer(target: self, action: #selector(DashboardViewController.longPress(_:)))
         view.addGestureRecognizer(longPress)
         longPress.delegate = self
@@ -129,7 +129,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addLabel(name: date, text: "\(d.day) \(m[d.month])", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 124, width: 150, height: 32, lines: 1)
         view.addSubview(date)
         
-        addLabel(name: alertAmount, text: String(Set.alertCount), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
+        addLabel(name: alertAmount, text: String(Set1.alertCount), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
         view.addSubview(alertAmount)
         addLabel(name: alerts1102, text: "Alerts", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 324, width: 260, height: 28, lines: 1)
         alerts1102.alpha = 0.5
@@ -161,13 +161,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         container.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
-        addLabel(name: monthIndicator, text: Set.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 22, lines: 1)
+        addLabel(name: monthIndicator, text: Set1.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 22, lines: 1)
         
         addLabel(name: stock1, text: "", textColor: customColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 24, width: 352, height: 48, lines: 0)
         addLabel(name: stock2, text: "", textColor: customColor.white128, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 72, width: 352, height: 48, lines: 0)
         addLabel(name: stock3, text: "", textColor: customColor.white209, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 120, width: 352, height: 48, lines: 0)
         
-        switch Set.alertCount {
+        switch Set1.alertCount {
         case 0:
             break
         case 1:
@@ -231,6 +231,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addTextField.textColor = customColor.white68
         addTextField.alpha = 0
         addTextField.tag = 1
+        addTextField.keyboardAppearance = .dark
         
         //    slideView.addSubview(myTextField)
         // slideView.addSubview(addTextField)
@@ -263,7 +264,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         mask.backgroundColor = customColor.black33
         slideView.addSubview(mask)
         //amountOfBlocks = loadsave.amount()
-        amountOfBlocks = Set.alertCount
+        amountOfBlocks = Set1.alertCount
         whoseOnFirst(container)
         
     }
@@ -329,7 +330,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
                 var i = CGFloat(0)
                 for block in blocks {
-                    Set.ti[Int(i)] = block.stockTickerLabel.text!
+                    Set1.ti[Int(i)] = block.stockTickerLabel.text!
                     block.layer.zPosition = i + 2
                     i += 1
                     
@@ -353,7 +354,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     }
                 }
             }
-            Set.saveUserInfo()
+            Set1.saveUserInfo()
         }
         
     }
@@ -430,7 +431,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
                 var i = CGFloat(0)
                 for block in blocks {
-                    Set.ti[Int(i)] = block.stockTickerLabel.text!
+                    Set1.ti[Int(i)] = block.stockTickerLabel.text!
                     block.layer.zPosition = i + 2
                     i += 1
                 }
@@ -478,7 +479,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             
             
             if (button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text) {
-                Set.ti.removeAll()
+                Set1.ti.removeAll()
                 
                 UIView.animate(withDuration: 0.6) {
                     self.blocks[i].removeFromSuperview()
@@ -488,14 +489,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 for k in 0..<i {
                     self.blocks[k].layer.zPosition = position; position += 1
                     newBlocks.append(blocks[k])
-                    Set.ti.append(blocks[k].stockTickerGlobal)
+                    Set1.ti.append(blocks[k].stockTickerGlobal)
                     
                 }
                 if i != (blocks.count - 1) {
                     for k in (i+1)..<blocks.count {
                         self.blocks[k].layer.zPosition = position; position += 1
                         newBlocks.append(blocks[k])
-                        Set.ti.append(blocks[k].stockTickerGlobal)
+                        Set1.ti.append(blocks[k].stockTickerGlobal)
                         
                     }
                 }
@@ -512,13 +513,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         alertAmount.text = String(amountOfBlocks)
         alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
         
-        Set.alertCount = amountOfBlocks
+        Set1.alertCount = amountOfBlocks
         
         loadsave.resaveBlocks(blocks: blocks)
-        Set.alertCount = amountOfBlocks
+        Set1.alertCount = amountOfBlocks
         
         reboot()
-        Set.saveUserInfo()
+        Set1.saveUserInfo()
     }
     
     
@@ -556,32 +557,32 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     private func populateCompareGraph() {
         
-        switch Set.alertCount {
+        switch Set1.alertCount {
         case 0:
             break
         case 1:
-            sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
-            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
+            sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
+            svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
             container.addSubview(sv)
             container2.addSubview(svDot)
             
         case 2:
-            sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
-            sv1 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
-            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
-            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
+            sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
+            sv1 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
+            svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
+            svDot1 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
             container.addSubview(sv)
             container.addSubview(sv1)
             container2.addSubview(svDot)
             container2.addSubview(svDot1)
             
         default:
-            sv =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
-            sv1 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
-            sv2 =  CompareScroll(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
-            svDot =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[0]]!, stockName: Set.ti[0], color: customColor.white68)
-            svDot1 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[1]]!, stockName: Set.ti[1], color: customColor.white128)
-            svDot2 =  CompareScrollDot(graphData: Set.oneYearDictionary[Set.ti[2]]!, stockName: Set.ti[2], color: customColor.white209)
+            sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
+            sv1 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
+            sv2 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[2]]!, stockName: Set1.ti[2], color: customColor.white209)
+            svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
+            svDot1 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
+            svDot2 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[2]]!, stockName: Set1.ti[2], color: customColor.white209)
             container.addSubview(sv)
             container.addSubview(sv1)
             container.addSubview(sv2)
@@ -611,7 +612,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         for i in 0...11 {
             if scrollView.contentSize.width*CGFloat(Double(i+1)-2.05)/12...scrollView.contentSize.width*CGFloat(Double(i+1)-2.0)/12 ~= scrollView.contentOffset.x {
                 
-                switch Set.alertCount {
+                switch Set1.alertCount {
                 case 0:
                     break
                 case 1:
@@ -625,9 +626,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     stock3.text = "\(sv2.stock): \(sv2.percentSet[i])%"
                 }
                 
-                monthIndicator.text = Set.month[i]
+                monthIndicator.text = Set1.month[i]
                 
-                switch Set.alertCount {
+                switch Set1.alertCount {
                 case 0:
                     break
                 case 1:
@@ -744,7 +745,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 }
                 else if results.restoredProducts.count > 0 {
                     
-                    Set.premium = true
+                    Set1.premium = true
                     //self.loadsave.savePurchase(purchase: "firetail.iap.premium")
                     self.premiumMember = true
                 }
@@ -883,17 +884,17 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     func populateAlertBars() {
         //TEST Set.weeklyAlerts = ["mon":1,"tues":2,"wed":3,"thur":10,"fri":1]
-        let monday = Set.weeklyAlerts["mon"] ?? 0
-        let tuesday = Set.weeklyAlerts["tues"] ?? 0
-        let wednesday = Set.weeklyAlerts["wed"] ?? 0
-        let thursday = Set.weeklyAlerts["thur"] ?? 0
-        let friday = Set.weeklyAlerts["fri"] ?? 0
+        let monday = Set1.weeklyAlerts["mon"] ?? 0
+        let tuesday = Set1.weeklyAlerts["tues"] ?? 0
+        let wednesday = Set1.weeklyAlerts["wed"] ?? 0
+        let thursday = Set1.weeklyAlerts["thur"] ?? 0
+        let friday = Set1.weeklyAlerts["fri"] ?? 0
         let sum = monday + tuesday + wednesday + thursday + friday
         if sum > 0 {
             daysOfTheWeek.alpha = 1.0
         }
         print("DOTW")
-        print(Set.weeklyAlerts)
+        print(Set1.weeklyAlerts)
         //need to add bars when alerts are triggered
         var i = 0
         for day in [monday,tuesday,wednesday,thursday,friday] {

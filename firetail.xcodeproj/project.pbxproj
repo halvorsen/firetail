@@ -13,6 +13,8 @@
 		0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4CC1E649578005965C5 /* SignupViewController.swift */; };
 		0609E4CF1E649596005965C5 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4CE1E649596005965C5 /* LoginViewController.swift */; };
 		0609E4D11E64A5EA005965C5 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0609E4D01E64A5EA005965C5 /* Roboto-Italic.ttf */; };
+		06110EA91EB925BF00C901C5 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06110EA81EB925BF00C901C5 /* ChangePasswordViewController.swift */; };
+		06110EAD1EB93A0700C901C5 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06110EAC1EB93A0700C901C5 /* UIExtensions.swift */; };
 		0613068C1E625996008E5898 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0613068B1E625996008E5898 /* Roboto-Regular.ttf */; };
 		0613068E1E626DBA008E5898 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0613068D1E626DBA008E5898 /* Roboto-Bold.ttf */; };
 		061306901E626FC9008E5898 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0613068F1E626FC9008E5898 /* Roboto-Light.ttf */; };
@@ -45,6 +47,8 @@
 		0609E4CC1E649578005965C5 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		0609E4CE1E649596005965C5 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0609E4D01E64A5EA005965C5 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Italic.ttf"; sourceTree = "<group>"; };
+		06110EA81EB925BF00C901C5 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
+		06110EAC1EB93A0700C901C5 /* UIExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
 		0613068B1E625996008E5898 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		0613068D1E626DBA008E5898 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		0613068F1E626FC9008E5898 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				06A914021E817E0900D032A9 /* firetail.entitlements */,
+				06110EAC1EB93A0700C901C5 /* UIExtensions.swift */,
 				069FD1211E5382D4003BDFE2 /* AppDelegate.swift */,
 				069FD1231E5382D4003BDFE2 /* GraphViewController.swift */,
 				0609E4A71E632DF4005965C5 /* DashboardViewController.swift */,
@@ -127,6 +132,7 @@
 				06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */,
 				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
 				069FD1251E5382D4003BDFE2 /* Main.storyboard */,
+				06110EA81EB925BF00C901C5 /* ChangePasswordViewController.swift */,
 				069FD12B1E5382D4003BDFE2 /* Assets.xcassets */,
 				0609E4D01E64A5EA005965C5 /* Roboto-Italic.ttf */,
 				0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */,
@@ -272,7 +278,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		FE571FB095EE8D6F88829340 /* [CP] Embed Pods Frameworks */ = {
@@ -309,7 +315,9 @@
 				0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */,
 				0617DFA11E7B6F81006D73C5 /* GridLine.swift in Sources */,
 				06FDA8DC1E7094270043BC90 /* CompareScroll.swift in Sources */,
+				06110EAD1EB93A0700C901C5 /* UIExtensions.swift in Sources */,
 				06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */,
+				06110EA91EB925BF00C901C5 /* ChangePasswordViewController.swift in Sources */,
 				0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */,
 				0609E4A81E632DF4005965C5 /* DashboardViewController.swift in Sources */,
 				069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */,

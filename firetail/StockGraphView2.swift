@@ -175,12 +175,12 @@ class StockGraphView2: UIView {
             outputValues[j] += _original[i]
             }
         }
-        outputValues[14] += Double(setAmount)*Set.currentPrice //<--added to get the last value equal to last closing price and not average
+        outputValues[14] += Double(setAmount)*Set1.currentPrice //<--added to get the last value equal to last closing price and not average
         //outputValues.append(Double(setAmount)*Set.currentPrice)
 
         if g == "1d" {
  
-            outputValues[0] = Double(setAmount)*Set.yesterday
+            outputValues[0] = Double(setAmount)*Set1.yesterday
             
         }
    

@@ -8,8 +8,9 @@
 
 import UIKit
 import BigBoard
+import MessageUI
 
-class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MFMailComposeViewControllerDelegate {
     var customColor = CustomColor()
     var continueB = UIButton()
     var getSupport = UIButton()
@@ -71,6 +72,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             myTextField.textColor = .white
             myTextField.tag = i
             myTextField.font = UIFont(name: "Roboto-Italic", size: 15)
+            myTextField.keyboardAppearance = .dark
             view.addSubview(myTextField)
             myTextFields.append(myTextField)
             
@@ -144,10 +146,24 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
+        if textField.isSecureTextEntry == true {
+            self.performSegue(withIdentifier: "fromSettingsToChangePassword", sender: self)
+        }
     }
     
     @objc private func supportFunc(_ sender: UIButton) {
-      
+      sendEmail()
+    }
+    
+    private func sendEmail() {
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setToRecipients(["support@firetailapp.com"])
+            present(mail, animated: true)
+        } else {
+            // show failure alert
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -157,13 +173,13 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             
                 switch textField.tag {
                 case 0:
-                    Set.email = myTextFields[0].text!
+                    Set1.email = myTextFields[0].text!
                     //change email with firebase
                 case 1:
-                    Set.phone = myTextFields[1].text!
+                    Set1.phone = myTextFields[1].text!
                     
                 case 2:
-                    Set.brokerName = myTextFields[2].text!
+                    Set1.brokerName = myTextFields[2].text!
                 default:
                  // change password with firebase:   myTextFields[2].text!
                     break

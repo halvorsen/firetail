@@ -70,6 +70,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             myTextField.textColor = .white
             myTextField.tag = i
             myTextField.font = UIFont(name: "Roboto-Italic", size: 15)
+            myTextField.keyboardAppearance = .dark
             view.addSubview(myTextField)
             textFields.append(myTextField)
         }
@@ -102,7 +103,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         let firstTwo = textFields[0].text![0...1]
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         loadsave.saveUsername(username: firstTwo + timestamp)
-        Set.username = firstTwo + timestamp
+        Set1.username = firstTwo + timestamp
         
         let emailField = textFields[0].text
         let passwordField = textFields[1].text

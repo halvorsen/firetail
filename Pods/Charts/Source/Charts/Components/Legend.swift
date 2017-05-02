@@ -289,7 +289,7 @@ open class Legend: ComponentBase
     /// this is currently supported only for `orientation == Horizontal`.
     /// you may want to set maxSizePercent when word wrapping, to set the point where the text wraps.
     /// 
-    /// **default**: false
+    /// **default**: true
     open var wordWrapEnabled = true
     
     /// if this is set, then word wrapping the legend is enabled.
@@ -300,10 +300,7 @@ open class Legend: ComponentBase
     /// If the legend is to the top/bottom of the chart, then this affects the height of the legend.
     /// 
     /// **default**: 0.95 (95%)
-    
-    
     open var maxSizePercent: CGFloat = 0.95
- 
     
     open func calculateDimensions(labelFont: NSUIFont, viewPortHandler: ViewPortHandler)
     {

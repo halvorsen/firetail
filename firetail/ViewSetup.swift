@@ -82,6 +82,7 @@ class ViewSetup: UIViewController {
     var screenHeight: CGFloat {get{return UIScreen.main.bounds.height}}
     var fontSizeMultiplier: CGFloat {get{return UIScreen.main.bounds.width / 375}}
     var topMargin: CGFloat {get{return (269/1332)*UIScreen.main.bounds.height}}
+    let cover = UIView()
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -124,7 +125,7 @@ class ViewSetup: UIViewController {
          
                     
                     
-                    Set.month = _month
+                    Set1.month = _month
 
                 }
                 
