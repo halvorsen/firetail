@@ -39,7 +39,8 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var isFirstLoading = true
     //FIXIT some reason adding the cover view crashes things
     override func viewDidAppear(_ animated: Bool) {
-   //     reachabilityAddNotification()
+        reachabilityAddNotification()
+
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +56,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         imageView.frame.origin.y = view.frame.midY - 220
         imageView.layer.zPosition = 11
         view.addSubview(imageView)
+        
+        //reachabilityAddNotification()
+        
         firetail.frame = CGRect(x: 0, y: view.frame.midY - 10, width: screenWidth, height: 65*screenHeight/667)
         firetail.text = "FIRETAIL"
         firetail.font = UIFont(name: "Roboto-Bold", size: 27*fontSizeMultiplier)
@@ -225,6 +229,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         let reachability = note.object as! Reachability
         
         if reachability.isReachable {
+            removeNoInternetCover()
             if reachability.isReachableViaWiFi {
                 print("Reachable via WiFi")
             } else {
@@ -236,12 +241,16 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         }
     }
     func removeNoInternetCover() {
+        if coverInternet.isDescendant(of: view) {
         coverInternet.removeFromSuperview()
+        }
     }
     func addNoInternetCover() {
-        coverInternet.frame = view.bounds
+        
+        //view.subviews.forEach({ $0.removeFromSuperview() })
+        coverInternet.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         coverInternet.backgroundColor = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
-        view.addSubview(coverInternet)
+        
         let imageView = UIImageView()
         imageView.frame = CGRect(x: 127*screenWidth/375, y:64*screenHeight/667, width: 122*screenWidth/375, height: 157*screenHeight/667)
         imageView.image = #imageLiteral(resourceName: "flames")
@@ -253,7 +262,12 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         label.textAlignment = .center
         label.font = UIFont(name: "Roboto-Bold", size: fontSizeMultiplier*15)
         coverInternet.addSubview(label)
+        print(view)
+        print(coverInternet)
+        self.view.addSubview(coverInternet)
+        coverInternet.layer.zPosition = 50
     }
+
     
     func textFieldDidBeginEditing(_ textField : UITextField)
     {

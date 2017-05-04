@@ -369,15 +369,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
                 let translation = gesture.translation(in: view)
                 
-                if alertInMotion.center.y < alertScroller.contentOffset.y + 300*screenHeight/1334 && alertInMotion.center.y > alertScroller.contentOffset.y + 90*screenHeight/1334 {
-                    alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y*CGFloat(2*alertScroller.contentSize.height/alertScroller.frame.height))
-                } else if translation.y < 0 && alertInMotion.center.y >= alertScroller.contentOffset.y + 300*screenHeight/1334 {
-                    alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertScroller.contentOffset.y + 299*screenHeight/1334)
-                } else if translation.y > 0 && alertInMotion.center.y <= alertScroller.contentOffset.y + 90*screenHeight/1334 {
-                    alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertScroller.contentOffset.y + 99*screenHeight/1334)
+                if alertInMotion.center.y + translation.y < alertScroller.contentOffset.y + 300*screenHeight/1334 && alertInMotion.center.y + translation.y > alertScroller.contentOffset.y + 90*screenHeight/1334 {
+                    alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y)
+                    
                 }
-                
-                alertScroller.contentOffset.y = alertScroller.contentOffset.y + translation.y*CGFloat(alertScroller.contentSize.height/alertScroller.frame.height)
+                alertScroller.contentOffset.y = alertScroller.contentOffset.y + translation.y*3
+                alertInMotion.frame.origin.y = alertInMotion.frame.origin.y + translation.y*3
+          
                 
                 gesture.setTranslation(CGPoint(x:0,y:0), in: self.view)
                 if l > -1 {

@@ -7,10 +7,10 @@
 //
 
 import UIKit
-import BigBoard
-import MessageUI
+import Firebase
+import FirebaseAuth
 
-class ChangePasswordViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MFMailComposeViewControllerDelegate {
+class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
     var customColor = CustomColor()
     var continueB = UIButton()
     var getSupport = UIButton()
@@ -18,9 +18,6 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     var myTextFields = [UITextField]()
     var doneLoading = false
     var backArrow = UIButton()
-    var myPicker = UIPickerView()
-    let toolBar = UIToolbar()
-    let pickerData = ["Ameritrade", "Etrade", "Scottrade", "Schwab", "Merrill Edge", "Trademonster", "Capital One Investing", "eOption", "Interactive Brokers", "Kapitall", "Lightspeed", "optionsXpress", "Zacks", "Trade King", "Sogo Trade", "Trading Block", "USAA", "Vangaurd", "Wells Fargo", "Robinhood"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,66 +76,21 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate, UIPickerView
             addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(ChangePasswordViewController.back(_:)), addSubview: true)
             backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         }
-        
-        
-        myPicker.dataSource = self
-        myPicker.delegate = self
-        myPicker.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 177*screenHeight/667)
-        myPicker.backgroundColor = .white
-        myPicker.showsSelectionIndicator = true
-        
-        
-        toolBar.barStyle = UIBarStyle.default
-        toolBar.isTranslucent = true
-        toolBar.tintColor = UIColor(red: 21/255, green: 127/255, blue: 249/255, alpha: 1)
-        toolBar.sizeToFit()
-        
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(AddViewController.donePicker))
-        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(AddViewController.donePicker))
-        
-        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
-        toolBar.isUserInteractionEnabled = true
-        
-        myTextFields[2].inputView = myPicker
-        myTextFields[2].inputAccessoryView = toolBar
+
     }
-    
-    func donePicker() {
-        
-        view.frame.origin.y = 0
-        myPicker.removeFromSuperview()
-        toolBar.removeFromSuperview()
-        
-    }
+
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return pickerData.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerData[row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        myTextFields[2].text = pickerData[row]
-    }
-    
-    @objc private func back(_ sender: UIButton) {
+        @objc private func back(_ sender: UIButton) {
         self.performSegue(withIdentifier: "fromChangePasswordToSettings", sender: self)
     }
     
-//    @objc private func loginFunc(_ sender: UIButton) {
-//        self.performSegue(withIdentifier: "fromSignupToLogin", sender: self)
-//        
-//    }
     @objc private func saveFunc(_ sender: UIButton) {
         
-        self.performSegue(withIdentifier: "fromChangePasswordToSettings", sender: self)
+        saveNewPassword()
         
     }
     
@@ -147,21 +99,9 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
     }
+
     
-    @objc private func supportFunc(_ sender: UIButton) {
-        sendEmail()
-    }
-    
-    private func sendEmail() {
-        if MFMailComposeViewController.canSendMail() {
-            let mail = MFMailComposeViewController()
-            mail.mailComposeDelegate = self
-            mail.setToRecipients(["support@firetailapp.com"])
-            present(mail, animated: true)
-        } else {
-            // show failure alert
-        }
-    }
+   
     var oldPass = String()
     var newPass = String()
     var newPass2 = String()
@@ -194,7 +134,52 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     
     private func saveNewPassword() {
         
+        let passwordField = myTextFields[1].text
+        let passwordField2 = myTextFields[2].text
+        let _oldPassword = myTextFields[0].text
+        
+        guard let password1 = passwordField else {return}
+        guard let password2 = passwordField2 else {return}
+        guard let oldPassword = _oldPassword else {return}
+        
+        guard password1 == password2 else {
+            let alert = UIAlertController(title: "Warning", message: "Passwords Do Not Match", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        guard password1.isValidPassword == true else {
+            let alert = UIAlertController(title: "Invalid Password", message: "6-20 Characters", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        let user = FIRAuth.auth()!.currentUser
+        let newPassword = password1
+        
+        let credential = FIREmailPasswordAuthProvider.credential(withEmail: Set1.email, password: oldPassword)
+        
+        user?.reauthenticate(with: credential, completion: { (error) in
+            if error != nil{
+                let alert = UIAlertController(title: "Error", message: "Error reauthenticating user", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }else{
+                user?.updatePassword(newPassword) { (error) in
+                    if error != nil {
+                        let alert = UIAlertController(title: "Error", message: "Error changing user password", preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                 self.performSegue(withIdentifier: "fromChangePasswordToSettings", sender: self)
+                }
+            }
+        })
+        
     }
     
 }
+
 
