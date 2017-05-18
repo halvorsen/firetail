@@ -12,8 +12,6 @@
 
 import UIKit
 
-
-
 class DailyGraphForAlertView: UIView {
     
     let screenWidth = UIScreen.main.bounds.width
