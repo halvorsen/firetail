@@ -120,12 +120,13 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         priceLabel.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
         priceLabel.textAlignment = .left
         priceLabel.textColor = .white
+        priceLabel.text = "$25.0"
         view.addSubview(priceLabel)
         
         //Stock ticker label/textfield
-        myTextField = UITextField(frame: CGRect(x: 99*screenWidth/375,y: 569*screenHeight/667,width: 110*screenWidth/375 ,height: 80*screenHeight/1334))
+        myTextField = UITextField(frame: CGRect(x: 99*screenWidth/375,y: 559*screenHeight/667,width: 110*screenWidth/375 ,height: 80*screenHeight/1334))
         myTextField.placeholder = newAlertTicker
-        myTextField.textAlignment = .left
+        myTextField.textAlignment = .center
         myTextField.clearsOnBeginEditing = true
         myTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
         myTextField.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
@@ -158,11 +159,9 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         view.addSubview(phoneTextField)
         phoneTextField.alpha = 0.0
         
-        let add = UIButton()
-        addButton(name: add, x: 610, y: 0, width: 140, height: 140, title: "  +", font: "Roboto-Light", fontSize: 45, titleColor: customColor.black33, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.add(_:)), addSubview: false)
-        add.titleLabel?.textAlignment = .center
         
         
+        dial.backgroundColor = .clear
         dial.frame = CGRect(x: 0, y: 597*screenHeight/667, width: 305*screenWidth/375, height: 70*screenWidth/375)
         dial.contentSize = CGSize(width: 10*screenWidth, height: dial.bounds.height)
         view.addSubview(dial)
@@ -303,9 +302,9 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         
         
     }
-    
+    var displayValues = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
     func populateDialView() {
-        for i in 0..<280 {
+        for i in 0..<360 {
             let tickTop = UILabel()
             tickTop.frame = CGRect(x: CGFloat(i)*11*screenWidth/375, y: 0, width: 1*screenWidth/375, height: 10*screenWidth/375)
             tickTop.backgroundColor = customColor.white115
@@ -318,6 +317,13 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 tickTop.frame.size.height = 14*screenWidth/375
                 tickBottom.frame.size.height = 14*screenWidth/375
                 tickBottom.frame.origin.y -= 4*screenWidth/375
+                let alertOption = UILabel()
+                alertOption.frame = CGRect(x: tickTop.frame.midX - 50, y: tickTop.frame.maxY, width: 100, height: tickBottom.frame.minY - tickTop.frame.maxY)
+                alertOption.text = String(displayValues[i/5])
+                alertOption.textAlignment = .center
+                alertOption.textColor = customColor.white115
+                alertOption.font = UIFont(name: "Roboto-Regular", size: 12*fontSizeMultiplier)
+                dial.addSubview(alertOption)
             }
             dial.addSubview(tickTop)
             dial.addSubview(tickBottom)
@@ -325,14 +331,26 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         }
         let dialMask = UILabel()
         dialMask.frame = CGRect(x: 0, y: 597*screenHeight/667, width: 305*screenWidth/375, height: 70*screenWidth/375)
-        addGradient(mask: dialMask, color1: customColor.black33, color2: customColor.black33Alpha0, start: CGPoint(x: 0.0, y: 35*screenWidth/375), end: CGPoint(x: 305*screenWidth/750, y: 35*screenWidth/375))
-        addGradient(mask: dialMask, color1: customColor.black33Alpha0, color2: customColor.black33, start: CGPoint(x: 305*screenWidth/750, y: 35*screenWidth/375), end: CGPoint(x: 305*screenWidth/375, y: 35*screenWidth/375))
+        dialMask.backgroundColor = customColor.black33Alpha0
+        view.addSubview(dialMask)
+        addGradient(mask: dialMask, color1: customColor.black33, color2: customColor.black33Alpha0, start: CGPoint(x: 0.0, y: 0.0), end: CGPoint(x: 0.3, y: 0.0))
+        addGradient(mask: dialMask, color1: customColor.black33Alpha0, color2: customColor.black33, start: CGPoint(x: 0.7, y: 0.0), end: CGPoint(x: 1.0, y: 0.0))
+        
+        
+        let indicator = UIImageView()
+        indicator.image = #imageLiteral(resourceName: "Indicator")
+        indicator.frame = CGRect(x: 142*screenWidth/375, y: screenHeight - 70*screenWidth/375, width: 23*screenWidth/375, height: 12*screenWidth/375)
+        view.addSubview(indicator)
+        
+        let add = UIButton()
+        addButton(name: add, x: 610, y: 1334 - 70*screenWidth*1334/(375*screenHeight), width: 140, height: 140, title: "  +", font: "Roboto-Light", fontSize: 45, titleColor: customColor.black33, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.add(_:)), addSubview: true)
+        add.titleLabel?.textAlignment = .center
         
     }
     
     private func addGradient(mask: UILabel, color1: UIColor, color2: UIColor, start: CGPoint, end: CGPoint){
         let gradient:CAGradientLayer = CAGradientLayer()
-        gradient.frame.size = mask.frame.size
+        gradient.frame.size = mask.bounds.size
         gradient.colors = [color1.cgColor,color2.cgColor]
         gradient.startPoint = start
         gradient.endPoint = end
