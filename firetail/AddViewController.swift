@@ -19,16 +19,18 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     public func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
     }
     var myTextField = UITextField()
-    var textField2 = UITextField()
+   // var textField2 = UITextField()
+    var priceLabel = UILabel()
     var phoneTextField = UITextField()
     let customColor = CustomColor()
     //let alertLabel2 = UILabel()
+    var dial = UIScrollView()
     var alertChangeTimer = Timer()
-    var alertPrice: Double = 0.00 {didSet{textField2.text = "$" + String(format: "%.2f", alertPrice); getPickerData()
-        let c = (textField2.text?.characters.map { String($0) })!
-        let s = textField2.text!
+    var alertPrice: Double = 0.00 {didSet{priceLabel.text = "$" + String(format: "%.2f", alertPrice) //getPickerData()
+        let c = (priceLabel.text?.characters.map { String($0) })!
+        let s = priceLabel.text!
         if c[c.count-2] == "." {
-            textField2.text = s + "0"
+            priceLabel.text = s + "0"
         }
         
         }}
@@ -49,7 +51,6 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     var pickerData = ["$10","$11","$12","$13","$14"]
     var pickerData2 = [".00",".05",".10",".15",".20",".25",".30",".35",".40",".45",".50",".55",".60",".65",".70",".75",".80",".85",".90",".95"]
     var myPicker = UIPickerView()
-    var myLabel = UILabel()
     let mask = UIView()
     var alertID: [String] {
         var aaa = [String]()
@@ -80,42 +81,49 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 1082, width: 240, height: 80, lines: 1)
+        addLabel(name: stockSymbol, text: "create alert", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 1082, width: 240, height: 80, lines: 1)
         view.addSubview(stockSymbol)
         //amountOfBlocksOld = Set.alertCount
         //amountOfBlocksOld = loadsave.amount()
         
         view.backgroundColor = customColor.black24
-        let bottomBar = UIView()
-        bottomBar.frame = CGRect(x: 0, y: 597*screenHeight/667, width: screenWidth, height: 70*screenHeight/667)
-        bottomBar.backgroundColor = customColor.black24
-        view.addSubview(bottomBar)
+//        let bottomBar = UIView()
+//        bottomBar.frame = CGRect(x: 0, y: 597*screenHeight/667, width: screenWidth, height: 70*screenHeight/667)
+//        bottomBar.backgroundColor = customColor.black24
+//        view.addSubview(bottomBar)
         
-        let alertLabel = UILabel()
-        addLabel(name: alertLabel, text: "Price Alert", textColor: customColor.white216, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 64, y: 1242, width: 240, height: 40, lines: 0)
-        view.addSubview(alertLabel)
+//        let alertLabel = UILabel()
+//        addLabel(name: alertLabel, text: "Price Alert", textColor: customColor.white216, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 64, y: 1242, width: 240, height: 40, lines: 0)
+//        view.addSubview(alertLabel)
         
         //addLabel(name: alertLabel2, text: "$", textColor: customColor.white216, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 17, x: 256, y: 1252, width: 240, height: 40, lines: 0)
         //view.addSubview(alertLabel2)
         
-        textField2 = UITextField(frame: CGRect(x: 256*screenWidth/750,y: 1242*screenHeight/1334,width: 240*screenWidth/750 ,height: 40*screenHeight/1334))
-        //textField.placeholder = newAlertTicker
-        textField2.textAlignment = .left
-        textField2.setValue(customColor.white216, forKeyPath: "_placeholderLabel.textColor")
-        textField2.font = UIFont(name: "Roboto-Bold", size: 17*fontSizeMultiplier)
-        textField2.autocorrectionType = UITextAutocorrectionType.no
-        textField2.keyboardType = UIKeyboardType.default
-        textField2.returnKeyType = UIReturnKeyType.done
-        textField2.clearsOnBeginEditing = true
-        textField2.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-        textField2.delegate = self
-        textField2.backgroundColor = .clear
-        textField2.textColor = customColor.white216
-        textField2.tag = 0
-        textField2.keyboardAppearance = .dark
-        view.addSubview(textField2)
+//        textField2 = UITextField(frame: CGRect(x: 256*screenWidth/750,y: 1242*screenHeight/1334,width: 240*screenWidth/750 ,height: 40*screenHeight/1334))
+//        //textField.placeholder = newAlertTicker
+//        textField2.textAlignment = .left
+//        textField2.setValue(customColor.white216, forKeyPath: "_placeholderLabel.textColor")
+//        textField2.font = UIFont(name: "Roboto-Bold", size: 17*fontSizeMultiplier)
+//        textField2.autocorrectionType = UITextAutocorrectionType.no
+//        textField2.keyboardType = UIKeyboardType.default
+//        textField2.returnKeyType = UIReturnKeyType.done
+//        textField2.clearsOnBeginEditing = true
+//        textField2.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+//        textField2.delegate = self
+//        textField2.backgroundColor = .clear
+//        textField2.textColor = customColor.white216
+//        textField2.tag = 0
+//        textField2.keyboardAppearance = .dark
+//        view.addSubview(textField2)
         
-        myTextField = UITextField(frame: CGRect(x: 60*screenWidth/750,y: 1014*screenHeight/1334,width: 240*screenWidth/750 ,height: 80*screenHeight/1334))
+        priceLabel.frame = CGRect(x: 27*screenWidth/375, y: 510*screenHeight/667, width: 150*screenWidth/375, height: 22*screenHeight/667)
+        priceLabel.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
+        priceLabel.textAlignment = .left
+        priceLabel.textColor = .white
+        view.addSubview(priceLabel)
+        
+        //Stock ticker label/textfield
+        myTextField = UITextField(frame: CGRect(x: 99*screenWidth/375,y: 569*screenHeight/667,width: 110*screenWidth/375 ,height: 80*screenHeight/1334))
         myTextField.placeholder = newAlertTicker
         myTextField.textAlignment = .left
         myTextField.clearsOnBeginEditing = true
@@ -152,11 +160,13 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         
         let add = UIButton()
         addButton(name: add, x: 610, y: 0, width: 140, height: 140, title: "  +", font: "Roboto-Light", fontSize: 45, titleColor: customColor.black33, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.add(_:)), addSubview: false)
-        add.titleLabel?.textAlignment = .center //this isnt working for some reason
-        bottomBar.addSubview(add)
+        add.titleLabel?.textAlignment = .center
         
-        //    addButton(name: stockTitle, x: 60, y: 1014, width: 240, height: 80, title: newAlertTicker, font: "Roboto-Medium", fontSize: 20, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.changeTicker(_:)), addSubview: true)
         
+        dial.frame = CGRect(x: 0, y: 597*screenHeight/667, width: 305*screenWidth/375, height: 70*screenWidth/375)
+        dial.contentSize = CGSize(width: 10*screenWidth, height: dial.bounds.height)
+        view.addSubview(dial)
+        populateDialView()
         view.addSubview(stockTitle)
         
         for i in 0...3 {
@@ -288,10 +298,45 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
         
-        textField2.inputView = myPicker
-        textField2.inputAccessoryView = toolBar
+//        textField2.inputView = myPicker
+//        textField2.inputAccessoryView = toolBar
         
         
+    }
+    
+    func populateDialView() {
+        for i in 0..<280 {
+            let tickTop = UILabel()
+            tickTop.frame = CGRect(x: CGFloat(i)*11*screenWidth/375, y: 0, width: 1*screenWidth/375, height: 10*screenWidth/375)
+            tickTop.backgroundColor = customColor.white115
+            let tickBottom = UILabel()
+            tickBottom.frame = CGRect(x: CGFloat(i)*11*screenWidth/375, y: 60*screenWidth/375, width: 1*screenWidth/375, height: 10*screenWidth/375)
+            tickBottom.backgroundColor = customColor.white115
+            
+            
+            if i%5 == 0 {
+                tickTop.frame.size.height = 14*screenWidth/375
+                tickBottom.frame.size.height = 14*screenWidth/375
+                tickBottom.frame.origin.y -= 4*screenWidth/375
+            }
+            dial.addSubview(tickTop)
+            dial.addSubview(tickBottom)
+            
+        }
+        let dialMask = UILabel()
+        dialMask.frame = CGRect(x: 0, y: 597*screenHeight/667, width: 305*screenWidth/375, height: 70*screenWidth/375)
+        addGradient(mask: dialMask, color1: customColor.black33, color2: customColor.black33Alpha0, start: CGPoint(x: 0.0, y: 35*screenWidth/375), end: CGPoint(x: 305*screenWidth/750, y: 35*screenWidth/375))
+        addGradient(mask: dialMask, color1: customColor.black33Alpha0, color2: customColor.black33, start: CGPoint(x: 305*screenWidth/750, y: 35*screenWidth/375), end: CGPoint(x: 305*screenWidth/375, y: 35*screenWidth/375))
+        
+    }
+    
+    private func addGradient(mask: UILabel, color1: UIColor, color2: UIColor, start: CGPoint, end: CGPoint){
+        let gradient:CAGradientLayer = CAGradientLayer()
+        gradient.frame.size = mask.frame.size
+        gradient.colors = [color1.cgColor,color2.cgColor]
+        gradient.startPoint = start
+        gradient.endPoint = end
+        mask.layer.addSublayer(gradient)
     }
     
     func donePicker() {
@@ -316,26 +361,26 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch component {
-        case 0:
-            return pickerData[row]
-        default:
-            return pickerData2[row]
-        }
-    }
-    var dd = "$1"
-    var cc = ".00"
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
-        switch component {
-        case 0:
-            dd = pickerData[row]
-        default:
-            cc = pickerData2[row]
-        }
-        textField2.text = dd + cc
-    }
+//    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+//        switch component {
+//        case 0:
+//            return pickerData[row]
+//        default:
+//            return pickerData2[row]
+//        }
+//    }
+//    var dd = "$1"
+//    var cc = ".00"
+//    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+//        
+//        switch component {
+//        case 0:
+//            dd = pickerData[row]
+//        default:
+//            cc = pickerData2[row]
+//        }
+//       // textField2.text = dd + cc
+//    }
     var apDollar = Int()
     var apDollarString = String()
     var apCentString = String()
@@ -348,32 +393,32 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         print("AlertID: \(alertID)")
     }
     
-    private func getPickerData() {
-        pickerData.removeAll()
-        let ap = alertPrice
-        apDollar = Int(alertPrice)
-
-        apDollarString = String(apDollar)
-        var apCent: String {
-            let a = textField2.text!
-            var last3 = a.substring(from:a.index(a.endIndex, offsetBy: -3))
-        //    let last2 = a.substring(from:a.index(a.endIndex, offsetBy: -2))
-            let last1 = a.substring(from:a.index(a.endIndex, offsetBy: -1))
-            switch last1 {
-            case "1","2","3","4":last3.remove(at: last3.index(before: last3.endIndex)); last3 += "0"
-            case "6","7","8","9":last3.remove(at: last3.index(before: last3.endIndex)); last3 += "5"
-            default: break
-            }
-            return last3
-        }
-        apCentString = apCent
-        for i in 0...100 {
-            if i - 50 + apDollar > 0 {
-                pickerData.append(String(i - 50 + apDollar))
-            }
-        }
-        
-    }
+//    private func getPickerData() {
+//        pickerData.removeAll()
+//        let ap = alertPrice
+//        apDollar = Int(alertPrice)
+//
+//        apDollarString = String(apDollar)
+//        var apCent: String {
+//            let a = textField2.text!
+//            var last3 = a.substring(from:a.index(a.endIndex, offsetBy: -3))
+//        //    let last2 = a.substring(from:a.index(a.endIndex, offsetBy: -2))
+//            let last1 = a.substring(from:a.index(a.endIndex, offsetBy: -1))
+//            switch last1 {
+//            case "1","2","3","4":last3.remove(at: last3.index(before: last3.endIndex)); last3 += "0"
+//            case "6","7","8","9":last3.remove(at: last3.index(before: last3.endIndex)); last3 += "5"
+//            default: break
+//            }
+//            return last3
+//        }
+//        apCentString = apCent
+//        for i in 0...100 {
+//            if i - 50 + apDollar > 0 {
+//                pickerData.append(String(i - 50 + apDollar))
+//            }
+//        }
+//        
+//    }
     
     private func registerForPushNotifications() {
         if #available(iOS 10.0, *) {
@@ -445,7 +490,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     @objc private func add(_ button: UIButton) {
         guard isStock == true else {return}
         guard myTextField.text != nil else {return}
-        guard textField2.text != nil else {return}
+        guard priceLabel.text != nil else {return}
         Set1.ti.append(newAlertTicker)
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
@@ -525,38 +570,38 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         }
     }
     
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        
-        if textField.tag == 2 {
-        } else {
-            if textField.tag == 0 {
-                var row0 = Int()
-                var row1 = Int()
-                for i in 0..<pickerData.count {
-                    if pickerData[i] == apDollarString {
-                        row0 = i
-                    }
-                }
-                for i in 0..<pickerData2.count {
-                    if pickerData2[i] == apCentString {
-                        row1 = i
-                    }
-                }
-                myPicker.selectRow(row0, inComponent: 0, animated: false)
-                pickerView(myPicker, didSelectRow: row0, inComponent: 0)
-                myPicker.selectRow(row1, inComponent: 1, animated: false)
-                pickerView(myPicker, didSelectRow: row1, inComponent: 1)
-                UIView.animate(withDuration: 0.3) {
-                    self.view.frame.origin.y = 446-667
-                    
-                }
-            } else {
-                self.view.frame.origin.y = -135*screenHeight/667
-            }
-        }
-        return true
-        
-    }
+//    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+//        
+//        if textField.tag == 2 {
+//        } else {
+//            if textField.tag == 0 {
+//                var row0 = Int()
+//                var row1 = Int()
+//                for i in 0..<pickerData.count {
+//                    if pickerData[i] == apDollarString {
+//                        row0 = i
+//                    }
+//                }
+//                for i in 0..<pickerData2.count {
+//                    if pickerData2[i] == apCentString {
+//                        row1 = i
+//                    }
+//                }
+//                myPicker.selectRow(row0, inComponent: 0, animated: false)
+//                pickerView(myPicker, didSelectRow: row0, inComponent: 0)
+//                myPicker.selectRow(row1, inComponent: 1, animated: false)
+//                pickerView(myPicker, didSelectRow: row1, inComponent: 1)
+//                UIView.animate(withDuration: 0.3) {
+//                    self.view.frame.origin.y = 446-667
+//                    
+//                }
+//            } else {
+//                self.view.frame.origin.y = -135*screenHeight/667
+//            }
+//        }
+//        return true
+//        
+//    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
@@ -573,8 +618,8 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             UIView.animate(withDuration: 0.6) {
                 self.view.frame.origin.y = 0
             }
-            textField2.tintColor = .clear
-        } else {
+           // textField2.tintColor = .clear
+        } else if textField.tag == 1 {
             container.contentOffset =  CGPoint(x: 2.7*screenWidth, y: 0)
             if myTextField.text != nil && myTextField.delegate != nil {
                 activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
