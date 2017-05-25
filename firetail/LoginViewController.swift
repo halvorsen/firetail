@@ -74,12 +74,12 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         if launchedBefore  {
             print("Not first launch.")
         } else {
-            do {try FIRAuth.auth()?.signOut()}catch { }
+            do {try Auth.auth().signOut()}catch { }
             UserDefaults.standard.set(true, forKey: "launchedBefore")
         }
         
         
-        FIRAuth.auth()!.addStateDidChangeListener() { auth, user in
+        Auth.auth().addStateDidChangeListener() { auth, user in
             // 2
             if user != nil {
                 // 3
@@ -121,7 +121,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     func loadUserInfoFromFirebase(firebaseUsername: String) {
         
-        let ref = FIRDatabase.database().reference()
+        let ref = Database.database().reference()
         
         ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
@@ -373,7 +373,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         loadsave.saveUsername(username: firstTwo + timestamp)
         Set1.username = firstTwo + timestamp
         
-        FIRAuth.auth()!.signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!, completion: { (user, error) in
+        Auth.auth().signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!, completion: { (user, error) in
             if error != nil{
           
                 let alert = UIAlertController(title: "Warning", message: "Incorrect Email or Password.", preferredStyle: UIAlertControllerStyle.alert)

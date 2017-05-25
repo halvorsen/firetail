@@ -156,10 +156,10 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
             return
         }
         
-        let user = FIRAuth.auth()!.currentUser
+        let user = Auth.auth().currentUser
         let newPassword = password1
         
-        let credential = FIREmailPasswordAuthProvider.credential(withEmail: Set1.email, password: oldPassword)
+        let credential = EmailAuthProvider.credential(withEmail: Set1.email, password: oldPassword)
         
         user?.reauthenticate(with: credential, completion: { (error) in
             if error != nil{
@@ -167,7 +167,7 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }else{
-                user?.updatePassword(newPassword) { (error) in
+                user?.updatePassword(to: newPassword) { (error) in
                     if error != nil {
                         let alert = UIAlertController(title: "Error", message: "Error changing user password", preferredStyle: UIAlertControllerStyle.alert)
                         alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))

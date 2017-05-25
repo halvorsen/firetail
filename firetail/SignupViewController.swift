@@ -131,11 +131,11 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             return
         }
         
-        FIRAuth.auth()!.createUser(withEmail: email, password: password1) {
+        Auth.auth().createUser(withEmail: email, password: password1) {
             user, error in
             if error == nil {
                 self.username.text = email
-                FIRAuth.auth()!.signIn(withEmail: email, password: password1) //adds authentication
+                Auth.auth().signIn(withEmail: email, password: password1) //adds authentication
                 self.delay(bySeconds: 1.5) {
                     self.performSegue(withIdentifier: "fromSignupToAdd", sender: self)
                 }

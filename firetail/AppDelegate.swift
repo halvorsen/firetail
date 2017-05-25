@@ -22,11 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        FIRApp.configure()
+        FirebaseApp.configure()
         // Override point for customization after application launch.
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotification(_:)),
-                                                         name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)
+                                                         name: NSNotification.Name.InstanceIDTokenRefresh, object: nil)
         
         return true
     }
@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        FIRMessaging.messaging().disconnect()
+        Messaging.messaging().disconnect()
         print("Disconnected from FCM.")
     }
 
@@ -103,7 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
     @objc private func tokenRefreshNotification(_ notification: Notification) {
-        if let refreshedToken = FIRInstanceID.instanceID().token() {
+        if let refreshedToken = InstanceID.instanceID().token() {
             print("InstanceID token: \(refreshedToken)")
         }
         
@@ -112,14 +112,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     func connectToFcm() {
         // Won't connect since there is no token
-        guard FIRInstanceID.instanceID().token() != nil else {
+        guard InstanceID.instanceID().token() != nil else {
             return
         }
         
         // Disconnect previous FCM connection if it exists.
-        FIRMessaging.messaging().disconnect()
+        Messaging.messaging().disconnect()
         
-        FIRMessaging.messaging().connect { (error) in
+        Messaging.messaging().connect { (error) in
             if error != nil {
                 print("Unable to connect with FCM. \(error?.localizedDescription ?? "")")
             } else {
@@ -128,7 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
     
-    public func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
+    public func applicationReceivedRemoteMessage(_ remoteMessage: MessagingRemoteMessage) {
         print("Minnesota")
     }
     

@@ -12,7 +12,7 @@ import Firebase
 public struct Set1 {
     
     public static var token: String {
-        if let refreshedToken = FIRInstanceID.instanceID().token() {
+        if let refreshedToken = InstanceID.instanceID().token() {
             return refreshedToken
         } else {
             return "none"

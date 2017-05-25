@@ -739,10 +739,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             UIAlertAction in
             
             SwiftyStoreKit.restorePurchases(atomically: true) { results in
-                if results.restoreFailedProducts.count > 0 {
-                    print("Restore Failed: \(results.restoreFailedProducts)")
+                if results.restoreFailedPurchases.count > 0 {
+                    print("Restore Failed: \(results.restoreFailedPurchases)")
                 }
-                else if results.restoredProducts.count > 0 {
+                else if results.restoredPurchases.count > 0 {
                     
                     Set1.premium = true
                     //self.loadsave.savePurchase(purchase: "firetail.iap.premium")

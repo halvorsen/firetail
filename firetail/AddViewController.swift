@@ -13,12 +13,18 @@ import Firebase
 import FirebaseMessaging
 import UserNotifications
 
-class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UNUserNotificationCenterDelegate, FIRMessagingDelegate, UIApplicationDelegate
+class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIApplicationDelegate, UIScrollViewDelegate
 {
-   // The callback to handle data message received via FCM for devices running iOS 10 or above.
-    public func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
+    /// This method will be called whenever FCM receives a new, default FCM token for your
+    /// Firebase project's Sender ID.
+    /// You can send this token to your application server to send notifications to this device.
+    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+        //code
     }
-    var myTextField = UITextField()
+   // The callback to handle data message received via FCM for devices running iOS 10 or above.
+    public func application(received remoteMessage: MessagingRemoteMessage) {
+    }
+    var stockSymbolTextField = UITextField()
    // var textField2 = UITextField()
     var priceLabel = UILabel()
     var phoneTextField = UITextField()
@@ -74,14 +80,14 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     
     override func viewDidAppear(_ animated: Bool) {
         if isSeguedFromDashboard {
-            myTextField.becomeFirstResponder()
+            stockSymbolTextField.becomeFirstResponder()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addLabel(name: stockSymbol, text: "create alert", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 1082, width: 240, height: 80, lines: 1)
+        addLabel(name: stockSymbol, text: "create alert", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 56, y: 1055, width: 240, height: 80, lines: 1)
         view.addSubview(stockSymbol)
         //amountOfBlocksOld = Set.alertCount
         //amountOfBlocksOld = loadsave.amount()
@@ -116,7 +122,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
 //        textField2.keyboardAppearance = .dark
 //        view.addSubview(textField2)
         
-        priceLabel.frame = CGRect(x: 27*screenWidth/375, y: 510*screenHeight/667, width: 150*screenWidth/375, height: 22*screenHeight/667)
+        priceLabel.frame = CGRect(x: 27*screenWidth/375, y: 505*screenHeight/667, width: 150*screenWidth/375, height: 22*screenHeight/667)
         priceLabel.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
         priceLabel.textAlignment = .left
         priceLabel.textColor = .white
@@ -124,22 +130,22 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         view.addSubview(priceLabel)
         
         //Stock ticker label/textfield
-        myTextField = UITextField(frame: CGRect(x: 99*screenWidth/375,y: 559*screenHeight/667,width: 110*screenWidth/375 ,height: 80*screenHeight/1334))
-        myTextField.placeholder = newAlertTicker
-        myTextField.textAlignment = .center
-        myTextField.clearsOnBeginEditing = true
-        myTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
-        myTextField.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
-        myTextField.autocorrectionType = UITextAutocorrectionType.no
-        myTextField.keyboardType = UIKeyboardType.default
-        myTextField.returnKeyType = UIReturnKeyType.done
-        myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-        myTextField.delegate = self
-        myTextField.backgroundColor = .clear
-        myTextField.textColor = .white
-        myTextField.tag = 1
-        myTextField.keyboardAppearance = .dark
-        view.addSubview(myTextField)
+        stockSymbolTextField = UITextField(frame: CGRect(x: 99*screenWidth/375,y: 559*screenHeight/667,width: 110*screenWidth/375 ,height: 80*screenHeight/1334))
+        stockSymbolTextField.placeholder = newAlertTicker
+        stockSymbolTextField.textAlignment = .center
+        stockSymbolTextField.clearsOnBeginEditing = true
+        stockSymbolTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
+        stockSymbolTextField.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
+        stockSymbolTextField.autocorrectionType = UITextAutocorrectionType.no
+        stockSymbolTextField.keyboardType = UIKeyboardType.default
+        stockSymbolTextField.returnKeyType = UIReturnKeyType.done
+        stockSymbolTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        stockSymbolTextField.delegate = self
+        stockSymbolTextField.backgroundColor = .clear
+        stockSymbolTextField.textColor = .white
+        stockSymbolTextField.tag = 1
+        stockSymbolTextField.keyboardAppearance = .dark
+        view.addSubview(stockSymbolTextField)
         
         phoneTextField = UITextField(frame: CGRect(x: 375*screenWidth/750,y: 800*screenHeight/1334,width: 375*screenWidth/750 ,height: 80*screenHeight/1334))
         phoneTextField.placeholder = "(000) 000-0000"
@@ -165,6 +171,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         dial.frame = CGRect(x: 0, y: 597*screenHeight/667, width: 305*screenWidth/375, height: 70*screenWidth/375)
         dial.contentSize = CGSize(width: 10*screenWidth, height: dial.bounds.height)
         view.addSubview(dial)
+        dial.contentOffset.x = screenWidth*4.285
+        dial.showsHorizontalScrollIndicator = false
+        dial.showsVerticalScrollIndicator = false
+        dial.delegate = self
         populateDialView()
         view.addSubview(stockTitle)
         
@@ -278,11 +288,11 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         
         
-        myPicker.dataSource = self
-        myPicker.delegate = self
-        myPicker.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 177*screenHeight/667)
-        myPicker.backgroundColor = .white
-        myPicker.showsSelectionIndicator = true
+//        myPicker.dataSource = self
+//        myPicker.delegate = self
+//        myPicker.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 177*screenHeight/667)
+//        myPicker.backgroundColor = .white
+//        myPicker.showsSelectionIndicator = true
         
         
         toolBar.barStyle = UIBarStyle.default
@@ -302,9 +312,12 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
         
         
     }
-    var displayValues = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+    var displayValues = [Int]()
+    
     func populateDialView() {
+        
         for i in 0..<360 {
+            displayValues.append(i) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
             let tickTop = UILabel()
             tickTop.frame = CGRect(x: CGFloat(i)*11*screenWidth/375, y: 0, width: 1*screenWidth/375, height: 10*screenWidth/375)
             tickTop.backgroundColor = customColor.white115
@@ -449,7 +462,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 completionHandler: {_, _ in })
             
             // For iOS 10 data message (sent via FCM)
-            FIRMessaging.messaging().remoteMessageDelegate = self
+            Messaging.messaging().remoteMessageDelegate = self
             
         } else {
             let settings: UIUserNotificationSettings =
@@ -507,7 +520,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     let myloadsave = LoadSaveCoreData()
     @objc private func add(_ button: UIButton) {
         guard isStock == true else {return}
-        guard myTextField.text != nil else {return}
+        guard stockSymbolTextField.text != nil else {return}
         guard priceLabel.text != nil else {return}
         Set1.ti.append(newAlertTicker)
         
@@ -586,6 +599,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             textField.autocapitalizationType = .allCharacters
             textField.spellCheckingType = .no
         }
+        if textField == stockSymbolTextField {
+            textField.frame = CGRect(x: 0, y: 400*screenHeight/667, width: screenWidth, height: 40*screenHeight/667)
+            textField.textAlignment = .right
+        }
     }
     
 //    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
@@ -638,8 +655,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
             }
            // textField2.tintColor = .clear
         } else if textField.tag == 1 {
+            textField.frame = CGRect(x: 99*screenWidth/375,y: 559*screenHeight/667,width: 110*screenWidth/375 ,height: 80*screenHeight/1334)
+            textField.textAlignment = .center
             container.contentOffset =  CGPoint(x: 2.7*screenWidth, y: 0)
-            if myTextField.text != nil && myTextField.delegate != nil {
+            if stockSymbolTextField.text != nil && stockSymbolTextField.delegate != nil {
                 activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
                 activityView.center.y = self.container.center.y
                 activityView.center.x = 3.2*screenWidth
@@ -647,15 +666,15 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 activityView.alpha = 1.0
                 self.container.addSubview(activityView)
                 
-                getOneYearData(stockName: myTextField.text!.uppercased()) {
+                getOneYearData(stockName: stockSymbolTextField.text!.uppercased()) {
                     
                     Set1.oneYearDictionary[$1] = $0
                     
                 }
                 
-                newAlertTicker = myTextField.text!.uppercased()
-                myTextField.text = myTextField.text!.uppercased()
-                myTextField.tintColor = .clear
+                newAlertTicker = stockSymbolTextField.text!.uppercased()
+                stockSymbolTextField.text = stockSymbolTextField.text!.uppercased()
+                stockSymbolTextField.tintColor = .clear
                 
                 graph.removeFromSuperview()
                 graph = DailyGraphForAlertView()
@@ -712,7 +731,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
     }
     var isStock = false
     private func prepareGraph(result: @escaping (_ dateArray: [Date]?,_ closings: [Double]?) -> Void) {
-        guard myTextField.text != nil else {return}
+        guard stockSymbolTextField.text != nil else {return}
         BigBoard.stockWithSymbol(symbol: newAlertTicker, success: { (stock) in
             
             var stockData = [Double]()
@@ -738,7 +757,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                         des.remove(at: des.startIndex)
                     }
                     print(des)
-                    if des == "The request timed out" || des == self.myTextField.text! + " is not a real stock." {
+                    if des == "The request timed out" || des == self.stockSymbolTextField.text! + " is not a real stock." {
                     self.userWarning(title: "", message: des)
                     }
                 }
@@ -754,13 +773,27 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, U
                 for _ in 0...14 {
                     des.remove(at: des.startIndex)
                 }
-                let des2 = self.myTextField.text! + " is not a real stock."
-                if des == "The request timed out." || des == self.myTextField.text! + " is not a real stock." {
+                let des2 = self.stockSymbolTextField.text! + " is not a real stock."
+                if des == "The request timed out." || des == self.stockSymbolTextField.text! + " is not a real stock." {
                 self.userWarning(title: "", message: des)
                 }
             }
             print(error)
             result(nil, nil)
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if scrollView == dial {
+           
+            let offset = Float(scrollView.contentOffset.x)
+            
+            let a = (14/15)*Float(displayValues[3])
+            let c = (65.4/66)*Float(displayValues[66])
+            let price = offset*(c-a)/(Float(screenWidth)*9.186) + a
+           
+            priceLabel.text = "$" + String(format: "%.02f", price)
         }
     }
 }

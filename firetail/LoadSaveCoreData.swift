@@ -88,7 +88,7 @@ class LoadSaveCoreData {
         
       //  let ref = FIRDatabase.database().reference(withPath: "users")
 
-        let rootRef = FIRDatabase.database().reference()
+        let rootRef = Database.database().reference()
 
       //  let childRef = FIRDatabase.database().reference(withPath: "users")
 
@@ -112,7 +112,7 @@ class LoadSaveCoreData {
         
      //   let ref = FIRDatabase.database().reference(withPath: "alerts")
         
-        let rootRef = FIRDatabase.database().reference()
+        let rootRef = Database.database().reference()
         
      //   let childRef = FIRDatabase.database().reference(withPath: "alerts")
         
