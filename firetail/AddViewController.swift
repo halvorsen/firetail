@@ -685,25 +685,26 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                 graph = DailyGraphForAlertView()
                 prepareGraph() {(dateArray,closings) -> Void in
                     if closings != nil && dateArray != nil {
-                        print("self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)")
-                        self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)
+                        print(closings!.count)
+                        print("HIIII::::::")
+                        self.graph = DailyGraphForAlertView(graphData: closings!.reversed(), dateArray: dateArray!.reversed())
                         self.container.addSubview(self.graph)
                         var t = CGAffineTransform.identity
                         t = t.translatedBy(x: 0, y: -100)
                         t = t.scaledBy(x: 1.0, y: 0.01)
                         self.graph.transform = t
-                        print("DispatchQueue.main.async {self.activityView.removeFromSuperview()}")
+                       
                         self.activityView.removeFromSuperview()
-                        print("UIView.animate(withDuration: 2.0) {")
+                    
                         UIView.animate(withDuration: 2.0) {
-                            print("self.graph.transform = CGAffineTransform.identity")
+                            
                             self.graph.transform = CGAffineTransform.identity
                             self.graph.frame.origin.y = 50*self.screenHeight/667
                         }
                         //this timing is off and has to do with activivy view removal as well.
-                        print("self.delay(bySeconds: 1.2) {")
+                        
                         self.delay(bySeconds: 1.2) {
-                            print("for i in 0..<self.graph.labels.count {")
+                            
                             for i in 0..<self.graph.labels.count {
                                 self.delay(bySeconds: 0.3) {
                                     UIView.animate(withDuration: 0.3*Double(i)) {
@@ -743,10 +744,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         guard stockSymbolTextField.text != nil else {return}
         print("entered addview google1")
         let myGoogle = Google()
-        myGoogle.historicalPrices(years: 1, index: "NASDAQ", ticker: self.newAlertTicker) { (stockDataTuple) in
+        myGoogle.historicalPrices(years: 1, ticker: self.newAlertTicker) { (stockDataTuple) in
             let (_stockData,dates,error) = stockDataTuple
             guard let stockData = _stockData else {return}
-            guard stockDataTuple.0!.count > 0  else {return}
+            guard stockDataTuple.0!.count > 0 else {return}
             self.isStock = true
             result(dates, stockData)
             //FIXIT add error handling simiar to BigBoard below, the error will be coming from url request to google

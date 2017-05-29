@@ -21,6 +21,7 @@
 		0617DFA11E7B6F81006D73C5 /* GridLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0617DFA01E7B6F81006D73C5 /* GridLine.swift */; };
 		0617DFA31E7C7E7F006D73C5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0617DFA21E7C7E7F006D73C5 /* SettingsViewController.swift */; };
 		0617DFA51E7DBDC7006D73C5 /* LoadSaveCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */; };
+		062CC7371EDCA66400E2520A /* IndexListOfStocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */; };
 		0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0672601A1E67BD5B00F54500 /* StockGraphView2.swift */; };
 		068D8D251E72F0D700E422DB /* Dot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068D8D241E72F0D700E422DB /* Dot.swift */; };
 		069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1211E5382D4003BDFE2 /* AppDelegate.swift */; };
@@ -57,6 +58,7 @@
 		0617DFA01E7B6F81006D73C5 /* GridLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLine.swift; sourceTree = "<group>"; };
 		0617DFA21E7C7E7F006D73C5 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadSaveCoreData.swift; sourceTree = "<group>"; };
+		062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexListOfStocks.swift; sourceTree = "<group>"; };
 		0672601A1E67BD5B00F54500 /* StockGraphView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView2.swift; sourceTree = "<group>"; };
 		068D8D241E72F0D700E422DB /* Dot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dot.swift; sourceTree = "<group>"; };
 		069FD11E1E5382D4003BDFE2 /* firetail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = firetail.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,6 +127,7 @@
 				06FDA8DB1E7094270043BC90 /* CompareScroll.swift */,
 				06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */,
 				06FC95B61E76E9F000DF7559 /* AddViewController.swift */,
+				062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */,
 				06F15E8F1ED7B3ED00288413 /* Google.swift */,
 				06F15E911ED88C1300288413 /* Extensions.swift */,
 				0617DFA01E7B6F81006D73C5 /* GridLine.swift */,
@@ -320,6 +323,7 @@
 				06FC95B91E77415500DF7559 /* DailyGraphForAlertView.swift in Sources */,
 				06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */,
 				06F15E901ED7B3ED00288413 /* Google.swift in Sources */,
+				062CC7371EDCA66400E2520A /* IndexListOfStocks.swift in Sources */,
 				0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */,
 				0617DFA11E7B6F81006D73C5 /* GridLine.swift in Sources */,
 				06FDA8DC1E7094270043BC90 /* CompareScroll.swift in Sources */,

@@ -96,7 +96,7 @@ class ViewSetup: UIViewController {
     
     func getOneYearData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
         let myGoogle = Google()
-        myGoogle.historicalPrices(years: 1, index: "NASDAQ", ticker: stockName.uppercased()) { (stockDataTuple) in
+        myGoogle.historicalPrices(years: 1, ticker: stockName.uppercased()) { (stockDataTuple) in
             let (_stockData,dates,error) = stockDataTuple
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0  else {return}

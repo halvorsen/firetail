@@ -194,7 +194,6 @@ class StockGraphView2: UIView {
 
     init() {super.init(frame: CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenHeight/1334))}
     init(stockData: StockData2, key: String, cubic: Bool) {
-
         _stockData = stockData
         super.init(frame: CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenHeight/1334))
         ys = [y1,y2,y3,y4,y5]
@@ -215,7 +214,7 @@ class StockGraphView2: UIView {
         if stockData.closingPrice.count <= 15 {
             fillChartViewWithSetsOfData(dataPoints: stockData.closingPrice, cubic: cubic)
         } else {
-           // if
+       
             fillChartViewWithSetsOfData(dataPoints: reduceDataPoints(original: stockData.closingPrice), cubic: cubic)
         }
         if cubic {
@@ -265,7 +264,7 @@ class StockGraphView2: UIView {
         self.addSubview(layerView)
          var xLabels: [String] {
             get {
-                let _xLabels = ["Max","5y","1y","3m","1m","5d","1d"]
+                let _xLabels = ["10y","5y","1y","3m","1m","5d","1d"]
                 return _xLabels
             }
         }
@@ -280,8 +279,8 @@ class StockGraphView2: UIView {
         
         //make a switch for different graph ranges
         
-        for i in 0...6 {
-            addLabel(name: xs[i], text: xLabels[i], textColor: customColor.labelGray, textAlignment: .center, fontName: "Roboto-Regular", fontSize: 12, x: (screenWidth/8)*(CGFloat(i)+1)*1334/screenHeight - 30, y: graphHeight*1334/screenHeight + 20, width: 60, height: 75, lines: 1)
+        for i in 0...5 {
+            addLabel(name: xs[i], text: xLabels[i], textColor: customColor.labelGray, textAlignment: .center, fontName: "Roboto-Regular", fontSize: 12, x: (screenWidth/8)*(CGFloat(i)+1)*1334/screenHeight + 20, y: graphHeight*1334/screenHeight + 20, width: 60, height: 75, lines: 1)
             if xs[i].text == key {
                 xs[i].textColor = customColor.yellow
             }

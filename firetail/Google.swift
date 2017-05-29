@@ -19,15 +19,19 @@ class Google {
     
     //date info in first column: "11-May-17"
     // func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
-    func historicalPrices(years: Int, index: String, ticker: String, result: @escaping (_ stockDataTuple:([Double]?,[(String,Int)]?,Error?)) -> Void) {
+    func historicalPrices(years: Int, ticker: String, result: @escaping (_ stockDataTuple:([Double]?,[(String,Int)]?,Error?)) -> Void) {
         _years = years
-        
+        var index = ""
+        if IndexListOfStocks.nasdaq.contains(ticker) {
+            index = "NASDAQ"
+        } else if IndexListOfStocks.nyse.contains(ticker) {
+            index = "NYSE"
+        } else if IndexListOfStocks.amex.contains(ticker) {
+            index = "AMEX"
+        }
         var start = DateComponents()
         var end = DateComponents()
         var _error: Error?
-        // if isNone {
-        print("ENTERED GATE")
-        //   isNone = false
         
         start.year = -years
         end.year = 0
@@ -42,7 +46,7 @@ class Google {
                 if let data = data {
                     if let _stringData = String(data: data, encoding: String.Encoding.utf8) {
                         stringData = _stringData
-                        print(_stringData) //JSONSerialization
+                        //JSONSerialization
                     }
                 }
                 var stringPrice = String()
@@ -61,7 +65,7 @@ class Google {
                 let componentDate = Calendar.current.dateComponents([.year, .month, .day], from: Date())
                 let monthToday = self.monthStrings[componentDate.month!]
                 let dayToday = componentDate.day!
-                print((Double(stringPrice)!,dayToday,monthToday))
+                guard Double(stringPrice) != nil else {return}
                 self.basket[1] = [(Double(stringPrice)!,monthToday,dayToday)]
                 
                 self.count += 1
@@ -89,7 +93,7 @@ class Google {
     
     
     private func fetchFromGoogle(yearStart: Int, dateComponentStart: DateComponents, dateComponentEnd: DateComponents, ticker: String, index: String) {
-        print("entered fetchfromgoogle func")
+       
         let endDate = Calendar.current.date(byAdding: dateComponentEnd, to: Date())
         let endDateComponents = Calendar.current.dateComponents([.year, .month, .day], from: endDate!)
         let startDate = Calendar.current.date(byAdding: dateComponentStart, to: endDate!)
@@ -97,15 +101,12 @@ class Google {
         let startDateMonth = monthStrings[startDateComponents.month!]
         let startDateYear = String(describing: startDateComponents.year!)
         let startDateDay = String(describing: startDateComponents.day!)
-        print("start \(String(describing: startDateComponents.day)), \(startDateDay)")
         let endDateMonth = monthStrings[endDateComponents.month!]
         let endDateYear = String(describing: endDateComponents.year!)
         let endDateDay = String(describing: endDateComponents.day!)
         let stringComponents: [String] = ["http://www.google.com/finance/historical?q=",index,":",ticker,"&startdate=",startDateMonth,"+",startDateDay,"%2C+",startDateYear,"&enddate=",endDateMonth,"+",endDateDay,"%2C+",endDateYear,"&output=csv"]
         
         let urlString = stringComponents.flatMap({$0}).joined()
-        print("URL \(yearStart)")
-        print(urlString)
         let url = URL(string: urlString)
         var priceData = [(Double,String,Int)]()
         
@@ -137,7 +138,7 @@ class Google {
                                 
                             }
                         }
-                        print("first price in price data: \(priceData[0])")
+
                         self.basket[0] = priceData
                         self.count += 1
                     }

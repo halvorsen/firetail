@@ -42,10 +42,10 @@ class GraphViewController: ViewSetup {
     var start = CGFloat()
     var switchable = true
     var first = true
-    let list = ["1y","5y","Max","1d","5d","1m","3m"]
-    var orderOfGraphs = ["1y":0,"5y":1,"Max":2,"1d":3,"5d":4,"1m":5,"3m":6]
+    let list = ["1y","5y","10y","1d","5d","1m","3m"]
+    var orderOfGraphs = ["1y":0,"5y":1,"10y":2,"1d":3,"5d":4,"1m":5,"3m":6]
     var orderofGraphsInverse = [Int:String]()
-    let orderOfLabels = ["Max":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
+    let orderOfLabels = ["10y":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
     var loading = UILabel()
     let brokersDictionary: [String:String] = [
         "Ameritrade":"https://invest.ameritrade.com/grid/p/site",
@@ -251,7 +251,7 @@ class GraphViewController: ViewSetup {
     
     func showGraph() {
         
-        graphViews = ["1y":nil,"5y":nil,"Max":nil,"1d":nil,"5d":nil,"1m":nil,"3m":nil]
+        graphViews = ["1y":nil,"5y":nil,"10y":nil,"1d":nil,"5d":nil,"1m":nil,"3m":nil]
         
         self.view.endEditing(true)
         if passedString != "Patriots" {
@@ -386,14 +386,14 @@ class GraphViewController: ViewSetup {
     var keys = [String]()
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         let myGoogle = Google()
-        myGoogle.historicalPrices(years: 10, index: "NASDAQ", ticker: stockName.uppercased()) { (stockDataTuple) in
+        myGoogle.historicalPrices(years: 10, ticker: stockName.uppercased()) { (stockDataTuple) in
             let (_stockData,dates,error) = stockDataTuple
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0  else {return}
             print("stockdata: \(stockData)")
             print("AMOUNT")
             print(stockData.count)
-            let list = ["1y","5y","Max","1d","5d","1m","3m"]
+            let list = ["1y","5y","10y","1d","5d","1m","3m"]
             let amount = stockData.count
             var stockDatas = [StockData2]()
             //252 days in the trading year
@@ -408,7 +408,7 @@ class GraphViewController: ViewSetup {
                     for i in (amount - 252*5)..<amount {
                         stockData2.closingPrice.append(stockData[i])
                     }
-                case "Max":
+                case "10y":
                     for i in (amount - 252*10 + 20)..<amount {
                         stockData2.closingPrice.append(stockData[i])
                     }
