@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import BigBoard
+
 
 struct CustomColor {
     
@@ -95,61 +95,26 @@ class ViewSetup: UIViewController {
     
     
     func getOneYearData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
-        
-        BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
-            
-            var stockData = [Double]()
-            
-            stock.mapOneYearChartDataModule({
-                
-                
-                
-                for point in (stock.oneYearChartModule?.dataPoints)! {
-                    
-                    // stockData.dates.append(point.date)
-                    stockData.append(point.close)
-                    
-                    
-                }
-                
-                let mo = ["","January","Febrary","March","April","May","June","July","August","September","October","November","December"]
-                //  if Set.month.count < 2 {
-                var i = 0
-                var _month = [String]()
-                for point in (stock.oneYearChartModule?.dataPoints)! {
-                    let y = point.date.year
-                 
-                    let m = point.date.month
-               
-                    
-                    if i%21 == 20 {
-                        _month.append("\(mo[m]), \(y)")
-                    }
-                    i += 1
-                    
-                    //  }
-         
-                    
-                    
-                    Set1.month = _month
+        let myGoogle = Google()
+        myGoogle.oneYearHistoricalPrices(years: 1, index: "NASDAQ", ticker: stockName.uppercased()) { (stockDataTuple) in
+            let (_stockData,dates,error) = stockDataTuple
+            guard let stockData = _stockData else {return}
+            guard stockDataTuple.0!.count > 0  else {return}
+           
 
-                }
-                
-                result(stockData, stockName)
-                
-            }, failure: { (error) in
-                print(error)
-                result(nil, stockName)
-            })
+            let mo = ["","January","Febrary","March","April","May","June","July","August","September","October","November","December","January","Febrary","March","April","May","June","July","August","September","October","November","December"]
+            var _mo = [String]()
+            let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+            for i in 0..<12 {
+                _mo.append(mo[dComponent.month! + i])
+            }
             
-        }) { (error) in
-            print(error)
+            Set1.month = _mo
+
+            result(stockData, stockName)
             
-            result(nil, stockName)
-        }
-        
-        
-        
+            }
+
     }
     
     func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor, act:

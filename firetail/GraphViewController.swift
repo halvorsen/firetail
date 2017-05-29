@@ -8,7 +8,7 @@
 
 
 
-import BigBoard
+
 import UIKit
 import Charts
 
@@ -196,7 +196,8 @@ class GraphViewController: ViewSetup {
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
         
         if stockData.1[self.i] != nil {
-            
+            print("stockData.1[self.i]!: \(stockData.1[self.i]!)")
+            print("stockData.0[self.i]: \(stockData.0[self.i])")
             let graphView = StockGraphView2(stockData: stockData.1[self.i]!, key: stockData.0[self.i], cubic: true)
             
             let ma = stockData.1[self.i]!.closingPrice.max()! //from unfiltered highs and lows
@@ -384,62 +385,79 @@ class GraphViewController: ViewSetup {
     // let serialQueue = DispatchQueue(label: "queuename")
     var keys = [String]()
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
-        
-        BigBoard.stockWithSymbol(symbol: stockName, success: { (stock) in
-            
+        let myGoogle = Google()
+        myGoogle.oneYearHistoricalPrices(years: 10, index: "NASDAQ", ticker: stockName.uppercased()) { (stockDataTuple) in
+            let (_stockData,dates,error) = stockDataTuple
+            guard let stockData = _stockData else {return}
+            guard stockDataTuple.0!.count > 0  else {return}
+            print("stockdata: \(stockData)")
+            print("AMOUNT")
+            print(stockData.count)
             let list = ["1y","5y","Max","1d","5d","1m","3m"]
-            
-            let charts = ["1y":stock.mapOneYearChartDataModule,"5y":stock.mapFiveYearChartDataModule,"Max":stock.mapLifetimeChartDataModule,"1d":stock.mapOneDayChartDataModule,"5d":stock.mapFiveDayChartDataModule,"1m":stock.mapOneMonthChartDataModule,"3m":stock.mapThreeMonthChartDataModule]
-            
+            let amount = stockData.count
             var stockDatas = [StockData2]()
-            
-            for key in list {
-                
-                var stockData = StockData2()
-                stockData.text = key
-                
-                charts[key]!({
-                    let chartsModule = ["1y":stock.oneYearChartModule,"5y":stock.fiveYearChartModule,"Max":stock.lifetimeChartModule,"1d":stock.oneDayChartModule,"5d":stock.fiveDayChartModule,"1m":stock.oneMonthChartModule,"3m":stock.threeMonthChartModule]
-                    let asdf: BigBoardChartDataModule? = chartsModule[key]!
-                    
-                    if asdf != nil {
-                        
-                        
-                        for point in (asdf?.dataPoints)! {
-                            
-                            stockData.dates.append(point.date)
-                            stockData.closingPrice.append(point.close)
-                            
-                        }
-
-                        if key == "1m" {
-                            // let z = stockData.1[self.i]!.closingPrice.count - 1
-                            Set1.yesterday = stockData.closingPrice.last!
-                        }
-                        
-                        if key == "1d" {
-                            Set1.currentPrice = stockData.closingPrice.last!
-                        }
-                        
-                        stockDatas.append(stockData)
+            //252 days in the trading year
+            for timeSpan in list {
+                var stockData2 = StockData2()
+                switch timeSpan {
+                case "1y":
+                    for i in (amount - 252)..<amount {
+                       stockData2.closingPrice.append(stockData[i])
                     }
-          
+                case "5y":
+                    for i in (amount - 252*5)..<amount {
+                        stockData2.closingPrice.append(stockData[i])
+                    }
+                case "Max":
+                    for i in (amount - 252*10 + 20)..<amount {
+                        stockData2.closingPrice.append(stockData[i])
+                    }
+                case "1d":
+                    for i in (amount - 55)..<amount {
+                        stockData2.closingPrice.append(stockData[i])
+                    }
+//                    for i in (amount - 5)..<amount {
+//                        stockData2.closingPrice.append(stockData[i])
+//                    }
+                       // stockData2.closingPrice.append(stockData[amount - 1])
                     
-                    self.keys.append(key)
-                    result((self.keys,stockDatas))
-
-                }, { (error) in
-                    self.userWarning(title: "", message: error.description)
-                    print(error)
-                    result(([""],[nil]))
-                })
+                case "5d":
+                    for i in (amount - 55)..<amount {
+                        stockData2.closingPrice.append(stockData[i])
+                    }
+//                    for i in (amount - 5)..<amount {
+//                        stockData2.closingPrice.append(stockData[i])
+//                    }
+                case "1m":
+                    for i in (amount-252/12)..<amount {
+                        stockData2.closingPrice.append(stockData[i])
+                    }
+                case "3m":
+                    for i in (amount-252/4)..<amount {
+                        stockData2.closingPrice.append(stockData[i])
+                    }
+                default: break
+                }
+                stockDatas.append(stockData2)
+                
             }
-        }) { (error) in
-            self.userWarning(title: "", message: error.description)
-            print(error)
-            result(([""],[nil]))
-        }
+            result((list,stockDatas))
+            //FIXIT add error message
+            //                }, { (error) in
+            //                    self.userWarning(title: "", message: error.description)
+            //                    print(error)
+            //                    result(([""],[nil]))
+            
+            }
+        
     }
 }
+//result((self.keys,stockDatas))
+
+//struct StockData2 {
+//    var dates = [Date]()
+//    var closingPrice = [Double]()
+//    var text = String()
+//}
 
 

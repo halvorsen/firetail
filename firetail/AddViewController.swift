@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import BigBoard
 import QuartzCore
 import Firebase
 import FirebaseMessaging
@@ -21,11 +20,11 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
         //code
     }
-   // The callback to handle data message received via FCM for devices running iOS 10 or above.
+    // The callback to handle data message received via FCM for devices running iOS 10 or above.
     public func application(received remoteMessage: MessagingRemoteMessage) {
     }
     var stockSymbolTextField = UITextField()
-   // var textField2 = UITextField()
+    // var textField2 = UITextField()
     var priceLabel = UILabel()
     var phoneTextField = UITextField()
     let customColor = CustomColor()
@@ -47,7 +46,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
     let stockTitle = UIButton()
     var container = UIScrollView()
     var graph = DailyGraphForAlertView()
-    var newAlertTicker = "TSLA"
+    var newAlertTicker = "GOOG"
     var newAlertPrice = Double()
     var newAlertBoolTuple = (false, false, false, false)
     let backArrow = UIButton()
@@ -93,34 +92,34 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         //amountOfBlocksOld = loadsave.amount()
         
         view.backgroundColor = customColor.black24
-//        let bottomBar = UIView()
-//        bottomBar.frame = CGRect(x: 0, y: 597*screenHeight/667, width: screenWidth, height: 70*screenHeight/667)
-//        bottomBar.backgroundColor = customColor.black24
-//        view.addSubview(bottomBar)
+        //        let bottomBar = UIView()
+        //        bottomBar.frame = CGRect(x: 0, y: 597*screenHeight/667, width: screenWidth, height: 70*screenHeight/667)
+        //        bottomBar.backgroundColor = customColor.black24
+        //        view.addSubview(bottomBar)
         
-//        let alertLabel = UILabel()
-//        addLabel(name: alertLabel, text: "Price Alert", textColor: customColor.white216, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 64, y: 1242, width: 240, height: 40, lines: 0)
-//        view.addSubview(alertLabel)
+        //        let alertLabel = UILabel()
+        //        addLabel(name: alertLabel, text: "Price Alert", textColor: customColor.white216, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 64, y: 1242, width: 240, height: 40, lines: 0)
+        //        view.addSubview(alertLabel)
         
         //addLabel(name: alertLabel2, text: "$", textColor: customColor.white216, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 17, x: 256, y: 1252, width: 240, height: 40, lines: 0)
         //view.addSubview(alertLabel2)
         
-//        textField2 = UITextField(frame: CGRect(x: 256*screenWidth/750,y: 1242*screenHeight/1334,width: 240*screenWidth/750 ,height: 40*screenHeight/1334))
-//        //textField.placeholder = newAlertTicker
-//        textField2.textAlignment = .left
-//        textField2.setValue(customColor.white216, forKeyPath: "_placeholderLabel.textColor")
-//        textField2.font = UIFont(name: "Roboto-Bold", size: 17*fontSizeMultiplier)
-//        textField2.autocorrectionType = UITextAutocorrectionType.no
-//        textField2.keyboardType = UIKeyboardType.default
-//        textField2.returnKeyType = UIReturnKeyType.done
-//        textField2.clearsOnBeginEditing = true
-//        textField2.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-//        textField2.delegate = self
-//        textField2.backgroundColor = .clear
-//        textField2.textColor = customColor.white216
-//        textField2.tag = 0
-//        textField2.keyboardAppearance = .dark
-//        view.addSubview(textField2)
+        //        textField2 = UITextField(frame: CGRect(x: 256*screenWidth/750,y: 1242*screenHeight/1334,width: 240*screenWidth/750 ,height: 40*screenHeight/1334))
+        //        //textField.placeholder = newAlertTicker
+        //        textField2.textAlignment = .left
+        //        textField2.setValue(customColor.white216, forKeyPath: "_placeholderLabel.textColor")
+        //        textField2.font = UIFont(name: "Roboto-Bold", size: 17*fontSizeMultiplier)
+        //        textField2.autocorrectionType = UITextAutocorrectionType.no
+        //        textField2.keyboardType = UIKeyboardType.default
+        //        textField2.returnKeyType = UIReturnKeyType.done
+        //        textField2.clearsOnBeginEditing = true
+        //        textField2.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        //        textField2.delegate = self
+        //        textField2.backgroundColor = .clear
+        //        textField2.textColor = customColor.white216
+        //        textField2.tag = 0
+        //        textField2.keyboardAppearance = .dark
+        //        view.addSubview(textField2)
         
         priceLabel.frame = CGRect(x: 27*screenWidth/375, y: 505*screenHeight/667, width: 150*screenWidth/375, height: 22*screenHeight/667)
         priceLabel.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
@@ -248,51 +247,54 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         
         //        callCorrectGraph2(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
         
-        prepareGraph() {(_ dateArray: [Date]?,_ closings: [Double]?) -> Void in
-            if closings != nil && dateArray != nil {
-                self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)
-                self.container.addSubview(self.graph)
-                var t = CGAffineTransform.identity
-                t = t.translatedBy(x: 0, y: -100)
-                t = t.scaledBy(x: 1.0, y: 0.01)
-                self.graph.transform = t
-
-    
-                UIView.animate(withDuration: 2.0) {
-             
-                    self.graph.transform = CGAffineTransform.identity
-                    self.graph.frame.origin.y = 50*self.screenHeight/667
-                }
-                self.delay(bySeconds: 1.2) {
-                    
-                    for i in 0..<self.graph.labels.count {
-                        self.delay(bySeconds: 0.3) {
-                            UIView.animate(withDuration: 0.3*Double(i)) {
-                                self.graph.grids[self.graph.labels.count - i - 1].alpha = 1.0
-                                self.graph.labels[self.graph.labels.count - i - 1].alpha = 1.0
-                                self.graph.dayLabels[self.graph.labels.count - i - 1].alpha = 1.0
-                            }
-                        }
-                    }
-                    
-                }
-                
-                
-                self.alertPrice = closings!.last!
-            }
-            
-        }
+        
+        ///here is the code if we want to add the graph before adding a ticker, it seems though that i broke this with some asynch stuff after taking off bigboard
+        //        prepareGraph() {(_ dateArray: [(String,Int)]?,_ closings: [Double]?) -> Void in
+        //            if closings != nil && dateArray != nil {
+        //                print("preparegraph is about to call dailygraphforalertview, dateArray: \(dateArray)")
+        //                self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!) //[(String,Int)]
+        //                DispatchQueue.main.async { self.container.addSubview(self.graph) }
+        //                var t = CGAffineTransform.identity
+        //                t = t.translatedBy(x: 0, y: -100)
+        //                t = t.scaledBy(x: 1.0, y: 0.01)
+        //                self.graph.transform = t
+        //
+        //
+        //                UIView.animate(withDuration: 2.0) {
+        //
+        //                    self.graph.transform = CGAffineTransform.identity
+        //                    self.graph.frame.origin.y = 50*self.screenHeight/667
+        //                }
+        //                self.delay(bySeconds: 1.2) {
+        //
+        //                    for i in 0..<self.graph.labels.count {
+        //                        self.delay(bySeconds: 0.3) {
+        //                            UIView.animate(withDuration: 0.3*Double(i)) {
+        //                                self.graph.grids[self.graph.labels.count - i - 1].alpha = 1.0
+        //                                self.graph.labels[self.graph.labels.count - i - 1].alpha = 1.0
+        //                                self.graph.dayLabels[self.graph.labels.count - i - 1].alpha = 1.0
+        //                            }
+        //                        }
+        //                    }
+        //
+        //                }
+        //
+        //
+        //                self.alertPrice = closings!.last!
+        //            }
+        //
+        //        }
         
         
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         
         
-//        myPicker.dataSource = self
-//        myPicker.delegate = self
-//        myPicker.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 177*screenHeight/667)
-//        myPicker.backgroundColor = .white
-//        myPicker.showsSelectionIndicator = true
+        //        myPicker.dataSource = self
+        //        myPicker.delegate = self
+        //        myPicker.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 177*screenHeight/667)
+        //        myPicker.backgroundColor = .white
+        //        myPicker.showsSelectionIndicator = true
         
         
         toolBar.barStyle = UIBarStyle.default
@@ -307,9 +309,9 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
         
-//        textField2.inputView = myPicker
-//        textField2.inputAccessoryView = toolBar
-        
+        //        textField2.inputView = myPicker
+        //        textField2.inputAccessoryView = toolBar
+        stockSymbolTextField.becomeFirstResponder()
         
     }
     var displayValues = [Int]()
@@ -392,26 +394,26 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         
     }
     
-//    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-//        switch component {
-//        case 0:
-//            return pickerData[row]
-//        default:
-//            return pickerData2[row]
-//        }
-//    }
-//    var dd = "$1"
-//    var cc = ".00"
-//    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-//        
-//        switch component {
-//        case 0:
-//            dd = pickerData[row]
-//        default:
-//            cc = pickerData2[row]
-//        }
-//       // textField2.text = dd + cc
-//    }
+    //    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    //        switch component {
+    //        case 0:
+    //            return pickerData[row]
+    //        default:
+    //            return pickerData2[row]
+    //        }
+    //    }
+    //    var dd = "$1"
+    //    var cc = ".00"
+    //    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    //
+    //        switch component {
+    //        case 0:
+    //            dd = pickerData[row]
+    //        default:
+    //            cc = pickerData2[row]
+    //        }
+    //       // textField2.text = dd + cc
+    //    }
     var apDollar = Int()
     var apDollarString = String()
     var apCentString = String()
@@ -424,32 +426,32 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         print("AlertID: \(alertID)")
     }
     
-//    private func getPickerData() {
-//        pickerData.removeAll()
-//        let ap = alertPrice
-//        apDollar = Int(alertPrice)
-//
-//        apDollarString = String(apDollar)
-//        var apCent: String {
-//            let a = textField2.text!
-//            var last3 = a.substring(from:a.index(a.endIndex, offsetBy: -3))
-//        //    let last2 = a.substring(from:a.index(a.endIndex, offsetBy: -2))
-//            let last1 = a.substring(from:a.index(a.endIndex, offsetBy: -1))
-//            switch last1 {
-//            case "1","2","3","4":last3.remove(at: last3.index(before: last3.endIndex)); last3 += "0"
-//            case "6","7","8","9":last3.remove(at: last3.index(before: last3.endIndex)); last3 += "5"
-//            default: break
-//            }
-//            return last3
-//        }
-//        apCentString = apCent
-//        for i in 0...100 {
-//            if i - 50 + apDollar > 0 {
-//                pickerData.append(String(i - 50 + apDollar))
-//            }
-//        }
-//        
-//    }
+    //    private func getPickerData() {
+    //        pickerData.removeAll()
+    //        let ap = alertPrice
+    //        apDollar = Int(alertPrice)
+    //
+    //        apDollarString = String(apDollar)
+    //        var apCent: String {
+    //            let a = textField2.text!
+    //            var last3 = a.substring(from:a.index(a.endIndex, offsetBy: -3))
+    //        //    let last2 = a.substring(from:a.index(a.endIndex, offsetBy: -2))
+    //            let last1 = a.substring(from:a.index(a.endIndex, offsetBy: -1))
+    //            switch last1 {
+    //            case "1","2","3","4":last3.remove(at: last3.index(before: last3.endIndex)); last3 += "0"
+    //            case "6","7","8","9":last3.remove(at: last3.index(before: last3.endIndex)); last3 += "5"
+    //            default: break
+    //            }
+    //            return last3
+    //        }
+    //        apCentString = apCent
+    //        for i in 0...100 {
+    //            if i - 50 + apDollar > 0 {
+    //                pickerData.append(String(i - 50 + apDollar))
+    //            }
+    //        }
+    //
+    //    }
     
     private func registerForPushNotifications() {
         if #available(iOS 10.0, *) {
@@ -514,11 +516,14 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                 break
             }
         }
- 
+        
     }
     
     let myloadsave = LoadSaveCoreData()
     @objc private func add(_ button: UIButton) {
+        // Google.shared.oneYearHistoricalPrices(index: "NASDAQ",ticker: "GOOG") {_,_,_ in }
+        // Google.shared.requestStockPrice(Index: "", Ticker: "")
+        
         guard isStock == true else {return}
         guard stockSymbolTextField.text != nil else {return}
         guard priceLabel.text != nil else {return}
@@ -605,38 +610,38 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         }
     }
     
-//    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-//        
-//        if textField.tag == 2 {
-//        } else {
-//            if textField.tag == 0 {
-//                var row0 = Int()
-//                var row1 = Int()
-//                for i in 0..<pickerData.count {
-//                    if pickerData[i] == apDollarString {
-//                        row0 = i
-//                    }
-//                }
-//                for i in 0..<pickerData2.count {
-//                    if pickerData2[i] == apCentString {
-//                        row1 = i
-//                    }
-//                }
-//                myPicker.selectRow(row0, inComponent: 0, animated: false)
-//                pickerView(myPicker, didSelectRow: row0, inComponent: 0)
-//                myPicker.selectRow(row1, inComponent: 1, animated: false)
-//                pickerView(myPicker, didSelectRow: row1, inComponent: 1)
-//                UIView.animate(withDuration: 0.3) {
-//                    self.view.frame.origin.y = 446-667
-//                    
-//                }
-//            } else {
-//                self.view.frame.origin.y = -135*screenHeight/667
-//            }
-//        }
-//        return true
-//        
-//    }
+    //    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+    //
+    //        if textField.tag == 2 {
+    //        } else {
+    //            if textField.tag == 0 {
+    //                var row0 = Int()
+    //                var row1 = Int()
+    //                for i in 0..<pickerData.count {
+    //                    if pickerData[i] == apDollarString {
+    //                        row0 = i
+    //                    }
+    //                }
+    //                for i in 0..<pickerData2.count {
+    //                    if pickerData2[i] == apCentString {
+    //                        row1 = i
+    //                    }
+    //                }
+    //                myPicker.selectRow(row0, inComponent: 0, animated: false)
+    //                pickerView(myPicker, didSelectRow: row0, inComponent: 0)
+    //                myPicker.selectRow(row1, inComponent: 1, animated: false)
+    //                pickerView(myPicker, didSelectRow: row1, inComponent: 1)
+    //                UIView.animate(withDuration: 0.3) {
+    //                    self.view.frame.origin.y = 446-667
+    //
+    //                }
+    //            } else {
+    //                self.view.frame.origin.y = -135*screenHeight/667
+    //            }
+    //        }
+    //        return true
+    //
+    //    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
@@ -653,7 +658,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
             UIView.animate(withDuration: 0.6) {
                 self.view.frame.origin.y = 0
             }
-           // textField2.tintColor = .clear
+            // textField2.tintColor = .clear
         } else if textField.tag == 1 {
             textField.frame = CGRect(x: 99*screenWidth/375,y: 559*screenHeight/667,width: 110*screenWidth/375 ,height: 80*screenHeight/1334)
             textField.textAlignment = .center
@@ -678,24 +683,27 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                 
                 graph.removeFromSuperview()
                 graph = DailyGraphForAlertView()
-                prepareGraph() {(_ dateArray: [Date]?,_ closings: [Double]?) -> Void in
+                prepareGraph() {(dateArray,closings) -> Void in
                     if closings != nil && dateArray != nil {
+                        print("self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)")
                         self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)
                         self.container.addSubview(self.graph)
                         var t = CGAffineTransform.identity
                         t = t.translatedBy(x: 0, y: -100)
                         t = t.scaledBy(x: 1.0, y: 0.01)
                         self.graph.transform = t
-                        
+                        print("DispatchQueue.main.async {self.activityView.removeFromSuperview()}")
                         self.activityView.removeFromSuperview()
+                        print("UIView.animate(withDuration: 2.0) {")
                         UIView.animate(withDuration: 2.0) {
-                            
+                            print("self.graph.transform = CGAffineTransform.identity")
                             self.graph.transform = CGAffineTransform.identity
                             self.graph.frame.origin.y = 50*self.screenHeight/667
                         }
-                        
+                        //this timing is off and has to do with activivy view removal as well.
+                        print("self.delay(bySeconds: 1.2) {")
                         self.delay(bySeconds: 1.2) {
-                            
+                            print("for i in 0..<self.graph.labels.count {")
                             for i in 0..<self.graph.labels.count {
                                 self.delay(bySeconds: 0.3) {
                                     UIView.animate(withDuration: 0.3*Double(i)) {
@@ -730,69 +738,47 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         
     }
     var isStock = false
-    private func prepareGraph(result: @escaping (_ dateArray: [Date]?,_ closings: [Double]?) -> Void) {
+    //{(_ stockData: ([String],[StockData2?])) -> Void in
+    private func prepareGraph(result: @escaping (_ dateArray: [(String,Int)]?,_ closings: [Double]?) -> Void) {
         guard stockSymbolTextField.text != nil else {return}
-        BigBoard.stockWithSymbol(symbol: newAlertTicker, success: { (stock) in
-            
-            var stockData = [Double]()
-            var dates = [Date]()
-            
-            stock.mapOneMonthChartDataModule({
-                
-                self.isStock = true
-                for point in (stock.oneMonthChartModule?.dataPoints)! {
-                    
-                    dates.append(point.date)
-                    stockData.append(point.close)
-                }
-                
-                result(dates, stockData)
-                
-            }, failure: { (error) in
-                self.isStock = false
-                self.activityView.removeFromSuperview()
-                if self.newAlertTicker != "TICKER" {
-                    var des = error.description
-                    for _ in 0...14 {
-                        des.remove(at: des.startIndex)
-                    }
-                    print(des)
-                    if des == "The request timed out" || des == self.stockSymbolTextField.text! + " is not a real stock." {
-                    self.userWarning(title: "", message: des)
-                    }
-                }
-                print(error)
-                result(nil, nil)
-            })
-            
-        }) { (error) in
-            self.isStock = false
-            self.activityView.removeFromSuperview()
-            if self.newAlertTicker != "TICKER" {
-                var des = error.description
-                for _ in 0...14 {
-                    des.remove(at: des.startIndex)
-                }
-                let des2 = self.stockSymbolTextField.text! + " is not a real stock."
-                if des == "The request timed out." || des == self.stockSymbolTextField.text! + " is not a real stock." {
-                self.userWarning(title: "", message: des)
-                }
+        print("entered addview google1")
+        let myGoogle = Google()
+        myGoogle.oneYearHistoricalPrices(years: 1, index: "NASDAQ", ticker: self.newAlertTicker) { (stockDataTuple) in
+            let (_stockData,dates,error) = stockDataTuple
+            guard let stockData = _stockData else {return}
+            guard stockDataTuple.0!.count > 0  else {return}
+            self.isStock = true
+            result(dates, stockData)
+            //FIXIT add error handling simiar to BigBoard below, the error will be coming from url request to google
+            // })
+            //            self.isStock = false
+            //            self.activityView.removeFromSuperview()
+            //            if self.newAlertTicker != "TICKER" {
+            //                var des = error.description
+            //                for _ in 0...14 {
+            //                    des.remove(at: des.startIndex)
+            //                }
+            //                let des2 = self.stockSymbolTextField.text! + " is not a real stock."
+            //                if des == "The request timed out." || des == self.stockSymbolTextField.text! + " is not a real stock." {
+            //                    self.userWarning(title: "", message: des)
+            //                }
+            //            }
+            //            print(error)
+            //            result(nil, nil)
             }
-            print(error)
-            result(nil, nil)
-        }
+        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if scrollView == dial {
-           
+            
             let offset = Float(scrollView.contentOffset.x)
             
             let a = (14/15)*Float(displayValues[3])
             let c = (65.4/66)*Float(displayValues[66])
             let price = offset*(c-a)/(Float(screenWidth)*9.186) + a
-           
+            
             priceLabel.text = "$" + String(format: "%.02f", price)
         }
     }

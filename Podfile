@@ -7,7 +7,6 @@ target 'firetail' do
 
   pod 'Charts'
   pod 'SwiftCharts', '~> 0.2'
-  pod 'BigBoard'
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'Firebase/Database'

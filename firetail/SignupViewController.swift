@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import BigBoard
+
 import Firebase
 import FirebaseAuth
 

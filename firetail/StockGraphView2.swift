@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import BigBoard
+
 import Charts
 
 public struct Label {
@@ -103,53 +103,7 @@ class StockGraphView2: UIView {
         }
        
     }
-
-    
-//    func squash() {
-//        baseOfGraphView.baseLayer.add(baseOfGraphView.layerAnimation, forKey: nil)
-//        self.delay(bySeconds: 0.3) {
-//            self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation2, forKey: nil)
-//            self.delay(bySeconds: 0.05) {
-//                self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation5, forKey: nil)
-//                self.delay(bySeconds: 0.05) {
-//                    self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation6, forKey: nil)
-//                   // self.delay(bySeconds: 0.05) {
-//                        self.doneSquashing = true
-//                   // }
-//                }
-//            }
-//            
-//        }
-//    }
-    
-//    func bounce() {
-//        //     DispatchQueue.global(qos: .userInteractive).async {
-//        self.delay(bySeconds: 0.0) {
-//            self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation, forKey: nil)
-//            self.delay(bySeconds: 0.4) {
-//                self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation2, forKey: nil)
-//                self.delay(bySeconds: 0.1) {
-//                    self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation3, forKey: nil)
-//                    self.delay(bySeconds: 0.1) {
-//                        self.baseOfGraphView.baseLayer.add(self.baseOfGraphView.layerAnimation4, forKey: nil)
-//                        self.delay(bySeconds: 0.4) {
-//                            
-//                            if self.countinueBouncing == true {
-//                                self.bounce()
-//                            } else {
-//                                self.squash()
-//                            }
-//                            
-//                        }
-//                    }
-//                }
-//                
-//            }
-//        }
-//        //  }
-//        
-//    }
-//    
+  
     
     var _outputValues = [Double]()
     

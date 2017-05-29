@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import BigBoard
 import MessageUI
 
 class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MFMailComposeViewControllerDelegate {

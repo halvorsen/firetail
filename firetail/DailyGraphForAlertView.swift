@@ -28,27 +28,35 @@ class DailyGraphForAlertView: UIView {
     var allStockValues = [String]()
     var grids = [GridLine]()
     var dayLabels = [UILabel]()
-    var date = [Date]()
+    var month = [String]()
+    var day = [Int]()
     
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
-    init(graphData: [Double], dateArray: [Date], frame: CGRect = CGRect(x: 0, y:0*UIScreen.main.bounds.height/667, width: 4*UIScreen.main.bounds.width, height: 160*UIScreen.main.bounds.height/667)) {
+    init(graphData: [Double], dateArray: [(String,Int)], frame: CGRect = CGRect(x: 0, y:0*UIScreen.main.bounds.height/667, width: 4*UIScreen.main.bounds.width, height: 160*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
         self.backgroundColor = customColor.black24
-        date = dateArray
+        var _graphData = [Double]()
+        for i in 0..<20 {
+            month.append(dateArray[19-i].0)
+            day.append(dateArray[19-i].1)
+            _graphData.append(graphData[19-i])
+        }
+        
+       // print("month: \(month), day: \(day), price \(_graphData)")
         var _set = [Double]()
-        let max = graphData.max()!
-        let min = graphData.min()!
+        let max = _graphData.max()!
+        let min = _graphData.min()!
         let range = max - min
         let x = 59*screenHeight/667
         let y = 140*screenHeight/667
-        _set = graphData.map {1 - ($0 - min / range) } // values go from 0 to 1
+        _set = _graphData.map {1 - ($0 - min / range) } // values go from 0 to 1
         pointSet = _set.map { CGFloat(x + CGFloat($0)*y) }
         __set = [pointSet.first!] + pointSet + [pointSet.last!] //adds extra datapoint to make quadratic curves look good on ends
 
-        data = graphData.map {CGFloat(($0-min)/range)}
-        allStockValues = graphData.map {String($0)}
+        data = _graphData.map {CGFloat(($0-min)/range)}
+        allStockValues = _graphData.map {String($0)}
         setNeedsDisplay()
 
 
@@ -142,13 +150,15 @@ class DailyGraphForAlertView: UIView {
         extraBottomGray.backgroundColor = customColor.black24
         self.addSubview(extraBottomGray)
         
-        let monthString = ["","jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
+       // let monthString = ["","jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
         for i in 1..<points.count {
             let l = UILabel()
-            let monthInt = date[i].month
-            let dayInt = date[i].day
             
-            l.text = allStockValues[i]
+            let monthString = month[i]
+            let dayString = String(day[i])
+//            print("dayString: \(dayString)")
+//            print("monthString: \(monthString)")
+            l.text = String(format:"%.2f", allStockValues[i])
             l.frame = CGRect(x: scale*(points[i].x)-25*screenWidth/375, y: 0.9*scale*(points[i].y + 5) - 60*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
             l.font = UIFont(name: "Roboto-Medium", size: 12*fontSizeMultiplier)
             l.textColor = .white
@@ -159,7 +169,7 @@ class DailyGraphForAlertView: UIView {
             
             let k = UILabel()
             //k.text = dayLabelsText[i]
-            k.text = "\(dayInt) \(monthString[monthInt])"
+            k.text = dayString + " " + monthString.lowercased()
             k.frame = CGRect(x: scale*(points[i].x)-22*screenWidth/375, y: 155*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
             k.font = UIFont(name: "Roboto-Regular", size: 13*fontSizeMultiplier)
             k.textColor = customColor.whiteAlpha30
