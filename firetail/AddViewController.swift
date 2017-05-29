@@ -743,7 +743,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         guard stockSymbolTextField.text != nil else {return}
         print("entered addview google1")
         let myGoogle = Google()
-        myGoogle.oneYearHistoricalPrices(years: 1, index: "NASDAQ", ticker: self.newAlertTicker) { (stockDataTuple) in
+        myGoogle.historicalPrices(years: 1, index: "NASDAQ", ticker: self.newAlertTicker) { (stockDataTuple) in
             let (_stockData,dates,error) = stockDataTuple
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0  else {return}
