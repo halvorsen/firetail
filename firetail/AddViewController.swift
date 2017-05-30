@@ -125,7 +125,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         priceLabel.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
         priceLabel.textAlignment = .left
         priceLabel.textColor = .white
-        priceLabel.text = "$25.0"
+        priceLabel.text = ""
         view.addSubview(priceLabel)
         
         //Stock ticker label/textfield
@@ -174,7 +174,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         dial.showsHorizontalScrollIndicator = false
         dial.showsVerticalScrollIndicator = false
         dial.delegate = self
-        populateDialView()
+        
         view.addSubview(stockTitle)
         
         for i in 0...3 {
@@ -313,13 +313,37 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         //        textField2.inputAccessoryView = toolBar
         stockSymbolTextField.becomeFirstResponder()
         
+        populateDialView()
     }
-    var displayValues = [Int]()
+    var displayValues = [Double]()
+    func populateDisplayValues(currentPrice: Double) {
+        if displayValues.count > 0 {
+            displayValues.removeAll()
+        }
+        if currentPrice > 32.0 && currentPrice < 160.0 {
+            for i in 0..<360 {
+                displayValues.append(currentPrice - 32.0 + Double(i)) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
+            }
+        } else if currentPrice >= 160.00 && currentPrice < 320.0 {
+            for i in 0..<360 {
+                displayValues.append(currentPrice - 160.0 + 5*Double(i)) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
+            }
+        } else if currentPrice >= 320.00 {
+            for i in 0..<360 {
+                displayValues.append(currentPrice - 320.0 + 10*Double(i)) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
+            }
+        } else if currentPrice > 0.00 && currentPrice <= 32.0 {
+            for i in 0..<360 {
+                displayValues.append(Double(i)) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
+            }
+        }
+    }
     
     func populateDialView() {
         
+        
         for i in 0..<360 {
-            displayValues.append(i) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
+            
             let tickTop = UILabel()
             tickTop.frame = CGRect(x: CGFloat(i)*11*screenWidth/375, y: 0, width: 1*screenWidth/375, height: 10*screenWidth/375)
             tickTop.backgroundColor = customColor.white115
@@ -334,12 +358,24 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                 tickBottom.frame.origin.y -= 4*screenWidth/375
                 let alertOption = UILabel()
                 alertOption.frame = CGRect(x: tickTop.frame.midX - 50, y: tickTop.frame.maxY, width: 100, height: tickBottom.frame.minY - tickTop.frame.maxY)
-                alertOption.text = String(displayValues[i/5])
+                if displayValues.count > 0 {
+                if displayValues[i/5] > 100.0 {
+                   alertOption.text = String(format: "%.0f", displayValues[i/5])
+                } else if displayValues[i/5] < 10.0 {
+                   alertOption.text = String(format: "%.1f", displayValues[i/5])
+                } else {
+                   alertOption.text = String(format: "%.2f", displayValues[i/5])
+                }
+                } else {
+                    alertOption.text = String(i)
+                }
+               // alertOption.text = String(displayValues[i/5])
                 alertOption.textAlignment = .center
                 alertOption.textColor = customColor.white115
                 alertOption.font = UIFont(name: "Roboto-Regular", size: 12*fontSizeMultiplier)
                 dial.addSubview(alertOption)
             }
+            
             dial.addSubview(tickTop)
             dial.addSubview(tickBottom)
             
@@ -685,10 +721,20 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                 graph = DailyGraphForAlertView()
                 prepareGraph() {(dateArray,closings) -> Void in
                     if closings != nil && dateArray != nil {
-                        print(closings!.count)
-                        print("HIIII::::::")
-                        self.graph = DailyGraphForAlertView(graphData: closings!.reversed(), dateArray: dateArray!.reversed())
+                        
+                        self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)
                         self.container.addSubview(self.graph)
+                        
+                        for view in self.dial.subviews {
+                            view.removeFromSuperview()
+                        }
+                        self.populateDisplayValues(currentPrice: closings!.last!)
+                        self.populateDialView()
+                        if closings!.last! < 32.0 {
+                            self.dial.contentOffset.x = self.screenWidth*3.7*CGFloat(closings!.last!)/32
+                        } else {
+                        self.dial.contentOffset.x = self.screenWidth*4.285
+                        }
                         var t = CGAffineTransform.identity
                         t = t.translatedBy(x: 0, y: -100)
                         t = t.scaledBy(x: 1.0, y: 0.01)
@@ -701,7 +747,6 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                             self.graph.transform = CGAffineTransform.identity
                             self.graph.frame.origin.y = 50*self.screenHeight/667
                         }
-                        //this timing is off and has to do with activivy view removal as well.
                         
                         self.delay(bySeconds: 1.2) {
                             
@@ -711,6 +756,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                                         self.graph.grids[self.graph.labels.count - i - 1].alpha = 1.0
                                         self.graph.labels[self.graph.labels.count - i - 1].alpha = 1.0
                                         self.graph.dayLabels[self.graph.labels.count - i - 1].alpha = 1.0
+                                        
                                     }
                                 }
                             }
@@ -775,11 +821,14 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         if scrollView == dial {
             
             let offset = Float(scrollView.contentOffset.x)
-            
-            let a = (14/15)*Float(displayValues[3])
-            let c = (65.4/66)*Float(displayValues[66])
-            let price = offset*(c-a)/(Float(screenWidth)*9.186) + a
-            
+            // little messy here but should be just a linear calculation, the labeling could be wrong too
+            print("displayvalues")
+            print(displayValues[66])
+            let a = Float((displayValues[3]-displayValues[2])*0.8+displayValues[2])
+            let c = Float((displayValues[67]-displayValues[66])*0.4+displayValues[66])
+            let price = offset*(c-a)/(Float(screenWidth)*9.33) + a*0.9988
+            print("a: \(a)")
+            print("c: \(c)")
             priceLabel.text = "$" + String(format: "%.02f", price)
         }
     }
