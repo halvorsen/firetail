@@ -316,12 +316,13 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         populateDialView()
     }
     var displayValues = [Double]()
+    
     func populateDisplayValues(currentPrice: Double) {
         if displayValues.count > 0 {
             displayValues.removeAll()
         }
         if currentPrice > 32.0 && currentPrice < 160.0 {
-            for i in 0..<360 {
+            for i in -3..<357 {
                 displayValues.append(currentPrice - 32.0 + Double(i)) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
             }
         } else if currentPrice >= 160.00 && currentPrice < 320.0 {
@@ -333,7 +334,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                 displayValues.append(currentPrice - 320.0 + 10*Double(i)) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
             }
         } else if currentPrice > 0.00 && currentPrice <= 32.0 {
-            for i in 0..<360 {
+            for i in -3..<357 {
                 displayValues.append(Double(i)) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
             }
         }
@@ -359,21 +360,21 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                 let alertOption = UILabel()
                 alertOption.frame = CGRect(x: tickTop.frame.midX - 50, y: tickTop.frame.maxY, width: 100, height: tickBottom.frame.minY - tickTop.frame.maxY)
                 if displayValues.count > 0 {
-                if displayValues[i/5] > 100.0 {
-                   alertOption.text = String(format: "%.0f", displayValues[i/5])
-                } else if displayValues[i/5] < 10.0 {
-                   alertOption.text = String(format: "%.1f", displayValues[i/5])
-                } else {
-                   alertOption.text = String(format: "%.2f", displayValues[i/5])
+                    if displayValues[i/5] >= 100.0 {
+                        alertOption.text = String(format: "%.0f", displayValues[i/5])
+                    } else if displayValues[i/5] < 100.0 && displayValues[i/5] > 1.0{
+                        alertOption.text = String(format: "%.1f", displayValues[i/5])
+                    } else if displayValues[i/5] <= 1.0 && displayValues[i/5] >= 0.0{
+                        alertOption.text = String(format: "%.2f", displayValues[i/5])
+                    } else if displayValues[i/5] < 0.0 {
+                        alertOption.text = ""
+                    }
+                    // alertOption.text = String(displayValues[i/5])
+                    alertOption.textAlignment = .center
+                    alertOption.textColor = customColor.white115
+                    alertOption.font = UIFont(name: "Roboto-Regular", size: 12*fontSizeMultiplier)
+                    dial.addSubview(alertOption)
                 }
-                } else {
-                    alertOption.text = String(i)
-                }
-               // alertOption.text = String(displayValues[i/5])
-                alertOption.textAlignment = .center
-                alertOption.textColor = customColor.white115
-                alertOption.font = UIFont(name: "Roboto-Regular", size: 12*fontSizeMultiplier)
-                dial.addSubview(alertOption)
             }
             
             dial.addSubview(tickTop)
@@ -384,8 +385,8 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         dialMask.frame = CGRect(x: 0, y: 597*screenHeight/667, width: 305*screenWidth/375, height: 70*screenWidth/375)
         dialMask.backgroundColor = customColor.black33Alpha0
         view.addSubview(dialMask)
-        addGradient(mask: dialMask, color1: customColor.black33, color2: customColor.black33Alpha0, start: CGPoint(x: 0.0, y: 0.0), end: CGPoint(x: 0.3, y: 0.0))
-        addGradient(mask: dialMask, color1: customColor.black33Alpha0, color2: customColor.black33, start: CGPoint(x: 0.7, y: 0.0), end: CGPoint(x: 1.0, y: 0.0))
+        addGradient(mask: dialMask, color1: customColor.black33, color2: customColor.black33Alpha0, start: CGPoint(x: 0.0, y: 0.0), end: CGPoint(x: 0.25, y: 0.0))
+        addGradient(mask: dialMask, color1: customColor.black33Alpha0, color2: customColor.black33, start: CGPoint(x: 0.75, y: 0.0), end: CGPoint(x: 1.0, y: 0.0))
         
         
         let indicator = UIImageView()
@@ -564,7 +565,16 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         guard stockSymbolTextField.text != nil else {return}
         guard priceLabel.text != nil else {return}
         Set1.ti.append(newAlertTicker)
+        var finalAlertPrice = Double()
         
+        if priceLabel.text != nil {
+            let p = priceLabel.text!
+            let q = p[p.index(p.startIndex, offsetBy: 1)..<p.endIndex]
+            print("q: \(q)")
+            finalAlertPrice = Double(q)!
+            alertPrice = finalAlertPrice
+            
+        }
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID = newAlertTicker.lowercased() + timestamp
         Set1.userAlerts[alertID[Set1.alertCount]] = newAlertLongID
@@ -574,11 +584,12 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         else {
             Set1.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, newAlertBoolTuple.1, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3)
         }
+
         if newAlertTicker != "TICKER" {
             if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 {
-                myloadsave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: true, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
+                myloadsave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: true, deleted: false, email: true, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
             } else {
-                myloadsave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: alertPrice, isGreaterThan: true, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
+                myloadsave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: true, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
             }
             
             self.performSegue(withIdentifier: "fromAddToMain", sender: self)
@@ -731,17 +742,17 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                         self.populateDisplayValues(currentPrice: closings!.last!)
                         self.populateDialView()
                         if closings!.last! < 32.0 {
-                            self.dial.contentOffset.x = self.screenWidth*3.7*CGFloat(closings!.last!)/32
+                            self.dial.contentOffset.x = self.screenWidth*4.75*CGFloat(closings!.last!)/32
                         } else {
-                        self.dial.contentOffset.x = self.screenWidth*4.285
+                            self.dial.contentOffset.x = self.screenWidth*4.285
                         }
                         var t = CGAffineTransform.identity
                         t = t.translatedBy(x: 0, y: -100)
                         t = t.scaledBy(x: 1.0, y: 0.01)
                         self.graph.transform = t
-                       
+                        
                         self.activityView.removeFromSuperview()
-                    
+                        
                         UIView.animate(withDuration: 2.0) {
                             
                             self.graph.transform = CGAffineTransform.identity
@@ -812,7 +823,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
             //            }
             //            print(error)
             //            result(nil, nil)
-            }
+        }
         
     }
     
@@ -829,7 +840,13 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
             let price = offset*(c-a)/(Float(screenWidth)*9.33) + a*0.9988
             print("a: \(a)")
             print("c: \(c)")
-            priceLabel.text = "$" + String(format: "%.02f", price)
+            if price < 0.00 {
+              priceLabel.text = "$0.00"
+            } else if price < 5.00 {
+                priceLabel.text = "$" + String(format: "%.2f", price)
+            } else {
+                priceLabel.text = "$" + String(format: "%.1f", price) + "0"
+            }
         }
     }
 }

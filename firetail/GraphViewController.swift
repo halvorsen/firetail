@@ -390,9 +390,10 @@ class GraphViewController: ViewSetup {
             let (_stockData,dates,error) = stockDataTuple
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0  else {return}
-            print("stockdata: \(stockData)")
-            print("AMOUNT")
-            print(stockData.count)
+            var __stockData = stockData
+            if stockData[stockData.count - 1] == stockData[stockData.count - 2] {
+                __stockData.remove(at: stockData.count - 1)
+            }
             let list = ["1y","5y","10y","1d","5d","1m","3m"]
             let amount = stockData.count
             var stockDatas = [StockData2]()
@@ -401,20 +402,38 @@ class GraphViewController: ViewSetup {
                 var stockData2 = StockData2()
                 switch timeSpan {
                 case "1y":
+                    if amount < 252 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
                     for i in (amount - 252)..<amount {
-                       stockData2.closingPrice.append(stockData[i])
+                       stockData2.closingPrice.append(__stockData[i])
+                    }
                     }
                 case "5y":
+                    if amount < 252*5 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
                     for i in (amount - 252*5)..<amount {
-                        stockData2.closingPrice.append(stockData[i])
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
                     }
                 case "10y":
+                    if amount < 252*10 + 20 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
                     for i in (amount - 252*10 + 20)..<amount {
-                        stockData2.closingPrice.append(stockData[i])
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
                     }
                 case "1d":
                     for i in (amount - 55)..<amount {
-                        stockData2.closingPrice.append(stockData[i])
+                        stockData2.closingPrice.append(__stockData[i])
                     }
 //                    for i in (amount - 5)..<amount {
 //                        stockData2.closingPrice.append(stockData[i])
@@ -423,18 +442,30 @@ class GraphViewController: ViewSetup {
                     
                 case "5d":
                     for i in (amount - 55)..<amount {
-                        stockData2.closingPrice.append(stockData[i])
+                        stockData2.closingPrice.append(__stockData[i])
                     }
 //                    for i in (amount - 5)..<amount {
 //                        stockData2.closingPrice.append(stockData[i])
 //                    }
                 case "1m":
+                    if amount < 252/12 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
                     for i in (amount-252/12)..<amount {
-                        stockData2.closingPrice.append(stockData[i])
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
                     }
                 case "3m":
+                    if amount < 252/4 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
                     for i in (amount-252/4)..<amount {
-                        stockData2.closingPrice.append(stockData[i])
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
                     }
                 default: break
                 }
