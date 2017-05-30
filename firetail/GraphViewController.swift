@@ -202,9 +202,10 @@ class GraphViewController: ViewSetup {
             
             let ma = stockData.1[self.i]!.closingPrice.max()! //from unfiltered highs and lows
             let mi = stockData.1[self.i]!.closingPrice.min()! //from unfiltered
+            
             let ma2 = graphView._outputValues.max()! //from averages for middle of graph
             let mi2 = graphView._outputValues.min()!// from averages for middle of graph
-            
+            print("mi: \(mi),\(ma),\(ma2), \(mi2)")
             //basically what this does to the yellow detailed graphs is gives the actual max and min values as the top and bottom y labels. the graph is all averages execpt for the current price, last point on graph, which is the current prices. As you can imagine this makes for a graph that isn't totally lined up with it's legends but gives you a good point at the end and top and bottom, then everything else is approximation curve through averaged prices
             
             let range = ma - mi
@@ -441,12 +442,15 @@ class GraphViewController: ViewSetup {
                        // stockData2.closingPrice.append(stockData[amount - 1])
                     
                 case "5d":
-                    for i in (amount - 55)..<amount {
+                    if amount < 5 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
+                    for i in (amount - 5)..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
-//                    for i in (amount - 5)..<amount {
-//                        stockData2.closingPrice.append(stockData[i])
-//                    }
+                    }
                 case "1m":
                     if amount < 252/12 {
                         for i in 0..<amount {

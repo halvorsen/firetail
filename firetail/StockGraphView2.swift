@@ -40,12 +40,12 @@ class StockGraphView2: UIView {
     var graphAppearsInView = true
     var g = String()
     var upDownArrowView = UIImageView()
-    
+    var _outputValues = [Double]()
     
     
     // fills the graph view with the uploaded stock data on initialization and loaded by controller //
     func fillChartViewWithSetsOfData(dataPoints: [Double], cubic: Bool = true) {
-       
+        
         var yVal1 = [ChartDataEntry]()
         var yVal2 = [ChartDataEntry]()
         self.cubicChartView.xAxis.drawLabelsEnabled = false
@@ -95,23 +95,23 @@ class StockGraphView2: UIView {
         let data: LineChartData = LineChartData(dataSets: dataSets)
         data.setValueTextColor(UIColor.white)
         if cubic {
-           
+            
             self.cubicChartView.autoScaleMinMaxEnabled = false
             self.cubicChartView.frame = self.bounds
             self.cubicChartView.backgroundColor = UIColor.clear
             self.cubicChartView.data = data
         }
-       
+        
     }
-  
     
-    var _outputValues = [Double]()
+    
+    
     
     func reduceDataPoints(original: [Double]) -> [Double] {
         let originalAmount = original.count
         var _original = original
         
-      //  let last = original.last! //<--added to get the last value equal to last closing price and not average
+        //  let last = original.last! //<--added to get the last value equal to last closing price and not average
         
         let setAmount: Int = originalAmount/15
         var outputValues = [Double](repeating: 0, count: 15)
@@ -123,75 +123,75 @@ class StockGraphView2: UIView {
         for i in 0..<_original.count {
             
             let j = Int(i/setAmount)
-        
+            
             if j != 14 { //<--added to get the last value equal to last closing price and not average
-         
-            outputValues[j] += _original[i]
+                
+                outputValues[j] += _original[i]
             }
         }
-        outputValues[14] += Double(setAmount)*Set1.currentPrice //<--added to get the last value equal to last closing price and not average
+        outputValues[14] += Double(setAmount)*_stockData.closingPrice.last! //<--added to get the last value equal to last closing price and not average
         //outputValues.append(Double(setAmount)*Set.currentPrice)
-
+        
         if g == "1d" {
- 
+            
             outputValues[0] = Double(setAmount)*Set1.yesterday
             
         }
-   
+        
         _outputValues = outputValues.map { $0 / Double(setAmount) }
-
-               return _outputValues
+        
+        return _outputValues
         
     }
-
+    
     func animateIt() {
         self.baseOfGraphView.alpha = 1.0
         self.baseOfGraphView.frame = CGRect(x: 0, y: 565*self.bounds.height/636, width: self.bounds.width, height: 70*self.bounds.height/636)
         
-//        baseOfGraphView.baseLayer.path = baseOfGraphView.bez.cgPath
-//        baseOfGraphView.baseLayer.fillColor = customColor.yellow.cgColor
-//        baseOfGraphView.layer.addSublayer(baseOfGraphView.baseLayer)
- 
+        //        baseOfGraphView.baseLayer.path = baseOfGraphView.bez.cgPath
+        //        baseOfGraphView.baseLayer.fillColor = customColor.yellow.cgColor
+        //        baseOfGraphView.layer.addSublayer(baseOfGraphView.baseLayer)
+        
     }
     
     override func draw(_ rect: CGRect) {
         if graphAppearsInView {
             DispatchQueue.global(qos: .utility).async {
-        let horizontalGridPath = UIBezierPath()
-        let vGridPath = UIBezierPath()
-        for i in 1...5 {
-            horizontalGridPath.move(to: CGPoint(x: 80*self.screenWidth/750, y: self.graphHeight/6*CGFloat(i) - 1))
-            horizontalGridPath.addLine(to: CGPoint(x: self.screenWidth, y: self.graphHeight/6*CGFloat(i) - 1))
-            horizontalGridPath.addLine(to: CGPoint(x: self.screenWidth, y: self.graphHeight/6*CGFloat(i)))
-            horizontalGridPath.addLine(to: CGPoint(x: 80*self.screenWidth/750, y: self.graphHeight/6*CGFloat(i)))
-            horizontalGridPath.addLine(to: CGPoint(x: 80*self.screenWidth/750, y: self.graphHeight/6*CGFloat(i) - 1))
-            horizontalGridPath.close()
-
-        }
-        let gridShape = CAShapeLayer()
-        gridShape.zPosition = 7
-        gridShape.path = horizontalGridPath.cgPath
-        gridShape.fillColor = self.customColor.gridGray.cgColor
-        self.layer.addSublayer(gridShape)
-        for i in 0...5 {
-            vGridPath.move(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: 0))
-            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: self.frame.height))
-            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 + self.screenWidth/750, y: self.frame.height))
-            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 + self.screenWidth/750, y: 0))
-            vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: 0))
-            vGridPath.close()
-  
-        }
-        
-        let gridShape2 = CAShapeLayer()
-        gridShape2.zPosition = 7
-        gridShape2.path = vGridPath.cgPath
-        gridShape2.fillColor = self.customColor.gridGray.cgColor
-        self.layer.addSublayer(gridShape2)
-        }
+                let horizontalGridPath = UIBezierPath()
+                let vGridPath = UIBezierPath()
+                for i in 1...5 {
+                    horizontalGridPath.move(to: CGPoint(x: 80*self.screenWidth/750, y: self.graphHeight/6*CGFloat(i) - 1))
+                    horizontalGridPath.addLine(to: CGPoint(x: self.screenWidth, y: self.graphHeight/6*CGFloat(i) - 1))
+                    horizontalGridPath.addLine(to: CGPoint(x: self.screenWidth, y: self.graphHeight/6*CGFloat(i)))
+                    horizontalGridPath.addLine(to: CGPoint(x: 80*self.screenWidth/750, y: self.graphHeight/6*CGFloat(i)))
+                    horizontalGridPath.addLine(to: CGPoint(x: 80*self.screenWidth/750, y: self.graphHeight/6*CGFloat(i) - 1))
+                    horizontalGridPath.close()
+                    
+                }
+                let gridShape = CAShapeLayer()
+                gridShape.zPosition = 7
+                gridShape.path = horizontalGridPath.cgPath
+                gridShape.fillColor = self.customColor.gridGray.cgColor
+                self.layer.addSublayer(gridShape)
+                for i in 0...5 {
+                    vGridPath.move(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: 0))
+                    vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: self.frame.height))
+                    vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 + self.screenWidth/750, y: self.frame.height))
+                    vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 + self.screenWidth/750, y: 0))
+                    vGridPath.addLine(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: 0))
+                    vGridPath.close()
+                    
+                }
+                
+                let gridShape2 = CAShapeLayer()
+                gridShape2.zPosition = 7
+                gridShape2.path = vGridPath.cgPath
+                gridShape2.fillColor = self.customColor.gridGray.cgColor
+                self.layer.addSublayer(gridShape2)
+            }
         }
     }
-
+    
     init() {super.init(frame: CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenHeight/1334))}
     init(stockData: StockData2, key: String, cubic: Bool) {
         _stockData = stockData
@@ -209,12 +209,20 @@ class StockGraphView2: UIView {
         base.layer.zPosition = 5
         self.addSubview(base)
         g = key
-
+        
         var dataEntries = GraphSet2()
-        if stockData.closingPrice.count <= 15 {
-            fillChartViewWithSetsOfData(dataPoints: stockData.closingPrice, cubic: cubic)
-        } else {
-       
+        if stockData.closingPrice.count == 5 {
+            print("stockData.closingPrice \(stockData.closingPrice)")
+            let __stockData = [stockData.closingPrice[0],stockData.closingPrice[0],stockData.closingPrice[0],
+                              stockData.closingPrice[1],stockData.closingPrice[1],stockData.closingPrice[1],
+                              stockData.closingPrice[2],stockData.closingPrice[2],stockData.closingPrice[2],
+                              stockData.closingPrice[3],stockData.closingPrice[3],stockData.closingPrice[3],
+                              stockData.closingPrice[4],stockData.closingPrice[4],stockData.closingPrice[4],
+                              ]
+            fillChartViewWithSetsOfData(dataPoints: __stockData, cubic: cubic)
+            _outputValues = stockData.closingPrice
+        } else if stockData.closingPrice.count > 14  {
+            
             fillChartViewWithSetsOfData(dataPoints: reduceDataPoints(original: stockData.closingPrice), cubic: cubic)
         }
         if cubic {
@@ -262,7 +270,7 @@ class StockGraphView2: UIView {
         self.backgroundColor = customColor.gray
         layerView.frame = self.bounds
         self.addSubview(layerView)
-         var xLabels: [String] {
+        var xLabels: [String] {
             get {
                 let _xLabels = ["10y","5y","1y","3m","1m","5d","1d"]
                 return _xLabels
@@ -272,9 +280,9 @@ class StockGraphView2: UIView {
             let yY = (1111.66-222.33*CGFloat(i))*graphHeight/screenHeight - 9
             addLabel(name: ys[i], text: "", textColor: customColor.labelGray, textAlignment: .right, fontName: "Roboto-Regular", fontSize: 12, x: 0, y: yY, width: 85, height: 20, lines: 1)
             ys[i].layer.zPosition = 7
-           // if i == 0 || i == 4 { // leave the middle graph labels out
+            // if i == 0 || i == 4 { // leave the middle graph labels out
             self.addSubview(ys[i])
-           // }
+            // }
         }
         
         //make a switch for different graph ranges
