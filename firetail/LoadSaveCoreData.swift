@@ -108,7 +108,7 @@ class LoadSaveCoreData {
         
     }
     
-    func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: Bool, push: Bool, alertLongName: String) {
+    func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, alertLongName: String) {
         
      //   let ref = FIRDatabase.database().reference(withPath: "alerts")
         
@@ -119,7 +119,7 @@ class LoadSaveCoreData {
         let itemsRef = rootRef.child("alerts")
 
         let alertRef = itemsRef.child(alertLongName)
-        let dict = ["isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker,"push":push, "urgent":urgent,"triggered":triggered] as [String : Any]
+        let dict = ["id":alertLongName,"isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker.uppercased(),"push":push, "urgent":urgent,"triggered":triggered] as [String : Any]
         alertRef.setValue(dict)
         
     }
@@ -128,6 +128,7 @@ class LoadSaveCoreData {
 //Structure of FIREBASE Database
 //“users”:{
 //    “ja1459361875666":{ (First two alphanumberic symbols of email address and timestamp)
+//          "id":"ja145..."
 //        “username”:“email@address.com”,
 //        “fullName”:“John Vincent”,
 //        “email”:“john@gmail.com”,

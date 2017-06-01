@@ -88,12 +88,7 @@ class ViewSetup: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
-    
-    
-    
-    
-    
-    
+
     func getOneYearData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
         let myGoogle = Google()
         myGoogle.historicalPrices(years: 1, ticker: stockName.uppercased()) { (stockDataTuple) in
@@ -106,7 +101,7 @@ class ViewSetup: UIViewController {
             var _mo = [String]()
             let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
             for i in 0..<12 {
-                _mo.append(mo[dComponent.month! + i])
+                _mo.append(mo[dComponent.month! + i + 1])
             }
             
             Set1.month = _mo

@@ -23,6 +23,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
     // The callback to handle data message received via FCM for devices running iOS 10 or above.
     public func application(received remoteMessage: MessagingRemoteMessage) {
     }
+    var lastPrice = Double()
     var stockSymbolTextField = UITextField()
     // var textField2 = UITextField()
     var priceLabel = UILabel()
@@ -576,7 +577,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
             
         }
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
-        newAlertLongID = newAlertTicker.lowercased() + timestamp
+        newAlertLongID = newAlertTicker.uppercased() + timestamp
         Set1.userAlerts[alertID[Set1.alertCount]] = newAlertLongID
         Set1.alertCount += 1
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 {
@@ -584,12 +585,16 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         else {
             Set1.alerts[newAlertLongID] = (newAlertLongID, true, alertPrice, false, newAlertBoolTuple.1, newAlertBoolTuple.2, newAlertBoolTuple.0, newAlertTicker, false, false, newAlertBoolTuple.3)
         }
+        var alertTriggerWhenGreaterThan = false
+        if alertPrice > lastPrice {
+            alertTriggerWhenGreaterThan = true
+        }
 
         if newAlertTicker != "TICKER" {
             if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 {
-                myloadsave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: true, deleted: false, email: true, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
+                myloadsave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: "false", push: false, alertLongName: newAlertLongID)
             } else {
-                myloadsave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: true, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: false, push: false, alertLongName: newAlertLongID)
+                myloadsave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.1, sms: newAlertBoolTuple.0, flash: newAlertBoolTuple.2, urgent: newAlertBoolTuple.3, triggered: "false", push: false, alertLongName: newAlertLongID)
             }
             
             self.performSegue(withIdentifier: "fromAddToMain", sender: self)
@@ -778,6 +783,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                         
                         
                         self.alertPrice = closings!.last!
+                        self.lastPrice = closings!.last!
                     }
                     
                 }

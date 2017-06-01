@@ -427,7 +427,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             
             let addView: AddViewController = segue.destination as! AddViewController
             
-            addView.newAlertTicker = "TSLA"
+            addView.newAlertTicker = "TICKER"
         }
     }
 }
