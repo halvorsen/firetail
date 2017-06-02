@@ -508,10 +508,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
             let settings: UIUserNotificationSettings =
                 UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
             UIApplication.shared.registerUserNotificationSettings(settings)
-            //application.registerUserNotificationSettings(settings)
+
         }
         UIApplication.shared.registerForRemoteNotifications()
-        //application.registerForRemoteNotifications()
+
     }
     
     
