@@ -388,7 +388,7 @@ class GraphViewController: ViewSetup {
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         let myGoogle = Google()
         myGoogle.historicalPrices(years: 10, ticker: stockName.uppercased()) { (stockDataTuple) in
-            let (_stockData,dates,error) = stockDataTuple
+            let (_stockData,_,_) = stockDataTuple
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0  else {return}
             var __stockData = stockData

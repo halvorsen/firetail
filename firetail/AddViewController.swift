@@ -9,8 +9,9 @@
 import UIKit
 import QuartzCore
 import Firebase
-import FirebaseMessaging
+//import FirebaseMessaging
 import UserNotifications
+
 
 class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIApplicationDelegate, UIScrollViewDelegate
 {
@@ -502,7 +503,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
                 completionHandler: {_, _ in })
             
             // For iOS 10 data message (sent via FCM)
-            Messaging.messaging().remoteMessageDelegate = self
+            Messaging.messaging().delegate = self
             
         } else {
             let settings: UIUserNotificationSettings =
