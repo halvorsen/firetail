@@ -31,7 +31,6 @@
 		069FD12C1E5382D4003BDFE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 069FD12B1E5382D4003BDFE2 /* Assets.xcassets */; };
 		069FD12F1E5382D4003BDFE2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */; };
 		069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1361E538926003BDFE2 /* ViewSetup.swift */; };
-		06A914011E80A50800D032A9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06A914001E80A50800D032A9 /* GoogleService-Info.plist */; };
 		06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC27071E7319F700041D1F /* CompareScrollDot.swift */; };
 		06F15E901ED7B3ED00288413 /* Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F15E8F1ED7B3ED00288413 /* Google.swift */; };
 		06F15E921ED88C1300288413 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F15E911ED88C1300288413 /* Extensions.swift */; };
@@ -70,7 +69,6 @@
 		069FD12E1E5382D4003BDFE2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		069FD1301E5382D4003BDFE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		069FD1361E538926003BDFE2 /* ViewSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewSetup.swift; sourceTree = "<group>"; };
-		06A914001E80A50800D032A9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06A914021E817E0900D032A9 /* firetail.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = firetail.entitlements; sourceTree = "<group>"; };
 		06AC27071E7319F700041D1F /* CompareScrollDot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScrollDot.swift; sourceTree = "<group>"; };
 		06F15E8F1ED7B3ED00288413 /* Google.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Google.swift; sourceTree = "<group>"; };
@@ -150,7 +148,6 @@
 				0613068F1E626FC9008E5898 /* Roboto-Light.ttf */,
 				069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */,
 				069FD1301E5382D4003BDFE2 /* Info.plist */,
-				06A914001E80A50800D032A9 /* GoogleService-Info.plist */,
 				069FD1281E5382D4003BDFE2 /* firetail.xcdatamodeld */,
 				0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */,
 			);
@@ -214,7 +211,7 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.InAppPurchase = {
 								enabled = 1;
@@ -254,7 +251,6 @@
 			files = (
 				069FD12F1E5382D4003BDFE2 /* LaunchScreen.storyboard in Resources */,
 				069FD12C1E5382D4003BDFE2 /* Assets.xcassets in Resources */,
-				06A914011E80A50800D032A9 /* GoogleService-Info.plist in Resources */,
 				061306901E626FC9008E5898 /* Roboto-Light.ttf in Resources */,
 				0609E4A61E6284DD005965C5 /* Roboto-Medium.ttf in Resources */,
 				0613068E1E626DBA008E5898 /* Roboto-Bold.ttf in Resources */,

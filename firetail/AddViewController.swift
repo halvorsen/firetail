@@ -809,7 +809,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         print("entered addview google1")
         let myGoogle = Google()
         myGoogle.historicalPrices(years: 1, ticker: self.newAlertTicker) { (stockDataTuple) in
-            let (_stockData,dates,error) = stockDataTuple
+            let (_stockData,dates,_) = stockDataTuple
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0 else {return}
             self.isStock = true

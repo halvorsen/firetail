@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-
+        FirebaseApp.configure()
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
             UNUserNotificationCenter.current().delegate = self
@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         application.registerForRemoteNotifications()
         
-        FirebaseApp.configure()
+        
         
         // Override point for customization after application launch.
         
@@ -54,7 +54,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        Messaging.messaging().apnsToken = deviceToken
+       // Messaging.messaging().apnsToken = deviceToken
+        Messaging.messaging().setAPNSToken(deviceToken, type: MessagingAPNSTokenType.sandbox)
+        Messaging.messaging().setAPNSToken(deviceToken, type: MessagingAPNSTokenType.prod)
     }
     
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
@@ -163,6 +165,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     public func application(received remoteMessage: MessagingRemoteMessage) {
         print("Minnesota")
         print(remoteMessage.appData)
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        // Will not be called until you open your application from the remote notification (returns to foreground)
+        
+        // Note: *with swizzling disabled you must let Messaging know about the message
+        // Messaging.messaging().appDidReceiveMessage(userInfo)`
+        
+        // Print message ID.
+        if let messageId = userInfo["gcm.message_id"] {
+            print("Message Id: \(messageId)")
+        }
+        
+        // Print full message.
+        print(userInfo)
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        // Will not be called until you open your application from the remote notification (returns to foreground)
+        
+        // Note: *with swizzling disabled you must let Messaging know about the message
+        // Messaging.messaging().appDidReceiveMessage(userInfo)
+        
+        // Print message id
+        if let messageId = userInfo["gcm.message_id"] {
+            print("Message Id: \(messageId)")
+        }
+        
+        // Print full message.
+        print(userInfo)
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+        
+        completionHandler(UIBackgroundFetchResult.newData)
     }
     
 //    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
