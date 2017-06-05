@@ -22,6 +22,8 @@
 		0617DFA51E7DBDC7006D73C5 /* LoadSaveCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */; };
 		062CC7371EDCA66400E2520A /* IndexListOfStocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */; };
 		06478E6D1EE38E390016DF88 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */; };
+		06478E6F1EE5CC100016DF88 /* AddStockTickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */; };
+		06478E711EE5DA450016DF88 /* AddStockPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */; };
 		0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0672601A1E67BD5B00F54500 /* StockGraphView2.swift */; };
 		06866FA61EDFA18B003D0C46 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06866FA51EDFA18B003D0C46 /* StoreKit.framework */; };
 		068D8D251E72F0D700E422DB /* Dot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068D8D241E72F0D700E422DB /* Dot.swift */; };
@@ -59,6 +61,8 @@
 		0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadSaveCoreData.swift; sourceTree = "<group>"; };
 		062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexListOfStocks.swift; sourceTree = "<group>"; };
 		06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockTickerViewController.swift; sourceTree = "<group>"; };
+		06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockPriceViewController.swift; sourceTree = "<group>"; };
 		0672601A1E67BD5B00F54500 /* StockGraphView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView2.swift; sourceTree = "<group>"; };
 		06866FA51EDFA18B003D0C46 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		068D8D241E72F0D700E422DB /* Dot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dot.swift; sourceTree = "<group>"; };
@@ -127,6 +131,8 @@
 				06FDA8DB1E7094270043BC90 /* CompareScroll.swift */,
 				06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */,
 				06FC95B61E76E9F000DF7559 /* AddViewController.swift */,
+				06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */,
+				06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */,
 				062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */,
 				06F15E8F1ED7B3ED00288413 /* Google.swift */,
 				06F15E911ED88C1300288413 /* Extensions.swift */,
@@ -325,6 +331,7 @@
 				0617DFA51E7DBDC7006D73C5 /* LoadSaveCoreData.swift in Sources */,
 				0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */,
 				068D8D251E72F0D700E422DB /* Dot.swift in Sources */,
+				06478E711EE5DA450016DF88 /* AddStockPriceViewController.swift in Sources */,
 				069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */,
 				069FD12A1E5382D4003BDFE2 /* firetail.xcdatamodeld in Sources */,
 				06FC95B91E77415500DF7559 /* DailyGraphForAlertView.swift in Sources */,
@@ -334,6 +341,7 @@
 				0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */,
 				0617DFA11E7B6F81006D73C5 /* GridLine.swift in Sources */,
 				06FDA8DC1E7094270043BC90 /* CompareScroll.swift in Sources */,
+				06478E6F1EE5CC100016DF88 /* AddStockTickerViewController.swift in Sources */,
 				06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */,
 				06110EA91EB925BF00C901C5 /* ChangePasswordViewController.swift in Sources */,
 				0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */,

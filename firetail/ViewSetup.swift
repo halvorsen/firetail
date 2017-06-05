@@ -297,6 +297,15 @@ extension String {
         }
     }
     
+    private func addGradient(mask: UILabel, color1: UIColor, color2: UIColor, start: CGPoint, end: CGPoint){
+        let gradient:CAGradientLayer = CAGradientLayer()
+        gradient.frame.size = mask.bounds.size
+        gradient.colors = [color1.cgColor,color2.cgColor]
+        gradient.startPoint = start
+        gradient.endPoint = end
+        mask.layer.addSublayer(gradient)
+    }
+    
     
 }
 
