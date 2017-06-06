@@ -385,10 +385,10 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         }
         let dialMask = UILabel()
         dialMask.frame = CGRect(x: 0, y: 597*screenHeight/667, width: 305*screenWidth/375, height: 70*screenWidth/375)
-        dialMask.backgroundColor = customColor.black33Alpha0
+        dialMask.backgroundColor = customColor.black42Alpha0
         view.addSubview(dialMask)
-        addGradient(mask: dialMask, color1: customColor.black33, color2: customColor.black33Alpha0, start: CGPoint(x: 0.0, y: 0.0), end: CGPoint(x: 0.25, y: 0.0))
-        addGradient(mask: dialMask, color1: customColor.black33Alpha0, color2: customColor.black33, start: CGPoint(x: 0.75, y: 0.0), end: CGPoint(x: 1.0, y: 0.0))
+        addGradient(mask: dialMask, color1: customColor.black42, color2: customColor.black42Alpha0, start: CGPoint(x: 0.0, y: 0.0), end: CGPoint(x: 0.25, y: 0.0))
+        addGradient(mask: dialMask, color1: customColor.black42Alpha0, color2: customColor.black42, start: CGPoint(x: 0.75, y: 0.0), end: CGPoint(x: 1.0, y: 0.0))
         
         
         let indicator = UIImageView()

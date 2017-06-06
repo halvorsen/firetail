@@ -137,7 +137,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                 self.username.text = email
                 Auth.auth().signIn(withEmail: email, password: password1) //adds authentication
                 self.delay(bySeconds: 1.5) {
-                    self.performSegue(withIdentifier: "fromSignupToAdd", sender: self)
+                    self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                 }
             } else {
                 self.userWarning(title: "", message: (error!.localizedDescription))

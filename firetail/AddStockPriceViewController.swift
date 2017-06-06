@@ -10,6 +10,7 @@ import UIKit
 
 class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     var newAlertTicker = String()
+    var newAlertTickerLabel = UILabel()
     var newAlertPrice = Double()
     let backArrow = UIButton()
     var graph = DailyGraphForAlertView()
@@ -33,45 +34,90 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     let setPriceAlert = UILabel()
     let arrow = UIImageView()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        arrow.frame = CGRec
-        addLabel(name: setPriceAlert, text: "Set Price Alert", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 56, y: 880, width: 300, height: 80, lines: 1)
-        view.addSubview(stockSymbol)
-        addButton(name: set, x: 0, y: 1194, width: 750, height: 140, title: "SET", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.setFunc(_:)), addSubview: true)
-        addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.back(_:)), addSubview: true)
+    private func loadItAll() {
+        let blockInBackground = UIView()
+        blockInBackground.frame = CGRect(x: 0, y: 424*screenHeight/667, width: screenWidth, height: 70*screenHeight/667)
+        blockInBackground.backgroundColor = customColor.black24
+        view.addSubview(blockInBackground)
+        arrow.frame = CGRect(x: 212*screenWidth/375, y: 456*screenHeight/667, width: 10*screenWidth/375, height: 11*screenWidth/375)
+        arrow.image = #imageLiteral(resourceName: "upArrow")
+        view.addSubview(arrow)
+        addLabel(name: setPriceAlert, text: "Set Price Alert", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 56, y: 885, width: 300, height: 80, lines: 1)
+        view.addSubview(setPriceAlert)
         
-        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 56, y: 1055, width: 240, height: 80, lines: 1)
+        addButton(name: set, x: 0, y: 1194, width: 750, height: 140, title: "SET", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.setFunc(_:)), addSubview: true)
+        set.contentHorizontalAlignment = .center
+        
+        
+        
+        addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif-Regular", fontSize: 20, x: 60, y: 606, width: 200, height: 56, lines: 1)
+        view.addSubview(newAlertTickerLabel)
+        
+        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 56, y: 680, width: 240, height: 80, lines: 1)
         view.addSubview(stockSymbol)
         
         container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 260*screenHeight/667))
         container.contentSize = CGSize(width: 3.8*screenWidth, height: container.bounds.height)
-        container.backgroundColor = customColor.black24
+        container.backgroundColor = customColor.black33
         container.contentOffset =  CGPoint(x: 2.7*screenWidth, y: 0)
         container.clipsToBounds = false
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
         view.addSubview(container)
         
-        priceLabel.frame = CGRect(x: 0, y: 450*screenHeight/667, width: screenWidth, height: 25*screenHeight/667)
+        priceLabel.frame = CGRect(x: 0, y: 450*screenHeight/667, width: 205*screenWidth/375, height: 25*screenHeight/667)
         priceLabel.font = UIFont(name: "Roboto-Bold", size: 17*fontSizeMultiplier)
-        priceLabel.textAlignment = .center
+        priceLabel.textAlignment = .right
         priceLabel.textColor = .white
         priceLabel.text = ""
         view.addSubview(priceLabel)
         
+        dial.backgroundColor = customColor.black42
+        dial.frame = CGRect(x: 0, y: 494*screenHeight/667, width: screenWidth, height: 100*screenHeight/667)
+        dial.contentSize = CGSize(width: 416*screenWidth, height: dial.bounds.height)
+        view.addSubview(dial)
+        dial.contentOffset.x = screenWidth*4.285
+        dial.showsHorizontalScrollIndicator = false
+        dial.showsVerticalScrollIndicator = false
+        dial.delegate = self
         
+       
+        
+        var myBezier = UIBezierPath()
+        myBezier.move(to: CGPoint(x: 167*screenWidth/375, y: 489*screenHeight/667))
+        myBezier.addLine(to: CGPoint(x: 207*screenWidth/375, y: 489*screenHeight/667))
+        myBezier.addLine(to: CGPoint(x: 187*screenWidth/375, y: 509*screenHeight/667))
+        myBezier.close()
+        let myLayer = CAShapeLayer()
+        myLayer.path = myBezier.cgPath
+        myLayer.fillColor = customColor.black24.cgColor
+        view.layer.addSublayer(myLayer)
+        
+        addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.back(_:)), addSubview: true)
+        backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
+        
+        
+    }
+    var dialPrice = Double()
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = customColor.black33
+        activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityView.center.y = view.center.y
+        activityView.center.x = view.center.x
+        activityView.startAnimating()
+        activityView.alpha = 1.0
+        view.addSubview(activityView)
         
         prepareGraph() {(dateArray,closings) -> Void in
             if closings != nil && dateArray != nil {
-                
+                self.loadItAll()
                 self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)
                 self.container.addSubview(self.graph)
                 
-                for view in self.dial.subviews {
-                    view.removeFromSuperview()
-                }
+                
                 self.populateDisplayValues(currentPrice: closings!.last!)
+                dialPrice = closings!.last!
                 self.populateDialView()
                 if closings!.last! < 32.0 {
                     self.dial.contentOffset.x = self.screenWidth*4.75*CGFloat(closings!.last!)/32
@@ -115,25 +161,13 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             
         }
         
-        dial.backgroundColor = .clear
-        dial.frame = CGRect(x: 0, y: 494*screenHeight/667, width: screenWidth, height: 100*screenWidth/375)
-        dial.contentSize = CGSize(width: 10*screenWidth, height: dial.bounds.height)
-        view.addSubview(dial)
-        dial.contentOffset.x = screenWidth*4.285
-        dial.showsHorizontalScrollIndicator = false
-        dial.showsVerticalScrollIndicator = false
-        dial.delegate = self
         
-        activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-        activityView.center.y = self.container.center.y
-        activityView.center.x = 3.2*screenWidth
-        activityView.startAnimating()
-        activityView.alpha = 1.0
-        self.container.addSubview(activityView)
         
         
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        
+    }
     
     
     func populateDisplayValues(currentPrice: Double) {
@@ -160,38 +194,35 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     }
     
     func populateDialView() {
+        var _dialPrice = Int()
+        if dialPrice <= 10 {
+        _dialPrice = -15
+        } else {
+          _dialPrice = Int(dialPrice)*5 - 100
+        }
         
-        
-        for i in 0..<360 {
+        for i in _dialPrice..<(_dialPrice + 200) {
             
             let tickTop = UILabel()
-            tickTop.frame = CGRect(x: CGFloat(i)*11*screenWidth/375, y: 0, width: 1*screenWidth/375, height: 10*screenWidth/375)
-            tickTop.backgroundColor = customColor.white115
+            tickTop.frame = CGRect(x: CGFloat(i)*15*screenWidth/375, y: 0, width: 1*screenWidth/375, height: 15*screenHeight/667)
+            tickTop.backgroundColor = .white
             let tickBottom = UILabel()
-            tickBottom.frame = CGRect(x: CGFloat(i)*11*screenWidth/375, y: 60*screenWidth/375, width: 1*screenWidth/375, height: 10*screenWidth/375)
-            tickBottom.backgroundColor = customColor.white115
+            tickBottom.frame = CGRect(x: CGFloat(i)*15*screenWidth/375, y: 85*screenHeight/667, width: 1*screenWidth/375, height: 15*screenHeight/667)
+            tickBottom.backgroundColor = .white
             
             
             if i%5 == 0 {
-                tickTop.frame.size.height = 14*screenWidth/375
-                tickBottom.frame.size.height = 14*screenWidth/375
-                tickBottom.frame.origin.y -= 4*screenWidth/375
+                tickTop.frame.size.height = 19*screenHeight/667
+                tickBottom.frame.size.height = 19*screenHeight/667
+                tickBottom.frame.origin.y -= 4*screenHeight/667
                 let alertOption = UILabel()
                 alertOption.frame = CGRect(x: tickTop.frame.midX - 50, y: tickTop.frame.maxY, width: 100, height: tickBottom.frame.minY - tickTop.frame.maxY)
                 if displayValues.count > 0 {
-                    if displayValues[i/5] >= 100.0 {
-                        alertOption.text = String(format: "%.0f", displayValues[i/5])
-                    } else if displayValues[i/5] < 100.0 && displayValues[i/5] > 1.0{
-                        alertOption.text = String(format: "%.1f", displayValues[i/5])
-                    } else if displayValues[i/5] <= 1.0 && displayValues[i/5] >= 0.0{
-                        alertOption.text = String(format: "%.2f", displayValues[i/5])
-                    } else if displayValues[i/5] < 0.0 {
-                        alertOption.text = ""
-                    }
+                    alertOption.text = String(i/5)
                     // alertOption.text = String(displayValues[i/5])
                     alertOption.textAlignment = .center
-                    alertOption.textColor = customColor.white115
-                    alertOption.font = UIFont(name: "Roboto-Regular", size: 12*fontSizeMultiplier)
+                    alertOption.textColor = .white
+                    alertOption.font = UIFont(name: "Roboto-Bold", size: 14*fontSizeMultiplier)
                     dial.addSubview(alertOption)
                 }
             }
@@ -201,21 +232,55 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             
         }
         let dialMask = UILabel()
-        dialMask.frame = CGRect(x: 0, y: 597*screenHeight/667, width: 305*screenWidth/375, height: 70*screenWidth/375)
-        dialMask.backgroundColor = customColor.black33Alpha0
+        dialMask.frame = CGRect(x: 0, y: 514*screenHeight/667, width: screenWidth, height: 60*screenHeight/667)
+        dialMask.backgroundColor = customColor.black42Alpha0
         view.addSubview(dialMask)
-        addGradient(mask: dialMask, color1: customColor.black33, color2: customColor.black33Alpha0, start: CGPoint(x: 0.0, y: 0.0), end: CGPoint(x: 0.25, y: 0.0))
-        addGradient(mask: dialMask, color1: customColor.black33Alpha0, color2: customColor.black33, start: CGPoint(x: 0.75, y: 0.0), end: CGPoint(x: 1.0, y: 0.0))
+        addGradient(mask: dialMask, color1: customColor.black42, color2: customColor.black42Alpha0, start: CGPoint(x: -0.2, y: 0.0), end: CGPoint(x: 0.45, y: 0.0))
+        addGradient(mask: dialMask, color1: customColor.black42Alpha0, color2: customColor.black42, start: CGPoint(x: 0.55, y: 0.0), end: CGPoint(x: 1.2, y: 0.0))
         
+    }
+    
+    func populateDialView2() {
+        var _dialPrice = Int()
+        if dialPrice <= 10 {
+            _dialPrice = -15
+        } else {
+            _dialPrice = Int(dialPrice)*5 - 100
+        }
         
-        let indicator = UIImageView()
-        indicator.image = #imageLiteral(resourceName: "Indicator")
-        indicator.frame = CGRect(x: 142*screenWidth/375, y: screenHeight - 70*screenWidth/375, width: 23*screenWidth/375, height: 12*screenWidth/375)
-        view.addSubview(indicator)
-        
-        let add = UIButton()
-        addButton(name: add, x: 610, y: 1334 - 70*screenWidth*1334/(375*screenHeight), width: 140, height: 140, title: "  +", font: "Roboto-Light", fontSize: 45, titleColor: customColor.black33, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddViewController.add(_:)), addSubview: true)
-        add.titleLabel?.textAlignment = .center
+        for i in -15..<10000 where i < _dialPrice && i > (_dialPrice + 199) {
+            
+            let tickTop = UILabel()
+            tickTop.frame = CGRect(x: CGFloat(i)*15*screenWidth/375, y: 0, width: 1*screenWidth/375, height: 15*screenHeight/667)
+            tickTop.backgroundColor = .white
+            let tickBottom = UILabel()
+            tickBottom.frame = CGRect(x: CGFloat(i)*15*screenWidth/375, y: 85*screenHeight/667, width: 1*screenWidth/375, height: 15*screenHeight/667)
+            tickBottom.backgroundColor = .white
+            
+            
+            if i%5 == 0 {
+                tickTop.frame.size.height = 19*screenHeight/667
+                tickBottom.frame.size.height = 19*screenHeight/667
+                tickBottom.frame.origin.y -= 4*screenHeight/667
+                let alertOption = UILabel()
+                alertOption.frame = CGRect(x: tickTop.frame.midX - 50, y: tickTop.frame.maxY, width: 100, height: tickBottom.frame.minY - tickTop.frame.maxY)
+                if displayValues.count > 0 {
+                    alertOption.text = String(i/5)
+                    // alertOption.text = String(displayValues[i/5])
+                    alertOption.textAlignment = .center
+                    alertOption.textColor = .white
+                    alertOption.font = UIFont(name: "Roboto-Bold", size: 14*fontSizeMultiplier)
+                    dial.addSubview(alertOption)
+                }
+            }
+            
+            dial.addSubview(tickTop)
+            dial.addSubview(tickBottom)
+            
+        }
+            
+            
+
         
     }
     
@@ -238,15 +303,14 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     
     
     private func prepareGraph(result: @escaping (_ dateArray: [(String,Int)]?,_ closings: [Double]?) -> Void) {
-        guard stockSymbolTextField.text != nil else {return}
         print("entered addview google1")
         let myGoogle = Google()
         myGoogle.historicalPrices(years: 1, ticker: self.newAlertTicker) { (stockDataTuple) in
             let (_stockData,dates,_) = stockDataTuple
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0 else {return}
-            self.isStock = true
-            populateDialView()
+            
+            self.populateDialView()
             result(dates, stockData)
             //FIXIT add error handling simiar to BigBoard below, the error will be coming from url request to google
             // })
@@ -275,9 +339,9 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             let offset = Float(scrollView.contentOffset.x)
             // little messy here but should be just a linear calculation, the labeling could be wrong too
             print("displayvalues")
-            print(displayValues[66])
+            print(displayValues[49])
             let a = Float((displayValues[3]-displayValues[2])*0.8+displayValues[2])
-            let c = Float((displayValues[67]-displayValues[66])*0.4+displayValues[66])
+            let c = Float((displayValues[50]-displayValues[49])*0.4+displayValues[49])
             let price = offset*(c-a)/(Float(screenWidth)*9.33) + a*0.9988
             print("a: \(a)")
             print("c: \(c)")
@@ -289,6 +353,15 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 priceLabel.text = "$" + String(format: "%.1f", price) + "0"
             }
         }
+    }
+    
+    private func addGradient(mask: UILabel, color1: UIColor, color2: UIColor, start: CGPoint, end: CGPoint){
+        let gradient:CAGradientLayer = CAGradientLayer()
+        gradient.frame.size = mask.bounds.size
+        gradient.colors = [color1.cgColor,color2.cgColor]
+        gradient.startPoint = start
+        gradient.endPoint = end
+        mask.layer.addSublayer(gradient)
     }
     
 }

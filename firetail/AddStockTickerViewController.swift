@@ -17,10 +17,11 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     var newAlertTicker = String()
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = customColor.black24
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockTickerViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         addLabel(name: quickPick, text: "QUICK PICK", textColor: customColor.labelGray, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 11, x: 36, y: 180, width: 200, height: 44, lines: 1)
-        
+        view.addSubview(quickPick)
         let boxButtons:[(CGFloat,CGFloat,String)] = [
         
             (220,164,"TSLA"),
@@ -40,13 +41,14 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         for (x,y,ticker) in boxButtons {
             let myButton = UIButton()
             addButton(name: myButton, x: x, y: y, width: 216, height: 70, title: ticker, font: "Roboto-Bold", fontSize: 18, titleColor: .black, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockTickerViewController.quickPickFunc(_:)), addSubview: true)
+            myButton.contentHorizontalAlignment = .center
         }
         
         addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.labelGray, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 808, width: 400, height: 42, lines: 1)
         view.addSubview(stockSymbol)
-        
+        stockSymbolTextField.delegate = self
         stockSymbolTextField = UITextField(frame: CGRect(x: 30*screenWidth/375,y: 368*screenHeight/667,width: 110*screenWidth/375 ,height: 28*screenHeight/667))
-        stockSymbolTextField.placeholder = "TS"
+        stockSymbolTextField.placeholder = "Search"
         stockSymbolTextField.textAlignment = .left
         stockSymbolTextField.clearsOnBeginEditing = true
         stockSymbolTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
@@ -72,7 +74,8 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func quickPickFunc(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromAddStockTickerToMain", sender: self)
+        newAlertTicker = (sender.titleLabel?.text!)!
+        self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -83,11 +86,16 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if stockSymbolTextField.text != nil && stockSymbolTextField.delegate != nil {
-          newAlertTicker = stockSymbolTextField.text!.uppercased()
-          self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
-        }
         
+        
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if stockSymbolTextField.text != nil && stockSymbolTextField.delegate != nil {
+            newAlertTicker = stockSymbolTextField.text!.uppercased()
+            self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
+        }
+        return false
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

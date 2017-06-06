@@ -64,7 +64,7 @@ struct CustomColor {
     
     //black33
     let black33 = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
-    let black33Alpha0 = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 0.0)
+    let black42Alpha0 = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 0.0)
     //black42
     let black42 = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
     //black30
@@ -297,14 +297,7 @@ extension String {
         }
     }
     
-    private func addGradient(mask: UILabel, color1: UIColor, color2: UIColor, start: CGPoint, end: CGPoint){
-        let gradient:CAGradientLayer = CAGradientLayer()
-        gradient.frame.size = mask.bounds.size
-        gradient.colors = [color1.cgColor,color2.cgColor]
-        gradient.startPoint = start
-        gradient.endPoint = end
-        mask.layer.addSublayer(gradient)
-    }
+    
     
     
 }

@@ -24,6 +24,7 @@
 		06478E6D1EE38E390016DF88 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */; };
 		06478E6F1EE5CC100016DF88 /* AddStockTickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */; };
 		06478E711EE5DA450016DF88 /* AddStockPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */; };
+		06478E751EE610BC0016DF88 /* AddStockAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */; };
 		0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0672601A1E67BD5B00F54500 /* StockGraphView2.swift */; };
 		06866FA61EDFA18B003D0C46 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06866FA51EDFA18B003D0C46 /* StoreKit.framework */; };
 		068D8D251E72F0D700E422DB /* Dot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068D8D241E72F0D700E422DB /* Dot.swift */; };
@@ -36,7 +37,6 @@
 		069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1361E538926003BDFE2 /* ViewSetup.swift */; };
 		06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC27071E7319F700041D1F /* CompareScrollDot.swift */; };
 		06F15E901ED7B3ED00288413 /* Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F15E8F1ED7B3ED00288413 /* Google.swift */; };
-		06F15E921ED88C1300288413 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F15E911ED88C1300288413 /* Extensions.swift */; };
 		06FC95B71E76E9F000DF7559 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FC95B61E76E9F000DF7559 /* AddViewController.swift */; };
 		06FC95B91E77415500DF7559 /* DailyGraphForAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */; };
 		06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */; };
@@ -63,6 +63,7 @@
 		06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockTickerViewController.swift; sourceTree = "<group>"; };
 		06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockPriceViewController.swift; sourceTree = "<group>"; };
+		06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockAlertViewController.swift; sourceTree = "<group>"; };
 		0672601A1E67BD5B00F54500 /* StockGraphView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView2.swift; sourceTree = "<group>"; };
 		06866FA51EDFA18B003D0C46 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		068D8D241E72F0D700E422DB /* Dot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dot.swift; sourceTree = "<group>"; };
@@ -78,7 +79,6 @@
 		06A914021E817E0900D032A9 /* firetail.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = firetail.entitlements; sourceTree = "<group>"; };
 		06AC27071E7319F700041D1F /* CompareScrollDot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScrollDot.swift; sourceTree = "<group>"; };
 		06F15E8F1ED7B3ED00288413 /* Google.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Google.swift; sourceTree = "<group>"; };
-		06F15E911ED88C1300288413 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		06FC95B61E76E9F000DF7559 /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyGraphForAlertView.swift; sourceTree = "<group>"; };
 		06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseOfGraphView.swift; sourceTree = "<group>"; };
@@ -130,12 +130,12 @@
 				068D8D241E72F0D700E422DB /* Dot.swift */,
 				06FDA8DB1E7094270043BC90 /* CompareScroll.swift */,
 				06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */,
+				06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */,
 				06FC95B61E76E9F000DF7559 /* AddViewController.swift */,
 				06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */,
 				06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */,
 				062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */,
 				06F15E8F1ED7B3ED00288413 /* Google.swift */,
-				06F15E911ED88C1300288413 /* Extensions.swift */,
 				0617DFA01E7B6F81006D73C5 /* GridLine.swift */,
 				06AC27071E7319F700041D1F /* CompareScrollDot.swift */,
 				06FDA8DF1E71B9960043BC90 /* Set1.swift */,
@@ -325,7 +325,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06F15E921ED88C1300288413 /* Extensions.swift in Sources */,
 				06FDA8E01E71B9960043BC90 /* Set1.swift in Sources */,
 				0609E4CF1E649596005965C5 /* LoginViewController.swift in Sources */,
 				0617DFA51E7DBDC7006D73C5 /* LoadSaveCoreData.swift in Sources */,
@@ -337,6 +336,7 @@
 				06FC95B91E77415500DF7559 /* DailyGraphForAlertView.swift in Sources */,
 				06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */,
 				06F15E901ED7B3ED00288413 /* Google.swift in Sources */,
+				06478E751EE610BC0016DF88 /* AddStockAlertViewController.swift in Sources */,
 				062CC7371EDCA66400E2520A /* IndexListOfStocks.swift in Sources */,
 				0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */,
 				0617DFA11E7B6F81006D73C5 /* GridLine.swift in Sources */,

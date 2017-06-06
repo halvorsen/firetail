@@ -799,7 +799,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     @objc private func addFunc(_ sender: UIButton) {
         if premiumMember || alertCount < 3 || true { //hack
-            self.performSegue(withIdentifier: "fromMainToAdd", sender: self)
+            self.performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
             
         } else if !premiumMember {
             purchase()
@@ -813,7 +813,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             if addTextField.text != nil && addTextField.delegate != nil {
                 
                 stringToPass = addTextField.text!
-                self.performSegue(withIdentifier: "fromMainToAdd", sender: self)
+                self.performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
             }
         }
         
@@ -825,11 +825,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             let graphView: GraphViewController = segue.destination as! GraphViewController
             
             graphView.passedString = stringToPass
-        } else if segue.identifier == "fromMainToAdd" {
-            let addView: AddViewController = segue.destination as! AddViewController
+        } else if segue.identifier == "fromMainToAddStockTicker" {
+            let addView: AddStockTickerViewController = segue.destination as! AddStockTickerViewController
             
             addView.newAlertTicker = "TICKER"
-            addView.isSeguedFromDashboard = true
         }
     }
     

@@ -37,7 +37,7 @@ class DailyGraphForAlertView: UIView {
     init(graphData: [Double], dateArray: [(String,Int)], frame: CGRect = CGRect(x: 0, y:0*UIScreen.main.bounds.height/667, width: 4*UIScreen.main.bounds.width, height: 160*UIScreen.main.bounds.height/667)) {
 
         super.init(frame: frame)
-        self.backgroundColor = customColor.black24
+        self.backgroundColor = customColor.black33
         var _graphData = [Double]()
         var a = 0; if String(format:"%.2f", graphData[dateArray.count-1]) == String(format:"%.2f", graphData[dateArray.count-2]) { a = 1 }
         for i in 0..<20 {
@@ -151,7 +151,7 @@ class DailyGraphForAlertView: UIView {
         ww.backgroundColor = customColor.black21
         self.addSubview(ww)
         let extraBottomGray = UIView(frame: CGRect(x: 0, y: 160*screenHeight/667, width: screenWidth*5, height: 30*screenHeight/667))
-        extraBottomGray.backgroundColor = customColor.black24
+        extraBottomGray.backgroundColor = customColor.black33
         self.addSubview(extraBottomGray)
         
        

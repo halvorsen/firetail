@@ -198,7 +198,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                         } else {
                             if self.isFirstTimeSeguing {
                                 self.isFirstTimeSeguing = false
-                                self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
+                                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
                             }
                         }
                         
@@ -208,7 +208,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     }
                 }
             } else {
-                self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
+                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
             }
             
             
@@ -395,7 +395,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         if ti == [""] {
             if isFirstTimeSeguing {
                 isFirstTimeSeguing = false
-                self.performSegue(withIdentifier: "fromLoginToAdd", sender: self)
+                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
             }
         } else {
     
@@ -423,9 +423,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "fromLoginToAdd" {
+        if segue.identifier == "fromLoginToAddStockTicker" {
             
-            let addView: AddViewController = segue.destination as! AddViewController
+            let addView: AddStockTickerViewController = segue.destination as! AddStockTickerViewController
             
             addView.newAlertTicker = "TICKER"
         }

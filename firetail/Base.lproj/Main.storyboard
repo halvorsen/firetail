@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XTk-aP-Bp1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XTk-aP-Bp1">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -25,7 +25,7 @@
                     <connections>
                         <segue destination="Vet-45-juL" kind="show" identifier="fromLoginToSignup" id="aWA-Zg-Qf7"/>
                         <segue destination="9Rf-87-nHj" kind="show" identifier="fromLoginToMain" id="j56-Bz-xny"/>
-                        <segue destination="VGb-5b-ve2" kind="show" identifier="fromLoginToAdd" id="S7Y-sp-YOE"/>
+                        <segue destination="VGb-5b-ve2" kind="show" identifier="fromLoginToAddStockTicker" id="S7Y-sp-YOE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V8G-bH-dK0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -75,10 +75,10 @@
             </objects>
             <point key="canvasLocation" x="-2634" y="-817"/>
         </scene>
-        <!--Add View Controller-->
+        <!--Add Stock Ticker View Controller-->
         <scene sceneID="CzO-Gj-xMU">
             <objects>
-                <viewController id="VGb-5b-ve2" customClass="AddViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="VGb-5b-ve2" customClass="AddStockTickerViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TOR-lR-XqF"/>
                         <viewControllerLayoutGuide type="bottom" id="8Jc-IY-J25"/>
@@ -89,12 +89,56 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="9Rf-87-nHj" kind="show" identifier="fromAddToMain" id="EQX-Ew-9w8"/>
+                        <segue destination="9Rf-87-nHj" kind="show" identifier="fromAddStockTickerToMain" id="csx-Lf-EuV"/>
+                        <segue destination="4fq-eV-8sR" kind="show" identifier="fromAddStockTickerToAddStockPrice" id="5ck-wd-Jmd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jdV-Fo-qzU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-785" y="-765"/>
+            <point key="canvasLocation" x="-722" y="-785"/>
+        </scene>
+        <!--Add Stock Price View Controller-->
+        <scene sceneID="v21-xB-1h2">
+            <objects>
+                <viewController id="4fq-eV-8sR" customClass="AddStockPriceViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="4La-nq-Dv2"/>
+                        <viewControllerLayoutGuide type="bottom" id="9Mr-68-2Mj"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="wpO-h4-1fj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="ttD-k5-EX4" kind="show" identifier="fromAddStockPriceToAddStockAlert" id="ZnZ-kn-boc"/>
+                        <segue destination="9Rf-87-nHj" kind="show" identifier="fromAddStockPriceToDashboard" id="oo7-fM-Qz4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GNN-dw-Wls" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7" y="-787"/>
+        </scene>
+        <!--Add Stock Alert View Controller-->
+        <scene sceneID="96e-13-Iz0">
+            <objects>
+                <viewController id="ttD-k5-EX4" customClass="AddStockAlertViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gIZ-bY-6oN"/>
+                        <viewControllerLayoutGuide type="bottom" id="fMx-h9-Mr0"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="uDg-AK-9UD">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="9Rf-87-nHj" kind="show" identifier="fromAddStockAlertToDashboard" id="ISW-sK-ONh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3zC-D7-ANs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="750" y="-794"/>
         </scene>
         <!--Signup View Controller-->
         <scene sceneID="gQK-Yt-OFO">
@@ -110,7 +154,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="VGb-5b-ve2" kind="show" identifier="fromSignupToAdd" id="se2-yd-rfk"/>
+                        <segue destination="VGb-5b-ve2" kind="show" identifier="fromSignupToAddStockTicker" id="se2-yd-rfk"/>
                         <segue destination="XTk-aP-Bp1" kind="show" identifier="fromSignupToLogin" id="Nux-za-Mvu"/>
                     </connections>
                 </viewController>
@@ -133,7 +177,7 @@
                     </view>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="fromMainToGraph" id="Zxg-fl-6EZ"/>
-                        <segue destination="VGb-5b-ve2" kind="show" identifier="fromMainToAdd" id="cxp-Cj-N2o"/>
+                        <segue destination="VGb-5b-ve2" kind="show" identifier="fromMainToAddStockTicker" id="cxp-Cj-N2o"/>
                         <segue destination="hTR-Nv-iEl" kind="show" identifier="fromMainToSettings" id="883-bY-VR1"/>
                     </connections>
                 </viewController>
@@ -160,12 +204,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-31" y="122"/>
+            <point key="canvasLocation" x="258" y="122"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="S7Y-sp-YOE"/>
         <segue reference="8EG-cA-84j"/>
-        <segue reference="7KN-h2-kPs"/>
+        <segue reference="cxp-Cj-N2o"/>
+        <segue reference="csx-Lf-EuV"/>
     </inferredMetricsTieBreakers>
 </document>
