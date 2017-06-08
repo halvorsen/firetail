@@ -44,6 +44,16 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        for xVal in Set3.shared._smallRectX {
+            Set2.smallRectX.append(xVal*screenWidth/375)
+        }
+        for xVal in Set3.shared._bigRectX {
+            Set2.bigRectX.append(xVal*screenWidth/375)
+        }
+        for xVal in Set3.shared.priceRectX {
+            Set2.priceRectX.append(xVal*screenWidth/375)
+        }
+        
         loadsave.loadUsername()
         coverView.frame = view.frame
         coverView.backgroundColor = customColor.black33
@@ -101,8 +111,10 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 }
             }
         }
-        
+
     }
+    
+    
     
     func reachabilityAddNotification() {
         //declare this property where it won't go out of scope relative to your listener

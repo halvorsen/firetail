@@ -40,7 +40,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         
         for (x,y,ticker) in boxButtons {
             let myButton = UIButton()
-            addButton(name: myButton, x: x, y: y, width: 216, height: 70, title: ticker, font: "Roboto-Bold", fontSize: 18, titleColor: .black, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockTickerViewController.quickPickFunc(_:)), addSubview: true)
+            addButton(name: myButton, x: x, y: y, width: 216, height: 70, title: ticker, font: "Roboto-Bold", fontSize: 18, titleColor: .black, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockTickerViewController._quickPickFunc(_:)), addSubview: true)
             myButton.contentHorizontalAlignment = .center
         }
         
@@ -73,9 +73,60 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         self.performSegue(withIdentifier: "fromAddStockTickerToMain", sender: self)
     }
     
-    @objc private func quickPickFunc(_ sender: UIButton) {
+    @objc private func quickPickFunc(callback: (_ isGoodToGo: Bool) -> Void) {
+        
+        var isGoodToGo = false
+        print("AAAAA1")
+        if IndexListOfStocks.amex.contains(newAlertTicker) || IndexListOfStocks.nyse.contains(newAlertTicker) || IndexListOfStocks.nasdaq.contains(newAlertTicker) {
+            print("AAAAAA2")
+            isGoodToGo = true
+            let charArray = newAlertTicker.characters.map { String($0) }
+            print("charArray: \(charArray)")
+            for char in charArray {
+                if char == "^" || char == "~" {
+                    isGoodToGo = false
+                    print("AAAAA3")
+                    callback(isGoodToGo)
+                }
+            }
+            print("AAAAA4")
+            callback(isGoodToGo)
+        } else {
+            print("AAAAA5")
+            callback(isGoodToGo)
+        }
+   
+    }
+    
+    private func __quickPickFunc() {
+        
+        quickPickFunc() { (isGoodToGo) -> Void in
+            print("isGoodToGo4: \(isGoodToGo)")
+            if isGoodToGo {
+                self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
+            } else {
+                let alert = UIAlertController(title: "", message: "Ticker Not Found", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    @objc private func _quickPickFunc(_ sender: UIButton) {
+        
         newAlertTicker = (sender.titleLabel?.text!)!
-        self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
+        quickPickFunc() { (isGoodToGo) -> Void in
+            print("isGoodToGo2: \(isGoodToGo)")
+            if isGoodToGo {
+                print("went in")
+                self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
+            } else {
+                print("went out")
+                let alert = UIAlertController(title: "", message: "Ticker Not Found", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -93,7 +144,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if stockSymbolTextField.text != nil && stockSymbolTextField.delegate != nil {
             newAlertTicker = stockSymbolTextField.text!.uppercased()
-            self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
+            __quickPickFunc()
         }
         return false
     }
