@@ -52,7 +52,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var newAlertTicker = String()
     var newAlertPrice = Double()
     var newAlertBoolTuple = (false, false, false, false)
-    var previousViewContoller = ""
     var amountOfBlocks = Int()
     var blocks = [AlertBlockView]()
     var newBlocks = [AlertBlockView]()

@@ -795,13 +795,7 @@ class AddViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCente
         }
         return false
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let mainView: DashboardViewController = segue.destination as! DashboardViewController
-        mainView.previousViewContoller = "Add"
-        
-        
-    }
+
     var isStock = false
     //{(_ stockData: ([String],[StockData2?])) -> Void in
     private func prepareGraph(result: @escaping (_ dateArray: [(String,Int)]?,_ closings: [Double]?) -> Void) {

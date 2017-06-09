@@ -83,7 +83,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         
         
         
-        var myBezier = UIBezierPath()
+        let myBezier = UIBezierPath()
         myBezier.move(to: CGPoint(x: 167*screenWidth/375, y: 489*screenHeight/667))
         myBezier.addLine(to: CGPoint(x: 207*screenWidth/375, y: 489*screenHeight/667))
         myBezier.addLine(to: CGPoint(x: 187*screenWidth/375, y: 509*screenHeight/667))
@@ -123,7 +123,6 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 
                 self.populateDisplayValues(currentPrice: closings!.last!)
                 self.dialPrice = closings!.last!
-                self.populateDialView()
                 self.dial.contentOffset.x = CGFloat(closings!.last!)*(7501.5)*self.screenWidth/(37500) + 38.5
                 var t = CGAffineTransform.identity
                 t = t.translatedBy(x: 0, y: -100)
@@ -192,12 +191,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     }
     
     func populateDialView() {
-        var _dialPrice = Int()
-        if dialPrice <= 10 {
-            _dialPrice = 0
-        } else {
-            _dialPrice = Int(dialPrice)*5 - 100
-        }
+
         
         for xVal in Set2.smallRectX {
             let tickTop = UIView()
@@ -287,7 +281,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     }
     
     @objc private func back(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromAddStockPriceToMain", sender: self)
+        self.performSegue(withIdentifier: "fromAddStockPriceToDashboard", sender: self)
     }
     
     @objc private func setFunc(_ sender: UIButton) {
@@ -297,9 +291,9 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "fromAddStockPriceToAddStockAlert" {
             let destinationViewController: AddStockAlertViewController = segue.destination as! AddStockAlertViewController
-            
             destinationViewController.newAlertTicker = newAlertTicker
             destinationViewController.newAlertPrice = newAlertPrice
+            destinationViewController.lastPrice = lastPrice
         }
     }
     
@@ -345,16 +339,22 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             let c:Float = 25
             let price = offset*(c-a)/1913.5 + a
             dialPrice = Double(price)
-            print(offset)
+            newAlertPrice = dialPrice
             if price < 0.00 {
                 priceLabel.text = "$0.00"
+             
             } else if price < 5.00 {
                 priceLabel.text = "$" + String(format: "%.2f", price)
+                
             } else if price > 2000.0 {
                 priceLabel.text = "$2000"
+           
             } else {
                 priceLabel.text = "$" + String(format: "%.1f", price) + "0"
+           
             }
+            
+            
         }
         if !isFirst {
         if lastPrice > dialPrice + 0.1 && arrow.image != #imageLiteral(resourceName: "downArrow") {

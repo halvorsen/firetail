@@ -37,7 +37,7 @@ class Google {
         end.year = 0
         fetchFromGoogle(yearStart: years, dateComponentStart: start, dateComponentEnd: end, ticker: ticker, index: index)
         
-        var price = [Double]()
+       
         let url = URL(string: "http://www.google.com/finance/info?q=" + index + ":" + ticker)
         if let usableUrl = url {
             let request = URLRequest(url: usableUrl)
