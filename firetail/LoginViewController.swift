@@ -12,7 +12,6 @@ import FirebaseAuth
 import FirebaseCore
 import ReachabilitySwift
 
-
 class LoginViewController: ViewSetup, UITextFieldDelegate {
     let coverInternet = UIView()
     let reachability = Reachability()!
@@ -43,13 +42,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        for xVal in Set3.shared._smallRectX {
-            Set2.smallRectX.append(xVal*screenWidth/375)
-        }
-        for xVal in Set3.shared._bigRectX {
-            Set2.bigRectX.append(xVal*screenWidth/375)
-        }
+
         for xVal in Set3.shared.priceRectX {
             Set2.priceRectX.append(xVal*screenWidth/375)
         }
@@ -76,8 +69,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         firetail.backgroundColor = .clear
         firetail.layer.zPosition = 11
         view.addSubview(firetail)
-        
-        // (check,_,_,_,_,_) = self.loadsave.loadBlocks()
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         if launchedBefore  {
@@ -180,26 +171,15 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                             let _name = uA[alertID[i]]!
                             let value = snapshot.value as? NSDictionary
                             let _isGreaterThan = value?["isGreaterThan"] as? Bool ?? false
-                            //   isGreaterThan.append(_isGreaterThan)
                             let _price = value?["price"] as? Double ?? 0.0
-                            // price.append(_price)
-                            
-                            //   deleted.append(_deleted)
                             let _email = value?["email"] as? Bool ?? false
-                            //   email.append(_email)
                             let _flash = value?["flash"] as? Bool ?? false
-                            //  flash.append(_flash)
                             let _sms = value?["sms"] as? Bool ?? false
-                            //  sms.append(_sms)
                             let _ticker = value?["ticker"] as? String ?? ""
                             Set1.ti.append(_ticker)
-                            //   ticker.append(_ticker)
                             let _push = value?["push"] as? Bool ?? false
-                            //   push.append(_push)
                             let _urgent = value?["urgent"] as? Bool ?? false
-                            //   urgent.append(_urgent)
                             let _triggered = value?["triggered"] as? Bool ?? false
-                            //   triggered.append(_triggered)
                             Set1.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent)
                         }
                         self.ti = Set1.ti

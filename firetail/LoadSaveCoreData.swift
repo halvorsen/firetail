@@ -30,17 +30,13 @@ class LoadSaveCoreData {
         return aaa
     }
 
-    
     func resaveBlocks(blocks: [AlertBlockView]) {
         Set1.userAlerts.removeAll()
         for i in 0..<Set1.alertCount {
             Set1.userAlerts[alertID[i]] = blocks[i].blockLongName
         }
-        
-
     }
 
-    
     func saveUsername(username: String) {
         let appDel = UIApplication.shared.delegate as! AppDelegate
         let context = appDel.persistentContainer.viewContext
@@ -75,14 +71,9 @@ class LoadSaveCoreData {
         }
         
         if resultsNameRequest.count > 0 {
-            
             Set1.username = resultsNameRequest.last!.value(forKey: "username") as! String
-            
         }
-        
     }
-    
-
 
     public static func saveUserInfoToFirebase(username:String,fullName:String,email:String,phone:String,premium:Bool,numOfAlerts:Int,brokerName:String,brokerURL:String,weeklyAlerts:[String:Int],userAlerts:[String:String], token: String) {
         
@@ -104,8 +95,6 @@ class LoadSaveCoreData {
         userRef.setValue(dict1)
         weeklyAlertsRef.setValue(dict2)
         userAlertsRef.setValue(dict3)
-        
-        
     }
     
     func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, alertLongName: String) {

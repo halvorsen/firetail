@@ -19,7 +19,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         //FIXIT
         //code
     }
-    
+    let backArrow = UIButton()
     var newAlertTicker = String()
     var newAlertPrice = Double()
     var customColor = CustomColor()
@@ -92,6 +92,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         addButton(name: addAlert, x: 0, y: 1194, width: 750, height: 140, title: "ADD ALERT", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockAlertViewController.add(_:)), addSubview: true)
         addAlert.contentHorizontalAlignment = .center
         
+        addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockAlertViewController.back(_:)), addSubview: true)
+        backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
+        
         for i in 0...4 {
             let l = UILabel()
             let name = ["Email","SMS","Push","Flash","All"]
@@ -144,16 +147,12 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         phoneTextField.alpha = 0.0
         
     }
-    var back = true
+    
     @objc private func addAlertFunc(_ sender: UIButton) {
-        back = false
+     
         self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
     }
-    @objc private func back(_ sender: UIButton) {
-        back = true
-        self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
-    }
-    //public static var alerts = [String:(name:String,isGreaterThan:Bool,price:Double,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool)]()
+    
     @objc private func add(_ button: UIButton) {
         
         Set1.ti.append(newAlertTicker)
@@ -172,7 +171,6 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         if finalAlertPrice > lastPrice {
             alertTriggerWhenGreaterThan = true
         }
-        //saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, alertLongName: String)
         
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
             myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID)
@@ -182,6 +180,10 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
         self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
         
+    }
+    
+    @objc private func back(_ sender: UIButton) {
+        self.performSegue(withIdentifier: "fromAddStockPriceToDashboard", sender: self)
     }
     
     private func registerForPushNotifications() {
@@ -286,8 +288,6 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         formattedString.append(remainder)
         textField.text = formattedString as String
         return false
-        
-        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -297,7 +297,4 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         }
         return false
     }
-    
-    
-    
 }

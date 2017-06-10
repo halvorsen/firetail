@@ -396,7 +396,7 @@ class GraphViewController: ViewSetup {
                 __stockData.remove(at: stockData.count - 1)
             }
             let list = ["1y","5y","10y","1d","5d","1m","3m"]
-            let amount = stockData.count
+            let amount = __stockData.count
             var stockDatas = [StockData2]()
             //252 days in the trading year
             for timeSpan in list {
@@ -409,6 +409,7 @@ class GraphViewController: ViewSetup {
                         }
                     } else {
                     for i in (amount - 252)..<amount {
+                    
                        stockData2.closingPrice.append(__stockData[i])
                     }
                     }
