@@ -2,6 +2,9 @@ PODS:
   - Charts (3.0.2):
     - Charts/Core (= 3.0.2)
   - Charts/Core (3.0.2)
+  - Crashlytics (3.8.4):
+    - Fabric (~> 1.6.3)
+  - Fabric (1.6.11)
   - Firebase/Auth (4.0.0):
     - Firebase/Core
     - FirebaseAuth (= 4.0.0)
@@ -54,6 +57,8 @@ PODS:
 
 DEPENDENCIES:
   - Charts
+  - Crashlytics
+  - Fabric
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
@@ -64,6 +69,8 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Charts: 236d6ccdd0ce6feae151d89e829a7397381a21fd
+  Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
+  Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
   Firebase: 284eea779b73fdff309791817da7c68bff8dd572
   FirebaseAnalytics: 6f08e746f7d66f5452931bc2e822b5df9c66b64a
   FirebaseAuth: ebb6abcbabae00fc47446d690c19ce68d8484fde
@@ -78,6 +85,6 @@ SPEC CHECKSUMS:
   SwiftCharts: d8e6d60679bc982f48f8bea25cf5c1b94fcfec4f
   SwiftyStoreKit: 1efe75032fa16140176863c080268cf0319b520d
 
-PODFILE CHECKSUM: 48496a7198d74dcea0a1cb3d6e05d6b17e0106c8
+PODFILE CHECKSUM: f26cbb996f51444600b39be0346dd4976e6bd0f2
 
 COCOAPODS: 1.2.1

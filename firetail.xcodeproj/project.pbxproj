@@ -194,6 +194,7 @@
 				069FD11C1E5382D4003BDFE2 /* Resources */,
 				FE571FB095EE8D6F88829340 /* [CP] Embed Pods Frameworks */,
 				A84EBC8586DBFDB8257B3101 /* [CP] Copy Pods Resources */,
+				064306A01EEDE259009973FF /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -273,6 +274,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		064306A01EEDE259009973FF /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" a9cc3c114b202ec31390e423f8db307328800a9f 8999b85b5b17d0926cf3c5c45657aee0032aa33c613d4bf7779c97b9eaefdeca";
+		};
 		A84EBC8586DBFDB8257B3101 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -473,6 +487,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = firetail/firetail.entitlements;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = PFDY3PS57G;
 				INFOPLIST_FILE = firetail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -489,6 +504,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = firetail/firetail.entitlements;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = PFDY3PS57G;
 				INFOPLIST_FILE = firetail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

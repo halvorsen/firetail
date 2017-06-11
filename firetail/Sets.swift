@@ -11,13 +11,7 @@ import Firebase
 
 public struct Set1 {
     
-    public static var token: String {
-        if let refreshedToken = InstanceID.instanceID().token() {
-            return refreshedToken
-        } else {
-            return "none"
-        }
-    }
+    public static var token: String = ""
     
     public static var currentPrice: Double = 0.0
     

@@ -12,6 +12,8 @@ import Firebase
 import UserNotifications
 import FirebaseInstanceID
 import FirebaseMessaging
+import Fabric
+import Crashlytics
 
 
 
@@ -24,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        Fabric.with([Crashlytics.self])
         FirebaseApp.configure()
         
 //        if #available(iOS 10.0, *) {
@@ -138,6 +141,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     @objc private func tokenRefreshNotification(_ notification: Notification) {
         if let refreshedToken = InstanceID.instanceID().token() {
             print("InstanceID token: \(refreshedToken)")
+            Set1.token = refreshedToken
         }
         
         // Connect to FCM since connection may have failed when attempted before having a token.

@@ -726,7 +726,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     @objc private func goPremiumFunc(_ sender: UIButton) {
         // Create the alert controller
-        let alertController = UIAlertController(title: "Go Premium", message: "Unlimited Alerts for $2.99", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Go Premium", message: "Up to 50 Alerts for $2.99", preferredStyle: .alert)
         
         // Create the actions
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
@@ -797,11 +797,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     @objc private func addFunc(_ sender: UIButton) {
-        if premiumMember || alertCount < 3 || true { //hack
+        if (premiumMember || alertCount < 3 || true) && alertCount < 50 { //hack
             self.performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
             
-        } else if !premiumMember {
+        } else if !premiumMember && alertCount < 50 {
             purchase()
+        } else {
+            let alert = UIAlertController(title: "", message: " 50 maximum alerts reached", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     

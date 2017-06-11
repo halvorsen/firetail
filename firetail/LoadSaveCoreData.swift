@@ -108,7 +108,7 @@ class LoadSaveCoreData {
         let itemsRef = rootRef.child("alerts")
 
         let alertRef = itemsRef.child(alertLongName)
-        let dict = ["id":alertLongName,"isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker.uppercased(),"push":push, "urgent":urgent,"triggered":triggered] as [String : Any]
+        let dict = ["id":alertLongName,"isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker.uppercased(),"push":push, "urgent":urgent,"triggered":triggered,"username":Set1.username] as [String : Any]
         alertRef.setValue(dict)
         
     }
