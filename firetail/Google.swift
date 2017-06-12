@@ -14,7 +14,6 @@ class Google {
     var closingPrices = [Double]()
     var basket = [Int:[(Double,String,Int)]]()
     var count = 0
-    let practice = "http://www.google.com/finance/historical?q=NASDAQ:ADBE&startdate=Jan+01%2C+2009&enddate=Aug+2%2C+2012&output=csv"
     let monthStrings = ["zero","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
     
     //date info in first column: "11-May-17"

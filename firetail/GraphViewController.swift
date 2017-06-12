@@ -159,17 +159,15 @@ class GraphViewController: ViewSetup {
                 graphViewSeen.change.text = Label.changeValues[orderOfGraphs[newTextKey]!]
                 if let symbol = Label.changeValues[orderOfGraphs[newTextKey]!].characters.first {
                     if symbol == "-" {
+                        graphViewSeen.percentChange.textColor = customColor.red
                         graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
                     } else {
+                        graphViewSeen.percentChange.textColor = customColor.yellow
                         graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
                     }
                 }
                 graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs[newTextKey]!]
-//                if Label.percentageValuesIsPositive[orderOfGraphs[newTextKey]!] {
-//                    graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
-//                } else {
-//                    graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
-//                }
+
                 for i in 0..<graphViewSeen.ys.count {
                     switch i {
                     case 0: graphViewSeen.ys[i].text = yVals[newTextKey]!.4
@@ -236,7 +234,6 @@ class GraphViewController: ViewSetup {
                 
                 delay(bySeconds: 1.0) {
                     self.checkDoneSquashing()} //bypasses animation
-                // self.myTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(GraphViewController.checkDoneSquashing), userInfo: nil, repeats: true)
             }
             
             if self.i < 6 {
@@ -328,16 +325,14 @@ class GraphViewController: ViewSetup {
             graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs["1y"]!]
             if let symbol = Label.changeValues[orderOfGraphs["1y"]!].characters.first {
                 if symbol == "-" {
+                    graphViewSeen.percentChange.textColor = customColor.red
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
                 } else {
+                    graphViewSeen.percentChange.textColor = customColor.yellow
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
                 }
             }
-//            if Label.percentageValuesIsPositive[orderOfGraphs["1y"]!] {
-//                graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
-//            } else {
-//                graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
-//            }
+
             trade.alpha = 0.0
             stockHeader.alpha = 0.0
             currentPrice.alpha = 0.0

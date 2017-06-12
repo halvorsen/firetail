@@ -38,7 +38,7 @@ class StockGraphView2: UIView {
     var countinueBouncing = true
     var doneSquashing = false
     var graphAppearsInView = true
-    var g = String()
+    var g = String() {didSet{print("g: \(g)")}}
     var upDownArrowView = UIImageView()
     var _outputValues = [Double]()
     
@@ -129,7 +129,7 @@ class StockGraphView2: UIView {
                 outputValues[j] += _original[i]
             }
         }
-        outputValues[14] += Double(setAmount)*_stockData.closingPrice.last! //<--added to get the last value equal to last closing price and not average
+        outputValues[14] = Double(setAmount)*_stockData.closingPrice.last! //<--added to get the last value equal to last closing price and not average
         //outputValues.append(Double(setAmount)*Set.currentPrice)
         
         if g == "1d" {
@@ -139,11 +139,12 @@ class StockGraphView2: UIView {
         }
         
         _outputValues = outputValues.map { $0 / Double(setAmount) }
-        
+        print("outputValues: \(g) \(_outputValues)")
+        _closingPrice = _outputValues
         return _outputValues
         
     }
-    
+    var _closingPrice = [Double]()
     func animateIt() {
         self.baseOfGraphView.alpha = 1.0
         self.baseOfGraphView.frame = CGRect(x: 0, y: 565*self.bounds.height/636, width: self.bounds.width, height: 70*self.bounds.height/636)
@@ -221,6 +222,7 @@ class StockGraphView2: UIView {
                               ]
             fillChartViewWithSetsOfData(dataPoints: __stockData, cubic: cubic)
             _outputValues = stockData.closingPrice
+            _closingPrice = __stockData
         } else if stockData.closingPrice.count > 14  {
             
             fillChartViewWithSetsOfData(dataPoints: reduceDataPoints(original: stockData.closingPrice), cubic: cubic)
@@ -232,12 +234,13 @@ class StockGraphView2: UIView {
             var changeValue: String {
                 get {
                     var _changeValue = String()
-                    if (stockData.closingPrice.last)! - (stockData.closingPrice.first)! > 0 {
-                        _changeValue = "+" + String(format: "%.2f", Float((stockData.closingPrice.last)! - (stockData.closingPrice.first)!))
+                    if (_closingPrice.last)! - (_closingPrice.first)! > 0 {
+                        _changeValue = "+" + String(format: "%.2f", Float((_closingPrice.last)! - (_closingPrice.first)!))
                         
                     } else {
-                        _changeValue = String(format: "%.2f", Float((stockData.closingPrice.last)! - (stockData.closingPrice.first)!))
+                        _changeValue = String(format: "%.2f", Float((_closingPrice.last)! - (_closingPrice.first)!))
                     }
+                    print("AAAAAAA: \(_changeValue), \(g)")
                     return _changeValue
                 }
             }
@@ -245,14 +248,15 @@ class StockGraphView2: UIView {
             var percentageValue: String {
                 get {
                     var _changeValue = String()
-                    if (stockData.closingPrice.last! - stockData.closingPrice.first!) > 0 {
+                    if (_closingPrice.last! - _closingPrice.first!) > 0 {
                         Label.percentageValuesIsPositive.append(true)
-                        _changeValue = String(format: "%.2f", Float(100*(stockData.closingPrice.last! - stockData.closingPrice.first!)/stockData.closingPrice.first!)) + "%"
+                        _changeValue = String(format: "%.2f", Float(100*(_closingPrice.last! - _closingPrice.first!)/_closingPrice.first!)) + "%"
                         
                     } else {
                         Label.percentageValuesIsPositive.append(false)
-                        _changeValue = String(format: "%.2f", Float(100*(stockData.closingPrice.first! - stockData.closingPrice.last!)/stockData.closingPrice.first!)) + "%"
+                        _changeValue = String(format: "%.2f", Float(100*(_closingPrice.first! - _closingPrice.last!)/_closingPrice.first!)) + "%"
                     }
+                    print("BBBBBBB: \(_changeValue), \(g)")
                     return _changeValue
                 }
             }
@@ -294,9 +298,6 @@ class StockGraphView2: UIView {
             }
             self.addSubview(xs[i])
         }
-        
-        
-        
     }
     
     required init?(coder aDecoder: NSCoder) {

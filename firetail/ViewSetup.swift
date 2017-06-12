@@ -15,6 +15,9 @@ struct CustomColor {
     //yellow
     let yellow = UIColor(red: 254/255, green: 203/255, blue: 9/255, alpha: 1.0)
     
+    //red
+    let red = UIColor(red: 228/255, green: 81/255, blue: 81/255, alpha: 1.0)
+    
     //gray
     let gray = UIColor(red: 41/255, green: 41/255, blue: 41/255, alpha: 1.0)
     
