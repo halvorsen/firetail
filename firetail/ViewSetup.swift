@@ -96,6 +96,13 @@ class ViewSetup: UIViewController {
         let myGoogle = Google()
         myGoogle.historicalPrices(years: 1, ticker: stockName.uppercased()) { (stockDataTuple) in
             let (_stockData,_,error) = stockDataTuple
+            guard error == nil else {
+                
+                self.userWarning(title: "", message: error!.localizedDescription)
+                
+                return
+            }
+            
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0  else {return}
            

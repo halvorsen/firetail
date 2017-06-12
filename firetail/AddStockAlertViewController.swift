@@ -194,7 +194,17 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
             UNUserNotificationCenter.current().requestAuthorization(
                 options: authOptions,
-                completionHandler: {_, _ in })
+                completionHandler: {_, _ in
+            
+                    if let refreshedToken = InstanceID.instanceID().token() {
+                        print("InstanceID token: \(refreshedToken)")
+                        Set1.token = refreshedToken
+                    }
+                    
+                    // Connect to FCM since connection may have failed when attempted before having a token.
+                    self.connectToFcm()
+            
+            })
             
             // For iOS 10 data message (sent via FCM)
             Messaging.messaging().delegate = self
@@ -296,5 +306,24 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             Set1.phone = phoneTextField.text!
         }
         return false
+    }
+    
+    func connectToFcm() {
+        
+    // Won't connect since there is no token
+    guard InstanceID.instanceID().token() != nil else {
+    return
+    }
+    
+    // Disconnect previous FCM connection if it exists.
+    Messaging.messaging().disconnect()
+    
+    Messaging.messaging().connect { (error) in
+    if error != nil {
+    print("Unable to connect with FCM. \(error?.localizedDescription ?? "")")
+    } else {
+    print("Connected to FCM.")
+    }
+    }
     }
 }

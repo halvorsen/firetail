@@ -719,7 +719,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         self.performSegue(withIdentifier: "fromMainToSettings", sender: self)
     }
     @objc private func legalFunc(_ sender: UIButton) {
-        UIApplication.shared.openURL(URL(string: "http://firetailapp.com/legal")!)
+        UIApplication.shared.open(URL(string: "http://firetailapp.com/legal")!)
     }
     @objc private func supportFunc(_ sender: UIButton) {
         sendEmail()

@@ -6,9 +6,6 @@
 //  Copyright © 2017 Aaron Halvorsen. All rights reserved.
 //
 
-
-
-
 import UIKit
 import Charts
 
@@ -19,16 +16,13 @@ public struct MyVariables {
 public var gingerBreadMan = CGMutablePath()
 
 class GraphViewController: ViewSetup {
-    // var myTimer = Timer()
+    
     let customColor = CustomColor()
     var enter = UIButton()
     var graphViewSeen = StockGraphView2()
     var stockName = String()
     var tap = UITapGestureRecognizer()
-    // var pan = UIPanGestureRecognizer()
-    //  var graphViews = [String:StockGraphView?]()
     var graphViews = [String:StockGraphView2?]()
-    
     var stockHeader = UILabel()
     var currentPrice = UILabel()
     var backArrow = UIButton()
@@ -37,8 +31,6 @@ class GraphViewController: ViewSetup {
     var newTextKey = String()
     var currentTextKey = "1y"
     let layer = CAShapeLayer()
-    
-    //var progressHUD = ProgressHUD(text: "")
     var start = CGFloat()
     var switchable = true
     var first = true
@@ -125,15 +117,12 @@ class GraphViewController: ViewSetup {
     
     @objc private func trade(_ sender: UIButton) {
         if Set1.brokerName != "none" {
-        UIApplication.shared.openURL(URL(string: brokersDictionary[Set1.brokerName]!)!)
+        UIApplication.shared.open(URL(string: brokersDictionary[Set1.brokerName]!)!)
         } else {
             self.userWarning(title: "", message: "Add Broker in Firetail Settings")
-//            let alert = UIAlertController(title: "Error", message: "Add Broker in Firetail Settings", preferredStyle: UIAlertControllerStyle.alert)
-//            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-//            self.present(alert, animated: true, completion: nil)
+
         }
     }
-    
     
     @objc private func pickGraph(_ tap: UITapGestureRecognizer) {
         
@@ -383,7 +372,19 @@ class GraphViewController: ViewSetup {
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         let myGoogle = Google()
         myGoogle.historicalPrices(years: 10, ticker: stockName.uppercased()) { (stockDataTuple) in
-            let (_stockData,_,_) = stockDataTuple
+            let (_stockData,_,error) = stockDataTuple
+            guard error == nil else {
+                
+                    let refreshAlert = UIAlertController(title: "", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    
+                    refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                        self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
+                    }))
+                
+                    self.present(refreshAlert, animated: true, completion: nil)
+
+                return
+            }
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0  else {return}
             var __stockData = stockData
@@ -483,12 +484,6 @@ class GraphViewController: ViewSetup {
         
     }
 }
-//result((self.keys,stockDatas))
 
-//struct StockData2 {
-//    var dates = [Date]()
-//    var closingPrice = [Double]()
-//    var text = String()
-//}
 
 

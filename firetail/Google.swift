@@ -15,9 +15,7 @@ class Google {
     var basket = [Int:[(Double,String,Int)]]()
     var count = 0
     let monthStrings = ["zero","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-    
-    //date info in first column: "11-May-17"
-    // func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
+
     func historicalPrices(years: Int, ticker: String, result: @escaping (_ stockDataTuple:([Double]?,[(String,Int)]?,Error?)) -> Void) {
         _years = years
         var index = ""
@@ -30,7 +28,7 @@ class Google {
         }
         var start = DateComponents()
         var end = DateComponents()
-        var _error: Error?
+        
         
         start.year = -years
         end.year = 0
@@ -41,6 +39,10 @@ class Google {
         if let usableUrl = url {
             let request = URLRequest(url: usableUrl)
             let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+                if error != nil {
+                    print("Error from Google Request of current price: \(error!)")
+                    result((nil,nil,error))
+                }
                 var stringData = String()
                 if let data = data {
                     if let _stringData = String(data: data, encoding: String.Encoding.utf8) {
@@ -60,7 +62,10 @@ class Google {
                         }
                     }
                 }
-                
+                if self.errorInSecondFetch {
+                    print("Error from Google Request of historical prices: \(self.error2!)")
+                    result((nil,nil,self.error2))
+                }
                 let componentDate = Calendar.current.dateComponents([.year, .month, .day], from: Date())
                 let monthToday = self.monthStrings[componentDate.month!]
                 let dayToday = componentDate.day!
@@ -79,7 +84,8 @@ class Google {
                                 self.monthAndDay.append((month,day))
                             }
                         }
-                        result((self.closingPrices,self.monthAndDay,_error))
+                        
+                        result((self.closingPrices,self.monthAndDay,nil))
                     }
                 }
                 }
@@ -90,7 +96,8 @@ class Google {
         
     }
     
-    
+    var errorInSecondFetch = false
+    var error2: Error?
     private func fetchFromGoogle(yearStart: Int, dateComponentStart: DateComponents, dateComponentEnd: DateComponents, ticker: String, index: String) {
        
         let endDate = Calendar.current.date(byAdding: dateComponentEnd, to: Date())
@@ -112,7 +119,11 @@ class Google {
         if let usableUrl = url {
             let request = URLRequest(url: usableUrl)
             let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
-                //   if error != nil {result((nil,nil,_error))}
+                if error != nil {
+                    self.errorInSecondFetch = true
+                    self.error2 = error!
+                    
+                }
                 if let data = data {
                     if let stringData = String(data: data, encoding: String.Encoding.utf8) {
                         let dataInArrays = self.csv(data: stringData)

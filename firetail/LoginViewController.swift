@@ -70,6 +70,22 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         firetail.layer.zPosition = 11
         view.addSubview(firetail)
         
+        coverInternet.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+        coverInternet.backgroundColor = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
+        
+        let imageView2 = UIImageView()
+        imageView2.frame = CGRect(x: 127*screenWidth/375, y:64*screenHeight/667, width: 122*screenWidth/375, height: 157*screenHeight/667)
+        imageView2.image = #imageLiteral(resourceName: "flames")
+        coverInternet.addSubview(imageView2)
+        let label = UILabel()
+        label.frame = CGRect(x: 0, y:290*screenHeight/667, width: screenWidth, height: 30*screenHeight/667)
+        label.text = "NO INTERNET"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont(name: "Roboto-Bold", size: fontSizeMultiplier*15)
+        coverInternet.addSubview(label)
+        coverInternet.layer.zPosition = 50
+        
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         if launchedBefore  {
             print("Not first launch.")
@@ -220,7 +236,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         let reachability = note.object as! Reachability
         
         if reachability.isReachable {
+        
             removeNoInternetCover()
+                
             if reachability.isReachableViaWiFi {
                 print("Reachable via WiFi")
             } else {
@@ -228,7 +246,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             }
         } else {
             print("Network not reachable")
-            addNoInternetCover()
+            DispatchQueue.main.async {
+            self.addNoInternetCover()
+            }
         }
     }
     func removeNoInternetCover() {
@@ -238,25 +258,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     func addNoInternetCover() {
         
-        //view.subviews.forEach({ $0.removeFromSuperview() })
-        coverInternet.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        coverInternet.backgroundColor = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
         
-        let imageView = UIImageView()
-        imageView.frame = CGRect(x: 127*screenWidth/375, y:64*screenHeight/667, width: 122*screenWidth/375, height: 157*screenHeight/667)
-        imageView.image = #imageLiteral(resourceName: "flames")
-        coverInternet.addSubview(imageView)
-        let label = UILabel()
-        label.frame = CGRect(x: 0, y:290*screenHeight/667, width: screenWidth, height: 30*screenHeight/667)
-        label.text = "NO INTERNET"
-        label.textColor = .white
-        label.textAlignment = .center
-        label.font = UIFont(name: "Roboto-Bold", size: fontSizeMultiplier*15)
-        coverInternet.addSubview(label)
-        print(view)
-        print(coverInternet)
-        self.view.addSubview(coverInternet)
-        coverInternet.layer.zPosition = 50
+        view.addSubview(coverInternet)
+        
     }
 
     

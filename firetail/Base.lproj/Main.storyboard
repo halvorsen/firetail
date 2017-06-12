@@ -208,8 +208,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cxp-Cj-N2o"/>
-        <segue reference="ISW-sK-ONh"/>
         <segue reference="8EG-cA-84j"/>
+        <segue reference="i3y-Bn-Gax"/>
+        <segue reference="cxp-Cj-N2o"/>
     </inferredMetricsTieBreakers>
 </document>
