@@ -19,7 +19,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     var dial = UIScrollView()
     var displayValues = [Double]()
     var priceLabel = UILabel()
-    var set = UIButton()
+    var sett = UIButton()
     var alertPrice: Double = 0.00 {didSet{priceLabel.text = "$" + String(format: "%.2f", alertPrice) //getPickerData()
         let c = (priceLabel.text?.characters.map { String($0) })!
         let s = priceLabel.text!
@@ -45,10 +45,9 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         addLabel(name: setPriceAlert, text: "Set Price Alert", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 56, y: 885, width: 300, height: 80, lines: 1)
         view.addSubview(setPriceAlert)
         
-        addButton(name: set, x: 0, y: 1194, width: 750, height: 140, title: "SET", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.setFunc(_:)), addSubview: true)
-        set.contentHorizontalAlignment = .center
         
         
+        print("screenwidth: \(screenWidth)")
         
         addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif-Regular", fontSize: 20, x: 60, y: 606, width: 200, height: 56, lines: 1)
         view.addSubview(newAlertTickerLabel)
@@ -73,14 +72,17 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         view.addSubview(priceLabel)
         
         dial.backgroundColor = customColor.black42
-        dial.frame = CGRect(x: 0, y: 494*screenHeight/667, width: screenWidth, height: 103*screenHeight/667)
+        dial.frame = CGRect(x: 0, y: 494*screenHeight/667, width: screenWidth, height: 103*screenWidth/375)
         dial.contentSize = CGSize(width: 400.182*screenWidth, height: dial.bounds.height)
         view.addSubview(dial)
         dial.contentOffset.x = screenWidth*4.285
         dial.showsHorizontalScrollIndicator = false
         dial.showsVerticalScrollIndicator = false
         dial.delegate = self
+        let bottomOfDial = dial.frame.maxY*1334/screenHeight //or 1194
         
+        addButton(name: sett, x: 0, y: bottomOfDial, width: 750, height: 1334 - bottomOfDial, title: "SET", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.setFunc(_:)), addSubview: true)
+        sett.contentHorizontalAlignment = .center
         
         
         let myBezier = UIBezierPath()
@@ -123,7 +125,14 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 
                 self.populateDisplayValues(currentPrice: closings!.last!)
                 self.dialPrice = closings!.last!
-                self.dial.contentOffset.x = CGFloat(closings!.last!)*(7501.5)*self.screenWidth/(37500) + 38.5
+                
+                
+                let a:CGFloat = -0.72
+                let c:CGFloat = 1000
+                self.dial.contentOffset.x = (CGFloat(closings!.last!) - a)*self.screenWidth*75053.5/(375*(c-a))
+                
+                
+               // self.dial.contentOffset.x = CGFloat(closings!.last!)*(7501.5)*self.screenWidth/(37500) + 38.5
                 var t = CGAffineTransform.identity
                 t = t.translatedBy(x: 0, y: -100)
                 t = t.scaledBy(x: 1.0, y: 0.01)
@@ -199,7 +208,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         for i in 0...50 {
         let dialImage = UIImageView()
         dialImage.frame.origin = CGPoint(x: CGFloat(i)*3000*screenWidth/375, y: 0)
-        dialImage.frame.size = CGSize(width: 3000*screenWidth/375, height: 103*screenHeight/667)
+        dialImage.frame.size = CGSize(width: 3000*screenWidth/375, height: 103*screenWidth/375)
         dialImage.image = #imageLiteral(resourceName: "Dial")
         dialImage.contentMode = UIViewContentMode.scaleAspectFit
         dial.addSubview(dialImage)
@@ -210,7 +219,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         for xVal in Set2.priceRectX {
             
             let alertOption = UILabel()
-            alertOption.frame = CGRect(x: xVal, y: 19*screenWidth/375, width: 100, height: 62*screenHeight/667)
+            alertOption.frame = CGRect(x: xVal, y: 19*screenWidth/375, width: 100*screenWidth/375, height: 62*screenWidth/375)
             
             alertOption.text = String(count)
             
@@ -222,7 +231,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         }
 
         let dialMask = UILabel()
-        dialMask.frame = CGRect(x: 0, y: 514*screenHeight/667, width: screenWidth, height: 60*screenHeight/667)
+        dialMask.frame = CGRect(x: 0, y: 514*screenWidth/375, width: screenWidth, height: 60*screenWidth/375)
         dialMask.backgroundColor = customColor.black42Alpha0
         view.addSubview(dialMask)
         addGradient(mask: dialMask, color1: customColor.black42, color2: customColor.black42Alpha0, start: CGPoint(x: -0.2, y: 0.0), end: CGPoint(x: 0.45, y: 0.0))
@@ -287,7 +296,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             
             let a:Float = -0.72
             let c:Float = 1000
-            let price = offset*(c-a)/75053.5 + a
+            let price = (offset*(c-a)/75053.5)*375/Float(screenWidth) + a
             dialPrice = Double(price)
             newAlertPrice = dialPrice
             if price < 0.00 {
