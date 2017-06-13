@@ -100,11 +100,20 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func continueFunc(_ sender: UIButton) {
-        let firstTwo = textFields[0].text![0...1]
-        let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
-        loadsave.saveUsername(username: firstTwo + timestamp)
-        Set1.username = firstTwo + timestamp
+
         
+        
+        var cleanString = textFields[0].text!
+        cleanString = cleanString.replacingOccurrences(of: ".", with: ",")
+        cleanString = cleanString.replacingOccurrences(of: "$", with: "(dollar)")
+        cleanString = cleanString.replacingOccurrences(of: "#", with: "(hashtag)")
+        cleanString = cleanString.replacingOccurrences(of: "[", with: "(")
+        cleanString = cleanString.replacingOccurrences(of: "]", with: ")")
+        cleanString = cleanString.replacingOccurrences(of: "/", with: "(slash)")
+        
+        loadsave.saveUsername(username: cleanString)
+        Set1.username = cleanString
+        Set1.email = cleanString
         let emailField = textFields[0].text
         let passwordField = textFields[1].text
         let passwordField2 = textFields[2].text
@@ -130,6 +139,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             self.present(alert, animated: true, completion: nil)
             return
         }
+        LoadSaveCoreData.saveUserInfoToFirebase(username: Set1.username, fullName: "none", email: Set1.email, phone: "none", premium: false, numOfAlerts: 0, brokerName: "none", brokerURL: "none", weeklyAlerts: Set1.weeklyAlerts, userAlerts: Set1.userAlerts, token: "")
         
         Auth.auth().createUser(withEmail: email, password: password1) {
             user, error in

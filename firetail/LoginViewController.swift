@@ -362,22 +362,28 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func continueFunc(_ sender: UIButton) {
-        let firstTwo = myTextFields[0].text![0...1]
-        let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
-        //In this instance we need to load an already existing username and not creating a new one!!! WARNING WARNING!!!!
-        loadsave.saveUsername(username: firstTwo + timestamp)
-        Set1.username = firstTwo + timestamp
+        
+        var cleanString = myTextFields[0].text!
+        cleanString = cleanString.replacingOccurrences(of: ".", with: ",")
+        cleanString = cleanString.replacingOccurrences(of: "$", with: "(dollar)")
+        cleanString = cleanString.replacingOccurrences(of: "#", with: "(hashtag)")
+        cleanString = cleanString.replacingOccurrences(of: "[", with: "(")
+        cleanString = cleanString.replacingOccurrences(of: "]", with: ")")
+        cleanString = cleanString.replacingOccurrences(of: "/", with: "(slash)")
+        
+        loadsave.saveUsername(username: cleanString)
+        Set1.username = cleanString
         
         Auth.auth().signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!, completion: { (user, error) in
             if error != nil{
-          
-                let alert = UIAlertController(title: "Warning", message: "Incorrect Email or Password.", preferredStyle: UIAlertControllerStyle.alert)
+                self.activityView.removeFromSuperview()
+                let alert = UIAlertController(title: "Warning", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
                 let action = UIAlertAction(title: "Okay", style: .default, handler: nil)
                 alert.addAction(action)
                 self.present(alert, animated: true, completion: nil)
             }
         })
-       // FIRAuth.auth()!.signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!)
+      
         activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         activityView.center = self.view.center
         activityView.startAnimating()

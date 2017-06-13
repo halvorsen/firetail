@@ -305,7 +305,12 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         if phoneTextField.text != nil {
             Set1.phone = phoneTextField.text!
         }
+        textField.resignFirstResponder()
         return false
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
+        phoneTextField.alpha = 0.0
     }
     
     func connectToFcm() {
