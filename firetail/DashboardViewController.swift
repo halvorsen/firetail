@@ -303,7 +303,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     block.layer.zPosition = j
                     j += 1
                 }
-                movingAlert = 9999
+                //movingAlert = 9999
                 alertScroller.isScrollEnabled = true
                 longpressOnce = true
                 
@@ -322,7 +322,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 }
                 p = Int(savedFrameOrigin.y/120)
                 
-                movingAlert = 9999
+               // movingAlert = 9999
                 delay(bySeconds: 0.3) {
                     self.alertScroller.isScrollEnabled = true
                 }
@@ -360,12 +360,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var startedPan = false
     var q = Int()
     @objc private func pan(_ gesture: UIPanGestureRecognizer) {
+        guard gesture.location(in: view).y > sv.frame.maxY else {return}
         
         startedPan = true
         if movingAlert != 9999 {
+           
             guard amountOfBlocks > 3 else {return}
             if gesture.state == UIGestureRecognizerState.changed {
-                
+            
                 let translation = gesture.translation(in: view)
                 
                 if alertInMotion.center.y + translation.y < alertScroller.contentOffset.y + 300*screenHeight/1334 && alertInMotion.center.y + translation.y > alertScroller.contentOffset.y + 90*screenHeight/1334 {
@@ -374,7 +376,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 }
                 alertScroller.contentOffset.y = alertScroller.contentOffset.y + translation.y*3
                 alertInMotion.frame.origin.y = alertInMotion.frame.origin.y + translation.y*3
-          
                 
                 gesture.setTranslation(CGPoint(x:0,y:0), in: self.view)
                 if l > -1 {
@@ -407,7 +408,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             }
             
             if gesture.state == UIGestureRecognizerState.ended {
-                
                 loadsave.resaveBlocks(blocks: blocks)
                 if blocks.count > 3 {
                     val = blocks[amountOfBlocks - 2].frame.maxY
@@ -419,6 +419,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     
                     self.alertInMotion.frame.origin = CGPoint(x: 0, y: CGFloat(self.q)*120*self.screenHeight/1334)
                 }
+                alertSafetyShuffle()
                 p = Int(savedFrameOrigin.y/120)
                 
                 movingAlert = 9999
@@ -448,8 +449,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                         self.alertScroller.contentOffset.y = 0
                     }
                 }
+                
+                
+                
             }
         } else {
+          
             for i in 0..<blocks.count {
                 if blocks[i].frame.contains(gesture.location(in: alertScroller)) && gesture.translation(in: view).x < 0 {
                     UIView.animate(withDuration: 0.6) {
@@ -464,6 +469,25 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             
         }
     }
+    
+    private func alertSafetyShuffle() {
+      //  var alertAndYPosition = [(AlertBlockView,CGFloat)]()
+        var previousFloat: CGFloat = -1.0
+        dance: for alert in blocks {
+           // alertAndYPosition.append((alert, alert.frame.origin.y/(60*screenHeight/667)))
+            if previousFloat + 1.0 != alert.frame.origin.y/(60*screenHeight/667) {
+                for i in 0..<blocks.count {
+                    blocks[i].frame.origin.y = CGFloat(i)*60*screenHeight/667
+                }
+                break dance
+            }
+            previousFloat = alert.frame.origin.y/(60*screenHeight/667)
+        }
+
+        
+    }
+    
+    
     var p = Int()
     @objc func act(_ button: UIButton) {
         stock1.text = ""
@@ -695,7 +719,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         self.myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(DashboardViewController.updateDot), userInfo: nil, repeats: true)
         
-       
+        
         
     }
     

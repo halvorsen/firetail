@@ -55,7 +55,7 @@ class CompareScroll: UIView {
         startLabel.text = "\(mo[dComponent.month! + 1]), \(dComponent.year! - 1)"
         startLabel.textColor = .white
         startLabel.alpha = 0.2
-        startLabel.font = UIFont(name: "Roboto-Light", size: 11*fontSizeMultiplier)
+        startLabel.font = UIFont(name: "Roboto-Medium", size: 12*fontSizeMultiplier)
         self.addSubview(startLabel)
         
         setNeedsDisplay()
