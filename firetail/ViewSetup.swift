@@ -106,13 +106,14 @@ class ViewSetup: UIViewController {
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0  else {return}
            
-
-            let mo = ["","January","Febrary","March","April","May","June","July","August","September","October","November","December","January","Febrary","March","April","May","June","July","August","September","October","November","December"]
-            var _mo = [String]()
-            let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-            for i in 0..<12 {
-                _mo.append(mo[dComponent.month! + i + 1])
-            }
+            let _mo = ["0","11","10","9","8","7","6","5","4","3","2","1"]
+            //this code turns the dashboard compare graph into month text instead of numbers
+//            let mo = ["","January","Febrary","March","April","May","June","July","August","September","October","November","December","January","Febrary","March","April","May","June","July","August","September","October","November","December"]
+//            var _mo = [String]()
+//            let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+//            for i in 0..<12 {
+//                _mo.append(mo[dComponent.month! + i + 1])
+//            }
             
             Set1.month = _mo
 

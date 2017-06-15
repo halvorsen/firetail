@@ -74,7 +74,6 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
 
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = customColor.black24

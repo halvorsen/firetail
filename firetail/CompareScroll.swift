@@ -52,7 +52,9 @@ class CompareScroll: UIView {
         let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
         let startLabel = UILabel()
         startLabel.frame = CGRect(x: screenWidth/5, y: screenHeight/7.1, width: 200, height: 50*screenHeight/667)
-        startLabel.text = "\(mo[dComponent.month! + 1]), \(dComponent.year! - 1)"
+        startLabel.text = "12 Months Ago"
+        
+        //startLabel.text = "\(mo[dComponent.month! + 1]), \(dComponent.year! - 1)"
         startLabel.textColor = .white
         startLabel.alpha = 0.2
         startLabel.font = UIFont(name: "Roboto-Medium", size: 12*fontSizeMultiplier)
