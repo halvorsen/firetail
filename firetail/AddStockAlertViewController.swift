@@ -71,7 +71,14 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             Set1.oneYearDictionary[$1] = $0
             
         }
+        //random alert to be triggered soon
+        let number = arc4random_uniform(2000)
+        let stringg = String(number)
+        myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: "AAPL", price: 10.0, isGreaterThan: false, deleted: false, email: false, sms: false, flash: false, urgent: false, triggered: "true", push: true, alertLongName: "AAPL1496966399" + stringg, priceString: "10,00")
+        
+        // delete above
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -171,11 +178,11 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         if finalAlertPrice > lastPrice {
             alertTriggerWhenGreaterThan = true
         }
-        
+        var pS = newAlertPriceLabel.text!
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
-            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID)
+            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: String(pS.remove(at: pS.startIndex)))
         } else {
-            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID)
+            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: String(pS.remove(at: pS.startIndex)))
         }
         
         self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
@@ -183,7 +190,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     }
     
     @objc private func back(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromAddStockPriceToDashboard", sender: self)
+        self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
     }
     
     private func registerForPushNotifications() {

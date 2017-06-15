@@ -77,6 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
       //  Messaging.messaging().disconnect()
        // print("Disconnected from FCM.")
+       // try! Auth.auth().signOut()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

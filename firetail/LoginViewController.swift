@@ -144,7 +144,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             let value = snapshot.value as? NSDictionary
-            // Set.username = value?["username"] as? String ?? "none"
+            Set1.token = value?["token"] as? String ?? "none"
             Set1.fullName = value?["fullName"] as? String ?? "none"
             Set1.email = value?["email"] as? String ?? "none"
             Set1.phone = value?["phone"] as? String ?? "none"

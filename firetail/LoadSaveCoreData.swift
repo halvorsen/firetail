@@ -97,7 +97,7 @@ class LoadSaveCoreData {
         userAlertsRef.setValue(dict3)
     }
     
-    func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, alertLongName: String) {
+    func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, alertLongName: String, priceString: String) {
         
      //   let ref = FIRDatabase.database().reference(withPath: "alerts")
         
@@ -108,7 +108,7 @@ class LoadSaveCoreData {
         let itemsRef = rootRef.child("alerts")
 
         let alertRef = itemsRef.child(alertLongName)
-        let dict = ["id":alertLongName,"isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker.uppercased(),"push":push, "urgent":urgent,"triggered":triggered,"username":Set1.username] as [String : Any]
+        let dict = ["id":alertLongName,"isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker.uppercased(),"push":push, "urgent":urgent,"triggered":triggered,"username":Set1.username, "priceString":priceString] as [String : Any]
         alertRef.setValue(dict)
         
     }

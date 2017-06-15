@@ -115,6 +115,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("username: \(Set1.username)")
+        
         premiumMember = Set1.premium
         longPress = UILongPressGestureRecognizer(target: self, action: #selector(DashboardViewController.longPress(_:)))
         view.addGestureRecognizer(longPress)
