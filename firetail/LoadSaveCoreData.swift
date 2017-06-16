@@ -97,7 +97,7 @@ class LoadSaveCoreData {
         userAlertsRef.setValue(dict3)
     }
     
-    func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, alertLongName: String, priceString: String) {
+    func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, alertLongName: String, priceString: String, data1: String = "", data2: String = "", data3: String = "", data4: String = "", data5: String = "") {
         
      //   let ref = FIRDatabase.database().reference(withPath: "alerts")
         
@@ -108,12 +108,33 @@ class LoadSaveCoreData {
         let itemsRef = rootRef.child("alerts")
 
         let alertRef = itemsRef.child(alertLongName)
-        let dict = ["id":alertLongName,"isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker.uppercased(),"push":push, "urgent":urgent,"triggered":triggered,"username":Set1.username, "priceString":priceString] as [String : Any]
+        let dict = ["id":alertLongName,"isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker.uppercased(),"push":push, "urgent":urgent,"triggered":triggered,"username":Set1.username, "priceString":priceString, "data1":data1, "data2":data2, "data3":data3, "data4":data4, "data5":data5] as [String : Any]
         alertRef.setValue(dict)
         
     }
    
 }
+
+//Fields under path alerts/alertID/
+//“id”:<String>,
+//“isGreaterThan”:<Bool>,
+//“price”:<Double>,
+//“deleted”:<Bool>,
+//“email”:<Bool>,
+//“flash”:<Bool>,
+//“sms”:<Bool>,
+//“ticker”:<String>,
+//“push”:<Bool>,
+//“urgent”:<Bool>,
+//“triggered”:<String>, <— #note: this has changed to String
+//“username”:<String>,
+//"priceString”:<String>,
+//“data1”:<String>,
+//“data2”:<String>,
+//“data3”:<String>,
+//“data4”:<String>,
+//“data5”:<String>
+
 //Structure of FIREBASE Database
 //“users”:{
 //    “ja1459361875666":{ (First two alphanumberic symbols of email address and timestamp)
@@ -156,8 +177,9 @@ class LoadSaveCoreData {
 //},
 //“alerts”: {
 //    “tsla030817173322”{
-//        “isGreaterThan”:true, (alert triggered when market price "isGreaterThan" alert price
+//        “isGreaterThan”:true,
 //        “price”:“220”,
+//        "priceString":"$220.00",
 //        “deleted”:false,
 //        “email”:true,
 //        “flash”:false,
@@ -166,18 +188,13 @@ class LoadSaveCoreData {
 //        “triggered”:false,
 //        “push”:true,
 //        “urgent”:false,
+//        “data1”:"",
+//        “data2”:"",
+//        “data3”:"",
+//        “data4”:"",
+//        “data5”:""
 //    },
-//    “fb030817173501"{
-//        “deleted”:false,
-//        “email”:true,
-//        “flash”:false,
-//        “price”:“220”,
-//        “sms”:false,
-//        “ticker”:“tsla”,
-//        “triggered”:true,
-//        “push”:true,
-//        “urgent”:false,
-//    },
+//    “fb030817173501"
 //    “goog352129879323": ...,
 //    “f692839290189”: ...
 //},

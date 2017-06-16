@@ -47,9 +47,9 @@ class CompareScroll: UIView {
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
         data = __set
         
-        let mo = ["","January","Febrary","March","April","May","June","July","August","September","October","November","December"]
+       // let mo = ["","January","Febrary","March","April","May","June","July","August","September","October","November","December"]
     
-        let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+      //  let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
         let startLabel = UILabel()
         startLabel.frame = CGRect(x: screenWidth/5, y: screenHeight/7.1, width: 200, height: 50*screenHeight/667)
         startLabel.text = "12 Months Ago"
