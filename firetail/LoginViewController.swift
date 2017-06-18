@@ -104,6 +104,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 if Set1.username != "none" {
                    if self.isFirstLoading {
                     self.loadUserInfoFromFirebase(firebaseUsername: Set1.username)
+                    
                         self.isFirstLoading = false
                     }
                 }    
@@ -144,7 +145,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             let value = snapshot.value as? NSDictionary
-            Set1.token = value?["token"] as? String ?? "none"
+           // Set1.token = value?["token"] as? String ?? "none"
             Set1.fullName = value?["fullName"] as? String ?? "none"
             Set1.email = value?["email"] as? String ?? "none"
             Set1.phone = value?["phone"] as? String ?? "none"
@@ -210,11 +211,14 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                             }
                         }
                         
+                        
+                        
                     }) { (error) in
                         print(error.localizedDescription)
                     }
                     }
                 }
+                Set1.saveUserInfo()
             } else {
                 self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
             }

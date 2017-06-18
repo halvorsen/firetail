@@ -30,6 +30,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Fabric.with([Crashlytics.self])
         FirebaseApp.configure()
         
+        if let refreshedToken = InstanceID.instanceID().token() {
+            print("InstanceID token: \(refreshedToken)")
+            Set1.token = refreshedToken
+        }
+        
 //        if #available(iOS 10.0, *) {
 //            // For iOS 10 display notification (sent via APNS)
 //            UNUserNotificationCenter.current().delegate = self
@@ -51,8 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         // Override point for customization after application launch.
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotification(_:)),
-                                                         name: NSNotification.Name.InstanceIDTokenRefresh, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotification(_:)),name: NSNotification.Name.InstanceIDTokenRefresh, object: nil)
         
         return true
     }
@@ -78,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
       //  Messaging.messaging().disconnect()
        // print("Disconnected from FCM.")
-        try! Auth.auth().signOut()
+       // try! Auth.auth().signOut()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -87,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        try! Auth.auth().signOut()
+       // try! Auth.auth().signOut()
         connectToFcm()
     }
 

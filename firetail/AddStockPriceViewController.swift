@@ -286,6 +286,16 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         }
         
     }
+   
+    
+    override func viewWillAppear(_ animated: Bool) {
+        getOneYearData(stockName: newAlertTicker) {
+            
+            Set1.oneYearDictionary[$1] = $0
+          
+        }
+    }
+    
     var isFirst = true
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print(scrollView.contentOffset.x)

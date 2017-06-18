@@ -90,7 +90,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         if Set1.alertCount > 0 {
             for i in 0..<Set1.alertCount {
                 
-                let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.ticker, currentPrice: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.price, sms: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.sms, email: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.email, flash: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.flash, urgent: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.urgent, longName: Set1.userAlerts[alertID[i]]!)
+                let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.ticker, currentPrice: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.price, sms: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.sms, email: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.email, flash: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.flash, urgent: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.urgent, longName: Set1.userAlerts[alertID[i]]!, push: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.push)
                 
                 block.ex.addTarget(self, action: #selector(DashboardViewController.act(_:)), for: .touchUpInside)
                 
@@ -504,10 +504,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             if (button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text) {
                 Set1.ti.removeAll()
                 
-                UIView.animate(withDuration: 0.6) {
-                    self.blocks[i].removeFromSuperview()
-                    // self.blocks[i].slideView.frame.origin.x = 0
-                }
+                blocks[i].removeFromSuperview()
+                
+                alertSafetyShuffle()
                 check = true
                 for k in 0..<i {
                     self.blocks[k].layer.zPosition = position; position += 1
@@ -632,21 +631,36 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     func whoseOnFirst(_ scrollView: UIScrollView) {
         
-        for i in 0...11 {
-            if scrollView.contentSize.width*CGFloat(Double(i+1)-2.05)/12...scrollView.contentSize.width*CGFloat(Double(i+1)-2.0)/12 ~= scrollView.contentOffset.x {
+        for i in 0...12 {
+            if scrollView.contentSize.width*CGFloat(Double(i+1)-2.3)/13...scrollView.contentSize.width*CGFloat(Double(i+1)-2.05)/13 ~= scrollView.contentOffset.x {
+                var value = CGFloat()
+                var value2 = CGFloat()
+                var value1 = CGFloat()
+
                 
                 switch Set1.alertCount {
                 case 0:
                     break
                 case 1:
                     stock1.text = "\(sv.stock): \(sv.percentSet[i])%"
+                    
+                    value = sv.percentSetVal[i]
+
                 case 2:
                     stock1.text = "\(sv.stock): \(sv.percentSet[i])%"
                     stock2.text = "\(sv1.stock): \(sv1.percentSet[i])%"
+                    
+                    value = sv.percentSetVal[i]
+                    value1 = sv1.percentSetVal[i]
+          
                 default:
                     stock1.text = "\(sv.stock): \(sv.percentSet[i])%"
                     stock2.text = "\(sv1.stock): \(sv1.percentSet[i])%"
                     stock3.text = "\(sv2.stock): \(sv2.percentSet[i])%"
+                    
+                    value = sv.percentSetVal[i]
+                    value1 = sv1.percentSetVal[i]
+                    value2 = sv2.percentSetVal[i]
                 }
                 
                 monthIndicator.text = Set1.month[i]
@@ -660,7 +674,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     self.stock3.frame.origin.y = 120*self.screenHeight/1334
                 case 2:
                     UIView.animate(withDuration: 0.5) {
-                        if self.sv.percentSetVal[i] > self.sv1.percentSetVal[i] {
+                        if value > value1 {
                             
                             self.stock1.frame.origin.y = 24*self.screenHeight/1334
                             self.stock2.frame.origin.y = 72*self.screenHeight/1334
@@ -674,10 +688,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     }
                 default:
                     UIView.animate(withDuration: 0.5) {
-                        if self.sv.percentSetVal[i] > self.sv1.percentSetVal[i] {
-                            if self.sv.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                        if value > value1 {
+                            if value > value2 {
                                 self.stock1.frame.origin.y = 24*self.screenHeight/1334
-                                if self.sv1.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                                if value1 > value2 {
                                     self.stock2.frame.origin.y = 72*self.screenHeight/1334
                                     self.stock3.frame.origin.y = 120*self.screenHeight/1334
                                 } else {
@@ -690,13 +704,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                                 self.stock2.frame.origin.y = 120*self.screenHeight/1334
                             }
                         } else {
-                            if self.sv.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                            if value > value2 {
                                 self.stock1.frame.origin.y = 72*self.screenHeight/1334
                                 self.stock2.frame.origin.y = 24*self.screenHeight/1334
                                 self.stock3.frame.origin.y = 120*self.screenHeight/1334
                             } else {
                                 self.stock1.frame.origin.y = 120*self.screenHeight/1334
-                                if self.sv1.percentSetVal[i] > self.sv2.percentSetVal[i] {
+                                if value1 > value2 {
                                     self.stock2.frame.origin.y = 24*self.screenHeight/1334
                                     self.stock3.frame.origin.y = 72*self.screenHeight/1334
                                 } else {
@@ -920,8 +934,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         if sum > 0 {
             daysOfTheWeek.alpha = 1.0
         }
-        print("DOTW")
-        print(Set1.weeklyAlerts)
         //need to add bars when alerts are triggered
         var i = 0
         for day in [monday,tuesday,wednesday,thursday,friday] {

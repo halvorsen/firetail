@@ -53,25 +53,21 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
         if newAlertPrice < 0.00 {
             newAlertPriceLabel.text = "$0.00"
-           
+            
         } else if newAlertPrice < 5.00 {
             newAlertPriceLabel.text = "$" + String(format: "%.2f", newAlertPrice)
-           
+            
         } else if newAlertPrice > 2000.0 {
             newAlertPriceLabel.text = "$2000"
-           
+            
         } else {
             newAlertPriceLabel.text = "$" + String(format: "%.1f", newAlertPrice) + "0"
-         
+            
         }
         
         
-        getOneYearData(stockName: newAlertTicker) {
-            
-            Set1.oneYearDictionary[$1] = $0
-            
-        }
-
+        
+        
     }
     
     override func viewDidLoad() {
@@ -105,26 +101,26 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         let (mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
         
         let switches:[(UISwitch,CGFloat,Int)] = [
-        
-        (mySwitchEmail,227,0),
-        (mySwitchSMS,286,1),
-        (mySwitchPush,347,2),
-        (mySwitchFlash,406,3),
-        (mySwitchAll,466,4),
-        
-        ]
+            
+            (mySwitchEmail,227,0),
+            (mySwitchSMS,286,1),
+            (mySwitchPush,347,2),
+            (mySwitchFlash,406,3),
+            (mySwitchAll,466,4),
+            
+            ]
         
         for (s, y, tag) in switches {
-       
-        s.frame = CGRect(x: 27*screenWidth/375, y: y*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
-        s.setOn(false, animated: false)
-        s.tintColor = customColor.white229
-        s.layer.cornerRadius = 16
-        s.backgroundColor = .white
-        s.onTintColor = customColor.yellow
-        s.addTarget(self, action: #selector(AddStockAlertViewController.switchChanged(_:)), for: UIControlEvents.valueChanged)
-        s.tag = tag
-        view.addSubview(s)
+            
+            s.frame = CGRect(x: 27*screenWidth/375, y: y*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
+            s.setOn(false, animated: false)
+            s.tintColor = customColor.white229
+            s.layer.cornerRadius = 16
+            s.backgroundColor = .white
+            s.onTintColor = customColor.yellow
+            s.addTarget(self, action: #selector(AddStockAlertViewController.switchChanged(_:)), for: UIControlEvents.valueChanged)
+            s.tag = tag
+            view.addSubview(s)
             
         }
         
@@ -150,7 +146,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     }
     
     @objc private func addAlertFunc(_ sender: UIButton) {
-     
+        
         self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
     }
     
@@ -172,7 +168,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         if finalAlertPrice > lastPrice {
             alertTriggerWhenGreaterThan = true
         }
-  
+        
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
             myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: newAlertPriceLabel.text!)
         } else {
@@ -196,15 +192,16 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             UNUserNotificationCenter.current().requestAuthorization(
                 options: authOptions,
                 completionHandler: {_, _ in
-            
+                    
                     if let refreshedToken = InstanceID.instanceID().token() {
                         print("InstanceID token: \(refreshedToken)")
                         Set1.token = refreshedToken
+                        Set1.saveUserInfo()
                     }
                     
                     // Connect to FCM since connection may have failed when attempted before having a token.
                     self.connectToFcm()
-            
+                    
             })
             
             // For iOS 10 data message (sent via FCM)
@@ -239,8 +236,14 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 newAlertBoolTuple.3 = true
                 
             case 4:
-                newAlertBoolTuple.4 = true
-                registerForPushNotifications()
+                if Set1.phone == "none" {
+                    phoneTextField.alpha = 1.0
+                    phoneTextField.becomeFirstResponder()
+                    registerForPushNotifications()
+                } else {
+                    newAlertBoolTuple.4 = true
+                    registerForPushNotifications()
+                }
             default:
                 break
             }
@@ -316,20 +319,20 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     
     func connectToFcm() {
         
-    // Won't connect since there is no token
-    guard InstanceID.instanceID().token() != nil else {
-    return
-    }
-    
-    // Disconnect previous FCM connection if it exists.
-    Messaging.messaging().disconnect()
-    
-    Messaging.messaging().connect { (error) in
-    if error != nil {
-    print("Unable to connect with FCM. \(error?.localizedDescription ?? "")")
-    } else {
-    print("Connected to FCM.")
-    }
-    }
+        // Won't connect since there is no token
+        guard InstanceID.instanceID().token() != nil else {
+            return
+        }
+        
+        // Disconnect previous FCM connection if it exists.
+        Messaging.messaging().disconnect()
+        
+        Messaging.messaging().connect { (error) in
+            if error != nil {
+                print("Unable to connect with FCM. \(error?.localizedDescription ?? "")")
+            } else {
+                print("Connected to FCM.")
+            }
+        }
     }
 }

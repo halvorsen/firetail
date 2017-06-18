@@ -22,7 +22,7 @@ class CompareScrollDot: UIView {
     var __set = [CGFloat]()
     var passedColor = UIColor()
     let rangeMultiplier: CGFloat = 10
-    let scale: CGFloat = 2.0
+    let scale: CGFloat = 1.5
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
@@ -32,7 +32,7 @@ class CompareScrollDot: UIView {
         passedColor = color
         var _set = [CGFloat]()
         _set.append(CGFloat(graphData.first!))
-        for i in 1...10 {
+        for i in 1...11 {
             _set.append(CGFloat(graphData[Int(21*i)]))
         }
         _set.append(CGFloat(graphData.last!))

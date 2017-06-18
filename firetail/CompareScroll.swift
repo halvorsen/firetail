@@ -22,7 +22,7 @@ class CompareScroll: UIView {
     var __set = [CGFloat]()
     var passedColor = UIColor()
     let rangeMultiplier: CGFloat = 10
-    let scale: CGFloat = 2.0
+    let scale: CGFloat = 1.5
     var stock = ""
     var percentSet = [String]()
     var percentSetVal = [CGFloat]()
@@ -36,13 +36,14 @@ class CompareScroll: UIView {
         passedColor = color
         var _set = [CGFloat]()
         _set.append(CGFloat(graphData.first!))
-        for i in 1...10 {
+        for i in 1...11 {
             _set.append(CGFloat(graphData[Int(21*i)]))
         }
         _set.append(CGFloat(graphData.last!))
 
-        _set = _set.map { $0 * rangeMultiplier / _set.first! }
+        _set = _set.map { $0 * rangeMultiplier / CGFloat(graphData.first!) }
         percentSet = _set.map { String(format: "%.1f", $0 * 10 - 100 ) }
+
         percentSetVal = _set.map { $0 * 10 - 100 }
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
         data = __set
@@ -51,7 +52,7 @@ class CompareScroll: UIView {
     
       //  let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
         let startLabel = UILabel()
-        startLabel.frame = CGRect(x: screenWidth/5, y: screenHeight/7.1, width: 200, height: 50*screenHeight/667)
+        startLabel.frame = CGRect(x: screenWidth/4.9, y: screenHeight/7.2, width: 200, height: 50*screenHeight/667)
         startLabel.text = "12 Months Ago"
         
         //startLabel.text = "\(mo[dComponent.month! + 1]), \(dComponent.year! - 1)"
@@ -107,7 +108,7 @@ class CompareScroll: UIView {
         var p1 = CGPoint(x: 0, y: coordXFor(index: 0))
         path.move(to: p1)
         
- //       drawPoint(point: p1, color: .green, radius: 3)
+     //   drawPoint(point: p1, color: .green, radius: 3)
         
         if (data.count == 2) {
             path.addLine(to: CGPoint(x: step, y: coordXFor(index: 1)))
@@ -118,7 +119,7 @@ class CompareScroll: UIView {
         
         for i in 1..<data.count {
             let p2 = CGPoint(x: step * CGFloat(i), y: coordXFor(index: i))
-//            drawPoint(point: p2, color: .red, radius: 3)
+      //      drawPoint(point: p2, color: .red, radius: 3)
             var p3: CGPoint?
             if i == data.count - 1 {
                 p3 = nil
