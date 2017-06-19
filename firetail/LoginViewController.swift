@@ -35,11 +35,12 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     let firetail = UILabel()
     let myLoadSaveCoreData = LoadSaveCoreData()
     var isFirstLoading = true
-    //FIXIT some reason adding the cover view crashes things
+  
     override func viewDidAppear(_ animated: Bool) {
         reachabilityAddNotification()
 
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -122,8 +123,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
 
     }
     
-    
-    
     func reachabilityAddNotification() {
         //declare this property where it won't go out of scope relative to your listener
         
@@ -197,7 +196,8 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                             let _push = value?["push"] as? Bool ?? false
                             let _urgent = value?["urgent"] as? Bool ?? false
                             let _triggered = value?["triggered"] as? Bool ?? false
-                            Set1.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent)
+                            let _timestamp = value?["data1"] as? Int ?? 1
+                            Set1.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent, _timestamp)
                         }
                         self.ti = Set1.ti
                         if self.ti.count != 0 {

@@ -90,7 +90,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         if Set1.alertCount > 0 {
             for i in 0..<Set1.alertCount {
                 
-                let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.ticker, currentPrice: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.price, sms: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.sms, email: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.email, flash: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.flash, urgent: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.urgent, longName: Set1.userAlerts[alertID[i]]!, push: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.push, isGreaterThan: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.isGreaterThan)
+                let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.ticker, currentPrice: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.price, sms: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.sms, email: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.email, flash: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.flash, urgent: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.urgent, longName: Set1.userAlerts[alertID[i]]!, push: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.push, isGreaterThan: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.isGreaterThan, timestamp: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.timestamp)
                 
                 block.ex.addTarget(self, action: #selector(DashboardViewController.act(_:)), for: .touchUpInside)
                 
@@ -110,6 +110,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         
         Set1.saveUserInfo()
+        
     }
     
     override func viewDidLoad() {
@@ -924,6 +925,45 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     func populateAlertBars() {
+        
+        for (key,_) in Set1.weeklyAlerts {
+            Set1.weeklyAlerts[key] = 0
+        }
+        
+        for (_,myTuple) in Set1.alerts {
+            if myTuple.timestamp != 1 {
+                let currentTimestamp = Int(Date().timeIntervalSince1970 * 1000)
+                let seconds = currentTimestamp - myTuple.timestamp
+                let dayOfTheWeek = Date().dayNumberOfWeek()!
+                let secondsInADay = 86400000
+                var addAlertToThisDay = Int()
+                switch seconds {
+                case 0..<secondsInADay: addAlertToThisDay = dayOfTheWeek
+                case secondsInADay..<(2*secondsInADay): addAlertToThisDay = dayOfTheWeek - 1
+                case 2*secondsInADay..<(3*secondsInADay): addAlertToThisDay = dayOfTheWeek - 2
+                case 3*secondsInADay..<(4*secondsInADay): addAlertToThisDay = dayOfTheWeek - 3
+                case 4*secondsInADay..<(5*secondsInADay): addAlertToThisDay = dayOfTheWeek - 4
+                case 5*secondsInADay..<(6*secondsInADay): addAlertToThisDay = dayOfTheWeek - 5
+                case 6*secondsInADay..<(7*secondsInADay): addAlertToThisDay = dayOfTheWeek - 6
+                default: break
+                }
+                //public static var weeklyAlerts: [String:Int] = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
+                
+                if addAlertToThisDay < 1 {
+                    addAlertToThisDay += 7
+                }
+                switch addAlertToThisDay {
+                case 2: Set1.weeklyAlerts["mon"]! += 1
+                case 3: Set1.weeklyAlerts["tues"]! += 1
+                case 4: Set1.weeklyAlerts["wed"]! += 1
+                case 5: Set1.weeklyAlerts["thur"]! += 1
+                case 6: Set1.weeklyAlerts["fri"]! += 1
+                default: break
+                }
+                
+            }
+            
+        }
         //TEST Set.weeklyAlerts = ["mon":1,"tues":2,"wed":3,"thur":10,"fri":1]
         let monday = Set1.weeklyAlerts["mon"] ?? 0
         let tuesday = Set1.weeklyAlerts["tues"] ?? 0

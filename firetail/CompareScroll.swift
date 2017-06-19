@@ -31,17 +31,23 @@ class CompareScroll: UIView {
     
     init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: 259*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
+        var _graphData = graphData
         stock = stockName
         self.backgroundColor = .clear
         passedColor = color
         var _set = [CGFloat]()
-        _set.append(CGFloat(graphData.first!))
-        for i in 1...11 {
-            _set.append(CGFloat(graphData[Int(21*i)]))
+        _set.append(CGFloat(_graphData.first!))
+        if _graphData.count < 252 {
+            while _graphData.count < 252 {
+                _graphData = [_graphData.first!] + _graphData
+            }
         }
-        _set.append(CGFloat(graphData.last!))
+        for i in 1...11 {
+            _set.append(CGFloat(_graphData[Int(21*i)]))
+        }
+        _set.append(CGFloat(_graphData.last!))
 
-        _set = _set.map { $0 * rangeMultiplier / CGFloat(graphData.first!) }
+        _set = _set.map { $0 * rangeMultiplier / CGFloat(_graphData.first!) }
         percentSet = _set.map { String(format: "%.1f", $0 * 10 - 100 ) }
 
         percentSetVal = _set.map { $0 * 10 - 100 }
@@ -51,15 +57,15 @@ class CompareScroll: UIView {
        // let mo = ["","January","Febrary","March","April","May","June","July","August","September","October","November","December"]
     
       //  let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-        let startLabel = UILabel()
-        startLabel.frame = CGRect(x: screenWidth/4.9, y: screenHeight/7.2, width: 200, height: 50*screenHeight/667)
-        startLabel.text = "12 Months Ago"
-        
-        //startLabel.text = "\(mo[dComponent.month! + 1]), \(dComponent.year! - 1)"
-        startLabel.textColor = .white
-        startLabel.alpha = 1.0
-        startLabel.font = UIFont(name: "Roboto-Medium", size: 12*fontSizeMultiplier)
-        self.addSubview(startLabel)
+//        let startLabel = UILabel()
+//        startLabel.frame = CGRect(x: screenWidth/4.9, y: screenHeight/7.2, width: 200, height: 50*screenHeight/667)
+//        startLabel.text = "12 Months Ago"
+//        
+//        //startLabel.text = "\(mo[dComponent.month! + 1]), \(dComponent.year! - 1)"
+//        startLabel.textColor = .white
+//        startLabel.alpha = 1.0
+//        startLabel.font = UIFont(name: "Roboto-Medium", size: 12*fontSizeMultiplier)
+//        self.addSubview(startLabel)
         
         setNeedsDisplay()
         

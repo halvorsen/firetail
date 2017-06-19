@@ -28,14 +28,20 @@ class CompareScrollDot: UIView {
     
     init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13 - 267*UIScreen.main.bounds.width/375, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: 259*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
+        var _graphData = graphData
         self.backgroundColor = .clear
         passedColor = color
         var _set = [CGFloat]()
-        _set.append(CGFloat(graphData.first!))
-        for i in 1...11 {
-            _set.append(CGFloat(graphData[Int(21*i)]))
+        _set.append(CGFloat(_graphData.first!))
+        if _graphData.count < 252 {
+            while _graphData.count < 252 {
+                _graphData = [_graphData.first!] + _graphData
+            }
         }
-        _set.append(CGFloat(graphData.last!))
+        for i in 1...11 {
+            _set.append(CGFloat(_graphData[Int(21*i)]))
+        }
+        _set.append(CGFloat(_graphData.last!))
         
         _set = _set.map { $0 * rangeMultiplier / _set.first! }
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends

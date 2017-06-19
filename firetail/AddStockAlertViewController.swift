@@ -166,9 +166,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             alertTriggerWhenGreaterThan = true
         }
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
-            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, true, false, false, newAlertTicker, false, false, false) }
+            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, true, false, false, newAlertTicker, false, false, false, 1) }
         else {
-            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, false, newAlertBoolTuple.2, newAlertBoolTuple.4)
+            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, false, newAlertBoolTuple.2, newAlertBoolTuple.4, 1)
         }
         
         
