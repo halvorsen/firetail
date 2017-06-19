@@ -49,6 +49,8 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         return aaa
     }
     var phoneTextField = UITextField()
+    var priceString = String()
+    
     override func viewWillAppear(_ animated: Bool) {
         
         if newAlertPrice < 0.00 {
@@ -159,20 +161,22 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         newAlertLongID = newAlertTicker.uppercased() + timestamp
         Set1.userAlerts[alertID[Set1.alertCount]] = newAlertLongID
         Set1.alertCount += 1
-        if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
-            Set1.alerts[newAlertLongID] = (newAlertLongID, newAlertPrice > lastPrice, newAlertPrice, false, true, false, false, newAlertTicker, false, false, false) }
-        else {
-            Set1.alerts[newAlertLongID] = (newAlertLongID, newAlertPrice > lastPrice, newAlertPrice, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, false, newAlertBoolTuple.2, newAlertBoolTuple.4)
-        }
         var alertTriggerWhenGreaterThan = false
         if finalAlertPrice > lastPrice {
             alertTriggerWhenGreaterThan = true
         }
+        if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
+            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, true, false, false, newAlertTicker, false, false, false) }
+        else {
+            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, false, newAlertBoolTuple.2, newAlertBoolTuple.4)
+        }
+        
+        
         
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
-            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: newAlertPriceLabel.text!)
+            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: priceString)
         } else {
-            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: newAlertPriceLabel.text!)
+            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString)
         }
         
         self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)

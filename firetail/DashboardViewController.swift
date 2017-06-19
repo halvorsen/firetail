@@ -90,7 +90,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         if Set1.alertCount > 0 {
             for i in 0..<Set1.alertCount {
                 
-                let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.ticker, currentPrice: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.price, sms: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.sms, email: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.email, flash: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.flash, urgent: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.urgent, longName: Set1.userAlerts[alertID[i]]!, push: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.push)
+                let block = AlertBlockView(y: CGFloat(i)*120, stockTicker: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.ticker, currentPrice: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.price, sms: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.sms, email: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.email, flash: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.flash, urgent: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.urgent, longName: Set1.userAlerts[alertID[i]]!, push: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.push, isGreaterThan: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.isGreaterThan)
                 
                 block.ex.addTarget(self, action: #selector(DashboardViewController.act(_:)), for: .touchUpInside)
                 

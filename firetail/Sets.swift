@@ -47,7 +47,7 @@ public struct Set1 {
     
     public static var userAlerts = [String:String]()
     
-    public static var alerts = [String:(name:String,isGreaterThan:Bool,price:Double,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:Bool,push:Bool,urgent:Bool)]()
+    public static var alerts = [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:Bool,push:Bool,urgent:Bool)]()
     
     public static func saveUserInfo() {
         LoadSaveCoreData.saveUserInfoToFirebase(username: Set1.username, fullName: Set1.fullName, email: Set1.email, phone: Set1.phone, premium: Set1.premium, numOfAlerts: Set1.alertCount, brokerName: Set1.brokerName, brokerURL: Set1.brokerURL, weeklyAlerts: Set1.weeklyAlerts, userAlerts: Set1.userAlerts, token: Set1.token)

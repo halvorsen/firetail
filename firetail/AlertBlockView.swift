@@ -21,7 +21,7 @@ class AlertBlockView: UIView {
     var tap = UITapGestureRecognizer()
     var ex = UIButton()
     var stockTickerGlobal: String = ""
-    var currentPriceGlobal: Double = 0.0
+    var currentPriceGlobal: String = ""
     var smsGlobal: Bool = false
     var emailGlobal: Bool = false
     var flashGlobal: Bool = false
@@ -29,7 +29,7 @@ class AlertBlockView: UIView {
     var blockLongName = String()
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
-    init(y: CGFloat, stockTicker: String, currentPrice: Double, sms: Bool = false, email: Bool = false, flash: Bool = false, urgent: Bool = false, longName: String, push: Bool = false) {
+    init(y: CGFloat, stockTicker: String, currentPrice: String, sms: Bool = false, email: Bool = false, flash: Bool = false, urgent: Bool = false, longName: String, push: Bool = false, isGreaterThan: Bool) {
         super.init(frame: CGRect(x: 0, y: y*screenHeight/1334, width: screenWidth, height: 120*screenHeight/1334))
         blockLongName = longName
         stockTickerGlobal = stockTicker
@@ -106,8 +106,11 @@ class AlertBlockView: UIView {
         }
         addLabel(name: alertList, text: alerts, textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 260, y: 70, width: 352, height: 36, lines: 1, alpha: 0.5)
         slideView.addSubview(alertList)
-        let _currentPrice = "$" + String(format: "%.2f", currentPrice)
+        let _currentPrice = currentPrice //"$" + String(format: "%.2f", currentPrice)
         addLabel(name: stockPrice, text: _currentPrice, textColor: customColor.yellow, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 620, y: 70, width: 130, height: 36, lines: 1)
+        if !isGreaterThan {
+            stockPrice.textColor = customColor.red
+        }
         slideView.addSubview(stockPrice)
         addLabel(name: line, text: "", textColor: .clear, textAlignment: .center, fontName: "", fontSize: 1, x: 0, y: 118, width: 750, height: 2, lines: 0)
         line.backgroundColor = customColor.alertLines

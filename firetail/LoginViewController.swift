@@ -188,7 +188,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                             let _name = uA[alertID[i]]!
                             let value = snapshot.value as? NSDictionary
                             let _isGreaterThan = value?["isGreaterThan"] as? Bool ?? false
-                            let _price = value?["price"] as? Double ?? 0.0
+                            let _price = value?["priceString"] as? String ?? ""
                             let _email = value?["email"] as? Bool ?? false
                             let _flash = value?["flash"] as? Bool ?? false
                             let _sms = value?["sms"] as? Bool ?? false

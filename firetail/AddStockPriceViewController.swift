@@ -33,6 +33,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     var lastPrice = Double()
     let setPriceAlert = UILabel()
     let arrow = UIImageView()
+    var priceString = String()
     
     private func loadItAll() {
         let blockInBackground = UIView()
@@ -253,6 +254,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             destinationViewController.newAlertTicker = newAlertTicker
             destinationViewController.newAlertPrice = newAlertPrice
             destinationViewController.lastPrice = lastPrice
+            destinationViewController.priceString = priceLabel.text!
         }
     }
     
@@ -308,21 +310,22 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             let c:Float = 1000
             let price = (offset*(c-a)/75053.5)*375/Float(screenWidth) + a
             dialPrice = Double(price)
-            newAlertPrice = dialPrice
+            
+            
             if price < 0.00 {
                 priceLabel.text = "$0.00"
-             
+                priceString = "0.00"
             } else if price < 5.00 {
                 priceLabel.text = "$" + String(format: "%.2f", price)
-                
+                priceString = String(format: "%.2f", price)
             } else if price > 2000.0 {
                 priceLabel.text = "$2000"
-           
+                priceString = "2000"
             } else {
                 priceLabel.text = "$" + String(format: "%.1f", price) + "0"
-           
+                priceString = String(format: "%.1f", price) + "0"
             }
-            
+            newAlertPrice = Double(priceString)!
             
         }
         if !isFirst {
