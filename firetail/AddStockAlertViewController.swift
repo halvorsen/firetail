@@ -264,7 +264,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 let accOn = UIApplication.shared.currentUserNotificationSettings
                // BOOL UIAccessibilityIsVoiceOverRunning();
                 
-                userWarning(title: "Flash Alert", message: "Go to Settings > General > Accessibility. Scroll down to LED Flash for Alerts. Turn On.")
+                userWarning(title: "Flash Alert", message: "Go to Settings > General > Accessibility. Scroll down to LED Flash for Alerts.")
                 
             case 4:
                 if Set1.phone == "none" {
@@ -286,7 +286,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             case 0:
                 newAlertBoolTuple.0 = false
                 UserDefaults.standard.set(false, forKey: "emailOn")
-                Set1.flashOn = false
+                Set1.emailOn = false
             case 1:
                 newAlertBoolTuple.1 = false
                 UserDefaults.standard.set(false, forKey: "smsOn")
