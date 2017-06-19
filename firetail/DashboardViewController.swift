@@ -60,7 +60,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var pan = UIPanGestureRecognizer()
     var canIScroll = true
     var myTimer2 = Timer()
-    
+    let myLoadSave = LoadSaveCoreData()
     var savedFrameOrigin = CGPoint()
     var l = 1
     var k = 10000
@@ -502,12 +502,20 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         for i in 0..<blocks.count {
             
             
-            if (button.title(for: .disabled)! == self.blocks[i].stockTickerLabel.text) {
+            if (button.title(for: .disabled)! == self.blocks[i].blockLongName) {
                 Set1.ti.removeAll()
                 
                 blocks[i].removeFromSuperview()
                 
+                let alertChanging = Set1.alerts[blocks[i].blockLongName]!
+              
+                var triggerStringNotBool = "false"
+                if alertChanging.triggered {
+                    triggerStringNotBool = "true"
+                }
                 alertSafetyShuffle()
+                myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: alertChanging.ticker, price: blocks[i].priceDouble, isGreaterThan: alertChanging.isGreaterThan, deleted: true, email: alertChanging.email, sms: alertChanging.sms, flash: alertChanging.flash, urgent: alertChanging.urgent, triggered: triggerStringNotBool, push: alertChanging.push, alertLongName: blocks[i].blockLongName, priceString: blocks[i].currentPriceGlobal)
+                
                 check = true
                 for k in 0..<i {
                     self.blocks[k].layer.zPosition = position; position += 1
@@ -542,6 +550,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         Set1.alertCount = amountOfBlocks
         
         reboot()
+        
         Set1.saveUserInfo()
     }
     
@@ -936,15 +945,19 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 let seconds = currentTimestamp - myTuple.timestamp
                 let dayOfTheWeek = Date().dayNumberOfWeek()!
                 let secondsInADay = 86400000
+                let hour = Calendar.current.component(.hour, from: Date())
+                let m = Calendar.current.component(.minute, from: Date())
+                print("minutes: \(m)")
+                let secondsSinceMidnight = hour * 3600 + m * 60
                 var addAlertToThisDay = Int()
                 switch seconds {
-                case 0..<secondsInADay: addAlertToThisDay = dayOfTheWeek
-                case secondsInADay..<(2*secondsInADay): addAlertToThisDay = dayOfTheWeek - 1
-                case 2*secondsInADay..<(3*secondsInADay): addAlertToThisDay = dayOfTheWeek - 2
-                case 3*secondsInADay..<(4*secondsInADay): addAlertToThisDay = dayOfTheWeek - 3
-                case 4*secondsInADay..<(5*secondsInADay): addAlertToThisDay = dayOfTheWeek - 4
-                case 5*secondsInADay..<(6*secondsInADay): addAlertToThisDay = dayOfTheWeek - 5
-                case 6*secondsInADay..<(7*secondsInADay): addAlertToThisDay = dayOfTheWeek - 6
+                case 0..<secondsSinceMidnight: addAlertToThisDay = dayOfTheWeek
+                case secondsSinceMidnight..<(secondsInADay) + secondsSinceMidnight: addAlertToThisDay = dayOfTheWeek - 1
+                case secondsInADay + secondsSinceMidnight..<(2*secondsInADay) + secondsSinceMidnight: addAlertToThisDay = dayOfTheWeek - 2
+                case 2*secondsInADay + secondsSinceMidnight..<(3*secondsInADay) + secondsSinceMidnight: addAlertToThisDay = dayOfTheWeek - 3
+                case 3*secondsInADay + secondsSinceMidnight..<(4*secondsInADay) + secondsSinceMidnight: addAlertToThisDay = dayOfTheWeek - 4
+                case 4*secondsInADay + secondsSinceMidnight..<(5*secondsInADay) + secondsSinceMidnight: addAlertToThisDay = dayOfTheWeek - 5
+                case 5*secondsInADay + secondsSinceMidnight..<(6*secondsInADay) + secondsSinceMidnight: addAlertToThisDay = dayOfTheWeek - 6
                 default: break
                 }
                 //public static var weeklyAlerts: [String:Int] = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]

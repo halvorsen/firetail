@@ -27,6 +27,7 @@ class AlertBlockView: UIView {
     var flashGlobal: Bool = false
     var urgentGlobal: Bool = false
     var blockLongName = String()
+    var priceDouble = Double()
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     init(y: CGFloat, stockTicker: String, currentPrice: String, sms: Bool = false, email: Bool = false, flash: Bool = false, urgent: Bool = false, longName: String, push: Bool = false, isGreaterThan: Bool, timestamp: Int) {
@@ -38,6 +39,7 @@ class AlertBlockView: UIView {
         emailGlobal = email
         flashGlobal = flash
         urgentGlobal = urgent
+        priceDouble = Double(currentPriceGlobal.chopPrefix())!
         self.backgroundColor = customColor.white153
         
         addButton(name: ex, x: 750 - 120, y: 0, width: 120, height: 120, title: "", font: "HelveticaNeue-light", fontSize: 40, titleColor: customColor.black33, bgColor: customColor.white249, cornerRad: 0, boarderW: 0, boarderColor: .clear, addSubview: true)
@@ -47,7 +49,7 @@ class AlertBlockView: UIView {
         x.frame.origin = CGPoint(x: 44*screenWidth/750, y: 44*screenWidth/750)
         ex.addSubview(x)
         //x.center = ex.center
-        ex.setTitle(stockTicker, for: .disabled)
+        ex.setTitle(longName, for: .disabled)
         slideView.backgroundColor = customColor.background
         slideView.frame = self.bounds
         //        slideView.layer.shadowColor = UIColor.black.cgColor

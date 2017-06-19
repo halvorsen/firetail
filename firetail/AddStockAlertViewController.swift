@@ -238,6 +238,12 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 registerForPushNotifications()
             case 3:
                 newAlertBoolTuple.3 = true
+                registerForPushNotifications()
+                
+                let accOn = UIApplication.shared.currentUserNotificationSettings
+               // BOOL UIAccessibilityIsVoiceOverRunning();
+                
+                userWarning(title: "Flash Alert", message: "Go to Settings > General > Accessibility. Scroll down to LED Flash for Alerts. Turn On.")
                 
             case 4:
                 if Set1.phone == "none" {
