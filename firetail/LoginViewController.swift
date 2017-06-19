@@ -120,7 +120,12 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 }
             }
         }
-
+        
+        Set1.flashOn = UserDefaults.standard.bool(forKey: "flashOn")
+        Set1.allOn = UserDefaults.standard.bool(forKey: "allOn")
+        Set1.pushOn = UserDefaults.standard.bool(forKey: "pushOn")
+        Set1.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
+        Set1.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
     }
     
     func reachabilityAddNotification() {

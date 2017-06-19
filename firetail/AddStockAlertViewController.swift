@@ -125,7 +125,21 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             view.addSubview(s)
             
         }
-        
+        if Set1.flashOn {
+            mySwitchFlash.setOn(true, animated: false)
+        }
+        if Set1.smsOn {
+            mySwitchSMS.setOn(true, animated: false)
+        }
+        if Set1.emailOn {
+            mySwitchEmail.setOn(true, animated: false)
+        }
+        if Set1.pushOn {
+            mySwitchPush.setOn(true, animated: false)
+        }
+        if Set1.allOn {
+            mySwitchAll.setOn(true, animated: false)
+        }
         
         phoneTextField = UITextField(frame: CGRect(x: 375*screenWidth/750,y: 800*screenHeight/1334,width: 375*screenWidth/750 ,height: 80*screenHeight/1334))
         phoneTextField.placeholder = "(000) 000-0000"
@@ -226,6 +240,8 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             switch sender.tag {
             case 0:
                 newAlertBoolTuple.0 = true
+                UserDefaults.standard.set(true, forKey: "emailOn")
+                Set1.emailOn = true
             case 1:
                 if Set1.phone == "none" {
                     phoneTextField.alpha = 1.0
@@ -233,13 +249,18 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 } else {
                     newAlertBoolTuple.1 = true
                 }
+                UserDefaults.standard.set(true, forKey: "smsOn")
+                Set1.smsOn = true
             case 2:
                 newAlertBoolTuple.2 = true
                 registerForPushNotifications()
+                UserDefaults.standard.set(true, forKey: "pushOn")
+                Set1.pushOn = true
             case 3:
                 newAlertBoolTuple.3 = true
                 registerForPushNotifications()
-                
+                UserDefaults.standard.set(true, forKey: "flashOn")
+                Set1.flashOn = true
                 let accOn = UIApplication.shared.currentUserNotificationSettings
                // BOOL UIAccessibilityIsVoiceOverRunning();
                 
@@ -247,6 +268,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 
             case 4:
                 if Set1.phone == "none" {
+                    
                     phoneTextField.alpha = 1.0
                     phoneTextField.becomeFirstResponder()
                     registerForPushNotifications()
@@ -254,6 +276,8 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                     newAlertBoolTuple.4 = true
                     registerForPushNotifications()
                 }
+                UserDefaults.standard.set(true, forKey: "allOn")
+                Set1.allOn = true
             default:
                 break
             }
@@ -261,13 +285,23 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             switch sender.tag {
             case 0:
                 newAlertBoolTuple.0 = false
+                UserDefaults.standard.set(false, forKey: "emailOn")
+                Set1.flashOn = false
             case 1:
                 newAlertBoolTuple.1 = false
+                UserDefaults.standard.set(false, forKey: "smsOn")
+                Set1.smsOn = false
             case 2:
+                UserDefaults.standard.set(false, forKey: "pushOn")
+                Set1.pushOn = false
                 newAlertBoolTuple.2 = false
             case 3:
+                UserDefaults.standard.set(false, forKey: "flashOn")
+                Set1.flashOn = false
                 newAlertBoolTuple.3 = false
             case 4:
+                UserDefaults.standard.set(false, forKey: "allOn")
+                Set1.allOn = false
                 newAlertBoolTuple.4 = false
             default:
                 break

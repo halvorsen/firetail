@@ -11,6 +11,12 @@ import Firebase
 
 public struct Set1 {
     
+    public static var flashOn: Bool = false
+    public static var smsOn: Bool = false
+    public static var emailOn: Bool = false
+    public static var pushOn: Bool = false
+    public static var allOn: Bool = false
+    
     public static var token: String = ""
     
     public static var currentPrice: Double = 0.0
