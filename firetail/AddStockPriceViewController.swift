@@ -27,6 +27,11 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             priceLabel.text = s + "0"
         }
         
+        if alertPrice > 999.99 {
+      
+            priceLabel.text = priceLabel.text!.chopPrefix(1)
+        }
+        
         }}
     let stockSymbol = UILabel()
     var activityView = UIActivityIndicatorView()
@@ -46,9 +51,6 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         addLabel(name: setPriceAlert, text: "Set Price Alert", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 56, y: 885, width: 300, height: 80, lines: 1)
         view.addSubview(setPriceAlert)
         
-        
-        
-        print("screenwidth: \(screenWidth)")
         
         addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif-Regular", fontSize: 20, x: 60, y: 606, width: 200, height: 56, lines: 1)
         view.addSubview(newAlertTickerLabel)
@@ -160,15 +162,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                     }
                 }
                
-                self.delay(bySeconds: 20.0) {
-                    print(self.rectsLabelsTop)
-                    
-                    print(self.rectsLabelsTopBig)
-                    
-                    print(self.rectsLabelsPrice)
-                    
-                    
-                }
+        
                 
                 self.alertPrice = closings!.last!
                 self.lastPrice = closings!.last!
@@ -260,7 +254,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     
     
     private func prepareGraph(result: @escaping (_ dateArray: [(String,Int)]?,_ closings: [Double]?) -> Void) {
-        print("entered addview google1")
+       
         let myGoogle = Google()
         myGoogle.historicalPrices(years: 1, ticker: self.newAlertTicker) { (stockDataTuple) in
             let (_stockData,dates,_) = stockDataTuple
@@ -300,7 +294,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     
     var isFirst = true
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset.x)
+      
         if scrollView == dial {
             
             let offset = Float(scrollView.contentOffset.x)
@@ -324,6 +318,10 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             } else {
                 priceLabel.text = "$" + String(format: "%.1f", price) + "0"
                 priceString = String(format: "%.1f", price) + "0"
+            }
+            if price > 999.99 {
+            
+                priceLabel.text = priceLabel.text!.chopPrefix(1)
             }
             newAlertPrice = Double(priceString)!
             

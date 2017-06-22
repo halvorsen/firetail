@@ -127,18 +127,23 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         }
         if Set1.flashOn {
             mySwitchFlash.setOn(true, animated: false)
+            newAlertBoolTuple.3 = true
         }
         if Set1.smsOn {
             mySwitchSMS.setOn(true, animated: false)
+            newAlertBoolTuple.1 = true
         }
         if Set1.emailOn {
             mySwitchEmail.setOn(true, animated: false)
+            newAlertBoolTuple.0 = true
         }
         if Set1.pushOn {
             mySwitchPush.setOn(true, animated: false)
+            newAlertBoolTuple.2 = true
         }
         if Set1.allOn {
             mySwitchAll.setOn(true, animated: false)
+            newAlertBoolTuple.4 = true
         }
         
         phoneTextField = UITextField(frame: CGRect(x: 375*screenWidth/750,y: 800*screenHeight/1334,width: 375*screenWidth/750 ,height: 80*screenHeight/1334))

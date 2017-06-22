@@ -52,12 +52,15 @@ class Google {
                 }
                 var stringPrice = String()
                 let arrayData = Array(stringData.characters)
+                
                 dance: for i in 0..<arrayData.count {
                     if arrayData[i] == "l" {
                         if arrayData[i+1] == "\"" {
                              for j in 0...10 {
                                 if arrayData[i+j+6] == "\"" {break dance}
+                                if arrayData[i+j+6] != "," {
                                 stringPrice += String(arrayData[i+j+6])
+                                }
                             }
                         }
                     }
@@ -69,7 +72,7 @@ class Google {
                 let componentDate = Calendar.current.dateComponents([.year, .month, .day], from: Date())
                 let monthToday = self.monthStrings[componentDate.month!]
                 let dayToday = componentDate.day!
-                guard Double(stringPrice) != nil else {return}
+                guard Double(stringPrice) != nil else {print("guard1");return}
                 self.basket[1] = [(Double(stringPrice)!,monthToday,dayToday)]
                 
                 self.count += 1
