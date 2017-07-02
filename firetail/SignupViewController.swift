@@ -103,7 +103,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         
         
         var cleanString = textFields[0].text!
-       // cleanString = cleanString.replacingOccurrences(of: ".", with: ",")
+        cleanString = cleanString.replacingOccurrences(of: ".", with: ",")
         cleanString = cleanString.replacingOccurrences(of: "$", with: "(dollar)")
         cleanString = cleanString.replacingOccurrences(of: "#", with: "(hashtag)")
         cleanString = cleanString.replacingOccurrences(of: "[", with: "(")

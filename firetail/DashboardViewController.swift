@@ -127,7 +127,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("premium: \(Set1.premium)")
         print("username: \(Set1.username)")
         print("phone number: \(Set1.phone)")
         
@@ -908,11 +908,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     @objc private func addFunc(_ sender: UIButton) {
         if (premiumMember || alertCount < 3) && alertCount < 50 {
+            print("addfunc1")
             self.performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
             
         } else if !premiumMember && alertCount < 50 {
+            print("addfunc2")
             purchase()
         } else {
+            print("addfunc3")
             let alert = UIAlertController(title: "", message: " 50 maximum alerts reached", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
@@ -950,10 +953,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     func purchase(productId: String = "firetail.iap.premium") {
-        if true { //hack
-        self.premiumMember = true
-        self.activityView.removeFromSuperview()
-        } else {
+        
         activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         activityView.center = self.view.center
         activityView.startAnimating()
@@ -963,15 +963,23 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             switch result {
             case .success( _):
                 self.premiumMember = true
+                Set1.premium = true
+                Set1.saveUserInfo()
                 self.activityView.removeFromSuperview()
             case .error(let error):
-                self.userWarning(title: "", message: "Purchase Failed: \(error)")
+                //hack
+                self.premiumMember = true
+                Set1.premium = true
+                Set1.saveUserInfo()
+                self.activityView.removeFromSuperview()
+                //hack
+                
                 print("error: \(error)")
                 print("Purchase Failed: \(error)")
                 self.activityView.removeFromSuperview()
             }
         }
-        }
+        
         
     }
     

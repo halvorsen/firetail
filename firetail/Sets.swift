@@ -45,7 +45,7 @@ public struct Set1 {
     
     public static var fullName = "none"
     
-    public static var premium = false
+    public static var premium = false {didSet{print("preimum: \(premium)")}}
     
     public static var numOfAlerts = [Int]()
     
