@@ -53,16 +53,16 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         coverView.backgroundColor = customColor.black33
         coverView.layer.zPosition = 10
         view.addSubview(coverView)
-        imageView.frame.size = CGSize(width: 161, height: 207)
+        imageView.frame.size = CGSize(width: 84*screenWidth/375, height: 108*screenHeight/667)
         imageView.image = #imageLiteral(resourceName: "logo161x207")
-        imageView.frame.origin.x = view.frame.midX - 161/2
-        imageView.frame.origin.y = view.frame.midY - 220
+        imageView.frame.origin.x = 146*screenWidth/375
+        imageView.frame.origin.y = 150*screenHeight/667
         imageView.layer.zPosition = 11
         view.addSubview(imageView)
         
         //reachabilityAddNotification()
         
-        firetail.frame = CGRect(x: 0, y: view.frame.midY - 10, width: screenWidth, height: 65*screenHeight/667)
+        firetail.frame = CGRect(x: 0, y: 334*screenHeight/667, width: screenWidth, height: 58*screenHeight/667)
         firetail.text = "FIRETAIL"
         firetail.font = UIFont(name: "Roboto-Bold", size: 27*fontSizeMultiplier)
         firetail.textAlignment = .center
@@ -181,7 +181,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     return aaa
                 }
                 let uA = Set1.userAlerts
-                for i in 0..<Set1.userAlerts.count {
+                for i in (0..<Set1.userAlerts.count).reversed() {
                     if uA[alertID[i]] != nil {
                     ref.child("alerts").child(uA[alertID[i]]!).observeSingleEvent(of: .value, with: { (snapshot) in
                         
@@ -348,12 +348,10 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     break
                 }
                 myTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
-                //myTextField.font = UIFont.systemFont(ofSize: 15)
-                //myTextField.borderStyle = UITextBorderStyle.roundedRect
                 myTextField.autocorrectionType = UITextAutocorrectionType.no
                 myTextField.keyboardType = UIKeyboardType.default
                 myTextField.returnKeyType = UIReturnKeyType.done
-                myTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
+                
                 myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
                 myTextField.delegate = self
                 myTextField.backgroundColor = .clear
@@ -373,7 +371,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     @objc private func continueFunc(_ sender: UIButton) {
         
         var cleanString = myTextFields[0].text!
-        cleanString = cleanString.replacingOccurrences(of: ".", with: ",")
+       // cleanString = cleanString.replacingOccurrences(of: ".", with: ",")
         cleanString = cleanString.replacingOccurrences(of: "$", with: "(dollar)")
         cleanString = cleanString.replacingOccurrences(of: "#", with: "(hashtag)")
         cleanString = cleanString.replacingOccurrences(of: "[", with: "(")

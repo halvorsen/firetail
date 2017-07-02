@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XTk-aP-Bp1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XTk-aP-Bp1">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -75,6 +75,27 @@
             </objects>
             <point key="canvasLocation" x="-2634" y="-817"/>
         </scene>
+        <!--Add Phone Number View Controller-->
+        <scene sceneID="Ng0-M4-w1N">
+            <objects>
+                <viewController id="FKv-bN-FUF" customClass="AddPhoneNumberViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tfd-qf-OTi"/>
+                        <viewControllerLayoutGuide type="bottom" id="jSM-uV-wle"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="UgM-W5-am3">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="9Rf-87-nHj" kind="show" identifier="fromPhoneToDashboard" id="cfB-1n-Ixr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OZW-cD-lyc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="750" y="1027"/>
+        </scene>
         <!--Add Stock Ticker View Controller-->
         <scene sceneID="CzO-Gj-xMU">
             <objects>
@@ -134,6 +155,7 @@
                     </view>
                     <connections>
                         <segue destination="9Rf-87-nHj" kind="show" identifier="fromAddStockAlertToDashboard" id="ISW-sK-ONh"/>
+                        <segue destination="FKv-bN-FUF" kind="show" identifier="fromAddStockAlertToPhone" id="sTU-uH-80f"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3zC-D7-ANs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -179,11 +201,12 @@
                         <segue destination="BYZ-38-t0r" kind="show" identifier="fromMainToGraph" id="Zxg-fl-6EZ"/>
                         <segue destination="VGb-5b-ve2" kind="show" identifier="fromMainToAddStockTicker" id="cxp-Cj-N2o"/>
                         <segue destination="hTR-Nv-iEl" kind="show" identifier="fromMainToSettings" id="883-bY-VR1"/>
+                        <segue destination="XTk-aP-Bp1" kind="show" identifier="fromMainToLogin" id="df9-T2-a9J"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hb6-AR-41S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-722" y="122"/>
+            <point key="canvasLocation" x="-1058" y="122"/>
         </scene>
         <!--Graph View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -208,8 +231,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="8EG-cA-84j"/>
-        <segue reference="i3y-Bn-Gax"/>
+        <segue reference="cfB-1n-Ixr"/>
         <segue reference="cxp-Cj-N2o"/>
+        <segue reference="883-bY-VR1"/>
+        <segue reference="df9-T2-a9J"/>
     </inferredMetricsTieBreakers>
 </document>

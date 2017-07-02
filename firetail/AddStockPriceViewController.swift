@@ -52,10 +52,10 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         view.addSubview(setPriceAlert)
         
         
-        addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif-Regular", fontSize: 20, x: 60, y: 606, width: 200, height: 56, lines: 1)
+        addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif", fontSize: 20, x: 60, y: 606, width: 200, height: 56, lines: 1)
         view.addSubview(newAlertTickerLabel)
         
-        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 56, y: 680, width: 240, height: 80, lines: 1)
+        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 56, y: 657, width: 240, height: 80, lines: 1)
         view.addSubview(stockSymbol)
         
         container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 260*screenHeight/667))
@@ -143,17 +143,17 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 
                 self.activityView.removeFromSuperview()
                 
-                UIView.animate(withDuration: 2.0) {
+                UIView.animate(withDuration: 1.0) {
                     
                     self.graph.transform = CGAffineTransform.identity
                     self.graph.frame.origin.y = 50*self.screenHeight/667
                 }
                 
-                self.delay(bySeconds: 1.2) {
+                self.delay(bySeconds: 0.6) {
                     
                     for i in 0..<self.graph.labels.count {
-                        self.delay(bySeconds: 0.3) {
-                            UIView.animate(withDuration: 0.3*Double(i)) {
+                        self.delay(bySeconds: 0.15) {
+                            UIView.animate(withDuration: 0.15*Double(i)) {
                                 self.graph.grids[self.graph.labels.count - i - 1].alpha = 1.0
                                 self.graph.labels[self.graph.labels.count - i - 1].alpha = 1.0
                                 self.graph.dayLabels[self.graph.labels.count - i - 1].alpha = 1.0

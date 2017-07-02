@@ -66,7 +66,7 @@ class GraphViewController: ViewSetup {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("phone number: \(Set1.phone)")
         PodVariable.gingerBreadMan.removeAll()
         Label.changeValues.removeAll()
         Label.percentageValues.removeAll()
@@ -374,14 +374,16 @@ class GraphViewController: ViewSetup {
         myGoogle.historicalPrices(years: 10, ticker: stockName.uppercased()) { (stockDataTuple) in
             let (_stockData,_,error) = stockDataTuple
             guard error == nil else {
+                self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
+                // had this error to "cancelled" once now just sending back to the Dashboard if an error occures. instead of showing an alert.
                 
-                    let refreshAlert = UIAlertController(title: "", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                    
-                    refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-                        self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
-                    }))
-                
-                    self.present(refreshAlert, animated: true, completion: nil)
+//                    let refreshAlert = UIAlertController(title: "", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+//                    
+//                    refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+//                        self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
+//                    }))
+//                
+//                    self.present(refreshAlert, animated: true, completion: nil)
 
                 return
             }

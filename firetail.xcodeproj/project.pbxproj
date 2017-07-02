@@ -21,6 +21,8 @@
 		0617DFA31E7C7E7F006D73C5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0617DFA21E7C7E7F006D73C5 /* SettingsViewController.swift */; };
 		0617DFA51E7DBDC7006D73C5 /* LoadSaveCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */; };
 		062CC7371EDCA66400E2520A /* IndexListOfStocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */; };
+		064193691F08483600B7B3FE /* DroidSerif-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 064193681F0847C500B7B3FE /* DroidSerif-Regular.ttf */; };
+		0641936B1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0641936A1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift */; };
 		06478E6D1EE38E390016DF88 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */; };
 		06478E6F1EE5CC100016DF88 /* AddStockTickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */; };
 		06478E711EE5DA450016DF88 /* AddStockPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */; };
@@ -59,6 +61,8 @@
 		0617DFA21E7C7E7F006D73C5 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadSaveCoreData.swift; sourceTree = "<group>"; };
 		062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexListOfStocks.swift; sourceTree = "<group>"; };
+		064193681F0847C500B7B3FE /* DroidSerif-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DroidSerif-Regular.ttf"; sourceTree = "<group>"; };
+		0641936A1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPhoneNumberViewController.swift; sourceTree = "<group>"; };
 		06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockTickerViewController.swift; sourceTree = "<group>"; };
 		06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockPriceViewController.swift; sourceTree = "<group>"; };
@@ -145,7 +149,9 @@
 				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
 				069FD1251E5382D4003BDFE2 /* Main.storyboard */,
 				06110EA81EB925BF00C901C5 /* ChangePasswordViewController.swift */,
+				0641936A1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift */,
 				069FD12B1E5382D4003BDFE2 /* Assets.xcassets */,
+				064193681F0847C500B7B3FE /* DroidSerif-Regular.ttf */,
 				0609E4D01E64A5EA005965C5 /* Roboto-Italic.ttf */,
 				0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */,
 				0613068B1E625996008E5898 /* Roboto-Regular.ttf */,
@@ -256,6 +262,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				064193691F08483600B7B3FE /* DroidSerif-Regular.ttf in Resources */,
 				069FD12F1E5382D4003BDFE2 /* LaunchScreen.storyboard in Resources */,
 				069FD12C1E5382D4003BDFE2 /* Assets.xcassets in Resources */,
 				06478E6D1EE38E390016DF88 /* GoogleService-Info.plist in Resources */,
@@ -349,6 +356,7 @@
 				06F15E901ED7B3ED00288413 /* Google.swift in Sources */,
 				06478E751EE610BC0016DF88 /* AddStockAlertViewController.swift in Sources */,
 				062CC7371EDCA66400E2520A /* IndexListOfStocks.swift in Sources */,
+				0641936B1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift in Sources */,
 				0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */,
 				0617DFA11E7B6F81006D73C5 /* GridLine.swift in Sources */,
 				06FDA8DC1E7094270043BC90 /* CompareScroll.swift in Sources */,

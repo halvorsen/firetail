@@ -48,8 +48,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         }
         return aaa
     }
-    var phoneTextField = UITextField()
+  //  var phoneTextField = UITextField()
     var priceString = String()
+    let (mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -76,16 +77,16 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         super.viewDidLoad()
         view.backgroundColor = customColor.black24
         
-        addLabel(name: priceAlert, text: "price alert", textColor: customColor.white115, textAlignment: .right, fontName: "Roboto-Italic", fontSize: 15, x: 490, y: 234, width: 200, height: 48, lines: 1)
+        addLabel(name: priceAlert, text: "price alert", textColor: customColor.white115, textAlignment: .right, fontName: "Roboto-Regular", fontSize: 15, x: 490, y: 234, width: 200, height: 48, lines: 1)
         view.addSubview(priceAlert)
         
-        addLabel(name: newAlertPriceLabel, text: "", textColor: .white, textAlignment: .right, fontName: "DroidSerif-Regular", fontSize: 20, x: 490, y: 162, width: 200, height: 56, lines: 1)
+        addLabel(name: newAlertPriceLabel, text: "", textColor: .white, textAlignment: .right, fontName: "DroidSerif", fontSize: 20, x: 490, y: 162, width: 200, height: 56, lines: 1)
         view.addSubview(newAlertPriceLabel)
         
-        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 54, y: 234, width: 240, height: 48, lines: 1)
+        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 54, y: 234, width: 240, height: 48, lines: 1)
         view.addSubview(stockSymbol)
         
-        addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif-Regular", fontSize: 20, x: 54, y: 162, width: 200, height: 56, lines: 1)
+        addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif", fontSize: 20, x: 54, y: 162, width: 200, height: 56, lines: 1)
         view.addSubview(newAlertTickerLabel)
         
         addButton(name: addAlert, x: 0, y: 1194, width: 750, height: 140, title: "ADD ALERT", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .black, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockAlertViewController.add(_:)), addSubview: true)
@@ -97,10 +98,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         for i in 0...4 {
             let l = UILabel()
             let name = ["Email","SMS","Push","Flash","All"]
-            addLabel(name: l, text: name[i].uppercased(), textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 200, y: 460 + CGFloat(i)*122, width: 150, height: 56, lines: 0)
+            addLabel(name: l, text: name[i].uppercased(), textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 200, y: 460 + CGFloat(i)*122, width: 150, height: 56, lines: 0)
             view.addSubview(l)
         }
-        let (mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
         
         let switches:[(UISwitch,CGFloat,Int)] = [
             
@@ -146,34 +146,32 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             newAlertBoolTuple.4 = true
         }
         
-        phoneTextField = UITextField(frame: CGRect(x: 375*screenWidth/750,y: 800*screenHeight/1334,width: 375*screenWidth/750 ,height: 80*screenHeight/1334))
-        phoneTextField.placeholder = "(000) 000-0000"
-        phoneTextField.textAlignment = .left
-        phoneTextField.clearsOnBeginEditing = true
-        phoneTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
-        phoneTextField.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
-        phoneTextField.autocorrectionType = UITextAutocorrectionType.no
-        phoneTextField.keyboardType = UIKeyboardType.default
-        phoneTextField.returnKeyType = UIReturnKeyType.done
-        phoneTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-        phoneTextField.delegate = self
-        phoneTextField.backgroundColor = .clear
-        phoneTextField.textColor = .white
-        phoneTextField.tag = 2
-        phoneTextField.keyboardAppearance = .dark
-        view.addSubview(phoneTextField)
-        phoneTextField.alpha = 0.0
+//        phoneTextField = UITextField(frame: CGRect(x: 375*screenWidth/750,y: 800*screenHeight/1334,width: 375*screenWidth/750 ,height: 80*screenHeight/1334))
+//        phoneTextField.placeholder = "(000) 000-0000"
+//        phoneTextField.textAlignment = .left
+//        phoneTextField.clearsOnBeginEditing = true
+//        phoneTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
+//        phoneTextField.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
+//        phoneTextField.autocorrectionType = UITextAutocorrectionType.no
+//        phoneTextField.keyboardType = UIKeyboardType.default
+//        phoneTextField.returnKeyType = UIReturnKeyType.done
+//        phoneTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+//        phoneTextField.delegate = self
+//        phoneTextField.backgroundColor = .clear
+//        phoneTextField.textColor = .white
+//        phoneTextField.tag = 2
+//        phoneTextField.keyboardAppearance = .dark
+//        view.addSubview(phoneTextField)
+//        phoneTextField.alpha = 0.0
         
     }
     
-    @objc private func addAlertFunc(_ sender: UIButton) {
-        
-        self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
-    }
+
     
     @objc private func add(_ button: UIButton) {
         
-        Set1.ti.append(newAlertTicker)
+       // Set1.ti.append(newAlertTicker)
+        Set1.ti = [newAlertTicker] + Set1.ti
         let finalAlertPrice = newAlertPrice
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
@@ -198,7 +196,11 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString)
         }
         
-        self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
+        if mySwitchSMS.isOn == true && Set1.phone == "none" {
+            self.performSegue(withIdentifier: "fromAddStockAlertToPhone", sender: self)
+        } else {
+            self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
+        }
         
     }
     
@@ -248,12 +250,12 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 UserDefaults.standard.set(true, forKey: "emailOn")
                 Set1.emailOn = true
             case 1:
-                if Set1.phone == "none" {
-                    phoneTextField.alpha = 1.0
-                    phoneTextField.becomeFirstResponder()
-                } else {
+              //  if Set1.phone == "none" {
+//                    phoneTextField.alpha = 1.0
+//                    phoneTextField.becomeFirstResponder()
+              //  } else {
                     newAlertBoolTuple.1 = true
-                }
+              //  }
                 UserDefaults.standard.set(true, forKey: "smsOn")
                 Set1.smsOn = true
             case 2:
@@ -266,23 +268,39 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 registerForPushNotifications()
                 UserDefaults.standard.set(true, forKey: "flashOn")
                 Set1.flashOn = true
-                let accOn = UIApplication.shared.currentUserNotificationSettings
-               // BOOL UIAccessibilityIsVoiceOverRunning();
-                
                 userWarning(title: "Flash Alert", message: "Go to Settings > General > Accessibility. Scroll down to LED Flash for Alerts.")
                 
             case 4:
-                if Set1.phone == "none" {
-                    
-                    phoneTextField.alpha = 1.0
-                    phoneTextField.becomeFirstResponder()
-                    registerForPushNotifications()
-                } else {
-                    newAlertBoolTuple.4 = true
-                    registerForPushNotifications()
-                }
+                
+                registerForPushNotifications()
+                newAlertBoolTuple.4 = true
                 UserDefaults.standard.set(true, forKey: "allOn")
                 Set1.allOn = true
+                
+                newAlertBoolTuple.0 = true
+                UserDefaults.standard.set(true, forKey: "emailOn")
+                Set1.emailOn = true
+          
+                newAlertBoolTuple.1 = true
+               
+                UserDefaults.standard.set(true, forKey: "smsOn")
+                Set1.smsOn = true
+            
+                newAlertBoolTuple.2 = true
+                registerForPushNotifications()
+                UserDefaults.standard.set(true, forKey: "pushOn")
+                Set1.pushOn = true
+         
+                newAlertBoolTuple.3 = true
+                registerForPushNotifications()
+                UserDefaults.standard.set(true, forKey: "flashOn")
+                Set1.flashOn = true
+                
+                mySwitchEmail.setOn(true, animated: true)
+                mySwitchSMS.setOn(true, animated: true)
+                mySwitchPush.setOn(true, animated: true)
+                mySwitchFlash.setOn(true, animated: true)
+
             default:
                 break
             }
@@ -353,18 +371,18 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         return false
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        phoneTextField.alpha = 0.0
-        if phoneTextField.text != nil {
-            Set1.phone = phoneTextField.text!
-        }
-        textField.resignFirstResponder()
-        return false
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
-        phoneTextField.alpha = 0.0
-    }
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//      //  phoneTextField.alpha = 0.0
+////        if phoneTextField.text != nil {
+////            Set1.phone = phoneTextField.text!
+////        }
+//        textField.resignFirstResponder()
+//        return false
+//    }
+//    
+//    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
+//        phoneTextField.alpha = 0.0
+//    }
     
     func connectToFcm() {
         

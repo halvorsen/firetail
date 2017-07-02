@@ -11,6 +11,10 @@ import Firebase
 
 public struct Set1 {
     
+    public static func logoutFirebase() {
+        try! Auth.auth().signOut()
+    }
+    
     public static var flashOn: Bool = false
     public static var smsOn: Bool = false
     public static var emailOn: Bool = false
@@ -35,7 +39,7 @@ public struct Set1 {
     
     public static var email = "none"
     
-    public static var brokerName = "none"
+    public static var brokerName = "none" {didSet{print("brokername: \(brokerName)")}}
     
     public static var username = "none"
     

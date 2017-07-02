@@ -30,7 +30,7 @@ class AlertBlockView: UIView {
     var priceDouble = Double()
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
-    init(y: CGFloat, stockTicker: String, currentPrice: String, sms: Bool = false, email: Bool = false, flash: Bool = false, urgent: Bool = false, longName: String, push: Bool = false, isGreaterThan: Bool, timestamp: Int) {
+    init(y: CGFloat, stockTicker: String, currentPrice: String, sms: Bool = false, email: Bool = false, flash: Bool = false, urgent: Bool = false, longName: String, push: Bool = false, isGreaterThan: Bool, timestamp: Int, triggered: Bool) {
         super.init(frame: CGRect(x: 0, y: y*screenHeight/1334, width: screenWidth, height: 120*screenHeight/1334))
         blockLongName = longName
         stockTickerGlobal = stockTicker
@@ -48,14 +48,10 @@ class AlertBlockView: UIView {
         x.frame.size = CGSize(width: 16*screenWidth/375, height: 16*screenWidth/375)
         x.frame.origin = CGPoint(x: 44*screenWidth/750, y: 44*screenWidth/750)
         ex.addSubview(x)
-        //x.center = ex.center
+        
         ex.setTitle(longName, for: .disabled)
         slideView.backgroundColor = customColor.background
         slideView.frame = self.bounds
-        //        slideView.layer.shadowColor = UIColor.black.cgColor
-        //        slideView.layer.shadowOpacity = 0.7
-        //        slideView.layer.shadowOffset = CGSize(width: 1, height: 1)
-        //        slideView.layer.shadowRadius = 1
         self.addSubview(slideView)
         
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slide(_:)))
@@ -109,9 +105,17 @@ class AlertBlockView: UIView {
         addLabel(name: alertList, text: alerts, textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 260, y: 70, width: 352, height: 36, lines: 1, alpha: 0.5)
         slideView.addSubview(alertList)
         let _currentPrice = currentPrice //"$" + String(format: "%.2f", currentPrice)
-        addLabel(name: stockPrice, text: _currentPrice, textColor: customColor.yellow, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 620, y: 70, width: 130, height: 36, lines: 1)
+        addLabel(name: stockPrice, text: _currentPrice, textColor: customColor.yellow, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 13, x: 620, y: 70, width: 130, height: 36, lines: 1)
         if !isGreaterThan {
             stockPrice.textColor = customColor.red
+        }
+        if triggered {
+            stockPrice.textColor = .white
+            stockPrice.alpha = 0.5
+            let imageView = UIImageView()
+            imageView.image = #imageLiteral(resourceName: "lighteningBolt")
+            imageView.frame = CGRect(x: 91*screenWidth/375, y: 31*screenHeight/667, width: 14*screenWidth/375, height: 18*screenHeight/667)
+            self.addSubview(imageView)
         }
         slideView.addSubview(stockPrice)
         addLabel(name: line, text: "", textColor: .clear, textAlignment: .center, fontName: "", fontSize: 1, x: 0, y: 118, width: 750, height: 2, lines: 0)

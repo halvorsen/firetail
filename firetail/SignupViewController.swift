@@ -63,7 +63,6 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             myTextField.autocorrectionType = UITextAutocorrectionType.no
             myTextField.keyboardType = UIKeyboardType.default
             myTextField.returnKeyType = UIReturnKeyType.done
-            myTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
             myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
             myTextField.delegate = self
             myTextField.backgroundColor = .clear
@@ -104,7 +103,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         
         
         var cleanString = textFields[0].text!
-        cleanString = cleanString.replacingOccurrences(of: ".", with: ",")
+       // cleanString = cleanString.replacingOccurrences(of: ".", with: ",")
         cleanString = cleanString.replacingOccurrences(of: "$", with: "(dollar)")
         cleanString = cleanString.replacingOccurrences(of: "#", with: "(hashtag)")
         cleanString = cleanString.replacingOccurrences(of: "[", with: "(")

@@ -62,7 +62,7 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
             myTextField.autocorrectionType = UITextAutocorrectionType.no
             myTextField.keyboardType = UIKeyboardType.default
             myTextField.returnKeyType = UIReturnKeyType.done
-            myTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
+           
             myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
             myTextField.delegate = self
             myTextField.backgroundColor = .clear
