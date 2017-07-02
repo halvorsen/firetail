@@ -372,11 +372,11 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         
         var cleanString = myTextFields[0].text!
         cleanString = cleanString.replacingOccurrences(of: ".", with: ",")
-        cleanString = cleanString.replacingOccurrences(of: "$", with: "(dollar)")
-        cleanString = cleanString.replacingOccurrences(of: "#", with: "(hashtag)")
+        cleanString = cleanString.replacingOccurrences(of: "$", with: "")
+        cleanString = cleanString.replacingOccurrences(of: "#", with: "")
         cleanString = cleanString.replacingOccurrences(of: "[", with: "(")
         cleanString = cleanString.replacingOccurrences(of: "]", with: ")")
-        cleanString = cleanString.replacingOccurrences(of: "/", with: "(slash)")
+        cleanString = cleanString.replacingOccurrences(of: "/", with: "")
         
         loadsave.saveUsername(username: cleanString)
         Set1.username = cleanString

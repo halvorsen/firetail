@@ -56,12 +56,20 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
             myTextField = UITextField(frame: CGRect(x: 177*screenWidth/375,y: 246*screenHeight/667 + CGFloat(i)*60*screenHeight/667,width: 198*screenWidth/375 ,height: 34*screenHeight/667))
             switch i {
             case 0:
-                myTextField.placeholder = "email@address.com"
+                myTextField.placeholder = Set1.email
                 myTextField.alpha = 0.13
             case 1:
-                myTextField.placeholder = "(000) 000-0000"
+                if Set1.phone != "none" {
+                    myTextField.placeholder = Set1.phone
+                } else {
+                    myTextField.placeholder = "(000) 000-0000"
+                }
             case 2:
-                myTextField.placeholder = "scottade"
+                if Set1.brokerName == "none" {
+                    myTextField.placeholder = "scottade"
+                } else {
+                    myTextField.placeholder = Set1.brokerName
+                }
                 myTextField.alpha = 0.13
             default:
                 myTextField.isSecureTextEntry = true

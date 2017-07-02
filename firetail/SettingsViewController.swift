@@ -51,11 +51,19 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             myTextField = UITextField(frame: CGRect(x: 177*screenWidth/375,y: 246*screenHeight/667 + CGFloat(i)*60*screenHeight/667,width: 198*screenWidth/375 ,height: 34*screenHeight/667))
             switch i {
             case 0:
-                myTextField.placeholder = "email@address.com"
+                myTextField.placeholder = Set1.email
             case 1:
+                if Set1.phone != "none" {
+                  myTextField.placeholder = Set1.phone
+                } else {
                 myTextField.placeholder = "(000) 000-0000"
+                }
             case 2:
+                if Set1.brokerName == "none" {
                 myTextField.placeholder = "scottade"
+                } else {
+                   myTextField.placeholder = Set1.brokerName
+                }
             default:
                 myTextField.isSecureTextEntry = true
                 myTextField.placeholder = "***********"
