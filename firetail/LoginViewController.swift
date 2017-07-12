@@ -287,6 +287,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         if ti.count > 0 {
             var j = 0
             for i in 0..<ti.count {
+                guard i < 6 else {return}
                 getOneYearData(stockName: ti[i]) {
                     
                     if $0 == nil {
@@ -301,7 +302,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     }
                     
                     j += 1
-                    if j == self.ti.count && self.noNils {
+                    if (j == self.ti.count && self.noNils) || (6 == j && self.noNils) {
                         
                         self.cont()
                         

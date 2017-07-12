@@ -622,36 +622,45 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         case 0:
             break
         case 1:
-            
+            guard Set1.oneYearDictionary[Set1.ti[0]] != nil else {return}
             sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
             svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
             container.addSubview(sv)
             container2.addSubview(svDot)
             
         case 2:
+            guard Set1.oneYearDictionary[Set1.ti[0]] != nil else {return}
             sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
-            sv1 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
-            svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
-            svDot1 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
             container.addSubview(sv)
-            container.addSubview(sv1)
+            svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
             container2.addSubview(svDot)
+            guard Set1.oneYearDictionary[Set1.ti[1]] != nil else {return}
+            sv1 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
+            container.addSubview(sv1)
+            svDot1 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
             container2.addSubview(svDot1)
             
+            
+            
+            
         default:
-            print("Set1.ti[0]: \(Set1.ti[0])")
+            guard Set1.oneYearDictionary[Set1.ti[0]] != nil else {return}
             sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
-            sv1 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
-            sv2 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[2]]!, stockName: Set1.ti[2], color: customColor.white209)
-            svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
-            svDot1 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
-            svDot2 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[2]]!, stockName: Set1.ti[2], color: customColor.white209)
             container.addSubview(sv)
-            container.addSubview(sv1)
-            container.addSubview(sv2)
+            svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
             container2.addSubview(svDot)
+            guard Set1.oneYearDictionary[Set1.ti[1]] != nil else {return}
+            sv1 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
+            container.addSubview(sv1)
+            svDot1 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
             container2.addSubview(svDot1)
-            container2.addSubview(svDot2)
+            guard Set1.oneYearDictionary[Set1.ti[2]] != nil else {return}
+            sv2 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[2]]!, stockName: Set1.ti[2], color: customColor.white209)
+            container.addSubview(sv2)
+            svDot2 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[2]]!, stockName: Set1.ti[2], color: customColor.white209)
+            container2.addSubview(svDot2
+
+            )
         }
     }
     
@@ -782,7 +791,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         self.myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(DashboardViewController.updateDot), userInfo: nil, repeats: true)
         
         
-        
+    
     }
     
     func updateDot() {
