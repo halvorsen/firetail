@@ -21,7 +21,7 @@ public struct Set1 {
     public static var pushOn: Bool = false
     public static var allOn: Bool = false
     
-    public static var token: String = ""
+    public static var token: String = "none"
     
     public static var currentPrice: Double = 0.0
     
@@ -60,6 +60,7 @@ public struct Set1 {
     public static var alerts = [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:Bool,push:Bool,urgent:Bool,timestamp:Int)]()
     
     public static func saveUserInfo() {
+        if Set1.email == "none" {print("WARNING!!!!!! FATAL WARNING, guarded against none string getting saved to database")}
         LoadSaveCoreData.saveUserInfoToFirebase(username: Set1.username, fullName: Set1.fullName, email: Set1.email, phone: Set1.phone, premium: Set1.premium, numOfAlerts: Set1.alertCount, brokerName: Set1.brokerName, brokerURL: Set1.brokerURL, weeklyAlerts: Set1.weeklyAlerts, userAlerts: Set1.userAlerts, token: Set1.token)
     }
 }

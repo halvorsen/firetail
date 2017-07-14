@@ -140,7 +140,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             self.present(alert, animated: true, completion: nil)
             return
         }
-        LoadSaveCoreData.saveUserInfoToFirebase(username: cleanString, fullName: "none", email: Set1.email, phone: "none", premium: false, numOfAlerts: 0, brokerName: "none", brokerURL: "none", weeklyAlerts: Set1.weeklyAlerts, userAlerts: Set1.userAlerts, token: "")
+        LoadSaveCoreData.saveUserInfoToFirebase(username: cleanString, fullName: "none", email: Set1.email, phone: "none", premium: false, numOfAlerts: 0, brokerName: "none", brokerURL: "none", weeklyAlerts: Set1.weeklyAlerts, userAlerts: Set1.userAlerts, token: "none")
         
         Auth.auth().createUser(withEmail: email, password: password1) {
             user, error in
@@ -162,6 +162,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.frame.origin.y = 0
         view.removeGestureRecognizer(tap)
         self.view.endEditing(true)
         if textField.text != nil && textField.delegate != nil {

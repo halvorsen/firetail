@@ -231,7 +231,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     }
                     }
                 }
-                Set1.saveUserInfo()
+                
             } else {
                 self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
             }
@@ -432,6 +432,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    
         view.removeGestureRecognizer(tap)
         self.view.endEditing(true)
         if textField.text != nil && textField.delegate != nil {
