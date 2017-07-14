@@ -19,7 +19,10 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     var backArrow = UIButton()
     var myPicker = UIPickerView()
     let toolBar = UIToolbar()
+    let myLoadSave = LoadSaveCoreData()
     let pickerData = ["Ameritrade", "Etrade", "Scottrade", "Schwab", "Merrill Edge", "Trademonster", "Capital One Investing", "eOption", "Interactive Brokers", "Kapitall", "Lightspeed", "optionsXpress", "Zacks", "Trade King", "Sogo Trade", "Trading Block", "USAA", "Vangaurd", "Wells Fargo", "Robinhood"]
+    
+    var alertInfo = (String(),String(),Double(),Bool(),Bool(),Bool(),Bool(),Bool(),Bool(),String(),Bool(),String(),String())
     
     override func viewDidAppear(_ animated: Bool) {
         myTextFields[1].becomeFirstResponder()
@@ -155,6 +158,9 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         Set1.brokerName = myTextFields[2].text!
         Set1.saveUserInfo()
         }
+        
+        myLoadSave.saveAlertToFirebase(username: alertInfo.0, ticker: alertInfo.1, price: alertInfo.2, isGreaterThan: alertInfo.3, deleted: alertInfo.4, email: alertInfo.5, sms: alertInfo.6, flash: alertInfo.7, urgent: alertInfo.8, triggered: alertInfo.9, push: alertInfo.10, alertLongName: alertInfo.11, priceString: alertInfo.12, data2: Set1.phone)
+        
         self.performSegue(withIdentifier: "fromPhoneToDashboard", sender: self)
         
     }

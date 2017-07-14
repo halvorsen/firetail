@@ -175,7 +175,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         let finalAlertPrice = newAlertPrice
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
-        newAlertLongID = newAlertTicker.uppercased() + timestamp
+        newAlertLongID =  timestamp + newAlertTicker.uppercased()
         Set1.userAlerts[alertID[Set1.alertCount]] = newAlertLongID
         Set1.alertCount += 1
         var alertTriggerWhenGreaterThan = false
@@ -192,16 +192,25 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
             myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: priceString)
-        } else {
+        } else if newAlertBoolTuple.1 {
+            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString, data2: Set1.phone)
+        }else {
             myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString)
         }
-        
+        alertInfo = (Set1.username,newAlertTicker,finalAlertPrice,alertTriggerWhenGreaterThan,false,newAlertBoolTuple.0,newAlertBoolTuple.1,newAlertBoolTuple.3,newAlertBoolTuple.4,"false",newAlertBoolTuple.2,newAlertLongID,priceString)
         if mySwitchSMS.isOn == true && Set1.phone == "none" {
             self.performSegue(withIdentifier: "fromAddStockAlertToPhone", sender: self)
         } else {
             self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
         }
         
+    }
+    var alertInfo = (String(),String(),Double(),Bool(),Bool(),Bool(),Bool(),Bool(),Bool(),String(),Bool(),String(),String())
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "fromAddStockAlertToPhone" {
+            let phoneView: AddPhoneNumberViewController = segue.destination as! AddPhoneNumberViewController
+            phoneView.alertInfo = alertInfo
+        }
     }
     
     @objc private func back(_ sender: UIButton) {

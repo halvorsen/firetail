@@ -37,7 +37,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var alertScroller = UIScrollView()
     let mask = UIView()
     var (monthIndicator,stock1,stock2,stock3) = (UILabel(), UILabel(), UILabel(), UILabel())
-    var alertCount: CGFloat = 10
+   // var alertCount: CGFloat = 10
     var dots = [Dot]()
     let indicatorDotWidth: CGFloat = 33
     var sv =  CompareScroll()
@@ -264,7 +264,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         line.backgroundColor = customColor.alertLines
         slideView.addSubview(line)
         alertScroller.frame = CGRect(x: 0, y: 974*screenHeight/1334, width: screenWidth, height: 360*screenHeight/1334)
-        alertScroller.contentSize = CGSize(width: screenWidth, height: alertCount*120*screenHeight/1334)
+        alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(Set1.alertCount)*120*screenHeight/1334)
         slideView.addSubview(alertScroller)
         
         //alertScroller.addSubview(googBlock)
@@ -639,10 +639,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             container.addSubview(sv1)
             svDot1 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
             container2.addSubview(svDot1)
-            
-            
-            
-            
+
         default:
             guard Set1.oneYearDictionary[Set1.ti[0]] != nil else {return}
             sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
@@ -914,13 +911,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             container.isUserInteractionEnabled = true
         }
     }
-    
+    var hitOnce = true
     @objc private func addFunc(_ sender: UIButton) {
-        if (premiumMember || alertCount < 3) && alertCount < 50 {
+        if hitOnce {
+            hitOnce = false
+        if (premiumMember || Set1.alertCount < 3) && Set1.alertCount < 50 {
             print("addfunc1")
             self.performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
-            
-        } else if !premiumMember && alertCount < 50 {
+            print("alertCount: \(Set1.alertCount)")
+        } else if !premiumMember && Set1.alertCount < 50 {
             print("addfunc2")
             purchase()
         } else {
@@ -928,6 +927,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             let alert = UIAlertController(title: "", message: " 50 maximum alerts reached", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
+        }
         }
     }
     
@@ -969,7 +969,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         activityView.alpha = 0.0
         self.view.addSubview(activityView)
         SwiftyStoreKit.purchaseProduct(productId) { result in
+             self.hitOnce = true
             switch result {
+               
             case .success( _):
                 self.premiumMember = true
                 Set1.premium = true

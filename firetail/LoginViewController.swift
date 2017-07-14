@@ -35,6 +35,8 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     let firetail = UILabel()
     let myLoadSaveCoreData = LoadSaveCoreData()
     var isFirstLoading = true
+    var tap = UITapGestureRecognizer()
+    
   
     override func viewDidAppear(_ animated: Bool) {
         reachabilityAddNotification()
@@ -43,7 +45,8 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        tap = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard(_:)))
+        
         for xVal in Set3.shared.priceRectX {
             Set2.priceRectX.append(xVal*screenWidth/375)
         }
@@ -126,6 +129,11 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         Set1.pushOn = UserDefaults.standard.bool(forKey: "pushOn")
         Set1.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
         Set1.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
+    }
+    
+    @objc private func dismissKeyboard(_ gesture: UITapGestureRecognizer) {
+       myTextFields[0].resignFirstResponder()
+       myTextFields[1].resignFirstResponder()
     }
     
     func reachabilityAddNotification() {
@@ -274,7 +282,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
 
     
     func textFieldDidBeginEditing(_ textField : UITextField)
+        
     {
+        view.addGestureRecognizer(tap)
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
@@ -422,7 +432,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
+        view.removeGestureRecognizer(tap)
         self.view.endEditing(true)
         if textField.text != nil && textField.delegate != nil {
             

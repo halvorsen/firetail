@@ -19,11 +19,12 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     var createAccount = UILabel()
     var textFields = [UITextField]()
     let loadsave = LoadSaveCoreData()
+    var tap = UITapGestureRecognizer()
     
     //var ti = [String]()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tap = UITapGestureRecognizer(target: self, action: #selector(SignupViewController.dismissKeyboard(_:)))
         view.backgroundColor = customColor.black33
         let logo = UIImageView(frame: CGRect(x: screenWidth/2 - 93*screenHeight/1334, y: 42*screenHeight/667, width: 93*screenHeight/667, height: 119*screenHeight/667))
         logo.image = #imageLiteral(resourceName: "logo93x119")
@@ -82,6 +83,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField : UITextField)
     {
+        view.addGestureRecognizer(tap)
         switch textField.tag {
         case 0:
             view.frame.origin.y = -50*screenHeight/1334
@@ -154,8 +156,13 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         }
     }
     
+    @objc private func dismissKeyboard(_ gesture: UITapGestureRecognizer) {
+        textFields[0].resignFirstResponder()
+        textFields[1].resignFirstResponder()
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
+        view.removeGestureRecognizer(tap)
         self.view.endEditing(true)
         if textField.text != nil && textField.delegate != nil {
             
