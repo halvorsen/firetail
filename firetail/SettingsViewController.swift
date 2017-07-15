@@ -23,6 +23,10 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("CHECK SETTINGS EMAIL PHONE BROKER")
+        print(Set1.email)
+        print(Set1.phone)
+        print(Set1.brokerName)
         
         view.backgroundColor = customColor.black33
         let logo = UIImageView(frame: CGRect(x: 28*screenWidth/375, y: 75*screenHeight/667, width: 50*screenWidth/375, height: 64*screenWidth/375))
@@ -51,7 +55,9 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             myTextField = UITextField(frame: CGRect(x: 177*screenWidth/375,y: 246*screenHeight/667 + CGFloat(i)*60*screenHeight/667,width: 198*screenWidth/375 ,height: 34*screenHeight/667))
             switch i {
             case 0:
+                
                 myTextField.placeholder = Set1.email
+                
             case 1:
                 if Set1.phone != "none" {
                   myTextField.placeholder = Set1.phone
@@ -143,9 +149,15 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
    
     @objc private func saveFunc(_ sender: UIButton) {
         if myTextFields[0].text! != nil && myTextFields[1].text! != nil && myTextFields[2].text != nil {
+            if myTextFields[0].text! != "" {
         Set1.email = myTextFields[0].text!
+            }
+            if myTextFields[1].text! != "" {
         Set1.phone = myTextFields[1].text!
+            }
+            if myTextFields[2].text! != "" {
         Set1.brokerName = myTextFields[2].text!
+            }
         }
             Set1.saveUserInfo()
             self.performSegue(withIdentifier: "fromSettingsToMain", sender: self)
@@ -156,6 +168,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
+        
         if textField.isSecureTextEntry == true {
             Set1.saveUserInfo()
             self.performSegue(withIdentifier: "fromSettingsToChangePassword", sender: self)
@@ -184,13 +197,18 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             
                 switch textField.tag {
                 case 0:
+                    if myTextFields[0].text! != "" {
                     Set1.email = myTextFields[0].text!
+                    }
                     //change email with firebase
                 case 1:
+                    if myTextFields[1].text! != "" {
                     Set1.phone = myTextFields[1].text!
-                    
+                    }
                 case 2:
+                    if myTextFields[2].text! != "" {
                     Set1.brokerName = myTextFields[2].text!
+                    }
                 default:
                  // change password with firebase:   myTextFields[2].text!
                     break
@@ -235,9 +253,11 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             let remainder = decimalString.substring(from: index)
             formattedString.append(remainder)
             textField.text = formattedString as String
-            
+          return false
+        } else {
+            return true
         }
-        return false
+        return true
     }
     
     

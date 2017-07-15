@@ -153,9 +153,15 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     
     @objc private func saveFunc(_ sender: UIButton) {
         if myTextFields[0].text! != nil && myTextFields[1].text! != nil && myTextFields[2].text != nil {
+            if myTextFields[0].text! != "" {
         Set1.email = myTextFields[0].text!
+            }
+            if myTextFields[1].text! != "" {
         Set1.phone = myTextFields[1].text!
+            }
+            if myTextFields[2].text! != "" {
         Set1.brokerName = myTextFields[2].text!
+            }
         Set1.saveUserInfo()
         }
         
@@ -194,16 +200,21 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         if textField.text != nil && textField.delegate != nil {
             
             switch textField.tag {
-            case 0:
+            case 0:if myTextFields[0].text! != "" {
                 Set1.email = myTextFields[0].text!
+                }
             //change email with firebase
             case 1:
+                if myTextFields[1].text! != "" {
                 Set1.phone = myTextFields[1].text!
+                }
                 Set1.saveUserInfo()
                 self.performSegue(withIdentifier: "fromPhoneToDashboard", sender: self)
                 
             case 2:
+                if myTextFields[2].text! != "" {
                 Set1.brokerName = myTextFields[2].text!
+                }
             default:
                 // change password with firebase:   myTextFields[2].text!
                 break
@@ -248,8 +259,10 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         let remainder = decimalString.substring(from: index)
         formattedString.append(remainder)
         textField.text = formattedString as String
-        
-    }
-    return false
+       return false
+        } else {
+            return true
+        }
+    return true
     }
 }

@@ -66,6 +66,7 @@ class GraphViewController: ViewSetup {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         print("phone number: \(Set1.phone)")
         PodVariable.gingerBreadMan.removeAll()
         Label.changeValues.removeAll()

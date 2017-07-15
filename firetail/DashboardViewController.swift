@@ -127,9 +127,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("premium: \(Set1.premium)")
-        print("username: \(Set1.username)")
-        print("phone number: \(Set1.phone)")
+        print("CHECK SETTINGS EMAIL PHONE BROKER FROM DASHBOARD")
+        print(Set1.email)
+        print(Set1.phone)
+        print(Set1.brokerName)
+        print(Set1.brokerURL)
         
         premiumMember = Set1.premium
        // longPress = UILongPressGestureRecognizer(target: self, action: #selector(DashboardViewController.longPress(_:)))
