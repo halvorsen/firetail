@@ -23,10 +23,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("CHECK SETTINGS EMAIL PHONE BROKER")
-        print(Set1.email)
-        print(Set1.phone)
-        print(Set1.brokerName)
+  
         
         view.backgroundColor = customColor.black33
         let logo = UIImageView(frame: CGRect(x: 28*screenWidth/375, y: 75*screenHeight/667, width: 50*screenWidth/375, height: 64*screenWidth/375))
@@ -148,7 +145,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
     
    
     @objc private func saveFunc(_ sender: UIButton) {
-        if myTextFields[0].text! != nil && myTextFields[1].text! != nil && myTextFields[2].text != nil {
+        if myTextFields[0].text != nil && myTextFields[1].text != nil && myTextFields[2].text != nil {
             if myTextFields[0].text! != "" {
         Set1.email = myTextFields[0].text!
             }
@@ -257,7 +254,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
         } else {
             return true
         }
-        return true
+       
     }
     
     

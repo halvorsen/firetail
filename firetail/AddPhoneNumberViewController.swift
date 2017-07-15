@@ -152,7 +152,7 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     }
     
     @objc private func saveFunc(_ sender: UIButton) {
-        if myTextFields[0].text! != nil && myTextFields[1].text! != nil && myTextFields[2].text != nil {
+        if myTextFields[0].text != nil && myTextFields[1].text != nil && myTextFields[2].text != nil {
             if myTextFields[0].text! != "" {
         Set1.email = myTextFields[0].text!
             }
@@ -263,6 +263,6 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         } else {
             return true
         }
-    return true
+  
     }
 }

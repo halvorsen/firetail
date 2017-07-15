@@ -143,7 +143,7 @@ class ViewSetup: UIViewController {
             }
             
             Set1.month = _mo
-            print("Set1.month: \(Set1.month)")
+         
             result(stockData, stockName)
             
             }
@@ -276,7 +276,7 @@ class ViewSetup: UIViewController {
         let refreshAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         
         refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-            print("Handle Ok logic here")
+    
         }))
         
         

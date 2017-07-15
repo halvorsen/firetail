@@ -76,23 +76,23 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     @objc private func quickPickFunc(callback: (_ isGoodToGo: Bool) -> Void) {
         
         var isGoodToGo = false
-        print("AAAAA1")
+       
         if IndexListOfStocks.amex.contains(newAlertTicker) || IndexListOfStocks.nyse.contains(newAlertTicker) || IndexListOfStocks.nasdaq.contains(newAlertTicker) {
-            print("AAAAAA2")
+           
             isGoodToGo = true
             let charArray = newAlertTicker.characters.map { String($0) }
-            print("charArray: \(charArray)")
+   
             for char in charArray {
                 if char == "^" || char == "~" {
                     isGoodToGo = false
-                    print("AAAAA3")
+               
                     callback(isGoodToGo)
                 }
             }
-            print("AAAAA4")
+       
             callback(isGoodToGo)
         } else {
-            print("AAAAA5")
+        
             callback(isGoodToGo)
         }
    
@@ -101,7 +101,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     private func __quickPickFunc() {
         
         quickPickFunc() { (isGoodToGo) -> Void in
-            print("isGoodToGo4: \(isGoodToGo)")
+      
             if isGoodToGo {
                 self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
             } else {
@@ -116,12 +116,12 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         
         newAlertTicker = (sender.titleLabel?.text!)!
         quickPickFunc() { (isGoodToGo) -> Void in
-            print("isGoodToGo2: \(isGoodToGo)")
+       
             if isGoodToGo {
-                print("went in")
+            
                 self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
             } else {
-                print("went out")
+           
                 let alert = UIAlertController(title: "", message: "Ticker Not Found", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)

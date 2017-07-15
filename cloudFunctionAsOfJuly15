@@ -1,0 +1,138 @@
+-'use strict';
+
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
+
+
+exports.alertTrigger = functions.database.ref('/alerts/{alertID}/triggered/').onWrite(event => {
+    const alertID = event.params.alertID;
+
+    console.log('We have a new alert triggered:', alertID);
+    // Get the list of device notification tokens.
+    const _alertRef = admin.database().ref(`/alerts/${alertID}`).once('value');
+
+
+    admin.database().ref(`/alerts/${alertID}`).once('value').then(function(snapshotAlert) {
+
+        var alertSnap = snapshotAlert.val();
+
+        const id = alertSnap.id;
+        const tic = alertSnap.ticker;
+        const user = alertSnap.username;
+        const push = alertSnap.push;
+        const urgent = alertSnap.urgent;
+        const triggered = alertSnap.triggered;
+        const alertPrice = alertSnap.priceString;
+        const greaterThan = alertSnap.isGreaterThan;
+        var isGThan = '<';
+        if (greaterThan) {
+            isGThan = '>'
+        };
+
+        console.log('ID:', id);
+        console.log('ticker:', tic);
+        console.log('username:', user);
+        console.log('push Bool:', push);
+        console.log('urgent Bool:', urgent);
+        console.log('triggered Bool:', triggered);
+        console.log('alert Price:', alertPrice);
+        console.log('isGThan:', isGThan);
+
+
+        admin.database().ref(`/users/${user}`).once('value').then(function(snapshotUser) {
+            var userSnap = snapshotUser.val();
+            const token = userSnap.token;
+            console.log('my snap:', userSnap);
+            console.log('my token:', token);
+
+
+            if (push == true && triggered == "true") {
+
+                console.log('entered if loop')
+                    // Notification details.
+                const payload = {
+                    notification: {
+                        //title: 'Stock Alert!',
+                        title: '',
+                        body: `${tic} ${isGThan} ${alertPrice}`
+                            //body: '$' + `${tic} ${alertPrice}.`,
+                    }
+                };
+
+
+                return admin.messaging().sendToDevice(token, payload).then(response => {
+                    console.log('entered message loop')
+
+                    response.results.forEach((result, index) => {
+                        console.log(Date.now())
+
+
+
+
+                        const error = result.error;
+                        if (error) {
+                            console.error('Failure sending notification to', token, error);
+                            // Cleanup the tokens who are not registered anymore.
+                            console.log('error code', error.code)
+                        }
+                    });
+
+                    // console.log("Successfully sent message:", response);
+                });
+                // .catch(function(error) {
+                //   console.log("Error sending message:", error);
+                // });
+
+            }
+
+
+
+            if (triggered == "true") {
+                return admin.database().ref(`/alerts/${alertID}`).once('value').then(function(snapshot) {
+                    console.log('entered timestamp loop')
+                    const _deleted = snapshot.val().deleted;
+                    const _email = snapshot.val().email;
+                    const _flash = snapshot.val().flash;
+                    const _id = snapshot.val().id;
+                    const _isGreaterThan = snapshot.val().isGreaterThan;
+                    const _price = snapshot.val().price;
+                    const _priceString = snapshot.val().priceString;
+                    const _push = snapshot.val().push;
+                    const _sms = snapshot.val().sms;
+                    const _ticker = snapshot.val().ticker;
+                    const _triggered = snapshot.val().triggered;
+                    const _urgent = snapshot.val().urgent;
+                    const _username = snapshot.val().username;
+                    const _data2 = ""
+                 
+                    admin.database().ref(`/alerts/${alertID}`).set({
+
+                        data1: Date.now(),
+                        data2: _data2,
+                        data3: _data2,
+                        data4: _data2,
+                        data5: _data2,
+                        deleted: _deleted,
+                        email: _email,
+                        flash: _flash,
+                        id: _id,
+                        isGreaterThan: _isGreaterThan,
+                        price: _price,
+                        priceString: _priceString,
+                        push: _push,
+                        sms: _sms,
+                        ticker: _ticker,
+                        triggered: _triggered,
+                        urgent: _urgent,
+                        username: _username
+                    });
+                });
+            }
+
+
+
+        });
+
+    });
+});

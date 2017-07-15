@@ -92,7 +92,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         if launchedBefore  {
-            print("Not first launch.")
+         
         } else {
             do {try Auth.auth().signOut()}catch { }
             UserDefaults.standard.set(true, forKey: "launchedBefore")
@@ -231,7 +231,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     }
                     }
                 }
-                
+                Set1.saveUserInfo()
             } else {
                 self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
             }

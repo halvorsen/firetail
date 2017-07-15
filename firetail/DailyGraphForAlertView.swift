@@ -59,8 +59,7 @@ class DailyGraphForAlertView: UIView {
 
         data = _graphData.map {CGFloat(($0-min)/range)}
         allStockValues = _graphData.map {String(format:"%.2f", $0)}
-        print("CCCCCC")
-        print(allStockValues)
+
         setNeedsDisplay()
 
 

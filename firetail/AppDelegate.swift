@@ -15,27 +15,22 @@ import FirebaseMessaging
 import Fabric
 import Crashlytics
 
-
+// fabric build phase run script that was removed:
+//"${PODS_ROOT}/Fabric/run" a9cc3c114b202ec31390e423f8db307328800a9f 8999b85b5b17d0926cf3c5c45657aee0032aa33c613d4bf7779c97b9eaefdeca
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
-
-
-
     var window: UIWindow?
-
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         Fabric.with([Crashlytics.self])
         FirebaseApp.configure()
-        
+     
         if let refreshedToken = InstanceID.instanceID().token() {
             print("InstanceID token: \(refreshedToken)")
             Set1.token = refreshedToken
         }
-        
-        
 
         // Override point for customization after application launch.
         
@@ -75,7 +70,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
        // try! Auth.auth().signOut()
+        
+        
+        
+        
+        
         connectToFcm()
+    
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -145,15 +146,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         // Disconnect previous FCM connection if it exists.
-        Messaging.messaging().disconnect()
+      //  Messaging.messaging().disconnect()
         
-        Messaging.messaging().connect { (error) in
-            if error != nil {
-                print("Unable to connect with FCM. \(error?.localizedDescription ?? "")")
-            } else {
-                print("Connected to FCM.")
-            }
-        }
+        Messaging.messaging().shouldEstablishDirectChannel = true
+        
+//        connect { (error) in
+//            if error != nil {
+//                print("Unable to connect with FCM. \(error?.localizedDescription ?? "")")
+//            } else {
+//                print("Connected to FCM.")
+//            }
+//        }
     }
     
     public func application(received remoteMessage: MessagingRemoteMessage) {

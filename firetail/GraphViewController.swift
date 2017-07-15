@@ -66,8 +66,7 @@ class GraphViewController: ViewSetup {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("phone number: \(Set1.phone)")
+ 
         PodVariable.gingerBreadMan.removeAll()
         Label.changeValues.removeAll()
         Label.percentageValues.removeAll()
@@ -184,8 +183,7 @@ class GraphViewController: ViewSetup {
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
         
         if stockData.1[self.i] != nil {
-            print("stockData.1[self.i]!: \(stockData.1[self.i]!)")
-            print("stockData.0[self.i]: \(stockData.0[self.i])")
+   
             let graphView = StockGraphView2(stockData: stockData.1[self.i]!, key: stockData.0[self.i], cubic: true)
             
             let ma = stockData.1[self.i]!.closingPrice.max()! //from unfiltered highs and lows
@@ -193,7 +191,7 @@ class GraphViewController: ViewSetup {
             
             let ma2 = graphView._outputValues.max()! //from averages for middle of graph
             let mi2 = graphView._outputValues.min()!// from averages for middle of graph
-            print("mi: \(mi),\(ma),\(ma2), \(mi2)")
+
             //basically what this does to the yellow detailed graphs is gives the actual max and min values as the top and bottom y labels. the graph is all averages execpt for the current price, last point on graph, which is the current prices. As you can imagine this makes for a graph that isn't totally lined up with it's legends but gives you a good point at the end and top and bottom, then everything else is approximation curve through averaged prices
             
             let range = ma - mi

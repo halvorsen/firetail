@@ -10,6 +10,7 @@ import UIKit
 import UserNotifications
 import QuartzCore
 import Firebase
+//import FirebaseMessaging
 
 class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIApplicationDelegate {
     /// This method will be called whenever FCM receives a new, default FCM token for your
@@ -401,14 +402,16 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         }
         
         // Disconnect previous FCM connection if it exists.
-        Messaging.messaging().disconnect()
+     //   Messaging.messaging().disconnect()
         
-        Messaging.messaging().connect { (error) in
-            if error != nil {
-                print("Unable to connect with FCM. \(error?.localizedDescription ?? "")")
-            } else {
-                print("Connected to FCM.")
-            }
-        }
+        Messaging.messaging().shouldEstablishDirectChannel = true
+        
+//        connect { (error) in
+//            if error != nil {
+//                print("Unable to connect with FCM. \(error?.localizedDescription ?? "")")
+//            } else {
+//                print("Connected to FCM.")
+//            }
+//        }
     }
 }

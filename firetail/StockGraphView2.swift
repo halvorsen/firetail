@@ -38,7 +38,7 @@ class StockGraphView2: UIView {
     var countinueBouncing = true
     var doneSquashing = false
     var graphAppearsInView = true
-    var g = String() {didSet{print("g: \(g)")}}
+    var g = String()
     var upDownArrowView = UIImageView()
     var _outputValues = [Double]()
     
@@ -139,7 +139,7 @@ class StockGraphView2: UIView {
         }
         
         _outputValues = outputValues.map { $0 / Double(setAmount) }
-        print("outputValues: \(g) \(_outputValues)")
+      
         _closingPrice = _outputValues
         return _outputValues
         
@@ -213,7 +213,7 @@ class StockGraphView2: UIView {
         
         var dataEntries = GraphSet2()
         if stockData.closingPrice.count == 5 {
-            print("stockData.closingPrice \(stockData.closingPrice)")
+          
             let __stockData = [stockData.closingPrice[0],stockData.closingPrice[0],stockData.closingPrice[0],
                               stockData.closingPrice[1],stockData.closingPrice[1],stockData.closingPrice[1],
                               stockData.closingPrice[2],stockData.closingPrice[2],stockData.closingPrice[2],
@@ -240,7 +240,7 @@ class StockGraphView2: UIView {
                     } else {
                         _changeValue = String(format: "%.2f", Float((_closingPrice.last)! - (_closingPrice.first)!))
                     }
-                    print("AAAAAAA: \(_changeValue), \(g)")
+               
                     return _changeValue
                 }
             }
@@ -256,7 +256,7 @@ class StockGraphView2: UIView {
                         Label.percentageValuesIsPositive.append(false)
                         _changeValue = String(format: "%.2f", Float(100*(_closingPrice.first! - _closingPrice.last!)/_closingPrice.first!)) + "%"
                     }
-                    print("BBBBBBB: \(_changeValue), \(g)")
+                 
                     return _changeValue
                 }
             }

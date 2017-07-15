@@ -893,12 +893,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         self.performSegue(withIdentifier: "fromMainToSettings", sender: self)
     }
     @objc private func logoutFunc(_ sender: UIButton) {
+       
         
+        Set1.month = ["","","","","","","","","","","",""]
         Set1.currentPrice = 0.0
         Set1.yesterday = 0.0
-        Set1.token = ""
+        Set1.token = "none"
         Set1.alertCount = 0
-        Set1.oneYearDictionary = ["":[0.0]]
+        Set1.oneYearDictionary.removeAll() //= ["":[0.0]]
         Set1.ti.removeAll()
         Set1.phone = "none"
         Set1.email = "none"
@@ -914,6 +916,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         Set2.smallRectX.removeAll()
         Set2.bigRectX.removeAll()
         Set2.priceRectX.removeAll()
+        Set1.alerts.removeAll()
         
         Set1.logoutFirebase()
         self.performSegue(withIdentifier: "fromMainToLogin", sender: self)
@@ -1001,14 +1004,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         if hitOnce {
             hitOnce = false
             if (premiumMember || Set1.alertCount < 3) && Set1.alertCount < 50 {
-                print("addfunc1")
+               
                 self.performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
-                print("alertCount: \(Set1.alertCount)")
+                
             } else if !premiumMember && Set1.alertCount < 50 {
-                print("addfunc2")
+             
                 purchase()
             } else {
-                print("addfunc3")
+         
                 let alert = UIAlertController(title: "", message: " 50 maximum alerts reached", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
@@ -1116,7 +1119,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 let secondsInADay = 86400000
                 let hour = Calendar.current.component(.hour, from: Date())
                 let m = Calendar.current.component(.minute, from: Date())
-                print("minutes: \(m)")
+            
                 let secondsSinceMidnight = hour * 3600 + m * 60
                 var addAlertToThisDay = Int()
                 switch seconds {
