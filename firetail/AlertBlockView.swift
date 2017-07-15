@@ -24,6 +24,7 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
     let line = UILabel()
     var slideView = UIView()
     var tap = UITapGestureRecognizer()
+
     var ex = UIButton()
     var stockTickerGlobal: String = ""
     var currentPriceGlobal: String = ""
@@ -72,9 +73,7 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
         //        swipeR.direction = .right
         //        slideView.addGestureRecognizer(swipeR)
         
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(AlertBlockView.move(_:)))
-        pan.cancelsTouchesInView = false
-        slideView.addGestureRecognizer(pan)
+        
         let _stockTicker = stockTicker.uppercased()
         addLabel(name: stockTickerLabel, text: _stockTicker, textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 60, y: 70, width: 100, height: 36, lines: 1, alpha: 0.5)
         slideView.addSubview(stockTickerLabel)
@@ -140,64 +139,8 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    var startingLocationX = CGFloat()
-    var endingLocationX = CGFloat()
-    @objc private func move(_ gesture: UIGestureRecognizer) {
-        
-        switch gesture.state {
-            
-        case .began:
-            self.startingLocationX = gesture.location(in: self).x
-            self.endingLocationX = gesture.location(in: self).x
-            
-        case .changed:
-            if !(deleteDelegate?.scrolling)! {
-            self.endingLocationX = gesture.location(in: self).x
-            var currentAlpha = abs(self.startingLocationX - self.endingLocationX)/(70*screenWidth/375)
-            
-            if currentAlpha > 1.0 { currentAlpha = 1.0 }
-            self.x.alpha = currentAlpha
-            if self.endingLocationX - self.startingLocationX < -60*self.screenWidth/375 {
-                UIView.animate(withDuration: 0.1) {
-                    self.ex.frame.origin.x = self.screenWidth + (self.endingLocationX - self.startingLocationX)
-                }
-            }
-            if self.endingLocationX - self.startingLocationX < 0 {//check if another alert is scrolling first
-                UIView.animate(withDuration: 0.1) {
-                    self.slideView.frame.origin.x = self.endingLocationX - self.startingLocationX
-                    
-                }
-                
-            } else {
-                UIView.animate(withDuration: 0.5) {
-                    self.slideView.frame.origin.x = 0
-                }
-            }
-            }
-            
-        case .ended:
-            if self.slideView.frame.origin.x < -60*self.screenWidth/375 {
-                UIView.animate(withDuration: 0.5) {
-                    self.slideView.frame.origin.x = -self.screenWidth*435/375
-                    self.ex.frame.origin.x = -60*self.screenWidth/375
-                }
-                delay(0.5) {
-                    self.deleteDelegate?.act(blockLongName: self.blockLongName)
-                }
-                
-            } else {
-                UIView.animate(withDuration: 0.5) {
-                    self.slideView.frame.origin.x = 0
-                }
-            }
-            
-            
-            
-        default: break
-            
-        
-        }
-    }
+
+    
     
     func delay(_ delay:Double, closure:@escaping ()->()) {
         let when = DispatchTime.now() + delay

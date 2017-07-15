@@ -159,6 +159,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     @objc private func dismissKeyboard(_ gesture: UITapGestureRecognizer) {
         textFields[0].resignFirstResponder()
         textFields[1].resignFirstResponder()
+        self.view.frame.origin.y = 0
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
