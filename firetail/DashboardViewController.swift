@@ -14,7 +14,7 @@ import SwiftyStoreKit
 import StoreKit
 import MessageUI
 
-class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate {
+class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate {
     var activityView = UIActivityIndicatorView()
     var premiumMember = false
     var addTextField = UITextField()
@@ -84,6 +84,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         return aaa
     }
+    var scrolling = false
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -104,9 +105,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     timestamp: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.timestamp,
                     triggered: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.triggered)
                 
-                block.ex.addTarget(self, action: #selector(DashboardViewController.act(_:)), for: .touchUpInside)
+             //   block.ex.addTarget(self, action: #selector(DashboardViewController.act(_:)), for: .touchUpInside)
                 
-                
+                block.deleteDelegate = self
                 blocks.append(block)
                 alertScroller.addSubview(block)
                 
@@ -127,11 +128,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("CHECK SETTINGS EMAIL PHONE BROKER FROM DASHBOARD")
-        print(Set1.email)
-        print(Set1.phone)
-        print(Set1.brokerName)
-        print(Set1.brokerURL)
+        
         
         premiumMember = Set1.premium
        // longPress = UILongPressGestureRecognizer(target: self, action: #selector(DashboardViewController.longPress(_:)))
@@ -382,6 +379,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         guard gesture.location(in: view).y > sv.frame.maxY else {return}
         
         startedPan = true
+    }
 //        if movingAlert != 9999 {
 //           
 //            guard amountOfBlocks > 3 else {return}
@@ -474,20 +472,24 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
 //            }
 //        } else {
         
-            for i in 0..<blocks.count {
-                if blocks[i].frame.contains(gesture.location(in: alertScroller)) && gesture.translation(in: view).x < 0 {
-                    UIView.animate(withDuration: 0.6) {
-                        self.blocks[i].slideView.frame.origin.x = -120*self.screenWidth/750
-                    }
-                } else if gesture.translation(in: view).x > 0 && self.blocks[i].slideView.frame.origin.x != 0 {
-                    UIView.animate(withDuration: 0.6) {
-                        self.blocks[i].slideView.frame.origin.x = 0
-                    }
-                }
-            }
-            
-      //  }
-    }
+        
+        
+//            for i in 0..<blocks.count {
+//                if blocks[i].frame.contains(gesture.location(in: alertScroller)) && gesture.translation(in: view).x < 0 {
+//                    UIView.animate(withDuration: 0.6) {
+//                        self.blocks[i].slideView.frame.origin.x = -120*self.screenWidth/750
+//                    }
+//                } else if gesture.translation(in: view).x > 0 && self.blocks[i].slideView.frame.origin.x != 0 {
+//                    UIView.animate(withDuration: 0.6) {
+//                        self.blocks[i].slideView.frame.origin.x = 0
+//                    }
+//                }
+//            }
+//            
+//      //  }
+//    }
+    
+    
     
 //    private func alertSafetyShuffle() {
 //      //  var alertAndYPosition = [(AlertBlockView,CGFloat)]()
@@ -519,7 +521,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     var p = Int()
-    @objc func act(_ button: UIButton) {
+    @objc func act(blockLongName: String) {
         stock1.text = ""
         stock2.text = ""
         stock3.text = ""
@@ -530,7 +532,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         for i in 0..<blocks.count {
             
             
-            if (button.title(for: .disabled)! == self.blocks[i].blockLongName) {
+            if blockLongName == self.blocks[i].blockLongName {
                 Set1.ti.removeAll()
                 
                 blocks[i].removeFromSuperview()
@@ -571,7 +573,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         amountOfBlocks -= 1
         alertAmount.text = String(amountOfBlocks)
         alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
-        
+        alertScroller.backgroundColor = customColor.black33
         Set1.alertCount = amountOfBlocks
         
         loadsave.resaveBlocks(blocks: blocks)
@@ -580,8 +582,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         reboot()
         
         Set1.saveUserInfo()
+        guard amountOfBlocks > 0 else {return}
         stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
+        guard amountOfBlocks > 1 else {return}
         stock2.text = "\(sv1.stock): \(sv1.percentSet[1])%"
+        guard amountOfBlocks > 2 else {return}
         stock3.text = "\(sv2.stock): \(sv2.percentSet[1])%"
     }
     
@@ -669,9 +674,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
     }
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        scrolling = false
+    }
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == alertScroller {
+            scrolling = true
+        }
         
         if scrollView == container {
         
@@ -682,6 +693,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         returnAllAlertSlides()
     }
+    
+    
     
     func whoseOnFirst(_ scrollView: UIScrollView) {
         
@@ -996,13 +1009,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
     }
     
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer is UIPanGestureRecognizer || gestureRecognizer is UILongPressGestureRecognizer {
-            return true
-        } else {
-            return false
-        }
-    }
+//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+////        if gestureRecognizer is UIPanGestureRecognizer || gestureRecognizer is UILongPressGestureRecognizer {
+//            return true
+////        } else {
+//    //        return false
+////        }
+//    }
     
     func sendEmail() {
         if MFMailComposeViewController.canSendMail() {

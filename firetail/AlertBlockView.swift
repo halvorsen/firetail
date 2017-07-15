@@ -8,7 +8,12 @@
 
 import UIKit
 
-class AlertBlockView: UIView {
+protocol deleteAlertDelegate: class {
+    func act(blockLongName: String)
+    var scrolling:Bool {get}
+}
+
+class AlertBlockView: UIView, UIGestureRecognizerDelegate {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     let fontSizeMultiplier = UIScreen.main.bounds.width / 375
@@ -28,6 +33,10 @@ class AlertBlockView: UIView {
     var urgentGlobal: Bool = false
     var blockLongName = String()
     var priceDouble = Double()
+    let xAlphaStart: CGFloat = 0.1
+    let xAlphaEnd: CGFloat = 1.0
+    var x = UIImageView()
+    var deleteDelegate:deleteAlertDelegate?
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     init(y: CGFloat, stockTicker: String, currentPrice: String, sms: Bool = false, email: Bool = false, flash: Bool = false, urgent: Bool = false, longName: String, push: Bool = false, isGreaterThan: Bool, timestamp: Int, triggered: Bool) {
@@ -40,13 +49,14 @@ class AlertBlockView: UIView {
         flashGlobal = flash
         urgentGlobal = urgent
         priceDouble = Double(currentPriceGlobal.chopPrefix())!
-        self.backgroundColor = customColor.white153
+        self.backgroundColor = customColor.white249
         
         addButton(name: ex, x: 750 - 120, y: 0, width: 120, height: 120, title: "", font: "HelveticaNeue-light", fontSize: 40, titleColor: customColor.black33, bgColor: customColor.white249, cornerRad: 0, boarderW: 0, boarderColor: .clear, addSubview: true)
-        let x = UIImageView()
+        
         x.image = #imageLiteral(resourceName: "ex")
         x.frame.size = CGSize(width: 16*screenWidth/375, height: 16*screenWidth/375)
         x.frame.origin = CGPoint(x: 44*screenWidth/750, y: 44*screenWidth/750)
+        x.alpha = xAlphaStart
         ex.addSubview(x)
         
         ex.setTitle(longName, for: .disabled)
@@ -54,15 +64,16 @@ class AlertBlockView: UIView {
         slideView.frame = self.bounds
         self.addSubview(slideView)
         
-        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slide(_:)))
-        swipe.direction = .left
-        slideView.addGestureRecognizer(swipe)
+        //        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slide(_:)))
+        //       // swipe.direction = .left
+        //        slideView.addGestureRecognizer(swipe)
         
-        let swipeR = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slideR(_:)))
-        swipeR.direction = .right
-        slideView.addGestureRecognizer(swipeR)
+        //        let swipeR = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slideR(_:)))
+        //        swipeR.direction = .right
+        //        slideView.addGestureRecognizer(swipeR)
         
-        let pan = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.move(_:)))
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(AlertBlockView.move(_:)))
+        pan.cancelsTouchesInView = false
         slideView.addGestureRecognizer(pan)
         let _stockTicker = stockTicker.uppercased()
         addLabel(name: stockTickerLabel, text: _stockTicker, textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 60, y: 70, width: 100, height: 36, lines: 1, alpha: 0.5)
@@ -129,31 +140,127 @@ class AlertBlockView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    var startingLocationX = CGFloat()
+    var endingLocationX = CGFloat()
     @objc private func move(_ gesture: UIGestureRecognizer) {
         
-    }
-    
-    @objc private func slide(_ gesture: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.6) {
-            if self.slideView.frame.origin.x == 0 {
-                self.slideView.frame.origin.x = -self.screenWidth/9 - 1
-                let swipeR = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slideR(_:)))
-                swipeR.direction = .right
-                self.slideView.addGestureRecognizer(swipeR)
-            } else {
-                self.slideView.frame.origin.x = 0
+        switch gesture.state {
+            
+        case .began:
+            self.startingLocationX = gesture.location(in: self).x
+            self.endingLocationX = gesture.location(in: self).x
+            
+        case .changed:
+            if !(deleteDelegate?.scrolling)! {
+            self.endingLocationX = gesture.location(in: self).x
+            var currentAlpha = abs(self.startingLocationX - self.endingLocationX)/(70*screenWidth/375)
+            
+            if currentAlpha > 1.0 { currentAlpha = 1.0 }
+            self.x.alpha = currentAlpha
+            if self.endingLocationX - self.startingLocationX < -60*self.screenWidth/375 {
+                UIView.animate(withDuration: 0.1) {
+                    self.ex.frame.origin.x = self.screenWidth + (self.endingLocationX - self.startingLocationX)
+                }
             }
+            if self.endingLocationX - self.startingLocationX < 0 {//check if another alert is scrolling first
+                UIView.animate(withDuration: 0.1) {
+                    self.slideView.frame.origin.x = self.endingLocationX - self.startingLocationX
+                    
+                }
+                
+            } else {
+                UIView.animate(withDuration: 0.5) {
+                    self.slideView.frame.origin.x = 0
+                }
+            }
+            }
+            
+        case .ended:
+            if self.slideView.frame.origin.x < -60*self.screenWidth/375 {
+                UIView.animate(withDuration: 0.5) {
+                    self.slideView.frame.origin.x = -self.screenWidth*435/375
+                    self.ex.frame.origin.x = -60*self.screenWidth/375
+                }
+                delay(0.5) {
+                    self.deleteDelegate?.act(blockLongName: self.blockLongName)
+                }
+                
+            } else {
+                UIView.animate(withDuration: 0.5) {
+                    self.slideView.frame.origin.x = 0
+                }
+            }
+            
+            
+            
+        default: break
+            
+        
         }
     }
     
-    @objc private func slideR(_ gesture: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.6) {
-            
-            self.slideView.frame.origin.x = 0
-            
-        }
+    func delay(_ delay:Double, closure:@escaping ()->()) {
+        let when = DispatchTime.now() + delay
+        DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
     }
+    
+    
+    //    @objc private func slide(_ gesture: UIGestureRecognizer) {
+    //        UIView.animate(withDuration: 0.6) {
+    //            switch gesture.state {
+    //
+    //            case .began:
+    //                self.startingLocationX = gesture.location(in: self).x
+    //                self.endingLocationX = gesture.location(in: self).x
+    //
+    //            case .changed:
+    //                self.endingLocationX = gesture.location(in: self).x
+    //                var currentAlpha = abs(self.startingLocationX - self.endingLocationX)/100
+    //                print("currentAlpha: \(currentAlpha)")
+    //                if currentAlpha > 1.0 { currentAlpha = 1.0 }
+    //                self.x.alpha = currentAlpha
+    //                if true {//check if another alert is scrolling first
+    //                    UIView.animate(withDuration: 0.1) {
+    //                        self.frame.origin.x = self.endingLocationX - self.startingLocationX
+    //                    }
+    //                } else {
+    //                    UIView.animate(withDuration: 0.5) {
+    //                        self.frame.origin.x = 0
+    //                    }
+    //                }
+    //
+    //            case .ended:
+    //                if self.frame.origin.x > 120*self.screenWidth/375 {
+    //
+    //                }
+    //                UIView.animate(withDuration: 0.5) {
+    //                    self.frame.origin.x = 0
+    //                }
+    //
+    //            default: break
+    //
+    //            }
+    //
+    //
+    //
+    //            if self.slideView.frame.origin.x == 0 {
+    //                self.slideView.frame.origin.x = -self.screenWidth/9 - 1
+    ////                let swipeR = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slideR(_:)))
+    ////                swipeR.direction = .right
+    ////                self.slideView.addGestureRecognizer(swipeR)
+    //            } else {
+    //                self.slideView.frame.origin.x = 0
+    //            }
+    //        }
+    //    }
+    
+    //    @objc private func slideR(_ gesture: UIGestureRecognizer) {
+    //        UIView.animate(withDuration: 0.6) {
+    //
+    //            self.slideView.frame.origin.x = 0
+    //
+    //        }
+    //    }
     
     func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int, alpha: CGFloat = 1.0) {
         name.text = text
@@ -179,5 +286,10 @@ class AlertBlockView: UIView {
         if addSubview {
             self.addSubview(name)
         }
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        
+        return false
     }
 }
