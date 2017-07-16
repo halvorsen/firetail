@@ -140,6 +140,9 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             self.present(alert, animated: true, completion: nil)
             return
         }
+        
+        
+        
         LoadSaveCoreData.saveUserInfoToFirebase(username: cleanString, fullName: "none", email: Set1.email, phone: "none", premium: false, numOfAlerts: 0, brokerName: "none", brokerURL: "none", weeklyAlerts: Set1.weeklyAlerts, userAlerts: Set1.userAlerts, token: "none")
         
         Auth.auth().createUser(withEmail: email, password: password1) {

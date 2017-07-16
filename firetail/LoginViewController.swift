@@ -139,7 +139,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     func reachabilityAddNotification() {
         //declare this property where it won't go out of scope relative to your listener
         
-        
         //declare this inside of viewWillAppear
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged),name: ReachabilityChangedNotification,object: reachability)
@@ -157,7 +156,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             let value = snapshot.value as? NSDictionary
-           // Set1.token = value?["token"] as? String ?? "none"
+            Set1.token = value?["token"] as? String ?? "none"
             Set1.fullName = value?["fullName"] as? String ?? "none"
             Set1.email = value?["email"] as? String ?? "none"
             Set1.phone = value?["phone"] as? String ?? "none"
