@@ -25,6 +25,8 @@ class Google {
             index = "NYSE"
         } else if IndexListOfStocks.amex.contains(ticker) {
             index = "AMEX"
+        } else if IndexListOfStocks.otcmkts.contains(ticker) {
+            index = "OTCMKTS"
         }
         var start = DateComponents()
         var end = DateComponents()

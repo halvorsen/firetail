@@ -13,8 +13,12 @@ import Charts
 import SwiftyStoreKit
 import StoreKit
 import MessageUI
+import Firebase
+import UserNotifications
+import QuartzCore
 
-class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate {
+
+class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     var activityView = UIActivityIndicatorView()
     var premiumMember = false
     var addTextField = UITextField()
@@ -85,7 +89,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         return aaa
     }
     var scrolling = false
-    var alertPan = UIPanGestureRecognizer()
+//    var alertPan = UIPanGestureRecognizer()
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -105,8 +109,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     isGreaterThan: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.isGreaterThan,
                     timestamp: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.timestamp,
                     triggered: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.triggered)
-                
-                //   block.ex.addTarget(self, action: #selector(DashboardViewController.act(_:)), for: .touchUpInside)
                 
                 block.deleteDelegate = self
                 blocks.append(block)
@@ -129,7 +131,48 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if Set1.token == "none" && Set1.alertCount > 0 {
+            if let refreshedToken = InstanceID.instanceID().token() {
+                print("InstanceID token: \(refreshedToken)")
+                Set1.token = refreshedToken
+                Set1.saveUserInfo()
+                
+                
+            }
+           
+                if #available(iOS 10.0, *) {
+                    // For iOS 10 display notification (sent via APNS)
+                    UNUserNotificationCenter.current().delegate = self
+                    
+                    let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+                    UNUserNotificationCenter.current().requestAuthorization(
+                        options: authOptions,
+                        completionHandler: {_, _ in
+                            
+                            if let refreshedToken = InstanceID.instanceID().token() {
+                                print("InstanceID token: \(refreshedToken)")
+                                Set1.token = refreshedToken
+                                Set1.saveUserInfo()
+                            }
+                            
+                            // Connect to FCM since connection may have failed when attempted before having a token.
+                            self.connectToFcm()
+                            
+                    })
+                    
+                    // For iOS 10 data message (sent via FCM)
+                    Messaging.messaging().delegate = self
+                    
+                } else {
+                    let settings: UIUserNotificationSettings =
+                        UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+                    UIApplication.shared.registerUserNotificationSettings(settings)
+                    
+                }
+                UIApplication.shared.registerForRemoteNotifications()
+                
+            
+        }
         
         premiumMember = Set1.premium
         // longPress = UILongPressGestureRecognizer(target: self, action: #selector(DashboardViewController.longPress(_:)))
@@ -282,74 +325,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         //amountOfBlocks = loadsave.amount()
         amountOfBlocks = Set1.alertCount
         whoseOnFirst(container)
-        
-        alertPan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.move(_:)))
-        //alertPan.pan.cancelsTouchesInView = false
-        view.addGestureRecognizer(alertPan)
+
         
     }
     
     var movingBlock = AlertBlockView()
     var startingLocationX = CGFloat()
     var endingLocationX = CGFloat()
-    @objc private func move(_ gesture: UIGestureRecognizer) {
-        
-        switch gesture.state {
-            
-        case .began:
-            for block in blocks {
-                if block.frame.contains(gesture.location(in: alertScroller)) {
-                    movingBlock = block
-                }
-                self.startingLocationX = gesture.location(in: alertScroller).x
-                self.endingLocationX = gesture.location(in: alertScroller).x
-            }
-            
-        case .changed:
-            //if !(deleteDelegate?.scrolling)! {
-            self.endingLocationX = gesture.location(in: alertScroller).x
-            var currentAlpha = abs(self.startingLocationX - self.endingLocationX)/(70*screenWidth/375)
-            
-            if currentAlpha > 1.0 { currentAlpha = 1.0 }
-            movingBlock.x.alpha = currentAlpha
-            if self.endingLocationX - self.startingLocationX < -60*self.screenWidth/375 {
-                UIView.animate(withDuration: 0.1) {
-                    self.movingBlock.ex.frame.origin.x = self.screenWidth + (self.endingLocationX - self.startingLocationX)
-                }
-            }
-            if self.endingLocationX - self.startingLocationX < 0 {//check if another alert is scrolling first
-                UIView.animate(withDuration: 0.1) {
-                    self.movingBlock.slideView.frame.origin.x = self.endingLocationX - self.startingLocationX
-                    
-                }
-                
-            } else {
-                UIView.animate(withDuration: 0.5) {
-                    self.movingBlock.slideView.frame.origin.x = 0
-                }
-            }
-            //   }
-            
-        case .ended:
-            if movingBlock.slideView.frame.origin.x < -60*self.screenWidth/375 {
-                UIView.animate(withDuration: 0.5) {
-                    self.movingBlock.slideView.frame.origin.x = -self.screenWidth*435/375
-                    self.movingBlock.ex.frame.origin.x = -60*self.screenWidth/375
-                }
-                delay(bySeconds: 0.4) {
-                self.act(blockLongName: self.movingBlock.blockLongName)
-                }
-                
-            } else {
-                UIView.animate(withDuration: 0.5) {
-                    self.movingBlock.slideView.frame.origin.x = 0
-                }
-            }
 
-        default: break
-    
-        }
-    }
     
     @objc func act(blockLongName: String) {
         stock1.text = ""
@@ -420,96 +403,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         guard amountOfBlocks > 2 else {return}
         stock3.text = "\(sv2.stock): \(sv2.percentSet[1])%"
     }
-    
-    
-    //    @objc private func longPress(_ gesture: UIGestureRecognizer) {
-    //        guard amountOfBlocks > 3 else {return}
-    //        startedPan = false
-    //        alertScroller.isScrollEnabled = false
-    //        if longpressOnce {
-    //            for i in 0..<blocks.count {
-    //
-    //                if blocks[i].frame.contains(gesture.location(in: alertScroller)) {
-    //                    savedFrameOrigin = blocks[i].frame.origin
-    //                    blocks[i].frame.origin.y -= 6*screenHeight/667
-    //                    blocks[i].frame.origin.x -= 6*screenHeight/667
-    //                    movingAlert = i
-    //                    longpressOnce = false
-    //                    l = i - 1
-    //                    k = i + 1
-    //                    blocks[i].slideView.backgroundColor = customColor.black42
-    //                    alertScroller.backgroundColor = customColor.white115
-    //                    alertInMotion = blocks[i]
-    //                    alertInMotion.layer.zPosition = 1000
-    //                }
-    //            }
-    //        }
-    //        if gesture.state == UIGestureRecognizerState.ended {
-    //            if !startedPan {
-    //
-    //
-    //                alertInMotion.frame.origin = savedFrameOrigin
-    //                alertScroller.backgroundColor = self.customColor.black33
-    //                alertInMotion.slideView.backgroundColor = self.customColor.black33
-    //                var j = CGFloat(2)
-    //                for block in blocks {
-    //                    block.layer.zPosition = j
-    //                    j += 1
-    //                }
-    //                //movingAlert = 9999
-    //                alertScroller.isScrollEnabled = true
-    //                longpressOnce = true
-    //
-    //
-    //
-    //                loadsave.resaveBlocks(blocks: blocks)
-    //                if blocks.count > 3 {
-    //                    val = blocks[amountOfBlocks - 2].frame.maxY
-    //                } else {
-    //                    val = 0
-    //                }
-    //
-    //                UIView.animate(withDuration: 0.5) {
-    //
-    //                    self.alertInMotion.frame.origin = CGPoint(x: 0, y: CGFloat(self.q)*120*self.screenHeight/1334)
-    //                }
-    //                p = Int(savedFrameOrigin.y/120)
-    //
-    //               // movingAlert = 9999
-    //                delay(bySeconds: 0.3) {
-    //                    self.alertScroller.isScrollEnabled = true
-    //                }
-    //
-    //                var i = CGFloat(0)
-    //                for block in blocks {
-    //                    Set1.ti[Int(i)] = block.stockTickerLabel.text!
-    //                    block.layer.zPosition = i + 2
-    //                    i += 1
-    //
-    //                }
-    //                delay(bySeconds: 0.5) {
-    //                    self.alertScroller.backgroundColor = self.customColor.black33
-    //                    self.alertInMotion.slideView.backgroundColor = self.customColor.black33
-    //                }
-    //
-    //                myTimer2.invalidate()
-    //
-    //                reboot()
-    //                delay(bySeconds: 0.5) {
-    //                    self.longpressOnce = true
-    //                }
-    //
-    //
-    //                if alertScroller.contentOffset.y < 0 {
-    //                    UIView.animate(withDuration: 0.5) {
-    //                        self.alertScroller.contentOffset.y = 0
-    //                    }
-    //                }
-    //            }
-    //            Set1.saveUserInfo()
-    //        }
-    //
-    //    }
+
     var startedPan = false
     var q = Int()
     @objc private func pan(_ gesture: UIPanGestureRecognizer) {
@@ -517,133 +411,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         startedPan = true
     }
-    //        if movingAlert != 9999 {
-    //
-    //            guard amountOfBlocks > 3 else {return}
-    //            if gesture.state == UIGestureRecognizerState.changed {
-    //
-    //                let translation = gesture.translation(in: view)
-    //
-    //                if alertInMotion.center.y + translation.y < alertScroller.contentOffset.y + 300*screenHeight/1334 && alertInMotion.center.y + translation.y > alertScroller.contentOffset.y + 90*screenHeight/1334 {
-    //                    alertInMotion.center = CGPoint(x: alertInMotion.center.x + translation.x, y: alertInMotion.center.y + translation.y)
-    //
-    //                }
-    //                alertScroller.contentOffset.y = alertScroller.contentOffset.y + translation.y*3
-    //                alertInMotion.frame.origin.y = alertInMotion.frame.origin.y + translation.y*3
-    //
-    //                gesture.setTranslation(CGPoint(x:0,y:0), in: self.view)
-    //                if l > -1 {
-    //                    if alertInMotion.center.y < blocks[l].center.y {
-    //                        savedFrameOrigin = blocks[l].frame.origin
-    //                        blocks[l].frame.origin.y += 120*screenHeight/1334
-    //
-    //                        blocks[l+1] = blocks[l]
-    //                        blocks[l] = alertInMotion
-    //                        q = l
-    //                        l -= 1
-    //                        k -= 1
-    //                    }
-    //                }
-    //                if k < blocks.count {
-    //                    if alertInMotion.center.y > blocks[k].center.y {
-    //                        savedFrameOrigin = blocks[k].frame.origin
-    //                        UIView.animate(withDuration: 0.3) {
-    //                            self.blocks[self.k].frame.origin.y -= 120*self.screenHeight/1334
-    //                        }
-    //                        blocks[k-1] = blocks[k]
-    //                        blocks[k] = alertInMotion
-    //
-    //                        q = k
-    //                        k += 1
-    //                        l += 1
-    //                    }
-    //                }
-    //
-    //            }
-    //
-    //            if gesture.state == UIGestureRecognizerState.ended {
-    //                loadsave.resaveBlocks(blocks: blocks)
-    //                if blocks.count > 3 {
-    //                    val = blocks[amountOfBlocks - 2].frame.maxY
-    //                } else {
-    //                    val = 0
-    //                }
-    //
-    //                UIView.animate(withDuration: 0.5) {
-    //
-    //                    self.alertInMotion.frame.origin = CGPoint(x: 0, y: CGFloat(self.q)*120*self.screenHeight/1334)
-    //                }
-    //              //  alertSafetyShuffle()
-    //                p = Int(savedFrameOrigin.y/120)
-    //
-    //                movingAlert = 9999
-    //                delay(bySeconds: 0.3) {
-    //                    self.alertScroller.isScrollEnabled = true
-    //                }
-    //
-    //                var i = CGFloat(0)
-    //                for block in blocks {
-    //                    Set1.ti[Int(i)] = block.stockTickerLabel.text!
-    //                    block.layer.zPosition = i + 2
-    //                    i += 1
-    //                }
-    //                delay(bySeconds: 0.5) {
-    //                    self.alertScroller.backgroundColor = self.customColor.black33
-    //                    self.alertInMotion.slideView.backgroundColor = self.customColor.black33
-    //                }
-    //
-    //                myTimer2.invalidate()
-    //
-    //                reboot()
-    ////                delay(bySeconds: 0.5) {
-    ////                    self.longpressOnce = true
-    ////                }
-    //                if alertScroller.contentOffset.y < 0 {
-    //                    UIView.animate(withDuration: 0.5) {
-    //                        self.alertScroller.contentOffset.y = 0
-    //                    }
-    //                }
-    //
-    //
-    //
-    //            }
-    //        } else {
-    
-    
-    
-    //            for i in 0..<blocks.count {
-    //                if blocks[i].frame.contains(gesture.location(in: alertScroller)) && gesture.translation(in: view).x < 0 {
-    //                    UIView.animate(withDuration: 0.6) {
-    //                        self.blocks[i].slideView.frame.origin.x = -120*self.screenWidth/750
-    //                    }
-    //                } else if gesture.translation(in: view).x > 0 && self.blocks[i].slideView.frame.origin.x != 0 {
-    //                    UIView.animate(withDuration: 0.6) {
-    //                        self.blocks[i].slideView.frame.origin.x = 0
-    //                    }
-    //                }
-    //            }
-    //
-    //      //  }
-    //    }
-    
-    
-    
-    //    private func alertSafetyShuffle() {
-    //      //  var alertAndYPosition = [(AlertBlockView,CGFloat)]()
-    //        var previousFloat: CGFloat = -1.0
-    //        dance: for alert in blocks {
-    //           // alertAndYPosition.append((alert, alert.frame.origin.y/(60*screenHeight/667)))
-    //            if previousFloat + 1.0 != alert.frame.origin.y/(60*screenHeight/667) {
-    //                for i in 0..<blocks.count {
-    //                    blocks[i].frame.origin.y = CGFloat(i)*60*screenHeight/667
-    //                }
-    //                break dance
-    //            }
-    //            previousFloat = alert.frame.origin.y/(60*screenHeight/667)
-    //        }
-    //
-    //
-    //    }
+
     
     
     private func returnAllAlertSlides() {
@@ -1187,6 +955,26 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             i += 1
         }
         
+    }
+    
+    func connectToFcm() {
+        
+        // Won't connect since there is no token
+        guard InstanceID.instanceID().token() != nil else {
+            return
+        }
+        Messaging.messaging().shouldEstablishDirectChannel = true
+  
+    }
+    
+    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+        if let refreshedToken = InstanceID.instanceID().token() {
+            print("InstanceID token: \(refreshedToken)")
+            Set1.token = refreshedToken
+            Set1.saveUserInfo()
+            
+            
+        }
     }
     
 }

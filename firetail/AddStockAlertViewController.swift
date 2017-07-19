@@ -17,8 +17,13 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     /// Firebase project's Sender ID.
     /// You can send this token to your application server to send notifications to this device.
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
-        //FIXIT
-        //code
+        if let refreshedToken = InstanceID.instanceID().token() {
+            print("InstanceID token: \(refreshedToken)")
+            Set1.token = refreshedToken
+            Set1.saveUserInfo()
+            
+            
+        }
     }
     let backArrow = UIButton()
     var newAlertTicker = String()
