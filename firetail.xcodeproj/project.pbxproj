@@ -220,7 +220,7 @@
 				TargetAttributes = {
 					069FD11D1E5382D4003BDFE2 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = PFDY3PS57G;
+						DevelopmentTeam = 3KFA49ZHXN;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -492,7 +492,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = firetail/firetail.entitlements;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = PFDY3PS57G;
+				DEVELOPMENT_TEAM = 3KFA49ZHXN;
 				INFOPLIST_FILE = firetail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.halvorsen.firetail;
@@ -509,7 +509,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = firetail/firetail.entitlements;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = PFDY3PS57G;
+				DEVELOPMENT_TEAM = 3KFA49ZHXN;
 				INFOPLIST_FILE = firetail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.halvorsen.firetail;
