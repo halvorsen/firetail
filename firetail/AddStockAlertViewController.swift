@@ -189,9 +189,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             alertTriggerWhenGreaterThan = true
         }
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
-            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, true, false, false, newAlertTicker, false, false, false, 1) }
+            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, true, false, false, newAlertTicker, "false", false, false, 1) }
         else {
-            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, false, newAlertBoolTuple.2, newAlertBoolTuple.4, 1)
+            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, "false", newAlertBoolTuple.2, newAlertBoolTuple.4, 1)
         }
         
         
@@ -216,11 +216,14 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         if segue.identifier == "fromAddStockAlertToPhone" {
             let phoneView: AddPhoneNumberViewController = segue.destination as! AddPhoneNumberViewController
             phoneView.alertInfo = alertInfo
+        } else if segue.identifier == "fromAddStockAlertToAddStockPrice" {
+            let addStockPriceVC: AddStockPriceViewController = segue.destination as! AddStockPriceViewController
+            addStockPriceVC.newAlertTicker = newAlertTicker
         }
     }
     
     @objc private func back(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
+        self.performSegue(withIdentifier: "fromAddStockAlertToAddStockPrice", sender: self)
     }
     
     private func registerForPushNotifications() {

@@ -57,7 +57,7 @@ public struct Set1 {
     
     public static var userAlerts = [String:String]()
     
-    public static var alerts = [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:Bool,push:Bool,urgent:Bool,timestamp:Int)]()
+    public static var alerts = [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int)]()
     
     public static func saveUserInfo() {
         if Set1.email == "none" {print("WARNING!!!!!! FATAL WARNING, guarded against none string getting saved to database")}

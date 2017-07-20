@@ -235,7 +235,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     }
     
     @objc private func back(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromAddStockPriceToDashboard", sender: self)
+        self.performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self)
     }
     
     @objc private func setFunc(_ sender: UIButton) {

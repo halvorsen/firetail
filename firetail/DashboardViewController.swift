@@ -108,7 +108,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     push: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.push,
                     isGreaterThan: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.isGreaterThan,
                     timestamp: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.timestamp,
-                    triggered: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.triggered)
+                    triggered: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.triggered == "TRUE")
                 
                 block.deleteDelegate = self
                 blocks.append(block)
@@ -353,7 +353,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 let alertChanging = Set1.alerts[blocks[i].blockLongName]!
                 
                 var triggerStringNotBool = "false"
-                if alertChanging.triggered {
+                if alertChanging.triggered == "TRUE" {
                     triggerStringNotBool = "true"
                 }
                 //   alertSafetyShuffle()
@@ -822,7 +822,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         activityView.center = self.view.center
         activityView.startAnimating()
-        activityView.alpha = 0.0
+        activityView.alpha = 1.0
         self.view.addSubview(activityView)
         SwiftyStoreKit.purchaseProduct(productId) { result in
             self.hitOnce = true
@@ -834,12 +834,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 Set1.saveUserInfo()
                 self.activityView.removeFromSuperview()
             case .error(let error):
-                //hack
-                self.premiumMember = true
-                Set1.premium = true
-                Set1.saveUserInfo()
-                self.activityView.removeFromSuperview()
-                //hack
                 
                 print("error: \(error)")
                 print("Purchase Failed: \(error)")

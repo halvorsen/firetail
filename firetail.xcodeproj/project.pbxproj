@@ -127,43 +127,67 @@
 			children = (
 				06A914021E817E0900D032A9 /* firetail.entitlements */,
 				069FD1211E5382D4003BDFE2 /* AppDelegate.swift */,
+				06AE51491F2020C3008C5B3C /* ViewController */,
+				06AE514B1F202117008C5B3C /* Supporting */,
+				069FD1251E5382D4003BDFE2 /* Main.storyboard */,
+				069FD12B1E5382D4003BDFE2 /* Assets.xcassets */,
+				06AE514A1F2020F4008C5B3C /* font */,
+				06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */,
+				069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */,
+				069FD1301E5382D4003BDFE2 /* Info.plist */,
+				069FD1281E5382D4003BDFE2 /* firetail.xcdatamodeld */,
+			);
+			path = firetail;
+			sourceTree = "<group>";
+		};
+		06AE51491F2020C3008C5B3C /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
 				0609E4A71E632DF4005965C5 /* DashboardViewController.swift */,
-				0609E4A91E635226005965C5 /* AlertBlockView.swift */,
-				068D8D241E72F0D700E422DB /* Dot.swift */,
-				06FDA8DB1E7094270043BC90 /* CompareScroll.swift */,
-				06AC27071E7319F700041D1F /* CompareScrollDot.swift */,
-				06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */,
 				06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */,
 				06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */,
 				06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */,
-				062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */,
-				06F15E8F1ED7B3ED00288413 /* Google.swift */,
-				0617DFA01E7B6F81006D73C5 /* GridLine.swift */,
-				06FDA8DF1E71B9960043BC90 /* Sets.swift */,
 				0609E4CC1E649578005965C5 /* SignupViewController.swift */,
 				0617DFA21E7C7E7F006D73C5 /* SettingsViewController.swift */,
 				0609E4CE1E649596005965C5 /* LoginViewController.swift */,
-				0672601A1E67BD5B00F54500 /* StockGraphView2.swift */,
-				06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */,
 				069FD1231E5382D4003BDFE2 /* GraphViewController.swift */,
-				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
-				069FD1251E5382D4003BDFE2 /* Main.storyboard */,
 				06110EA81EB925BF00C901C5 /* ChangePasswordViewController.swift */,
 				0641936A1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift */,
-				069FD12B1E5382D4003BDFE2 /* Assets.xcassets */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		06AE514A1F2020F4008C5B3C /* font */ = {
+			isa = PBXGroup;
+			children = (
 				064193681F0847C500B7B3FE /* DroidSerif-Regular.ttf */,
 				0609E4D01E64A5EA005965C5 /* Roboto-Italic.ttf */,
 				0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */,
 				0613068B1E625996008E5898 /* Roboto-Regular.ttf */,
 				0613068D1E626DBA008E5898 /* Roboto-Bold.ttf */,
 				0613068F1E626FC9008E5898 /* Roboto-Light.ttf */,
-				06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */,
-				069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */,
-				069FD1301E5382D4003BDFE2 /* Info.plist */,
-				069FD1281E5382D4003BDFE2 /* firetail.xcdatamodeld */,
-				0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */,
 			);
-			path = firetail;
+			name = font;
+			sourceTree = "<group>";
+		};
+		06AE514B1F202117008C5B3C /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				0609E4A91E635226005965C5 /* AlertBlockView.swift */,
+				068D8D241E72F0D700E422DB /* Dot.swift */,
+				06FDA8DB1E7094270043BC90 /* CompareScroll.swift */,
+				06AC27071E7319F700041D1F /* CompareScrollDot.swift */,
+				06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */,
+				062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */,
+				06F15E8F1ED7B3ED00288413 /* Google.swift */,
+				0617DFA01E7B6F81006D73C5 /* GridLine.swift */,
+				06FDA8DF1E71B9960043BC90 /* Sets.swift */,
+				0672601A1E67BD5B00F54500 /* StockGraphView2.swift */,
+				0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */,
+				06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */,
+				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
+			);
+			name = Supporting;
 			sourceTree = "<group>";
 		};
 		259453A1E67893F45BCB5AE2 /* Frameworks */ = {

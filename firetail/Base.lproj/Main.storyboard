@@ -133,7 +133,7 @@
                     </view>
                     <connections>
                         <segue destination="ttD-k5-EX4" kind="show" identifier="fromAddStockPriceToAddStockAlert" id="ZnZ-kn-boc"/>
-                        <segue destination="9Rf-87-nHj" kind="show" identifier="fromAddStockPriceToDashboard" id="oo7-fM-Qz4"/>
+                        <segue destination="VGb-5b-ve2" kind="show" identifier="fromAddStockPriceToAddStockTicker" id="WkD-4d-o4c"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GNN-dw-Wls" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -156,6 +156,7 @@
                     <connections>
                         <segue destination="9Rf-87-nHj" kind="show" identifier="fromAddStockAlertToDashboard" id="ISW-sK-ONh"/>
                         <segue destination="FKv-bN-FUF" kind="show" identifier="fromAddStockAlertToPhone" id="sTU-uH-80f"/>
+                        <segue destination="4fq-eV-8sR" kind="show" identifier="fromAddStockAlertToAddStockPrice" id="hRL-gh-U7A"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3zC-D7-ANs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -231,9 +232,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cfB-1n-Ixr"/>
-        <segue reference="cxp-Cj-N2o"/>
-        <segue reference="883-bY-VR1"/>
         <segue reference="df9-T2-a9J"/>
+        <segue reference="ISW-sK-ONh"/>
+        <segue reference="hRL-gh-U7A"/>
+        <segue reference="WkD-4d-o4c"/>
+        <segue reference="883-bY-VR1"/>
     </inferredMetricsTieBreakers>
 </document>

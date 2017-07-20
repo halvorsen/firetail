@@ -207,7 +207,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                             Set1.ti.append(_ticker)
                             let _push = value?["push"] as? Bool ?? false
                             let _urgent = value?["urgent"] as? Bool ?? false
-                            let _triggered = value?["triggered"] as? Bool ?? false
+                            let _triggered = value?["triggered"] as? String ?? "false"
                             let _timestamp = value?["data1"] as? Int ?? 1
                             Set1.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent, _timestamp)
                         }
