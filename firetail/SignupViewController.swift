@@ -99,9 +99,10 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
     }
-    
+    var continueOnce = true
     @objc private func continueFunc(_ sender: UIButton) {
-
+        guard continueOnce == true else {return}
+        continueOnce = false
         
         
         var cleanString = textFields[0].text!
@@ -119,22 +120,25 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         let passwordField = textFields[1].text
         let passwordField2 = textFields[2].text
         
-        guard let email = emailField else {return}
-        guard let password1 = passwordField else {return}
-        guard let password2 = passwordField2 else {return}
+        guard let email = emailField else {continueOnce = true; return}
+        guard let password1 = passwordField else {continueOnce = true; return}
+        guard let password2 = passwordField2 else {continueOnce = true; return}
         guard password1 == password2 else {
+            continueOnce = true
             let alert = UIAlertController(title: "Warning", message: "Passwords Do Not Match", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return
         }
         guard email.isEmail == true else {
+            continueOnce = true
             let alert = UIAlertController(title: "Warning", message: "Enter Valid Email Address", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return
         }
         guard password1.isValidPassword == true else {
+            continueOnce = true
             let alert = UIAlertController(title: "Invalid Password", message: "6-20 Characters", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
@@ -148,13 +152,15 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         Auth.auth().createUser(withEmail: email, password: password1) {
             user, error in
             if error == nil {
+                continueOnce = true
                 self.username.text = email
                 Auth.auth().signIn(withEmail: email, password: password1) //adds authentication
                 self.delay(bySeconds: 1.5) {
                     self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                 }
             } else {
-                self.userWarning(title: "", message: (error!.localizedDescription))
+                continueOnce = true;
+               // self.userWarning(title: "", message: (error!.localizedDescription))
             }
         }
     }
