@@ -89,7 +89,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         return aaa
     }
     var scrolling = false
-//    var alertPan = UIPanGestureRecognizer()
+    var alertPan = UIPanGestureRecognizer()
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -127,10 +127,17 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         Set1.saveUserInfo()
         
+        
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        alertPan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.move(_:)))
+        //alertPan.pan.cancelsTouchesInView = false
+        view.addGestureRecognizer(alertPan)
+        
         if Set1.token == "none" && Set1.alertCount > 0 {
             if let refreshedToken = InstanceID.instanceID().token() {
                 print("InstanceID token: \(refreshedToken)")
@@ -139,38 +146,38 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
                 
             }
-           
-                if #available(iOS 10.0, *) {
-                    // For iOS 10 display notification (sent via APNS)
-                    UNUserNotificationCenter.current().delegate = self
-                    
-                    let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-                    UNUserNotificationCenter.current().requestAuthorization(
-                        options: authOptions,
-                        completionHandler: {_, _ in
-                            
-                            if let refreshedToken = InstanceID.instanceID().token() {
-                                print("InstanceID token: \(refreshedToken)")
-                                Set1.token = refreshedToken
-                                Set1.saveUserInfo()
-                            }
-                            
-                            // Connect to FCM since connection may have failed when attempted before having a token.
-                            self.connectToFcm()
-                            
-                    })
-                    
-                    // For iOS 10 data message (sent via FCM)
-                    Messaging.messaging().delegate = self
-                    
-                } else {
-                    let settings: UIUserNotificationSettings =
-                        UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-                    UIApplication.shared.registerUserNotificationSettings(settings)
-                    
-                }
-                UIApplication.shared.registerForRemoteNotifications()
+            
+            if #available(iOS 10.0, *) {
+                // For iOS 10 display notification (sent via APNS)
+                UNUserNotificationCenter.current().delegate = self
                 
+                let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+                UNUserNotificationCenter.current().requestAuthorization(
+                    options: authOptions,
+                    completionHandler: {_, _ in
+                        
+                        if let refreshedToken = InstanceID.instanceID().token() {
+                            print("InstanceID token: \(refreshedToken)")
+                            Set1.token = refreshedToken
+                            Set1.saveUserInfo()
+                        }
+                        
+                        // Connect to FCM since connection may have failed when attempted before having a token.
+                        self.connectToFcm()
+                        
+                })
+                
+                // For iOS 10 data message (sent via FCM)
+                Messaging.messaging().delegate = self
+                
+            } else {
+                let settings: UIUserNotificationSettings =
+                    UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+                UIApplication.shared.registerUserNotificationSettings(settings)
+                
+            }
+            UIApplication.shared.registerForRemoteNotifications()
+            
             
         }
         
@@ -178,8 +185,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         // longPress = UILongPressGestureRecognizer(target: self, action: #selector(DashboardViewController.longPress(_:)))
         //   view.addGestureRecognizer(longPress)
         //  longPress.delegate = self
-        pan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.pan(_:)))
-        view.addGestureRecognizer(pan)
+      //  pan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.pan(_:)))
+       // view.addGestureRecognizer(pan)
         self.view.backgroundColor = customColor.black33
         svs = [sv,sv1,sv2]
         let d = Calendar.current.dateComponents([.year, .month, .day], from: Date())
@@ -325,14 +332,80 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         //amountOfBlocks = loadsave.amount()
         amountOfBlocks = Set1.alertCount
         whoseOnFirst(container)
-
+        
         
     }
     
     var movingBlock = AlertBlockView()
     var startingLocationX = CGFloat()
     var endingLocationX = CGFloat()
+    
+    
+    @objc private func move(_ gesture: UIGestureRecognizer) {
+        
+        switch gesture.state {
+            
+        case .began:
+            for block in blocks {
+                if block.frame.contains(gesture.location(in: alertScroller)) {
+                    movingBlock = block
+                }
+                self.startingLocationX = gesture.location(in: alertScroller).x
+                self.endingLocationX = gesture.location(in: alertScroller).x
+            }
+            
+        case .changed:
+            //if !(deleteDelegate?.scrolling)! {
+            self.endingLocationX = gesture.location(in: alertScroller).x
+            var currentAlpha = abs(self.startingLocationX - self.endingLocationX)/(70*screenWidth/375)
+            
+            if currentAlpha > 1.0 { currentAlpha = 1.0 }
+            movingBlock.x.alpha = currentAlpha
+            if self.endingLocationX - self.startingLocationX < -60*self.screenWidth/375 {
+                UIView.animate(withDuration: 0.1) {
+                    self.movingBlock.ex.frame.origin.x = self.screenWidth + (self.endingLocationX - self.startingLocationX)
+                }
+            }
+            if self.endingLocationX - self.startingLocationX < 0 {//check if another alert is scrolling first
+                UIView.animate(withDuration: 0.1) {
+                    self.movingBlock.slideView.frame.origin.x = self.endingLocationX - self.startingLocationX
+                    
+                }
+                
+            } else {
+                UIView.animate(withDuration: 0.5) {
+                    self.movingBlock.slideView.frame.origin.x = 0
+                }
+            }
+            //   }
+            
+        case .ended:
+            if movingBlock.slideView.frame.origin.x < -60*self.screenWidth/375 {
+                UIView.animate(withDuration: 0.5) {
+                    self.movingBlock.slideView.frame.origin.x = -self.screenWidth*435/375
+                    self.movingBlock.ex.frame.origin.x = -60*self.screenWidth/375
+                }
+                delay(bySeconds: 0.4) {
+                    self.act(blockLongName: self.movingBlock.blockLongName)
+                }
+                
+            } else {
+                UIView.animate(withDuration: 0.1) {
+                    self.movingBlock.slideView.frame.origin.x = 0
+                }
+//                delay(bySeconds: 0.05) {
+//                    UIView.animate(withDuration: 0.5) {
+//                        self.movingBlock.slideView.frame.origin.x = 0
+//                    }
+//                }
 
+            }
+            
+        default: break
+            
+        }
+    }
+    
     
     @objc func act(blockLongName: String) {
         stock1.text = ""
@@ -403,7 +476,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         guard amountOfBlocks > 2 else {return}
         stock3.text = "\(sv2.stock): \(sv2.percentSet[1])%"
     }
-
+    
     var startedPan = false
     var q = Int()
     @objc private func pan(_ gesture: UIPanGestureRecognizer) {
@@ -411,7 +484,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         startedPan = true
     }
-
+    
     
     
     private func returnAllAlertSlides() {
@@ -661,7 +734,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         self.performSegue(withIdentifier: "fromMainToSettings", sender: self)
     }
     @objc private func logoutFunc(_ sender: UIButton) {
-       
+        
         
         Set1.month = ["","","","","","","","","","","",""]
         Set1.currentPrice = 0.0
@@ -772,14 +845,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         if hitOnce {
             hitOnce = false
             if (premiumMember || Set1.alertCount < 3) && Set1.alertCount < 50 {
-               
+                
                 self.performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
                 
             } else if !premiumMember && Set1.alertCount < 50 {
-             
+                
                 purchase()
             } else {
-         
+                
                 let alert = UIAlertController(title: "", message: " 50 maximum alerts reached", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
@@ -881,7 +954,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 let secondsInADay = 86400000
                 let hour = Calendar.current.component(.hour, from: Date())
                 let m = Calendar.current.component(.minute, from: Date())
-            
+                
                 let secondsSinceMidnight = hour * 3600 + m * 60
                 var addAlertToThisDay = Int()
                 switch seconds {
@@ -958,7 +1031,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             return
         }
         Messaging.messaging().shouldEstablishDirectChannel = true
-  
+        
     }
     
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {

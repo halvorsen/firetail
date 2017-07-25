@@ -61,12 +61,12 @@ class GraphViewController: ViewSetup {
         "Wells Fargo":"https://connect.secure.wellsfargo.com/auth/login/present?origin=cob&LOB=CONS",
         "Robinhood":"https://www.robinhood.com/signup/login/"]
     
-
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
- 
+        
         PodVariable.gingerBreadMan.removeAll()
         Label.changeValues.removeAll()
         Label.percentageValues.removeAll()
@@ -89,7 +89,7 @@ class GraphViewController: ViewSetup {
     }
     var activityView = UIActivityIndicatorView()
     override func viewWillAppear(_ animated: Bool) {
-
+        
         activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         activityView.center = self.view.center
         activityView.startAnimating()
@@ -108,7 +108,7 @@ class GraphViewController: ViewSetup {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-   //     let mainView: DashboardViewController = segue.destination as! DashboardViewController
+        //     let mainView: DashboardViewController = segue.destination as! DashboardViewController
     }
     
     @objc private func back(_ sender: UIButton) {
@@ -117,10 +117,10 @@ class GraphViewController: ViewSetup {
     
     @objc private func trade(_ sender: UIButton) {
         if Set1.brokerName != "none" {
-        UIApplication.shared.open(URL(string: brokersDictionary[Set1.brokerName]!)!)
+            UIApplication.shared.open(URL(string: brokersDictionary[Set1.brokerName]!)!)
         } else {
             self.userWarning(title: "", message: "Add Broker in Firetail Settings")
-
+            
         }
     }
     
@@ -156,7 +156,7 @@ class GraphViewController: ViewSetup {
                     }
                 }
                 graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs[newTextKey]!]
-
+                
                 for i in 0..<graphViewSeen.ys.count {
                     switch i {
                     case 0: graphViewSeen.ys[i].text = yVals[newTextKey]!.4
@@ -168,7 +168,60 @@ class GraphViewController: ViewSetup {
                     }
                     
                 }
+                return
             }
+        }
+        if tap.location(in: view!).y > 100 && tap.location(in: view!).y < 550 {
+            var xLabel = graphViewSeen.xs[0]
+            
+            switch currentTextKey {
+            case "10y":
+                xLabel = graphViewSeen.xs[1]
+            case "5y":
+                xLabel = graphViewSeen.xs[2]
+            case "1y":
+                xLabel = graphViewSeen.xs[3]
+            case "3m":
+                xLabel = graphViewSeen.xs[4]
+            case "1m":
+                xLabel = graphViewSeen.xs[5]
+            case "5d":
+                xLabel = graphViewSeen.xs[0]
+            default:
+                break
+            }
+            
+            graphViewSeen.xs[orderOfLabels[currentTextKey]!].textColor = customColor.labelGray
+            newTextKey = xLabel.text!
+            graphViewSeen.xs[orderOfLabels[newTextKey]!].textColor = customColor.yellow
+            layerAnimation.toValue = PodVariable.gingerBreadMan[orderOfGraphs[newTextKey]!]
+            
+            currentTextKey = newTextKey
+            layer.add(layerAnimation, forKey: nil)
+            graphViewSeen.change.text = Label.changeValues[orderOfGraphs[newTextKey]!]
+            if let symbol = Label.changeValues[orderOfGraphs[newTextKey]!].characters.first {
+                if symbol == "-" {
+                    graphViewSeen.percentChange.textColor = customColor.red
+                    graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
+                } else {
+                    graphViewSeen.percentChange.textColor = customColor.yellow
+                    graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
+                }
+            }
+            graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs[newTextKey]!]
+            
+            for i in 0..<graphViewSeen.ys.count {
+                switch i {
+                case 0: graphViewSeen.ys[i].text = yVals[newTextKey]!.4
+                case 1: graphViewSeen.ys[i].text = yVals[newTextKey]!.3
+                case 2: graphViewSeen.ys[i].text = yVals[newTextKey]!.2
+                case 3: graphViewSeen.ys[i].text = yVals[newTextKey]!.1
+                case 4: graphViewSeen.ys[i].text = yVals[newTextKey]!.0
+                default: break
+                }
+                
+            }
+            
         }
     }
     
@@ -183,7 +236,7 @@ class GraphViewController: ViewSetup {
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
         
         if stockData.1[self.i] != nil {
-   
+            
             let graphView = StockGraphView2(stockData: stockData.1[self.i]!, key: stockData.0[self.i], cubic: true)
             
             let ma = stockData.1[self.i]!.closingPrice.max()! //from unfiltered highs and lows
@@ -191,7 +244,7 @@ class GraphViewController: ViewSetup {
             
             let ma2 = graphView._outputValues.max()! //from averages for middle of graph
             let mi2 = graphView._outputValues.min()!// from averages for middle of graph
-
+            
             //basically what this does to the yellow detailed graphs is gives the actual max and min values as the top and bottom y labels. the graph is all averages execpt for the current price, last point on graph, which is the current prices. As you can imagine this makes for a graph that isn't totally lined up with it's legends but gives you a good point at the end and top and bottom, then everything else is approximation curve through averaged prices
             
             let range = ma - mi
@@ -266,9 +319,9 @@ class GraphViewController: ViewSetup {
         // if graphViewSeen.doneSquashing {
         loading.removeFromSuperview()
         add1YGraph()
- 
+        
         activityView.removeFromSuperview()
-     
+        
         backArrow.alpha = 0.0
         view.addSubview(backArrow) //this is because the way the graphs load app can crash if push back button before they load
         UIView.animate(withDuration: 0.3) {
@@ -320,7 +373,7 @@ class GraphViewController: ViewSetup {
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
                 }
             }
-
+            
             trade.alpha = 0.0
             stockHeader.alpha = 0.0
             currentPrice.alpha = 0.0
@@ -376,14 +429,14 @@ class GraphViewController: ViewSetup {
                 self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
                 // had this error to "cancelled" once now just sending back to the Dashboard if an error occures. instead of showing an alert.
                 
-//                    let refreshAlert = UIAlertController(title: "", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-//                    
-//                    refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-//                        self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
-//                    }))
-//                
-//                    self.present(refreshAlert, animated: true, completion: nil)
-
+                //                    let refreshAlert = UIAlertController(title: "", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                //
+                //                    refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                //                        self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
+                //                    }))
+                //
+                //                    self.present(refreshAlert, animated: true, completion: nil)
+                
                 return
             }
             guard let stockData = _stockData else {return}
@@ -405,10 +458,10 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     } else {
-                    for i in (amount - 252)..<amount {
-                    
-                       stockData2.closingPrice.append(__stockData[i])
-                    }
+                        for i in (amount - 252)..<amount {
+                            
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
                     }
                 case "5y":
                     if amount < 252*5 {
@@ -416,9 +469,9 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     } else {
-                    for i in (amount - 252*5)..<amount {
-                        stockData2.closingPrice.append(__stockData[i])
-                    }
+                        for i in (amount - 252*5)..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
                     }
                 case "10y":
                     if amount < 252*10 + 20 {
@@ -426,18 +479,18 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     } else {
-                    for i in (amount - 252*10 + 20)..<amount {
-                        stockData2.closingPrice.append(__stockData[i])
-                    }
+                        for i in (amount - 252*10 + 20)..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
                     }
                 case "1d":
                     for i in (amount - 55)..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
-//                    for i in (amount - 5)..<amount {
-//                        stockData2.closingPrice.append(stockData[i])
-//                    }
-                       // stockData2.closingPrice.append(stockData[amount - 1])
+                    //                    for i in (amount - 5)..<amount {
+                    //                        stockData2.closingPrice.append(stockData[i])
+                    //                    }
+                    // stockData2.closingPrice.append(stockData[amount - 1])
                     
                 case "5d":
                     if amount < 5 {
@@ -445,9 +498,9 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     } else {
-                    for i in (amount - 5)..<amount {
-                        stockData2.closingPrice.append(__stockData[i])
-                    }
+                        for i in (amount - 5)..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
                     }
                 case "1m":
                     if amount < 252/12 {
@@ -455,9 +508,9 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     } else {
-                    for i in (amount-252/12)..<amount {
-                        stockData2.closingPrice.append(__stockData[i])
-                    }
+                        for i in (amount-252/12)..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
                     }
                 case "3m":
                     if amount < 252/4 {
@@ -465,9 +518,9 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     } else {
-                    for i in (amount-252/4)..<amount {
-                        stockData2.closingPrice.append(__stockData[i])
-                    }
+                        for i in (amount-252/4)..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
                     }
                 default: break
                 }
@@ -481,7 +534,7 @@ class GraphViewController: ViewSetup {
             //                    print(error)
             //                    result(([""],[nil]))
             
-            }
+        }
         
     }
 }
