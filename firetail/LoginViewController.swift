@@ -90,12 +90,12 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         coverInternet.addSubview(label)
         coverInternet.layer.zPosition = 50
         
-        let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
+        let launchedBefore = UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore")
         if launchedBefore  {
          
         } else {
             do {try Auth.auth().signOut()}catch { }
-            UserDefaults.standard.set(true, forKey: "launchedBefore")
+            UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
         }
         
         

@@ -77,6 +77,7 @@ class LoadSaveCoreData {
         }
     }
 
+
     public static func saveUserInfoToFirebase(username:String,fullName:String,email:String,phone:String,premium:Bool,numOfAlerts:Int,brokerName:String,brokerURL:String,weeklyAlerts:[String:Int],userAlerts:[String:String], token: String) {
         
       //  let ref = FIRDatabase.database().reference(withPath: "users")

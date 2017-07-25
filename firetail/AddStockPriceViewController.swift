@@ -100,7 +100,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
-        populateDialView()
+        
         
     }
     var rectsLabelsTop = [CGFloat]()
@@ -285,6 +285,9 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
    
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        populateDialView()
+        
         getOneYearData(stockName: newAlertTicker) {
             
             Set1.oneYearDictionary[$1] = $0

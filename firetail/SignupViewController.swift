@@ -145,16 +145,13 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             return
         }
         
-        
-        
-        LoadSaveCoreData.saveUserInfoToFirebase(username: cleanString, fullName: "none", email: Set1.email, phone: "none", premium: false, numOfAlerts: 0, brokerName: "none", brokerURL: "none", weeklyAlerts: Set1.weeklyAlerts, userAlerts: Set1.userAlerts, token: "none")
-        
         Auth.auth().createUser(withEmail: email, password: password1) {
             user, error in
             if error == nil {
                 self.continueOnce = true
                 self.username.text = email
                 Auth.auth().signIn(withEmail: email, password: password1) //adds authentication
+                Set1.saveUserInfo()
                 self.delay(bySeconds: 1.5) {
                     self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                 }

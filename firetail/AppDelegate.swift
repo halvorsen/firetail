@@ -36,6 +36,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotification(_:)),name: NSNotification.Name.InstanceIDTokenRefresh, object: nil)
         
+        
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        
+        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+        
+        
+        if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") {
+            let viewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
+            self.window?.rootViewController = viewController
+            self.window?.makeKeyAndVisible()
+            
+        } else {
+            UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
+        let viewController = storyboard.instantiateViewController(withIdentifier: "SignupViewController") as! SignupViewController
+            self.window?.rootViewController = viewController
+            self.window?.makeKeyAndVisible()
+        }
+
         return true
     }
     

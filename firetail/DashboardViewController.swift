@@ -457,6 +457,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         blocks = newBlocks
         newBlocks.removeAll()
         amountOfBlocks -= 1
+        
         alertAmount.text = String(amountOfBlocks)
         alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
         alertScroller.backgroundColor = customColor.black33
@@ -469,12 +470,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         reboot()
         
         Set1.saveUserInfo()
+        print("Set1.userAlerts: \(Set1.userAlerts)")
         guard amountOfBlocks > 0 else {return}
         stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
         guard amountOfBlocks > 1 else {return}
         stock2.text = "\(sv1.stock): \(sv1.percentSet[1])%"
         guard amountOfBlocks > 2 else {return}
         stock3.text = "\(sv2.stock): \(sv2.percentSet[1])%"
+        
+        
     }
     
     var startedPan = false

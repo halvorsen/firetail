@@ -55,7 +55,7 @@ public struct Set1 {
     
     public static var weeklyAlerts: [String:Int] = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
     
-    public static var userAlerts = [String:String]()
+    public static var userAlerts : [String:String] = [:]
     
     public static var alerts = [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int)]()
     
