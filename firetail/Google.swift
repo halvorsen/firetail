@@ -37,7 +37,7 @@ class Google {
         fetchFromGoogle(yearStart: years, dateComponentStart: start, dateComponentEnd: end, ticker: ticker, index: index)
         
        
-        let url = URL(string: "http://www.google.com/finance/info?q=" + index + ":" + ticker)
+        let url = URL(string: "https://www.google.com/finance/info?q=" + index + ":" + ticker)
         if let usableUrl = url {
             let request = URLRequest(url: usableUrl)
             let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
@@ -115,7 +115,7 @@ class Google {
         let endDateMonth = monthStrings[endDateComponents.month!]
         let endDateYear = String(describing: endDateComponents.year!)
         let endDateDay = String(describing: endDateComponents.day!)
-        let stringComponents: [String] = ["http://www.google.com/finance/historical?q=",index,":",ticker,"&startdate=",startDateMonth,"+",startDateDay,"%2C+",startDateYear,"&enddate=",endDateMonth,"+",endDateDay,"%2C+",endDateYear,"&output=csv"]
+        let stringComponents: [String] = ["https://www.google.com/finance/historical?q=",index,":",ticker,"&startdate=",startDateMonth,"+",startDateDay,"%2C+",startDateYear,"&enddate=",endDateMonth,"+",endDateDay,"%2C+",endDateYear,"&output=csv"]
         
         let urlString = stringComponents.flatMap({$0}).joined()
         let url = URL(string: urlString)

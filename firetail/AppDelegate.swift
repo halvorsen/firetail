@@ -48,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             self.window?.makeKeyAndVisible()
             
         } else {
+            Set1.logoutFirebase()
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
         let viewController = storyboard.instantiateViewController(withIdentifier: "SignupViewController") as! SignupViewController
             self.window?.rootViewController = viewController

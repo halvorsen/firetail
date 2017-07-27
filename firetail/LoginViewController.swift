@@ -46,8 +46,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         tap = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard(_:)))
-        
+        Set2.priceRectX.removeAll()
         for xVal in Set3.shared.priceRectX {
+            
             Set2.priceRectX.append(xVal*screenWidth/375)
         }
         

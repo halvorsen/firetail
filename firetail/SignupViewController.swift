@@ -24,6 +24,11 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     //var ti = [String]()
     override func viewDidLoad() {
         super.viewDidLoad()
+        Set2.priceRectX.removeAll()
+        for xVal in Set3.shared.priceRectX {
+            
+            Set2.priceRectX.append(xVal*screenWidth/375)
+        }
         tap = UITapGestureRecognizer(target: self, action: #selector(SignupViewController.dismissKeyboard(_:)))
         view.backgroundColor = customColor.black33
         let logo = UIImageView(frame: CGRect(x: screenWidth/2 - 93*screenHeight/1334, y: 42*screenHeight/667, width: 93*screenHeight/667, height: 119*screenHeight/667))

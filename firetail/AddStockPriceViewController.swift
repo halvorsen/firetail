@@ -100,7 +100,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
-        
+        populateDialView()
         
     }
     var rectsLabelsTop = [CGFloat]()
@@ -123,11 +123,9 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             if closings != nil && dateArray != nil {
                 
                 self.loadItAll()
-                self.populateDialView()
+                
                 self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)
                 self.container.addSubview(self.graph)
-                
-                
                 self.populateDisplayValues(currentPrice: closings!.last!)
                 self.dialPrice = closings!.last!
                 
@@ -260,10 +258,12 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
        
         let myGoogle = Google()
         myGoogle.historicalPrices(years: 1, ticker: self.newAlertTicker) { (stockDataTuple) in
-            let (_stockData,dates,_) = stockDataTuple
+            let (_stockData,dates,error) = stockDataTuple
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0 else {return}
-            
+            if error != nil {
+                self.performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self)
+            }
             
             result(dates, stockData)
             //FIXIT add error handling simiar to BigBoard below, the error will be coming from url request to google
