@@ -121,7 +121,9 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         
         prepareGraph() {(dateArray,closings) -> Void in
             if closings != nil && dateArray != nil {
+                
                 self.loadItAll()
+                self.populateDialView()
                 self.graph = DailyGraphForAlertView(graphData: closings!, dateArray: dateArray!)
                 self.container.addSubview(self.graph)
                 
@@ -168,6 +170,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 self.lastPrice = closings!.last!
             }
         }
+        
     }
 
     
@@ -286,7 +289,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        populateDialView()
+        
         
         getOneYearData(stockName: newAlertTicker) {
             
