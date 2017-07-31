@@ -64,16 +64,7 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
         slideView.backgroundColor = customColor.background
         slideView.frame = self.bounds
         self.addSubview(slideView)
-        
-        //        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slide(_:)))
-        //       // swipe.direction = .left
-        //        slideView.addGestureRecognizer(swipe)
-        
-        //        let swipeR = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slideR(_:)))
-        //        swipeR.direction = .right
-        //        slideView.addGestureRecognizer(swipeR)
-        
-        
+
         let _stockTicker = stockTicker.uppercased()
         addLabel(name: stockTickerLabel, text: _stockTicker, textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 60, y: 70, width: 100, height: 36, lines: 1, alpha: 0.5)
         slideView.addSubview(stockTickerLabel)
@@ -125,7 +116,7 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
             let imageView = UIImageView()
             imageView.image = #imageLiteral(resourceName: "lighteningBolt")
             imageView.frame = CGRect(x: 91*screenWidth/375, y: 31*screenHeight/667, width: 14*screenWidth/375, height: 18*screenHeight/667)
-            self.addSubview(imageView)
+            slideView.addSubview(imageView)
         }
         slideView.addSubview(stockPrice)
         addLabel(name: line, text: "", textColor: .clear, textAlignment: .center, fontName: "", fontSize: 1, x: 0, y: 118, width: 750, height: 2, lines: 0)
@@ -146,64 +137,6 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
         let when = DispatchTime.now() + delay
         DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
     }
-    
-    
-    //    @objc private func slide(_ gesture: UIGestureRecognizer) {
-    //        UIView.animate(withDuration: 0.6) {
-    //            switch gesture.state {
-    //
-    //            case .began:
-    //                self.startingLocationX = gesture.location(in: self).x
-    //                self.endingLocationX = gesture.location(in: self).x
-    //
-    //            case .changed:
-    //                self.endingLocationX = gesture.location(in: self).x
-    //                var currentAlpha = abs(self.startingLocationX - self.endingLocationX)/100
-    //                print("currentAlpha: \(currentAlpha)")
-    //                if currentAlpha > 1.0 { currentAlpha = 1.0 }
-    //                self.x.alpha = currentAlpha
-    //                if true {//check if another alert is scrolling first
-    //                    UIView.animate(withDuration: 0.1) {
-    //                        self.frame.origin.x = self.endingLocationX - self.startingLocationX
-    //                    }
-    //                } else {
-    //                    UIView.animate(withDuration: 0.5) {
-    //                        self.frame.origin.x = 0
-    //                    }
-    //                }
-    //
-    //            case .ended:
-    //                if self.frame.origin.x > 120*self.screenWidth/375 {
-    //
-    //                }
-    //                UIView.animate(withDuration: 0.5) {
-    //                    self.frame.origin.x = 0
-    //                }
-    //
-    //            default: break
-    //
-    //            }
-    //
-    //
-    //
-    //            if self.slideView.frame.origin.x == 0 {
-    //                self.slideView.frame.origin.x = -self.screenWidth/9 - 1
-    ////                let swipeR = UISwipeGestureRecognizer(target: self, action: #selector(AlertBlockView.slideR(_:)))
-    ////                swipeR.direction = .right
-    ////                self.slideView.addGestureRecognizer(swipeR)
-    //            } else {
-    //                self.slideView.frame.origin.x = 0
-    //            }
-    //        }
-    //    }
-    
-    //    @objc private func slideR(_ gesture: UIGestureRecognizer) {
-    //        UIView.animate(withDuration: 0.6) {
-    //
-    //            self.slideView.frame.origin.x = 0
-    //
-    //        }
-    //    }
     
     func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int, alpha: CGFloat = 1.0) {
         name.text = text

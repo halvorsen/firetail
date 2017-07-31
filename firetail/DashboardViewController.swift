@@ -135,7 +135,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         super.viewDidLoad()
         
         alertPan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.move(_:)))
-        //alertPan.pan.cancelsTouchesInView = false
         view.addGestureRecognizer(alertPan)
         
         if Set1.token == "none" && Set1.alertCount > 0 {
@@ -381,11 +380,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             
         case .ended:
             if movingBlock.slideView.frame.origin.x < -60*self.screenWidth/375 {
-                UIView.animate(withDuration: 0.5) {
+                UIView.animate(withDuration: 0.2) {
                     self.movingBlock.slideView.frame.origin.x = -self.screenWidth*435/375
                     self.movingBlock.ex.frame.origin.x = -60*self.screenWidth/375
                 }
-                delay(bySeconds: 0.4) {
+                view.removeGestureRecognizer(alertPan)
+                delay(bySeconds: 0.3) {
                     self.act(blockLongName: self.movingBlock.blockLongName)
                 }
                 
@@ -393,11 +393,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 UIView.animate(withDuration: 0.1) {
                     self.movingBlock.slideView.frame.origin.x = 0
                 }
-//                delay(bySeconds: 0.05) {
-//                    UIView.animate(withDuration: 0.5) {
-//                        self.movingBlock.slideView.frame.origin.x = 0
-//                    }
-//                }
 
             }
             
@@ -408,6 +403,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     
     @objc func act(blockLongName: String) {
+        
         stock1.text = ""
         stock2.text = ""
         stock3.text = ""
@@ -470,7 +466,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         reboot()
         
         Set1.saveUserInfo()
-        print("Set1.userAlerts: \(Set1.userAlerts)")
+        view.addGestureRecognizer(alertPan)
         guard amountOfBlocks > 0 else {return}
         stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
         guard amountOfBlocks > 1 else {return}

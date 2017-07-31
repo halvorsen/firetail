@@ -152,24 +152,6 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             newAlertBoolTuple.4 = true
         }
         
-//        phoneTextField = UITextField(frame: CGRect(x: 375*screenWidth/750,y: 800*screenHeight/1334,width: 375*screenWidth/750 ,height: 80*screenHeight/1334))
-//        phoneTextField.placeholder = "(000) 000-0000"
-//        phoneTextField.textAlignment = .left
-//        phoneTextField.clearsOnBeginEditing = true
-//        phoneTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
-//        phoneTextField.font = UIFont(name: "Roboto-Medium", size: 20*fontSizeMultiplier)
-//        phoneTextField.autocorrectionType = UITextAutocorrectionType.no
-//        phoneTextField.keyboardType = UIKeyboardType.default
-//        phoneTextField.returnKeyType = UIReturnKeyType.done
-//        phoneTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-//        phoneTextField.delegate = self
-//        phoneTextField.backgroundColor = .clear
-//        phoneTextField.textColor = .white
-//        phoneTextField.tag = 2
-//        phoneTextField.keyboardAppearance = .dark
-//        view.addSubview(phoneTextField)
-//        phoneTextField.alpha = 0.0
-        
     }
     
 
@@ -328,18 +310,43 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 newAlertBoolTuple.0 = false
                 UserDefaults.standard.set(false, forKey: "emailOn")
                 Set1.emailOn = false
+                if Set1.allOn {
+                    UserDefaults.standard.set(false, forKey: "allOn")
+                    Set1.allOn = false
+                    newAlertBoolTuple.4 = false
+                    mySwitchAll.setOn(false, animated: true)
+                    
+                }
             case 1:
                 newAlertBoolTuple.1 = false
                 UserDefaults.standard.set(false, forKey: "smsOn")
                 Set1.smsOn = false
+                if Set1.allOn {
+                    UserDefaults.standard.set(false, forKey: "allOn")
+                    Set1.allOn = false
+                    newAlertBoolTuple.4 = false
+                    mySwitchAll.setOn(false, animated: true)
+                }
             case 2:
                 UserDefaults.standard.set(false, forKey: "pushOn")
                 Set1.pushOn = false
                 newAlertBoolTuple.2 = false
+                if Set1.allOn {
+                    UserDefaults.standard.set(false, forKey: "allOn")
+                    Set1.allOn = false
+                    newAlertBoolTuple.4 = false
+                    mySwitchAll.setOn(false, animated: true)
+                }
             case 3:
                 UserDefaults.standard.set(false, forKey: "flashOn")
                 Set1.flashOn = false
                 newAlertBoolTuple.3 = false
+                if Set1.allOn {
+                    UserDefaults.standard.set(false, forKey: "allOn")
+                    Set1.allOn = false
+                    newAlertBoolTuple.4 = false
+                    mySwitchAll.setOn(false, animated: true)
+                }
             case 4:
                 UserDefaults.standard.set(false, forKey: "allOn")
                 Set1.allOn = false

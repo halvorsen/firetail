@@ -34,7 +34,7 @@ class LoadSaveCoreData {
 
     func resaveBlocks(blocks: [AlertBlockView]) {
         Set1.userAlerts.removeAll()
-        for i in 0..<Set1.alertCount {
+        for i in 0..<blocks.count {
             Set1.userAlerts[alertID[i]] = blocks[i].blockLongName
         }
     }
