@@ -17,7 +17,7 @@ class LoadSaveCoreData {
     
     var alertID: [String] {
         var aaa = [String]()
-        for i in 0..<Set1.alertCount {
+        for i in 0..<Set1.userAlerts.count {
             switch i {
             case 0...9:
                 aaa.append("alert00" + String(i))
@@ -33,10 +33,16 @@ class LoadSaveCoreData {
     }
 
     func resaveBlocks(blocks: [AlertBlockView]) {
-        Set1.userAlerts.removeAll()
+        var _userAlerts = [String:String]()
+
+       // Set1.userAlerts.removeAll()
+       
+       
         for i in 0..<blocks.count {
-            Set1.userAlerts[alertID[i]] = blocks[i].blockLongName
+           
+            _userAlerts[alertID[i]] = blocks[i].blockLongName
         }
+        Set1.userAlerts = _userAlerts
     }
 
     func saveUsername(username: String) {

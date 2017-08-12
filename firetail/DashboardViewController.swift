@@ -74,7 +74,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var val = CGFloat()
     var alertID: [String] {
         var aaa = [String]()
-        for i in 0..<Set1.alertCount {
+        for i in 0..<Set1.userAlerts.count {
             switch i {
             case 0...9:
                 aaa.append("alert00" + String(i))
@@ -93,11 +93,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     override func viewWillAppear(_ animated: Bool) {
         
-        if Set1.alertCount > 0 {
-            for i in 0..<Set1.alertCount {
+        if Set1.userAlerts.count > 0 {
+            for i in 0..<Set1.userAlerts.count {
                 
                 let block = AlertBlockView(
-                    y: CGFloat(Set1.alertCount - 1 - i)*120,
+                    y: CGFloat(Set1.userAlerts.count - 1 - i)*120,
                     stockTicker: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.ticker,
                     currentPrice: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.price,
                     sms: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.sms,
@@ -137,7 +137,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         alertPan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.move(_:)))
         view.addGestureRecognizer(alertPan)
         
-        if Set1.token == "none" && Set1.alertCount > 0 {
+        if Set1.token == "none" && Set1.userAlerts.count > 0 {
             if let refreshedToken = InstanceID.instanceID().token() {
                 print("InstanceID token: \(refreshedToken)")
                 Set1.token = refreshedToken
@@ -193,7 +193,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addLabel(name: date, text: "\(d.day!) \(m[d.month!].capitalized)", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 13, x: 84, y: 124, width: 150, height: 32, lines: 1)
         view.addSubview(date)
         
-        addLabel(name: alertAmount, text: String(Set1.alertCount), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
+        addLabel(name: alertAmount, text: String(Set1.userAlerts.count), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
         view.addSubview(alertAmount)
         addLabel(name: alerts1102, text: "Alerts", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 330, width: 260, height: 28, lines: 1)
         alerts1102.alpha = 0.5
@@ -232,7 +232,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addLabel(name: stock2, text: "", textColor: customColor.white128, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 72, width: 352, height: 48, lines: 0)
         addLabel(name: stock3, text: "", textColor: customColor.white209, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 120, width: 352, height: 48, lines: 0)
         
-        switch Set1.alertCount {
+        switch Set1.userAlerts.count {
         case 0:
             break
         case 1:
@@ -313,7 +313,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         line.backgroundColor = customColor.alertLines
         slideView.addSubview(line)
         alertScroller.frame = CGRect(x: 0, y: 974*screenHeight/1334, width: screenWidth, height: 360*screenHeight/1334)
-        alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(Set1.alertCount)*120*screenHeight/1334)
+        alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(Set1.userAlerts.count)*120*screenHeight/1334)
         slideView.addSubview(alertScroller)
         
         //alertScroller.addSubview(googBlock)
@@ -329,7 +329,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         mask.backgroundColor = customColor.black33
         slideView.addSubview(mask)
         //amountOfBlocks = loadsave.amount()
-        amountOfBlocks = Set1.alertCount
+        amountOfBlocks = Set1.userAlerts.count
         whoseOnFirst(container)
         
         
@@ -458,10 +458,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
         alertScroller.backgroundColor = customColor.black33
         alertScroller.showsVerticalScrollIndicator = false
-        Set1.alertCount = amountOfBlocks
+     //   Set1.alertCount = amountOfBlocks
         
         loadsave.resaveBlocks(blocks: blocks)
-        Set1.alertCount = amountOfBlocks
+     //   Set1.alertCount = amountOfBlocks
         
         reboot()
         
@@ -535,8 +535,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     private func populateCompareGraph() {
-        
-        switch Set1.alertCount {
+      //  print("Set1.ti: \(Set1.ti)")
+        switch Set1.ti.count {
         case 0:
             break
         case 1:
@@ -616,7 +616,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 var value1 = CGFloat()
                 
                 
-                switch Set1.alertCount {
+                switch Set1.userAlerts.count {
                 case 0:
                     break
                 case 1:
@@ -643,7 +643,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
                 monthIndicator.text = Set1.month[i]
                 
-                switch Set1.alertCount {
+                switch Set1.userAlerts.count {
                 case 0:
                     break
                 case 1:
@@ -740,7 +740,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         Set1.currentPrice = 0.0
         Set1.yesterday = 0.0
         Set1.token = "none"
-        Set1.alertCount = 0
+       // Set1.alertCount = 0
         Set1.oneYearDictionary.removeAll() //= ["":[0.0]]
         Set1.ti.removeAll()
         Set1.phone = "none"
@@ -844,11 +844,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     @objc private func addFunc(_ sender: UIButton) {
         if hitOnce {
             hitOnce = false
-            if (premiumMember || Set1.alertCount < 3) && Set1.alertCount < 50 {
+            if (premiumMember || Set1.userAlerts.count < 3) && Set1.userAlerts.count < 50 {
                 
                 self.performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
                 
-            } else if !premiumMember && Set1.alertCount < 50 {
+            } else if !premiumMember && Set1.userAlerts.count < 50 {
                 
                 purchase()
             } else {

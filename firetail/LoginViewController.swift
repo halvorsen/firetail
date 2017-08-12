@@ -162,19 +162,19 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             Set1.email = value?["email"] as? String ?? "none"
             Set1.phone = value?["phone"] as? String ?? "none"
             Set1.premium = value?["premium"] as? Bool ?? false
-            Set1.alertCount = value?["numOfAlerts"] as? Int ?? 0
+           // Set1.alertCount = value?["numOfAlerts"] as? Int ?? 0
             Set1.brokerName = value?["brokerName"] as? String ?? "none"
             Set1.brokerURL = value?["brokerURL"] as? String ?? "none"
             Set1.weeklyAlerts = value?["weeklyAlerts"] as? [String:Int] ?? ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
-            if Set1.alertCount > 0 {
-                Set1.userAlerts = value?["userAlerts"] as! [String:String]
-            }
+            //if Set1.userAlerts.count > 0 {
+            Set1.userAlerts = value?["userAlerts"] as? [String:String] ?? [:]
+         //   }
             
             if Set1.userAlerts.count > 0 {
 
                 var alertID: [String] {
                     var aaa = [String]()
-                    for i in 0..<Set1.alertCount {
+                    for i in 0..<Set1.userAlerts.count {
                         switch i {
                         case 0...9:
                             aaa.append("alert00" + String(i))

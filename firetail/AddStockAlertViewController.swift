@@ -40,7 +40,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     var newAlertLongID = String()
     var alertID: [String] {
         var aaa = [String]()
-        for i in 0...Set1.alertCount {
+        for i in 0...Set1.userAlerts.count {
             switch i {
             case 0...9:
                 aaa.append("alert00" + String(i))
@@ -164,8 +164,8 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID =  timestamp + newAlertTicker.uppercased()
-        Set1.userAlerts[alertID[Set1.alertCount]] = newAlertLongID
-        Set1.alertCount += 1
+        Set1.userAlerts[alertID[Set1.userAlerts.count]] = newAlertLongID
+        // Set1.alertCount += 1
         var alertTriggerWhenGreaterThan = false
         if finalAlertPrice > lastPrice {
             alertTriggerWhenGreaterThan = true

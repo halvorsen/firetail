@@ -27,7 +27,7 @@ public struct Set1 {
     
     public static var yesterday: Double = 0.0
     
-    public static var alertCount: Int = 0
+   // public static var alertCount: Int = 0
     
     public static var oneYearDictionary: [String:[Double]] = ["":[0.0]]
     
@@ -61,7 +61,7 @@ public struct Set1 {
     
     public static func saveUserInfo() {
         if Set1.email == "none" {print("WARNING!!!!!! FATAL WARNING, guarded against none string getting saved to database")}
-        LoadSaveCoreData.saveUserInfoToFirebase(username: Set1.username, fullName: Set1.fullName, email: Set1.email, phone: Set1.phone, premium: Set1.premium, numOfAlerts: Set1.alertCount, brokerName: Set1.brokerName, brokerURL: Set1.brokerURL, weeklyAlerts: Set1.weeklyAlerts, userAlerts: Set1.userAlerts, token: Set1.token)
+        LoadSaveCoreData.saveUserInfoToFirebase(username: Set1.username, fullName: Set1.fullName, email: Set1.email, phone: Set1.phone, premium: Set1.premium, numOfAlerts: Set1.userAlerts.count, brokerName: Set1.brokerName, brokerURL: Set1.brokerURL, weeklyAlerts: Set1.weeklyAlerts, userAlerts: Set1.userAlerts, token: Set1.token)
     }
 }
 
