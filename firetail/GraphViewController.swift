@@ -125,7 +125,10 @@ class GraphViewController: ViewSetup {
     }
     
     @objc private func pickGraph(_ tap: UITapGestureRecognizer) {
-        
+        guard PodVariable.gingerBreadMan.count == 7 else {
+          self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
+            return
+        }
         let layerAnimation = CABasicAnimation(keyPath: "path")
         layerAnimation.duration = 0.7
         layerAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)

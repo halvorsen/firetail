@@ -335,7 +335,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
     }
     
-    var movingBlock = AlertBlockView()
+    var movingBlock : AlertBlockView?
     var startingLocationX = CGFloat()
     var endingLocationX = CGFloat()
     
@@ -346,7 +346,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             
         case .began:
             for block in blocks {
-                if block.frame.contains(gesture.location(in: alertScroller)) {
+                if block.frame.contains(gesture.location(in: alertScroller)) && alertScroller.frame.contains(gesture.location(in: view)) {
                     movingBlock = block
                 }
                 self.startingLocationX = gesture.location(in: alertScroller).x
@@ -354,44 +354,46 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             }
             
         case .changed:
-            //if !(deleteDelegate?.scrolling)! {
+            guard let _movingBlock = movingBlock else {return}
             self.endingLocationX = gesture.location(in: alertScroller).x
             var currentAlpha = abs(self.startingLocationX - self.endingLocationX)/(70*screenWidth/375)
             
             if currentAlpha > 1.0 { currentAlpha = 1.0 }
-            movingBlock.x.alpha = currentAlpha
+            _movingBlock.x.alpha = currentAlpha
             if self.endingLocationX - self.startingLocationX < -60*self.screenWidth/375 {
                 UIView.animate(withDuration: 0.1) {
-                    self.movingBlock.ex.frame.origin.x = self.screenWidth + (self.endingLocationX - self.startingLocationX)
+                    _movingBlock.ex.frame.origin.x = self.screenWidth + (self.endingLocationX - self.startingLocationX)
                 }
             }
             if self.endingLocationX - self.startingLocationX < 0 {//check if another alert is scrolling first
                 UIView.animate(withDuration: 0.1) {
-                    self.movingBlock.slideView.frame.origin.x = self.endingLocationX - self.startingLocationX
+                    _movingBlock.slideView.frame.origin.x = self.endingLocationX - self.startingLocationX
                     
                 }
                 
             } else {
                 UIView.animate(withDuration: 0.5) {
-                    self.movingBlock.slideView.frame.origin.x = 0
+                    _movingBlock.slideView.frame.origin.x = 0
                 }
             }
-            //   }
+            
             
         case .ended:
-            if movingBlock.slideView.frame.origin.x < -60*self.screenWidth/375 {
+            guard let _movingBlock = movingBlock else {return}
+            movingBlock = nil
+            if _movingBlock.slideView.frame.origin.x < -60*self.screenWidth/375 {
                 UIView.animate(withDuration: 0.2) {
-                    self.movingBlock.slideView.frame.origin.x = -self.screenWidth*435/375
-                    self.movingBlock.ex.frame.origin.x = -60*self.screenWidth/375
+                    _movingBlock.slideView.frame.origin.x = -self.screenWidth*435/375
+                    _movingBlock.ex.frame.origin.x = -60*self.screenWidth/375
                 }
                 view.removeGestureRecognizer(alertPan)
                 delay(bySeconds: 0.3) {
-                    self.act(blockLongName: self.movingBlock.blockLongName)
+                    self.act(blockLongName: _movingBlock.blockLongName)
                 }
                 
             } else {
                 UIView.animate(withDuration: 0.1) {
-                    self.movingBlock.slideView.frame.origin.x = 0
+                    _movingBlock.slideView.frame.origin.x = 0
                 }
 
             }
@@ -403,7 +405,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     
     @objc func act(blockLongName: String) {
-        
+        print("act!!!")
         stock1.text = ""
         stock2.text = ""
         stock3.text = ""
