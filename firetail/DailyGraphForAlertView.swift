@@ -48,14 +48,16 @@ class DailyGraphForAlertView: UIView {
         
        // print("month: \(month), day: \(day), price \(_graphData)")
         var _set = [Double]()
-        let max = _graphData.max()!
-        let min = _graphData.min()!
+        guard let max = _graphData.max() else {return}
+        guard let min = _graphData.min() else {return}
         let range = max - min
         let x = 59*screenHeight/667
         let y = 140*screenHeight/667
         _set = _graphData.map {1 - ($0 - min / range) } // values go from 0 to 1
         pointSet = _set.map { CGFloat(x + CGFloat($0)*y) }
+        if pointSet.count != 0 {
         __set = [pointSet.first!] + pointSet + [pointSet.last!] //adds extra datapoint to make quadratic curves look good on ends
+        }
 
         data = _graphData.map {CGFloat(($0-min)/range)}
         allStockValues = _graphData.map {String(format:"%.2f", $0)}
@@ -71,9 +73,11 @@ class DailyGraphForAlertView: UIView {
     
     override func draw(_ rect: CGRect) {
         let ctx = UIGraphicsGetCurrentContext()
+        guard ctx != nil else {return}
         ctx!.translateBy(x: 0, y: 5)
         ctx!.scaleBy(x: scale, y: 0.9*scale)
         let path = quadCurvedPath()
+        if points.count != 0 {
         path.addLine(to: CGPoint(x: points.last!.x + 200, y: points.last!.y))
         path.addLine(to: CGPoint(x: points.last!.x + 200, y: -10))
         path.addLine(to: CGPoint(x: 0, y: -10))
@@ -87,7 +91,7 @@ class DailyGraphForAlertView: UIView {
         path.lineWidth = 1
         path.fill()
        // path.stroke()
-        
+        }
         for i in 1..<points.count {
             drawPoint(point: points[i], color: .white, radius: 1)
 
@@ -104,11 +108,13 @@ class DailyGraphForAlertView: UIView {
     
     
     var points = [CGPoint]()
+    
     func quadCurvedPath() -> UIBezierPath {
         let path = UIBezierPath()
         let step = bounds.width / CGFloat(data.count - 1) / (scale * 1.1)
         
         var p1 = CGPoint(x: 0, y: coordXFor(index: 0))
+        points.removeAll()
         points.append(p1)
         path.move(to: p1)
         
@@ -143,6 +149,8 @@ class DailyGraphForAlertView: UIView {
         let v = UIView(frame: CGRect(x: 0, y: -50*screenHeight/667, width: self.frame.width, height: 50*screenHeight/667))
         v.backgroundColor = customColor.black21
         self.addSubview(v)
+        guard points.first != nil else {return path}
+        guard points.last != nil else {return path}
         let w = UIView(frame: CGRect(x: -400, y: -50*screenHeight/667, width: 400, height: 0.9*4*points.first!.y + 55*screenHeight/667))
         w.backgroundColor = customColor.black21
         self.addSubview(w)
@@ -212,8 +220,8 @@ class DailyGraphForAlertView: UIView {
         
         let leftMidPoint  = midPointForPoints(p1: p1, p2: p2)
         let rightMidPoint = midPointForPoints(p1: p2, p2: p3)
-        
-        var controlPoint = midPointForPoints(p1: leftMidPoint, p2: imaginFor(point1: rightMidPoint, center: p2)!)
+        guard let im = imaginFor(point1: rightMidPoint, center: p2) else {return nil}
+        var controlPoint = midPointForPoints(p1: leftMidPoint, p2: im)
         
         
         // this part needs for optimization
@@ -234,7 +242,7 @@ class DailyGraphForAlertView: UIView {
             }
         }
         
-        let imaginContol = imaginFor(point1: controlPoint, center: p2)!
+        guard let imaginContol = imaginFor(point1: controlPoint, center: p2) else {return nil}
         if p2.y < p3.y {
             if imaginContol.y < p2.y {
                 controlPoint.y = p2.y

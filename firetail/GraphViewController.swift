@@ -125,10 +125,10 @@ class GraphViewController: ViewSetup {
     }
     
     @objc private func pickGraph(_ tap: UITapGestureRecognizer) {
-        guard PodVariable.gingerBreadMan.count == 7 else {
-          self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
-            return
-        }
+//        guard PodVariable.gingerBreadMan.count == 7 else {
+//          self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
+//            return
+//        }
         let layerAnimation = CABasicAnimation(keyPath: "path")
         layerAnimation.duration = 0.7
         layerAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
@@ -319,7 +319,10 @@ class GraphViewController: ViewSetup {
     }
     
     func checkDoneSquashing() {
-        // if graphViewSeen.doneSquashing {
+        guard PodVariable.gingerBreadMan.count == 7 else {
+            self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
+            return
+        } //sometimes, for some reason, not all the calayers load, and this can crash the app. probably better to try to reload the layers instead of kicking the user back to the dashboard. but for now... 7th layer is the former 1 day layer
         loading.removeFromSuperview()
         add1YGraph()
         
