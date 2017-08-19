@@ -8,6 +8,7 @@
 
 import UIKit
 import Charts
+import ReachabilitySwift
 
 public struct MyVariables {
     static var gingerBreadMan = CGMutablePath()
@@ -103,6 +104,9 @@ class GraphViewController: ViewSetup {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
+            reachabilityAddNotification()
+        
         UIView.animate(withDuration: 0.5) {
             self.graphViewSeen.alpha = 1.0; self.loading.alpha = 1.0}
     }
@@ -543,6 +547,11 @@ class GraphViewController: ViewSetup {
         }
         
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        reachabilityRemoveNotification()
+    }
+    
 }
 
 

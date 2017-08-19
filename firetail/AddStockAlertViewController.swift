@@ -10,6 +10,7 @@ import UIKit
 import UserNotifications
 import QuartzCore
 import Firebase
+import ReachabilitySwift
 //import FirebaseMessaging
 
 class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIApplicationDelegate {
@@ -77,6 +78,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
         
         
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        reachabilityAddNotification()
     }
     
     override func viewDidLoad() {
@@ -429,4 +433,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
 //            }
 //        }
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        reachabilityRemoveNotification()
+    }
+    
+    
 }

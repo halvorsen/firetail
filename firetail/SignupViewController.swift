@@ -10,6 +10,7 @@ import UIKit
 
 import Firebase
 import FirebaseAuth
+import ReachabilitySwift
 
 class SignupViewController: ViewSetup, UITextFieldDelegate {
     var customColor = CustomColor()
@@ -20,6 +21,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     var textFields = [UITextField]()
     let loadsave = LoadSaveCoreData()
     var tap = UITapGestureRecognizer()
+
     
     //var ti = [String]()
     override func viewDidLoad() {
@@ -196,4 +198,14 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         }
         return false
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        reachabilityAddNotification()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        reachabilityRemoveNotification()
+    }
+    
+    
 }

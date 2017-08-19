@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import ReachabilitySwift
 
 class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
     var customColor = CustomColor()
@@ -18,6 +19,10 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
     var myTextFields = [UITextField]()
     var doneLoading = false
     var backArrow = UIButton()
+    
+    override func viewDidAppear(_ animated: Bool) {
+        reachabilityAddNotification()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -178,6 +183,10 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
             }
         })
         
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        reachabilityRemoveNotification()
     }
     
 }

@@ -16,6 +16,7 @@ import MessageUI
 import Firebase
 import UserNotifications
 import QuartzCore
+import ReachabilitySwift
 
 
 class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -715,6 +716,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         self.myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(DashboardViewController.updateDot), userInfo: nil, repeats: true)
         
+       
+            reachabilityAddNotification()
         
         
     }
@@ -1045,5 +1048,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             
         }
     }
+ 
+    override func viewWillDisappear(_ animated: Bool) {
+        reachabilityRemoveNotification()
+    }
+    
     
 }

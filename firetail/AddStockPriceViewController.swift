@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ReachabilitySwift
 
 class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     var newAlertTicker = String()
@@ -297,6 +298,9 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
           
         }
     }
+    override func viewDidAppear(_ animated: Bool) {
+        reachabilityAddNotification()
+    }
     
     var isFirst = true
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -351,5 +355,11 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         gradient.endPoint = end
         mask.layer.addSublayer(gradient)
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        reachabilityRemoveNotification()
+    }
+    
+    
     
 }

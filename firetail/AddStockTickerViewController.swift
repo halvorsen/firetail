@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ReachabilitySwift
 
 class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     let backArrow = UIButton()
@@ -67,6 +68,9 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
 
     override func viewDidAppear(_ animated: Bool) {
         stockSymbolTextField.becomeFirstResponder()
+       
+            reachabilityAddNotification()
+        
     }
     
     @objc private func back(_ sender: UIButton) {
@@ -156,5 +160,10 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
             destinationViewController.newAlertTicker = newAlertTicker
         }
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        reachabilityRemoveNotification()
+    }
+    
 
 }

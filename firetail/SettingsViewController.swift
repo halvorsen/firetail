@@ -8,6 +8,7 @@
 
 import UIKit
 import MessageUI
+import ReachabilitySwift
 
 class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MFMailComposeViewControllerDelegate {
     var customColor = CustomColor()
@@ -20,6 +21,10 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
     var myPicker = UIPickerView()
     let toolBar = UIToolbar()
     let pickerData = ["Ameritrade", "Etrade", "Scottrade", "Schwab", "Merrill Edge", "Trademonster", "Capital One Investing", "eOption", "Interactive Brokers", "Kapitall", "Lightspeed", "optionsXpress", "Zacks", "Trade King", "Sogo Trade", "Trading Block", "USAA", "Vangaurd", "Wells Fargo", "Robinhood"]
+    
+    override func viewDidAppear(_ animated: Bool) {
+        reachabilityAddNotification()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -255,6 +260,10 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             return true
         }
        
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        reachabilityRemoveNotification()
     }
     
     

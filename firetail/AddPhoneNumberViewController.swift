@@ -8,6 +8,7 @@
 
 import UIKit
 import MessageUI
+import ReachabilitySwift
 
 class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MFMailComposeViewControllerDelegate {
     var customColor = CustomColor()
@@ -26,6 +27,9 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     
     override func viewDidAppear(_ animated: Bool) {
         myTextFields[1].becomeFirstResponder()
+  
+            reachabilityAddNotification()
+        
     }
     
     override func viewDidLoad() {
@@ -265,4 +269,10 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         }
   
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        reachabilityRemoveNotification()
+    }
+    
+    
 }

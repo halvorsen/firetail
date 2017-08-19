@@ -10,11 +10,11 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseCore
-import ReachabilitySwift
+
 
 class LoginViewController: ViewSetup, UITextFieldDelegate {
-    let coverInternet = UIView()
-    let reachability = Reachability()!
+//    let coverInternet = UIView()
+//    let reachability = Reachability()!
     var customColor = CustomColor()
     var login = UIButton()
     var continueB = UIButton()
@@ -40,7 +40,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
   
     override func viewDidAppear(_ animated: Bool) {
         reachabilityAddNotification()
-
     }
     
     override func viewDidLoad() {
@@ -75,21 +74,21 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         firetail.layer.zPosition = 11
         view.addSubview(firetail)
         
-        coverInternet.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        coverInternet.backgroundColor = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
-        
-        let imageView2 = UIImageView()
-        imageView2.frame = CGRect(x: 127*screenWidth/375, y:64*screenHeight/667, width: 122*screenWidth/375, height: 157*screenHeight/667)
-        imageView2.image = #imageLiteral(resourceName: "flames")
-        coverInternet.addSubview(imageView2)
-        let label = UILabel()
-        label.frame = CGRect(x: 0, y:290*screenHeight/667, width: screenWidth, height: 30*screenHeight/667)
-        label.text = "NO INTERNET"
-        label.textColor = .white
-        label.textAlignment = .center
-        label.font = UIFont(name: "Roboto-Bold", size: fontSizeMultiplier*15)
-        coverInternet.addSubview(label)
-        coverInternet.layer.zPosition = 50
+//        coverInternet.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+//        coverInternet.backgroundColor = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
+//        
+//        let imageView2 = UIImageView()
+//        imageView2.frame = CGRect(x: 127*screenWidth/375, y:64*screenHeight/667, width: 122*screenWidth/375, height: 157*screenHeight/667)
+//        imageView2.image = #imageLiteral(resourceName: "flames")
+//        coverInternet.addSubview(imageView2)
+//        let label = UILabel()
+//        label.frame = CGRect(x: 0, y:290*screenHeight/667, width: screenWidth, height: 30*screenHeight/667)
+//        label.text = "NO INTERNET"
+//        label.textColor = .white
+//        label.textAlignment = .center
+//        label.font = UIFont(name: "Roboto-Bold", size: fontSizeMultiplier*15)
+//        coverInternet.addSubview(label)
+//        coverInternet.layer.zPosition = 50
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore")
         if launchedBefore  {
@@ -137,18 +136,18 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
        myTextFields[1].resignFirstResponder()
     }
     
-    func reachabilityAddNotification() {
-        //declare this property where it won't go out of scope relative to your listener
-        
-        //declare this inside of viewWillAppear
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged),name: ReachabilityChangedNotification,object: reachability)
-        do{
-            try reachability.startNotifier()
-        }catch{
-            print("could not start reachability notifier")
-        }
-    }
+//    func reachabilityAddNotification() {
+//        //declare this property where it won't go out of scope relative to your listener
+//        
+//        //declare this inside of viewWillAppear
+//        
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged),name: ReachabilityChangedNotification,object: reachability)
+//        do{
+//            try reachability.startNotifier()
+//        }catch{
+//            print("could not start reachability notifier")
+//        }
+//    }
     
     func loadUserInfoFromFirebase(firebaseUsername: String) {
         
@@ -248,37 +247,37 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         
     }
     
-    func reachabilityChanged(note: NSNotification) {
-        
-        let reachability = note.object as! Reachability
-        
-        if reachability.isReachable {
-        
-            removeNoInternetCover()
-                
-            if reachability.isReachableViaWiFi {
-                print("Reachable via WiFi")
-            } else {
-                print("Reachable via Cellular")
-            }
-        } else {
-            print("Network not reachable")
-            DispatchQueue.main.async {
-            self.addNoInternetCover()
-            }
-        }
-    }
-    func removeNoInternetCover() {
-        if coverInternet.isDescendant(of: view) {
-        coverInternet.removeFromSuperview()
-        }
-    }
-    func addNoInternetCover() {
-        
-        
-        view.addSubview(coverInternet)
-        
-    }
+//    func reachabilityChanged(note: NSNotification) {
+//        
+//        let reachability = note.object as! Reachability
+//        
+//        if reachability.isReachable {
+//        
+//            removeNoInternetCover()
+//                
+//            if reachability.isReachableViaWiFi {
+//                print("Reachable via WiFi")
+//            } else {
+//                print("Reachable via Cellular")
+//            }
+//        } else {
+//            print("Network not reachable")
+//            DispatchQueue.main.async {
+//            self.addNoInternetCover()
+//            }
+//        }
+//    }
+//    func removeNoInternetCover() {
+//        if coverInternet.isDescendant(of: view) {
+//        coverInternet.removeFromSuperview()
+//        }
+//    }
+//    func addNoInternetCover() {
+//        
+//        
+//        view.addSubview(coverInternet)
+//        
+//    }
 
     
     func textFieldDidBeginEditing(_ textField : UITextField)
@@ -451,4 +450,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             addView.newAlertTicker = "TICKER"
         }
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        reachabilityRemoveNotification()
+    }
+    
+    
 }
