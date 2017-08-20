@@ -56,16 +56,16 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         coverView.backgroundColor = customColor.black33
         coverView.layer.zPosition = 10
         view.addSubview(coverView)
-        imageView.frame.size = CGSize(width: 84*screenWidth/375, height: 108*screenHeight/667)
-        imageView.image = #imageLiteral(resourceName: "logo161x207")
-        imageView.frame.origin.x = 146*screenWidth/375
-        imageView.frame.origin.y = 150*screenHeight/667
+        imageView.frame.size = CGSize(width: 98*screenWidth/375, height: 95*screenHeight/667)
+        imageView.image = #imageLiteral(resourceName: "logo98x95")
+        imageView.frame.origin.x = 140*screenWidth/375
+        imageView.frame.origin.y = 170*screenHeight/667
         imageView.layer.zPosition = 11
         view.addSubview(imageView)
         
         //reachabilityAddNotification()
         
-        firetail.frame = CGRect(x: 0, y: 334*screenHeight/667, width: screenWidth, height: 58*screenHeight/667)
+        firetail.frame = CGRect(x: 0, y: 328*screenHeight/667, width: screenWidth, height: 58*screenHeight/667)
         firetail.text = "FIRETAIL"
         firetail.font = UIFont(name: "Roboto-Bold", size: 27*fontSizeMultiplier)
         firetail.textAlignment = .center
