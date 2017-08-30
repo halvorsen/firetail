@@ -21,7 +21,10 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     var myPicker = UIPickerView()
     let toolBar = UIToolbar()
     let myLoadSave = LoadSaveCoreData()
-    let pickerData = ["Ameritrade", "Etrade", "Scottrade", "Schwab", "Merrill Edge", "Trademonster", "Capital One Investing", "eOption", "Interactive Brokers", "Kapitall", "Lightspeed", "optionsXpress", "Zacks", "Trade King", "Sogo Trade", "Trading Block", "USAA", "Vangaurd", "Wells Fargo", "Robinhood"]
+    let myPickerBackground = UIColor(colorLiteralRed: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
+    let toolBarButtonColor = UIColor(colorLiteralRed: 140/255, green: 140/255, blue: 140/255, alpha: 1.0)
+    let toolBarColor = UIColor(colorLiteralRed: 64/255, green: 64/255, blue: 64/255, alpha: 1.0)
+    let pickerData = ["TD Ameritrade", "Chase", "Etrade", "Fidelity", "Scottrade", "Schwab", "Merrill Edge", "Trademonster", "Capital One Investing", "eOption", "Interactive Brokers", "TradeStation", "Ally", "Kapitall", "Lightspeed", "optionsXpress", "Zacks", "Trade King", "Sogo Trade", "Trading Block", "USAA", "Bank of America", "Vangaurd", "Wells Fargo", "Firstrade", "Robinhood"]
     
     var alertInfo = (String(),String(),Double(),Bool(),Bool(),Bool(),Bool(),Bool(),Bool(),String(),Bool(),String(),String())
     
@@ -106,21 +109,31 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         myPicker.dataSource = self
         myPicker.delegate = self
         myPicker.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 177*screenHeight/667)
-        myPicker.backgroundColor = .white
+      //  myPicker.backgroundColor = .white
         myPicker.showsSelectionIndicator = true
         
         
-        toolBar.barStyle = UIBarStyle.default
+        toolBar.barStyle = UIBarStyle.black
         toolBar.isTranslucent = true
         toolBar.tintColor = UIColor(red: 21/255, green: 127/255, blue: 249/255, alpha: 1)
         toolBar.sizeToFit()
-        //Fixit: maybe something screwy here with these buttons, came up as Addviewcontrller functions and i switch them to settings
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(SettingsViewController.donePicker))
-        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(SettingsViewController.donePicker))
         
-        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(SettingsViewController.donePicker))
+        doneButton.setTitleTextAttributes([NSForegroundColorAttributeName: toolBarButtonColor], for: .normal)
+        
+        let brokerLabel = UIBarButtonItem(title: "Broker", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        brokerLabel.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.white], for: .normal)
+        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target:nil, action:nil)
+        
+        
+        
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(SettingsViewController.donePicker))
+        cancelButton.setTitleTextAttributes([NSForegroundColorAttributeName: toolBarButtonColor], for: .normal)
+        
+        toolBar.setItems([cancelButton, flexible, brokerLabel, flexible, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
+        toolBar.barTintColor = toolBarColor
+
         
         myTextFields[2].inputView = myPicker
         myTextFields[2].inputAccessoryView = toolBar
@@ -135,11 +148,15 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        pickerView.backgroundColor = myPickerBackground
         return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickerData.count
+    }
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        return NSAttributedString(string: pickerData[row], attributes: [NSForegroundColorAttributeName:UIColor.white])
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {

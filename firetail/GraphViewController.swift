@@ -60,7 +60,14 @@ class GraphViewController: ViewSetup {
         "USAA":"https://www.usaa.com/inet/wc/investing-stocks-bonds-brokerage-main?akredirect=true",
         "Vangaurd":"https://investor.vanguard.com/my-account/log-on",
         "Wells Fargo":"https://connect.secure.wellsfargo.com/auth/login/present?origin=cob&LOB=CONS",
-        "Robinhood":"https://www.robinhood.com/signup/login/"]
+        "Robinhood":"https://www.robinhood.com/signup/login/",
+        "Fidelity": "https://login.fidelity.com/ftgw/Fas/Fidelity/RtlCust/Login/Init",
+        "TradeStation": "https://clientcenter.tradestation.com/",
+        "Ally": "https://secure.ally.com/",
+        "Bank of America": "https://www.bankofamerica.com/sitemap/hub/signin.go",
+        "Firstrade": "https://invest.firstrade.com/cgi-bin/login",
+        "Chase": "https://jpmorgan.chase.com/"
+    ]
     
     
     
