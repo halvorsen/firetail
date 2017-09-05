@@ -36,8 +36,10 @@ class Google {
         end.year = 0
         fetchFromGoogle(yearStart: years, dateComponentStart: start, dateComponentEnd: end, ticker: ticker, index: index)
         
-       
-        let url = URL(string: "https://www.google.com/finance/info?q=" + index + ":" + ticker)
+        var url = URL(string: "https://www.google.com/finance/info?q=" + ticker)
+        if index == "otcmkts" || index == "OTCMKTS" {
+        url = URL(string: "https://www.google.com/finance/info?q=" + index + ":" + ticker)
+        }
         if let usableUrl = url {
             let request = URLRequest(url: usableUrl)
             let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
@@ -74,6 +76,7 @@ class Google {
                 let componentDate = Calendar.current.dateComponents([.year, .month, .day], from: Date())
                 let monthToday = self.monthStrings[componentDate.month!]
                 let dayToday = componentDate.day!
+                print("String Price: \(stringPrice)")
                 guard Double(stringPrice) != nil else {print("guard1");return}
                 self.basket[1] = [(Double(stringPrice)!,monthToday,dayToday)]
                 
