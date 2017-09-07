@@ -440,7 +440,7 @@ class GraphViewController: ViewSetup {
     var keys = [String]()
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         let myAlpha = Alpha()
-        myAlpha.get20YearHistoricalData(ticker: stockName.uppercased()) { (stockDataTuple) in
+        myAlpha.get20YearHistoricalData(ticker: stockName.uppercased(), isOneYear: false) { (stockDataTuple) in
             let (_stockData,_,error) = stockDataTuple
             guard error == nil else {
                 self.performSegue(withIdentifier: "fromGraphToMain", sender: self)

@@ -953,7 +953,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         for (_,myTuple) in Set1.alerts {
             if myTuple.timestamp != 1 {
-                let currentTimestamp = Int(Date().timeIntervalSince1970 * 1000)
+                print(Date().timeIntervalSince1970)
+                print(Int.max)
+                let currentTimestamp = Int(Date().timeIntervalSince1970)
                 let seconds = currentTimestamp - myTuple.timestamp
                 let dayOfTheWeek = Date().dayNumberOfWeek()!
                 let secondsInADay = 86400000
