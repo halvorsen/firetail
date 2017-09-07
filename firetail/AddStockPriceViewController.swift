@@ -257,8 +257,8 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     
     private func prepareGraph(result: @escaping (_ dateArray: [(String,Int)]?,_ closings: [Double]?) -> Void) {
        
-        let myGoogle = Google()
-        myGoogle.historicalPrices(years: 1, ticker: self.newAlertTicker) { (stockDataTuple) in
+        let myAlpha = Alpha()
+        myAlpha.get20YearHistoricalData(ticker: self.newAlertTicker) { (stockDataTuple) in
             let (_stockData,dates,error) = stockDataTuple
             guard let stockData = _stockData else {return}
             guard stockDataTuple.0!.count > 0 else {return}

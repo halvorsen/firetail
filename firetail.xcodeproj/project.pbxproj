@@ -28,6 +28,7 @@
 		06478E711EE5DA450016DF88 /* AddStockPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */; };
 		06478E751EE610BC0016DF88 /* AddStockAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */; };
 		0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0672601A1E67BD5B00F54500 /* StockGraphView2.swift */; };
+		06813A721F616BEE00A420EF /* Alpha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06813A711F616BEE00A420EF /* Alpha.swift */; };
 		06866FA61EDFA18B003D0C46 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06866FA51EDFA18B003D0C46 /* StoreKit.framework */; };
 		068D8D251E72F0D700E422DB /* Dot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068D8D241E72F0D700E422DB /* Dot.swift */; };
 		069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1211E5382D4003BDFE2 /* AppDelegate.swift */; };
@@ -68,6 +69,7 @@
 		06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockPriceViewController.swift; sourceTree = "<group>"; };
 		06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockAlertViewController.swift; sourceTree = "<group>"; };
 		0672601A1E67BD5B00F54500 /* StockGraphView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView2.swift; sourceTree = "<group>"; };
+		06813A711F616BEE00A420EF /* Alpha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alpha.swift; sourceTree = "<group>"; };
 		06866FA51EDFA18B003D0C46 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		068D8D241E72F0D700E422DB /* Dot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dot.swift; sourceTree = "<group>"; };
 		069FD11E1E5382D4003BDFE2 /* firetail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = firetail.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -180,6 +182,7 @@
 				06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */,
 				062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */,
 				06F15E8F1ED7B3ED00288413 /* Google.swift */,
+				06813A711F616BEE00A420EF /* Alpha.swift */,
 				0617DFA01E7B6F81006D73C5 /* GridLine.swift */,
 				06FDA8DF1E71B9960043BC90 /* Sets.swift */,
 				0672601A1E67BD5B00F54500 /* StockGraphView2.swift */,
@@ -371,6 +374,7 @@
 				0609E4CF1E649596005965C5 /* LoginViewController.swift in Sources */,
 				0617DFA51E7DBDC7006D73C5 /* LoadSaveCoreData.swift in Sources */,
 				0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */,
+				06813A721F616BEE00A420EF /* Alpha.swift in Sources */,
 				068D8D251E72F0D700E422DB /* Dot.swift in Sources */,
 				06478E711EE5DA450016DF88 /* AddStockPriceViewController.swift in Sources */,
 				069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */,

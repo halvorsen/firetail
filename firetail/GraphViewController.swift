@@ -439,8 +439,8 @@ class GraphViewController: ViewSetup {
     // let serialQueue = DispatchQueue(label: "queuename")
     var keys = [String]()
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
-        let myGoogle = Google()
-        myGoogle.historicalPrices(years: 10, ticker: stockName.uppercased()) { (stockDataTuple) in
+        let myAlpha = Alpha()
+        myAlpha.get20YearHistoricalData(ticker: stockName.uppercased()) { (stockDataTuple) in
             let (_stockData,_,error) = stockDataTuple
             guard error == nil else {
                 self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
