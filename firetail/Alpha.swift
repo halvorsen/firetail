@@ -17,26 +17,27 @@ class Alpha {
         var rawDates = [String]()
         let monthStrings =
             ["zero","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-        
-        
+       
         let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=\(ticker.uppercased())&outputsize=full&apikey=PG1MGP38L4K05H5T")
         if let url = url {
             let request = URLRequest(url: url)
-            
+           
             let task = URLSession.shared.dataTask(with: request, completionHandler: {
                 (data, response, error) in
-                
+              
                 if error != nil {
                     print(error!.localizedDescription)
+                  
                     result((nil,nil,error))
                 }
                 else {
-                    
+                   
                     var json = [String: [String:Any]]()
                     do {
                         
                         if let _json = try JSONSerialization.jsonObject(with: data!) as? [String: [String:Any]] {
                             json = _json
+                            
                         }
                     }
                     catch {
@@ -45,6 +46,7 @@ class Alpha {
                     
                     for (keyRoot,valueRoot) in json {
                         if keyRoot == "Time Series (Daily)" {
+                          
                             for (date,_) in valueRoot {
                                 rawDates.append(date)
                                 
@@ -55,7 +57,7 @@ class Alpha {
                     let sortedDates = rawDates.sorted()
                     
                     if let datas = json["Time Series (Daily)"] {
-                        
+                      
                         for dateString in sortedDates {
                             
                             let dateFormatter = DateFormatter()
@@ -69,6 +71,7 @@ class Alpha {
                             let day = components.day
                             _dates.append((monthStrings[month!],day!))
                             if let packet = datas[dateString] as? [String:String] {
+                           
                                 for (key,value) in packet {
                                     if key == "5. adjusted close" {
                                         
@@ -81,19 +84,18 @@ class Alpha {
                         
                         
                         if isOneYear {
-                            guard _prices.count > 253 else {return}
-                            _prices = Array(_prices[(_prices.count-253)..<_prices.count])
-                            _dates = Array(_dates[(_dates.count-253)..<_dates.count])
+                            
+                            if _prices.count > 253  {
+                                _prices = Array(_prices[(_prices.count-253)..<_prices.count])
+                                _dates = Array(_dates[(_dates.count-253)..<_dates.count])
+                            }
                         } else { //ten years
-                            guard _prices.count > 2521 else {return}
-                            _prices = Array(_prices[(_prices.count-2520)..<_prices.count])
-                            _dates = Array(_dates[(_dates.count-2520)..<_dates.count])
+                            if _prices.count > 2521  {
+                                _prices = Array(_prices[(_prices.count-2520)..<_prices.count])
+                                _dates = Array(_dates[(_dates.count-2520)..<_dates.count])
+                            }
                         }
-                        print("COUNT")
-                        print(_prices.count)
-                        print(_dates.count)
-                        print(_dates)
-                        print(_prices)
+                    
                         result((_prices, _dates, nil))
                         
                     }
