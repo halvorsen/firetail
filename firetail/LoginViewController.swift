@@ -311,10 +311,10 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     }
                     
                     j += 1
-                    if (j == self.ti.count && self.noNils) || (6 == j && self.noNils) {
-                        
+                    if (j >= self.ti.count && self.noNils) || (j > 5 && self.noNils) {
+                        self.delay(bySeconds: 1.0) {
                         self.cont()
-                        
+                        }
                     } else if !self.noNils {
                         self.ti = self._ti
                         self.fetch()
@@ -409,8 +409,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     var isFirstTimeSeguing = true
     private func cont() {
+        print("Set1.oneyearDictionary")
+        print(Set1.oneYearDictionary)
         
-        //  if doneLoading && !retry { // check if alert stocks have loaded
         if ti == [""] {
             if isFirstTimeSeguing {
                 isFirstTimeSeguing = false

@@ -148,18 +148,26 @@ class DailyGraphForAlertView: UIView {
         }
         let v = UIView(frame: CGRect(x: 0, y: -50*screenHeight/667, width: self.frame.width, height: 50*screenHeight/667))
         v.backgroundColor = customColor.black21
+      
         self.addSubview(v)
+        
         guard points.first != nil else {return path}
         guard points.last != nil else {return path}
         let w = UIView(frame: CGRect(x: -400, y: -50*screenHeight/667, width: 400, height: 0.9*4*points.first!.y + 55*screenHeight/667))
         w.backgroundColor = customColor.black21
+        
         self.addSubview(w)
+        
         let ww = UIView(frame: CGRect(x: self.frame.maxX, y: -50*screenHeight/667, width: 400, height: 0.9*4*points.last!.y + 55*screenHeight/667))
         ww.backgroundColor = customColor.black21
+      
         self.addSubview(ww)
+        
         let extraBottomGray = UIView(frame: CGRect(x: 0, y: 160*screenHeight/667, width: screenWidth*5, height: 30*screenHeight/667))
         extraBottomGray.backgroundColor = customColor.black33
+     
         self.addSubview(extraBottomGray)
+        
         
        
         for i in 1..<points.count {
@@ -173,7 +181,9 @@ class DailyGraphForAlertView: UIView {
             l.textColor = .white
             l.textAlignment = .center
             l.alpha = 0.0
+            
             self.addSubview(l)
+            
             labels.append(l)
             
             let k = UILabel()
@@ -183,14 +193,18 @@ class DailyGraphForAlertView: UIView {
             k.textColor = customColor.whiteAlpha30
             k.textAlignment = .center
             k.alpha = 0.0
+         
             self.addSubview(k)
+            
             dayLabels.append(k)
             
             
             let grid = GridLine()
             grid.frame = CGRect(x: 4*points[i].x, y: -100*screenWidth/667, width: screenWidth/375, height: 245*screenHeight/667)
             grid.backgroundColor = customColor.whiteAlpha
+       
             self.addSubview(grid)
+            
             grids.append(grid)
 
         }

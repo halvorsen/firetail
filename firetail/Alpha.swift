@@ -81,9 +81,11 @@ class Alpha {
                         
                         
                         if isOneYear {
+                            guard _prices.count > 253 else {return}
                             _prices = Array(_prices[(_prices.count-253)..<_prices.count])
                             _dates = Array(_dates[(_dates.count-253)..<_dates.count])
                         } else { //ten years
+                            guard _prices.count > 2521 else {return}
                             _prices = Array(_prices[(_prices.count-2520)..<_prices.count])
                             _dates = Array(_dates[(_dates.count-2520)..<_dates.count])
                         }

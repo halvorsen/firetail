@@ -248,7 +248,7 @@ class GraphViewController: ViewSetup {
     var yVals = [String:(l1:String,l2:String,l3:String,l4:String,l5:String)]()
     
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
-        
+        print("i:\(i)")
         if stockData.1[self.i] != nil {
             
             let graphView = StockGraphView2(stockData: stockData.1[self.i]!, key: stockData.0[self.i], cubic: true)
@@ -315,15 +315,18 @@ class GraphViewController: ViewSetup {
             
             
             callCorrectGraph2(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
+                DispatchQueue.main.async {
+                    
                 
                 if stockData.0.count == 7 {
-                    
+                    print("stockdataCount111: \(stockData.1.count)")
                     for i in 0..<stockData.0.count {
                         self.orderOfGraphs[stockData.0[i]] = i
                         self.orderofGraphsInverse[i] = stockData.0[i]
                     }
                     
                     self.implementDrawSubviews(stockData: stockData)}
+                }
                 
             }
         }
@@ -446,13 +449,6 @@ class GraphViewController: ViewSetup {
                 self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
                 // had this error to "cancelled" once now just sending back to the Dashboard if an error occures. instead of showing an alert.
                 
-                //                    let refreshAlert = UIAlertController(title: "", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                //
-                //                    refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-                //                        self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
-                //                    }))
-                //
-                //                    self.present(refreshAlert, animated: true, completion: nil)
                 
                 return
             }
@@ -480,6 +476,7 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     }
+                    stockDatas.append(stockData2)
                 case "5y":
                     if amount < 252*5 {
                         for i in 0..<amount {
@@ -490,6 +487,7 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     }
+                    stockDatas.append(stockData2)
                 case "10y":
                     if amount < 252*10 + 20 {
                         for i in 0..<amount {
@@ -500,6 +498,7 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     }
+                    stockDatas.append(stockData2)
                 case "1d":
                     for i in (amount - 55)..<amount {
                         stockData2.closingPrice.append(__stockData[i])
@@ -508,7 +507,7 @@ class GraphViewController: ViewSetup {
                     //                        stockData2.closingPrice.append(stockData[i])
                     //                    }
                     // stockData2.closingPrice.append(stockData[amount - 1])
-                    
+                    stockDatas.append(stockData2)
                 case "5d":
                     if amount < 5 {
                         for i in 0..<amount {
@@ -519,6 +518,7 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     }
+                    stockDatas.append(stockData2)
                 case "1m":
                     if amount < 252/12 {
                         for i in 0..<amount {
@@ -529,6 +529,7 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     }
+                    stockDatas.append(stockData2)
                 case "3m":
                     if amount < 252/4 {
                         for i in 0..<amount {
@@ -539,12 +540,14 @@ class GraphViewController: ViewSetup {
                             stockData2.closingPrice.append(__stockData[i])
                         }
                     }
+                    stockDatas.append(stockData2)
+                    result((list,stockDatas))
                 default: break
                 }
-                stockDatas.append(stockData2)
+                
                 
             }
-            result((list,stockDatas))
+            
             //FIXIT add error message
             //                }, { (error) in
             //                    self.userWarning(title: "", message: error.description)
