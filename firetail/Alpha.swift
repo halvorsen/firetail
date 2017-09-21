@@ -11,6 +11,7 @@
 import Foundation
 
 class Alpha {
+    let cacheManager = CacheManager()
     func get20YearHistoricalData(ticker: String, isOneYear: Bool = true, result: @escaping (_ stockDataTuple:([Double]?,[(String,Int)]?,Error?)) -> Void) {
         var _prices = [Double]()
         var _dates = [(String,Int)]()
@@ -95,7 +96,13 @@ class Alpha {
                                 _dates = Array(_dates[(_dates.count-2520)..<_dates.count])
                             }
                         }
-                    
+                        var _days = [Int]()
+                        var _months = [String]()
+                        for i in 0..<_prices.count {
+                            _days.append(_dates[i].1)
+                            _months.append(_dates[i].0)
+                        }
+                        self.cacheManager.saveStockData(ticker: ticker, prices: _prices, days: _days, months: _months)
                         result((_prices, _dates, nil))
                         
                     }

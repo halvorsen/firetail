@@ -175,8 +175,10 @@ class ViewSetup: UIViewController {
 
     func getOneYearData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
         let myAlpha = Alpha()
+        print("ticker: \(stockName.uppercased())")
         myAlpha.get20YearHistoricalData(ticker: stockName.uppercased()) { (stockDataTuple) in
             print("got one set")
+            
             let (_stockData,_,error) = stockDataTuple
             guard error == nil else {
                 

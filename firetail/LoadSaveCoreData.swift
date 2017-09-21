@@ -7,7 +7,7 @@
 //
 
 import CoreData
-import UIKit
+import Foundation
 import FirebaseCore
 import Firebase
 
@@ -44,10 +44,37 @@ class LoadSaveCoreData {
         }
         Set1.userAlerts = _userAlerts
     }
+    private var persistentContainer: NSPersistentContainer = {
+        
+        let container = NSPersistentContainer(name: "firetail")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+    
+    // MARK: - Core Data Saving support
+    
+    private func saveContext () {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
+
 
     func saveUsername(username: String) {
-        let appDel = UIApplication.shared.delegate as! AppDelegate
-        let context = appDel.persistentContainer.viewContext
+        
+        let context = persistentContainer.viewContext
         let entity = NSEntityDescription.insertNewObject(forEntityName: "Info", into: context)
         entity.setValue(username, forKey: "username")
         do {
@@ -69,8 +96,7 @@ class LoadSaveCoreData {
     func loadUsername() {
         var resultsNameRequest = [AnyObject]()
    
-        let appDel = (UIApplication.shared.delegate as! AppDelegate)
-        let context = appDel.persistentContainer.viewContext
+        let context = persistentContainer.viewContext
         
         let nameRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Info")
         

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13240" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Entity1" representedClassName="Entity1" syncable="YES" codeGenerationType="class">
+        <attribute name="bool1" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="date1" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="days" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="double1" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="int1" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="months" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="prices" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="string1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="trans1" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="years" optional="YES" attributeType="Transformable" syncable="YES"/>
+    </entity>
+    <entity name="Entity2" representedClassName="Entity2" syncable="YES" codeGenerationType="class">
+        <attribute name="double1" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="int1" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="string1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="trans1" optional="YES" attributeType="Transformable" syncable="YES"/>
+    </entity>
+    <entity name="Entity3" representedClassName="Entity3" syncable="YES" codeGenerationType="class">
+        <attribute name="date1" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="string0" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string2" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string3" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string4" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string5" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string6" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string7" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string8" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string9" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string10" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string11" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string12" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string13" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string14" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="string15" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="trans1" optional="YES" attributeType="Transformable" syncable="YES"/>
+    </entity>
+    <entity name="Info" representedClassName="Info" syncable="YES" codeGenerationType="class">
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Entity1" positionX="-54" positionY="36" width="128" height="195"/>
+        <element name="Entity2" positionX="-45" positionY="45" width="128" height="105"/>
+        <element name="Entity3" positionX="-27" positionY="54" width="128" height="315"/>
+        <element name="Info" positionX="-54" positionY="27" width="128" height="60"/>
+    </elements>
+</model>
