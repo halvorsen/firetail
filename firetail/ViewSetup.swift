@@ -9,78 +9,6 @@
 import UIKit
 import ReachabilitySwift
 
-
-struct CustomColor {
-    
-    
-    //yellow
-    let yellow = UIColor(red: 254/255, green: 203/255, blue: 9/255, alpha: 1.0)
-    
-    //red
-    let red = UIColor(red: 228/255, green: 81/255, blue: 81/255, alpha: 1.0)
-    
-    //gray
-    let gray = UIColor(red: 41/255, green: 41/255, blue: 41/255, alpha: 1.0)
-    
-    //background
-    let background = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
-    
-    //gridGray
-    let gridGray = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.05)
-    
-    //black
-    let black = UIColor(red: 23/255, green: 23/255, blue: 23/255, alpha: 1.0)
-    
-    //white
-    let white = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
-    
-    //white209
-    let white209 = UIColor(red: 209/255, green: 209/255, blue: 209/255, alpha: 1.0)
-    //white128
-    let white128 = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0)
-    //white68
-    let white68 = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 1.0)
-    //white77
-    let white77 = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1.0)
-    //white216
-    let white216 = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
-    //white153
-    let white153 = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
-    //white115
-    let white115 = UIColor(red: 115/255, green: 115/255, blue: 115/255, alpha: 1.0)
-    //white229
-    let white229 = UIColor(red: 229/255, green: 229/255, blue: 229/255, alpha: 1.0)
-    //white249
-    let white249 = UIColor(red: 249/255, green: 249/255, blue: 249/255, alpha: 1.0)
-    //whitealpha
-    let whiteAlpha = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.1)
-    //whitealpha30
-    let whiteAlpha30 = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.3)
-    
-    //labelGray
-    let labelGray = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
-    
-    //alertLines
-    let alertLines = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 0.1)
-    
-    //fieldLines
-    let fieldLines = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 0.1)
-    
-    //black33
-    let black33 = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
-    let black42Alpha0 = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 0.0)
-    //black42
-    let black42 = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
-    //black30
-    let black30 = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1.0)
-    //black24
-    let black24 = UIColor(red: 24/255, green: 24/255, blue: 24/255, alpha: 1.0)
-    //black14
-    let black14 = UIColor(red: 14/255, green: 14/255, blue: 14/255, alpha: 1.0)
-    //black21
-    let black21 = UIColor(red: 21/255, green: 21/255, blue: 21/255, alpha: 1.0)
-}
-
 class ViewSetup: UIViewController {
     
     //Reachability
@@ -155,84 +83,19 @@ class ViewSetup: UIViewController {
     }
     
     func addNoInternetCover() {
-        
-        
         view.addSubview(coverInternet)
-        
     }
-    
-    
-    
+
     var screenWidth: CGFloat {get{return UIScreen.main.bounds.width}}
     var screenHeight: CGFloat {get{return UIScreen.main.bounds.height}}
     var fontSizeMultiplier: CGFloat {get{return UIScreen.main.bounds.width / 375}}
     var topMargin: CGFloat {get{return (269/1332)*UIScreen.main.bounds.height}}
     
-    
     override var prefersStatusBarHidden: Bool {
         return true
     }
 
-    func getOneYearData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
-        let myAlpha = Alpha()
-        print("ticker: \(stockName.uppercased())")
-        myAlpha.get20YearHistoricalData(ticker: stockName.uppercased()) { (stockDataTuple) in
-            print("got one set")
-            
-            let (_stockData,_,error) = stockDataTuple
-            guard error == nil else {
-                
-                self.userWarning(title: "", message: error!.localizedDescription)
-                
-                return
-            }
-            
-            guard let stockData = _stockData else {return}
-            guard stockDataTuple.0!.count > 0  else {return}
-           
-            //let _mo = ["0","11","10","9","8","7","6","5","4","3","2","1","0"]
-            //this code turns the dashboard compare graph into month text instead of numbers
-            
-            let date = Date()
-            let calendar = Calendar.current
-            let year = calendar.component(.year, from: date)
-            let mo = ["","January," + " " + String(year - 1),
-                      "Febrary," + " " + String(year - 1),
-                      "March," + " " + String(year - 1),
-                      "April," + " " + String(year - 1),
-                      "May," + " " + String(year - 1),
-                      "June," + " " + String(year - 1),
-                      "July," + " " + String(year - 1),
-                      "August," + " " + String(year - 1),
-                      "September," + " " + String(year - 1),
-                      "October," + " " + String(year - 1),
-                      "November," + " " + String(year - 1),
-                      "December," + " " + String(year - 1),
-                      "January," + " " + String(year),
-                        "Febrary," + " " + String(year),
-                        "March," + " " + String(year),
-                        "April," + " " + String(year),
-                        "May," + " " + String(year),
-                        "June," + " " + String(year),
-                        "July," + " " + String(year),
-                        "August," + " " + String(year),
-                        "September," + " " + String(year),
-                        "October," + " " + String(year),
-                        "November," + " " + String(year),
-                        "December," + " " + String(year)]
-            var _mo = [String]()
-            let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-            for i in 0..<13 {
-                _mo.append(mo[dComponent.month! + i])
-            }
-            
-            Set1.month = _mo
-         
-            result(stockData, stockName)
-            
-            }
-
-    }
+    
     
     func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor, act:
         Selector, addSubview: Bool, alignment: UIControlContentHorizontalAlignment = .left) {

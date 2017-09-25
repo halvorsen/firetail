@@ -13,8 +13,7 @@ import FirebaseCore
 
 
 class LoginViewController: ViewSetup, UITextFieldDelegate {
-//    let coverInternet = UIView()
-//    let reachability = Reachability()!
+
     var customColor = CustomColor()
     var login = UIButton()
     var continueB = UIButton()
@@ -31,12 +30,12 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var authenticated = false
     var noNils = true
     var tiLast = String()
-    var _ti = [String]()
+ //   var _ti = [String]()
     let firetail = UILabel()
     let myLoadSaveCoreData = LoadSaveCoreData()
     var isFirstLoading = true
     var tap = UITapGestureRecognizer()
-    
+    var appLoadingData = AppLoadingData()
   
     override func viewDidAppear(_ animated: Bool) {
         reachabilityAddNotification()
@@ -107,7 +106,13 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 self.authenticated = true
                 if Set1.username != "none" {
                    if self.isFirstLoading {
-                    self.loadUserInfoFromFirebase(firebaseUsername: Set1.username)
+                    self.appLoadingData.loadUserInfoFromFirebase(firebaseUsername: Set1.username) {haveNoAlerts in
+                        self.ti = Set1.ti
+                        if haveNoAlerts {
+                            self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
+                        }
+                        
+                    }
                     
                         self.isFirstLoading = false
                     }
@@ -149,99 +154,99 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
 //        }
 //    }
     
-    func loadUserInfoFromFirebase(firebaseUsername: String) {
-        
-        let ref = Database.database().reference()
-        
-        ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            let value = snapshot.value as? NSDictionary
-           // Set1.token = value?["token"] as? String ?? "none"
-            Set1.fullName = value?["fullName"] as? String ?? "none"
-            Set1.email = value?["email"] as? String ?? "none"
-            Set1.phone = value?["phone"] as? String ?? "none"
-            Set1.premium = value?["premium"] as? Bool ?? false
-           // Set1.alertCount = value?["numOfAlerts"] as? Int ?? 0
-            Set1.brokerName = value?["brokerName"] as? String ?? "none"
-            Set1.brokerURL = value?["brokerURL"] as? String ?? "none"
-            Set1.weeklyAlerts = value?["weeklyAlerts"] as? [String:Int] ?? ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
-            //if Set1.userAlerts.count > 0 {
-            Set1.userAlerts = value?["userAlerts"] as? [String:String] ?? [:]
-         //   }
-            
-            if Set1.userAlerts.count > 0 {
-
-                var alertID: [String] {
-                    var aaa = [String]()
-                    for i in 0..<Set1.userAlerts.count {
-                        switch i {
-                        case 0...9:
-                            aaa.append("alert00" + String(i))
-                        case 10...99:
-                            aaa.append("alert0" + String(i))
-                        case 100...999:
-                            aaa.append("alert" + String(i))
-                        default:
-                            break
-                        }
-                    }
-                    return aaa
-                }
-                let uA = Set1.userAlerts
-                for i in (0..<Set1.userAlerts.count).reversed() {
-                    if uA[alertID[i]] != nil {
-                    ref.child("alerts").child(uA[alertID[i]]!).observeSingleEvent(of: .value, with: { (snapshot) in
-                        
-                        let _deleted = value?["deleted"] as? Bool ?? false
-                        
-                        if !_deleted {
-                            
-                            let _name = uA[alertID[i]]!
-                            let value = snapshot.value as? NSDictionary
-                            let _isGreaterThan = value?["isGreaterThan"] as? Bool ?? false
-                            let _price = value?["priceString"] as? String ?? ""
-                            let _email = value?["email"] as? Bool ?? false
-                            let _flash = value?["flash"] as? Bool ?? false
-                            let _sms = value?["sms"] as? Bool ?? false
-                            let _ticker = value?["ticker"] as? String ?? ""
-                            Set1.ti.append(_ticker)
-                            let _push = value?["push"] as? Bool ?? false
-                            let _urgent = value?["urgent"] as? Bool ?? false
-                            let _triggered = value?["triggered"] as? String ?? "false"
-                            let _timestamp = value?["data1"] as? Int ?? 1
-                            Set1.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent, _timestamp)
-                        }
-                        self.ti = Set1.ti
-                        if self.ti.count != 0 {
-                            
-                            self.fetch()
-                            
-                        } else {
-                            if self.isFirstTimeSeguing {
-                                self.isFirstTimeSeguing = false
-                                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
-                            }
-                        }
-                        
-                        
-                        
-                    }) { (error) in
-                        print(error.localizedDescription)
-                    }
-                    }
-                }
-                Set1.saveUserInfo()
-            } else {
-                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
-            }
-            
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-        
-    }
-    
+//    func loadUserInfoFromFirebase(firebaseUsername: String) {
+//
+//        let ref = Database.database().reference()
+//
+//        ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
+//            // Get user value
+//            let value = snapshot.value as? NSDictionary
+//           // Set1.token = value?["token"] as? String ?? "none"
+//            Set1.fullName = value?["fullName"] as? String ?? "none"
+//            Set1.email = value?["email"] as? String ?? "none"
+//            Set1.phone = value?["phone"] as? String ?? "none"
+//            Set1.premium = value?["premium"] as? Bool ?? false
+//           // Set1.alertCount = value?["numOfAlerts"] as? Int ?? 0
+//            Set1.brokerName = value?["brokerName"] as? String ?? "none"
+//            Set1.brokerURL = value?["brokerURL"] as? String ?? "none"
+//            Set1.weeklyAlerts = value?["weeklyAlerts"] as? [String:Int] ?? ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
+//            //if Set1.userAlerts.count > 0 {
+//            Set1.userAlerts = value?["userAlerts"] as? [String:String] ?? [:]
+//         //   }
+//
+//            if Set1.userAlerts.count > 0 {
+//
+//                var alertID: [String] {
+//                    var aaa = [String]()
+//                    for i in 0..<Set1.userAlerts.count {
+//                        switch i {
+//                        case 0...9:
+//                            aaa.append("alert00" + String(i))
+//                        case 10...99:
+//                            aaa.append("alert0" + String(i))
+//                        case 100...999:
+//                            aaa.append("alert" + String(i))
+//                        default:
+//                            break
+//                        }
+//                    }
+//                    return aaa
+//                }
+//                let uA = Set1.userAlerts
+//                for i in (0..<Set1.userAlerts.count).reversed() {
+//                    if uA[alertID[i]] != nil {
+//                    ref.child("alerts").child(uA[alertID[i]]!).observeSingleEvent(of: .value, with: { (snapshot) in
+//
+//                        let _deleted = value?["deleted"] as? Bool ?? false
+//
+//                        if !_deleted {
+//
+//                            let _name = uA[alertID[i]]!
+//                            let value = snapshot.value as? NSDictionary
+//                            let _isGreaterThan = value?["isGreaterThan"] as? Bool ?? false
+//                            let _price = value?["priceString"] as? String ?? ""
+//                            let _email = value?["email"] as? Bool ?? false
+//                            let _flash = value?["flash"] as? Bool ?? false
+//                            let _sms = value?["sms"] as? Bool ?? false
+//                            let _ticker = value?["ticker"] as? String ?? ""
+//                            Set1.ti.append(_ticker)
+//                            let _push = value?["push"] as? Bool ?? false
+//                            let _urgent = value?["urgent"] as? Bool ?? false
+//                            let _triggered = value?["triggered"] as? String ?? "false"
+//                            let _timestamp = value?["data1"] as? Int ?? 1
+//                            Set1.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent, _timestamp)
+//                        }
+//                        self.ti = Set1.ti
+//                        if self.ti.count != 0 {
+//
+//                            self.fetch()
+//
+//                        } else {
+//                            if self.isFirstTimeSeguing {
+//                                self.isFirstTimeSeguing = false
+//                                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
+//                            }
+//                        }
+//
+//
+//
+//                    }) { (error) in
+//                        print(error.localizedDescription)
+//                    }
+//                    }
+//                }
+//                Set1.saveUserInfo()
+//            } else {
+//                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
+//            }
+//
+//
+//        }) { (error) in
+//            print(error.localizedDescription)
+//        }
+//
+//    }
+//
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -289,40 +294,40 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         textField.spellCheckingType = .no
     }
     
-    private func fetch() {
-        noNils = true
-        retry = false
-        var stockStrings = [String]()
-        if ti.count > 0 {
-            var j = 0
-            for i in 0..<ti.count {
-                guard i < 6 else {return}
-                getOneYearData(stockName: ti[i]) {
-                    
-                    if $0 == nil {
-                        self._ti.append($1)
-                        self.retry = true
-                        self.noNils = false
-                    }
-                    if !stockStrings.contains($1) && $0 != nil {
-                        stockStrings.append($1)
-                        
-                        Set1.oneYearDictionary[$1] = $0
-                    }
-                    
-                    j += 1
-                    if (j >= self.ti.count && self.noNils) || (j > 5 && self.noNils) {
-                        self.delay(bySeconds: 1.0) {
-                        self.cont()
-                        }
-                    } else if !self.noNils {
-                        self.ti = self._ti
-                        self.fetch()
-                    }
-                }
-            }
-        }
-    }
+//    private func fetch() {
+//        noNils = true
+//        retry = false
+//        var stockStrings = [String]()
+//        if ti.count > 0 {
+//            var j = 0
+//            for i in 0..<ti.count {
+//                guard i < 6 else {return}
+//                getOneYearData(stockName: ti[i]) {
+//                    
+//                    if $0 == nil {
+//                        self._ti.append($1)
+//                        self.retry = true
+//                        self.noNils = false
+//                    }
+//                    if !stockStrings.contains($1) && $0 != nil {
+//                        stockStrings.append($1)
+//                        
+//                        Set1.oneYearDictionary[$1] = $0
+//                    }
+//                    
+//                    j += 1
+//                    if (j >= self.ti.count && self.noNils) || (j > 5 && self.noNils) {
+//                        self.delay(bySeconds: 1.0) {
+//                        self.cont()
+//                        }
+//                    } else if !self.noNils {
+//                        self.ti = self._ti
+//                        self.fetch()
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     private func populateView() {
         if !alreadyAUser {

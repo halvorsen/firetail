@@ -116,4 +116,63 @@ class Alpha {
         
     }
     
+    func getOneYearData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
+       
+        get20YearHistoricalData(ticker: stockName.uppercased()) { (stockDataTuple) in
+            
+            let (_stockData,_,error) = stockDataTuple
+            guard error == nil else {
+                // could add a delegated method to display this error. did in version 1
+              //  self.userWarning(title: "", message: error!.localizedDescription)
+                
+                return
+            }
+            
+            guard let stockData = _stockData else {return}
+            guard stockDataTuple.0!.count > 0  else {return}
+            
+            //let _mo = ["0","11","10","9","8","7","6","5","4","3","2","1","0"]
+            //this code turns the dashboard compare graph into month text instead of numbers
+            
+            let date = Date()
+            let calendar = Calendar.current
+            let year = calendar.component(.year, from: date)
+            let mo = ["","January," + " " + String(year - 1),
+                      "Febrary," + " " + String(year - 1),
+                      "March," + " " + String(year - 1),
+                      "April," + " " + String(year - 1),
+                      "May," + " " + String(year - 1),
+                      "June," + " " + String(year - 1),
+                      "July," + " " + String(year - 1),
+                      "August," + " " + String(year - 1),
+                      "September," + " " + String(year - 1),
+                      "October," + " " + String(year - 1),
+                      "November," + " " + String(year - 1),
+                      "December," + " " + String(year - 1),
+                      "January," + " " + String(year),
+                      "Febrary," + " " + String(year),
+                      "March," + " " + String(year),
+                      "April," + " " + String(year),
+                      "May," + " " + String(year),
+                      "June," + " " + String(year),
+                      "July," + " " + String(year),
+                      "August," + " " + String(year),
+                      "September," + " " + String(year),
+                      "October," + " " + String(year),
+                      "November," + " " + String(year),
+                      "December," + " " + String(year)]
+            var _mo = [String]()
+            let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+            for i in 0..<13 {
+                _mo.append(mo[dComponent.month! + i])
+            }
+            
+            Set1.month = _mo
+            
+            result(stockData, stockName)
+            
+        }
+        
+    }
+    
 }

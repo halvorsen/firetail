@@ -40,6 +40,8 @@
 		069FD12F1E5382D4003BDFE2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */; };
 		069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1361E538926003BDFE2 /* ViewSetup.swift */; };
 		06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC27071E7319F700041D1F /* CompareScrollDot.swift */; };
+		06BB409C1F753E330068636E /* AppLoadingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BB409B1F753E330068636E /* AppLoadingData.swift */; };
+		06DDBE261F795A5B00C36CB6 /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DDBE251F795A5B00C36CB6 /* CustomColor.swift */; };
 		06F15E901ED7B3ED00288413 /* Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F15E8F1ED7B3ED00288413 /* Google.swift */; };
 		06FC95B91E77415500DF7559 /* DailyGraphForAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */; };
 		06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */; };
@@ -86,6 +88,8 @@
 		069FD1361E538926003BDFE2 /* ViewSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewSetup.swift; sourceTree = "<group>"; };
 		06A914021E817E0900D032A9 /* firetail.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = firetail.entitlements; sourceTree = "<group>"; };
 		06AC27071E7319F700041D1F /* CompareScrollDot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScrollDot.swift; sourceTree = "<group>"; };
+		06BB409B1F753E330068636E /* AppLoadingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingData.swift; sourceTree = "<group>"; };
+		06DDBE251F795A5B00C36CB6 /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
 		06F15E8F1ED7B3ED00288413 /* Google.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Google.swift; sourceTree = "<group>"; };
 		06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyGraphForAlertView.swift; sourceTree = "<group>"; };
 		06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseOfGraphView.swift; sourceTree = "<group>"; };
@@ -154,6 +158,7 @@
 				06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */,
 				0609E4CC1E649578005965C5 /* SignupViewController.swift */,
 				0609E4CE1E649596005965C5 /* LoginViewController.swift */,
+				06DDBE241F7949E700C36CB6 /* BootingApp */,
 				0617DFA21E7C7E7F006D73C5 /* SettingsViewController.swift */,
 				069FD1231E5382D4003BDFE2 /* GraphViewController.swift */,
 				06110EA81EB925BF00C901C5 /* ChangePasswordViewController.swift */,
@@ -193,8 +198,17 @@
 				0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */,
 				06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */,
 				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
+				06DDBE251F795A5B00C36CB6 /* CustomColor.swift */,
 			);
 			name = Supporting;
+			sourceTree = "<group>";
+		};
+		06DDBE241F7949E700C36CB6 /* BootingApp */ = {
+			isa = PBXGroup;
+			children = (
+				06BB409B1F753E330068636E /* AppLoadingData.swift */,
+			);
+			name = BootingApp;
 			sourceTree = "<group>";
 		};
 		259453A1E67893F45BCB5AE2 /* Frameworks */ = {
@@ -397,7 +411,9 @@
 				06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */,
 				06110EA91EB925BF00C901C5 /* ChangePasswordViewController.swift in Sources */,
 				0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */,
+				06DDBE261F795A5B00C36CB6 /* CustomColor.swift in Sources */,
 				0609E4A81E632DF4005965C5 /* DashboardViewController.swift in Sources */,
+				06BB409C1F753E330068636E /* AppLoadingData.swift in Sources */,
 				069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */,
 				069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */,
 				0617DFA31E7C7E7F006D73C5 /* SettingsViewController.swift in Sources */,
