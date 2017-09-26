@@ -36,14 +36,7 @@ class AppLoadingData {
         }
         return false
     }
-    
-    //FETCH FUNCTION
-    // looking to set.ti or locally ti for all the tickers to fetch their data, only grabbing the first 6
-    // getting that one year data and putting in the Set1.oneYearDictionary
-    // weird error checking as the fetches come in, need to check that at end but not durring fetch
-    //calling a cont() function to segue
-    
-    // func get20YearHistoricalData(ticker: String, isOneYear: Bool = true, result: @escaping (_ stockDataTuple:([Double]?,[(String,Int)]?,Error?)) -> Void) {}
+
     let alphaAPI = Alpha()
     private func fetch(callback: @escaping () -> Void) {
         var count = 3
@@ -65,10 +58,7 @@ class AppLoadingData {
             }
         }
     }
-    // now this fetches and stores in dictionary, doesn't cause the cont() function to happen
-    // this fetch needs to tell dashboard view controller that it's done
-    
-    
+
     //loads the firebase stock info for the username - storing in Set1
     //if there are no alerts it segues to add stock ticker
     

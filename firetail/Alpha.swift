@@ -162,30 +162,5 @@ class Alpha {
         Set1.month = _mo
     }
     
-//    func getOneYearData(stockName: String, result: @escaping (_ closingPrices: DataSet) -> Void) {
-//
-//        get20YearHistoricalData(ticker: stockName.uppercased()) { (stockData) in
-//
-//            //let (_stockData,_,error) = stockDataTuple
-//            guard stockData != nil else {
-//                // could add a delegated method to display this error. did in version 1
-//                //  self.userWarning(title: "", message: error!.localizedDescription)
-//
-//                return
-//            }
-//
-//            guard let stockData = stockData else {return}
-//            //  guard stockDataTuple.0!.count > 0  else {return}
-//
-//            //let _mo = ["0","11","10","9","8","7","6","5","4","3","2","1","0"]
-//            //this code turns the dashboard compare graph into month text instead of numbers
-//
-//
-//
-//            result(stockData)
-//
-//        }
-//
-//    }
     
 }

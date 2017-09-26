@@ -136,9 +136,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self, selector: #selector(DashboardViewController.finishedFetchingTop3Stocks), name: NSNotification.Name(rawValue: updatedDataKey), object: nil)
-//        deinit {
-//        NSNotificationCenter.default.removeObserver(self)
-//        }
+
         
         alertPan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.move(_:)))
         view.addGestureRecognizer(alertPan)
@@ -406,6 +404,17 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     @objc private func finishedFetchingTop3Stocks() {
         print("done fetching and received notification")
+        DispatchQueue.main.async {
+            self.sv.removeFromSuperview()
+            self.sv1.removeFromSuperview()
+            self.sv2.removeFromSuperview()
+            self.svDot.removeFromSuperview()
+            self.svDot1.removeFromSuperview()
+            self.svDot2.removeFromSuperview()
+            self.populateCompareGraph()
+        }
+        
+        
     }
     
     
@@ -884,6 +893,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+               NotificationCenter.default.removeObserver(self)
         if segue.identifier == "fromMainToGraph" {
             let graphView: GraphViewController = segue.destination as! GraphViewController
             
