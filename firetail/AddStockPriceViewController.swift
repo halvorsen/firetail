@@ -21,19 +21,23 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     var displayValues = [Double]()
     var priceLabel = UILabel()
     var sett = UIButton()
-    var alertPrice: Double = 0.00 {didSet{priceLabel.text = "$" + String(format: "%.2f", alertPrice) //getPickerData()
-        let c = (priceLabel.text?.characters.map { String($0) })!
-        let s = priceLabel.text!
-        if c[c.count-2] == "." {
-            priceLabel.text = s + "0"
+    var alertPrice: Double = 0.00 {
+        didSet{
+            DispatchQueue.main.async {
+                
+                self.priceLabel.text = "$" + String(format: "%.2f", self.alertPrice) //getPickerData()
+                let c = (self.priceLabel.text?.characters.map { String($0) })!
+                let s = self.priceLabel.text!
+                if c[c.count-2] == "." {
+                    self.priceLabel.text = s + "0"
+                }
+                
+                if self.alertPrice > 999.99 {
+                    self.priceLabel.text = self.priceLabel.text!.chopPrefix(1)
+                }
+            }
         }
-        
-        if alertPrice > 999.99 {
-            
-            priceLabel.text = priceLabel.text!.chopPrefix(1)
-        }
-        
-        }}
+    }
     let stockSymbol = UILabel()
     var activityView = UIActivityIndicatorView()
     var lastPrice = Double()
@@ -166,16 +170,16 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 var t = CGAffineTransform.identity
                 t = t.translatedBy(x: 0, y: -100)
                 t = t.scaledBy(x: 1.0, y: 0.01)
-                self.graph.transform = t
+                
                 DispatchQueue.main.async {
+                    self.graph.transform = t
                     self.activityView.removeFromSuperview()
-                }
-                DispatchQueue.main.async {
+              
                     UIView.animate(withDuration: 1.0) {
                         
                         self.graph.transform = CGAffineTransform.identity
                         self.graph.frame.origin.y = 50*self.screenHeight/667
-                    }
+                }
                 
                 
                 self.delay(bySeconds: 0.6) {

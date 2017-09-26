@@ -16,6 +16,9 @@ class AppLoadingData {
     let cacheManager = CacheManager()
     private func loadTop3StocksFromCoreData() -> Bool {
         let dataSets = cacheManager.loadData()
+        if dataSets.count > 50 {
+            cacheManager.eraseAllStockCashe()
+        }
         var count = 3
         if Set1.ti.count < 3 {
             guard Set1.ti.count > 0 else {print("Set1.ti.count == 0");return false}
@@ -23,7 +26,7 @@ class AppLoadingData {
         }
         var savedCount = 0
         for i in 0..<count {
-            loop: for dataSet in dataSets {
+            loop: for dataSet in dataSets.reversed() {
                 if dataSet.ticker == Set1.ti[i] {
                     Set1.oneYearDictionary[dataSet.ticker] = dataSet.price
                     savedCount += 1
@@ -36,6 +39,25 @@ class AppLoadingData {
         }
         return false
     }
+    
+    private func fetchAllButFirst3Stocks() { //stop fetching after 8 stocks
+        var count = 3
+        if Set1.ti.count > 3 {
+            count = Set1.ti.count
+        }
+        for i in 3..<count {
+            guard i < 9 else {return}
+            let keyExists = Set1.oneYearDictionary[Set1.ti[i]] != nil
+            if !keyExists {
+            alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i]) { dataSet in
+                if let dataSet = dataSet {
+                    Set1.oneYearDictionary[dataSet.ticker] = dataSet.price
+                }
+            }
+            }
+        }
+    }
+   
 
     let alphaAPI = Alpha()
     private func fetch(callback: @escaping () -> Void) {
@@ -51,7 +73,9 @@ class AppLoadingData {
                     Set1.oneYearDictionary[dataSet.ticker] = dataSet.price
                     savedCount += 1
                     if savedCount == count {
+                        self.fetchAllButFirst3Stocks()
                         NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                        print("finishedfetch1")
                         callback()
                     }
                 }
@@ -131,8 +155,12 @@ class AppLoadingData {
                                     
                                     DispatchQueue.global(qos: .background).async {
                                         self.fetch() {_ in
+                                            print("finished fetch2")
+                                            DispatchQueue.main.async {
                                             if haventSegued {
+                                                print("finished fetch3")
                                             result(false)
+                                            }
                                             }
                                         }
                                     }

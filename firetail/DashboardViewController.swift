@@ -20,6 +20,7 @@ import ReachabilitySwift
 
 
 class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
+
     var activityView = UIActivityIndicatorView()
     var premiumMember = false
     var addTextField = UITextField()
@@ -42,7 +43,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var alertScroller = UIScrollView()
     let mask = UIView()
     var (monthIndicator,stock1,stock2,stock3) = (UILabel(), UILabel(), UILabel(), UILabel())
-    // var alertCount: CGFloat = 10
     var dots = [Dot]()
     let indicatorDotWidth: CGFloat = 33
     var sv =  CompareScroll()
@@ -61,7 +61,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var blocks = [AlertBlockView]()
     var newBlocks = [AlertBlockView]()
     let loadsave = LoadSaveCoreData()
-    // var longPress = UILongPressGestureRecognizer()
     var pan = UIPanGestureRecognizer()
     var canIScroll = true
     var myTimer2 = Timer()
@@ -70,7 +69,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var l = 1
     var k = 10000
     var movingAlert = 9999
-    // var longpressOnce = true
     var alertInMotion = AlertBlockView()
     var val = CGFloat()
     var alertID: [String] {
@@ -146,8 +144,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 print("InstanceID token: \(refreshedToken)")
                 Set1.token = refreshedToken
                 Set1.saveUserInfo()
-                
-                
             }
             
             if #available(iOS 10.0, *) {
@@ -412,6 +408,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             self.svDot1.removeFromSuperview()
             self.svDot2.removeFromSuperview()
             self.populateCompareGraph()
+            guard self.amountOfBlocks > 0 else {return}
+            self.stock1.text = "\(self.sv.stock): \(self.sv.percentSet[1])%"
+            guard self.amountOfBlocks > 1 else {return}
+            self.stock2.text = "\(self.sv1.stock): \(self.sv1.percentSet[1])%"
+            guard self.amountOfBlocks > 2 else {return}
+            self.stock3.text = "\(self.sv2.stock): \(self.sv2.percentSet[1])%"
         }
         
         
