@@ -12,27 +12,27 @@ import Foundation
 
 class Alpha {
     let cacheManager = CacheManager()
-    func get20YearHistoricalData(ticker: String, isOneYear: Bool = true, result: @escaping (_ stockDataTuple:([Double]?,[(String,Int)]?,Error?)) -> Void) {
+    func get20YearHistoricalData(ticker: String, isOneYear: Bool = true, result: @escaping (_ stockData: DataSet?) -> Void) {
         var _prices = [Double]()
         var _dates = [(String,Int)]()
         var rawDates = [String]()
         let monthStrings =
             ["zero","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-       
+        
         let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=\(ticker.uppercased())&outputsize=full&apikey=PG1MGP38L4K05H5T")
         if let url = url {
             let request = URLRequest(url: url)
-           
+            
             let task = URLSession.shared.dataTask(with: request, completionHandler: {
                 (data, response, error) in
-              
+                
                 if error != nil {
                     print(error!.localizedDescription)
-                  
-                    result((nil,nil,error))
+                    
+                    result(nil)
                 }
                 else {
-                   
+                    
                     var json = [String: [String:Any]]()
                     do {
                         
@@ -47,7 +47,7 @@ class Alpha {
                     
                     for (keyRoot,valueRoot) in json {
                         if keyRoot == "Time Series (Daily)" {
-                          
+                            
                             for (date,_) in valueRoot {
                                 rawDates.append(date)
                                 
@@ -58,7 +58,7 @@ class Alpha {
                     let sortedDates = rawDates.sorted()
                     
                     if let datas = json["Time Series (Daily)"] {
-                      
+                        
                         for dateString in sortedDates {
                             
                             let dateFormatter = DateFormatter()
@@ -72,7 +72,7 @@ class Alpha {
                             let day = components.day
                             _dates.append((monthStrings[month!],day!))
                             if let packet = datas[dateString] as? [String:String] {
-                           
+                                
                                 for (key,value) in packet {
                                     if key == "5. adjusted close" {
                                         
@@ -103,7 +103,7 @@ class Alpha {
                             _months.append(_dates[i].0)
                         }
                         self.cacheManager.saveStockData(ticker: ticker, prices: _prices, days: _days, months: _months)
-                        result((_prices, _dates, nil))
+                        result(DataSet(ticker: ticker, price: _prices, month: _months, day: _days))
                         
                     }
                     
@@ -116,63 +116,76 @@ class Alpha {
         
     }
     
-    func getOneYearData(stockName: String, result: @escaping (_ closingPrices: ([Double]?), _ stockName: String) -> Void) {
-       
-        get20YearHistoricalData(ticker: stockName.uppercased()) { (stockDataTuple) in
-            
-            let (_stockData,_,error) = stockDataTuple
-            guard error == nil else {
-                // could add a delegated method to display this error. did in version 1
-              //  self.userWarning(title: "", message: error!.localizedDescription)
-                
-                return
-            }
-            
-            guard let stockData = _stockData else {return}
-            guard stockDataTuple.0!.count > 0  else {return}
-            
-            //let _mo = ["0","11","10","9","8","7","6","5","4","3","2","1","0"]
-            //this code turns the dashboard compare graph into month text instead of numbers
-            
-            let date = Date()
-            let calendar = Calendar.current
-            let year = calendar.component(.year, from: date)
-            let mo = ["","January," + " " + String(year - 1),
-                      "Febrary," + " " + String(year - 1),
-                      "March," + " " + String(year - 1),
-                      "April," + " " + String(year - 1),
-                      "May," + " " + String(year - 1),
-                      "June," + " " + String(year - 1),
-                      "July," + " " + String(year - 1),
-                      "August," + " " + String(year - 1),
-                      "September," + " " + String(year - 1),
-                      "October," + " " + String(year - 1),
-                      "November," + " " + String(year - 1),
-                      "December," + " " + String(year - 1),
-                      "January," + " " + String(year),
-                      "Febrary," + " " + String(year),
-                      "March," + " " + String(year),
-                      "April," + " " + String(year),
-                      "May," + " " + String(year),
-                      "June," + " " + String(year),
-                      "July," + " " + String(year),
-                      "August," + " " + String(year),
-                      "September," + " " + String(year),
-                      "October," + " " + String(year),
-                      "November," + " " + String(year),
-                      "December," + " " + String(year)]
-            var _mo = [String]()
-            let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-            for i in 0..<13 {
-                _mo.append(mo[dComponent.month! + i])
-            }
-            
-            Set1.month = _mo
-            
-            result(stockData, stockName)
-            
+    //    struct DataSet {
+    //
+    //        var ticker: String
+    //        var price: [Double]
+    //        var month: [String]
+    //        var day: [Int]
+    //
+    //    }
+    
+    func populateSet1Month() {
+        let date = Date()
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        let mo = ["","January," + " " + String(year - 1),
+                  "Febrary," + " " + String(year - 1),
+                  "March," + " " + String(year - 1),
+                  "April," + " " + String(year - 1),
+                  "May," + " " + String(year - 1),
+                  "June," + " " + String(year - 1),
+                  "July," + " " + String(year - 1),
+                  "August," + " " + String(year - 1),
+                  "September," + " " + String(year - 1),
+                  "October," + " " + String(year - 1),
+                  "November," + " " + String(year - 1),
+                  "December," + " " + String(year - 1),
+                  "January," + " " + String(year),
+                  "Febrary," + " " + String(year),
+                  "March," + " " + String(year),
+                  "April," + " " + String(year),
+                  "May," + " " + String(year),
+                  "June," + " " + String(year),
+                  "July," + " " + String(year),
+                  "August," + " " + String(year),
+                  "September," + " " + String(year),
+                  "October," + " " + String(year),
+                  "November," + " " + String(year),
+                  "December," + " " + String(year)]
+        var _mo = [String]()
+        let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        for i in 0..<13 {
+            _mo.append(mo[dComponent.month! + i])
         }
         
+        Set1.month = _mo
     }
+    
+//    func getOneYearData(stockName: String, result: @escaping (_ closingPrices: DataSet) -> Void) {
+//
+//        get20YearHistoricalData(ticker: stockName.uppercased()) { (stockData) in
+//
+//            //let (_stockData,_,error) = stockDataTuple
+//            guard stockData != nil else {
+//                // could add a delegated method to display this error. did in version 1
+//                //  self.userWarning(title: "", message: error!.localizedDescription)
+//
+//                return
+//            }
+//
+//            guard let stockData = stockData else {return}
+//            //  guard stockDataTuple.0!.count > 0  else {return}
+//
+//            //let _mo = ["0","11","10","9","8","7","6","5","4","3","2","1","0"]
+//            //this code turns the dashboard compare graph into month text instead of numbers
+//
+//
+//
+//            result(stockData)
+//
+//        }
+//
+//    }
     
 }

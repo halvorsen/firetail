@@ -21,12 +21,13 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     var textFields = [UITextField]()
     let loadsave = LoadSaveCoreData()
     var tap = UITapGestureRecognizer()
-
+    let alphaAPI = Alpha()
     
     //var ti = [String]()
     override func viewDidLoad() {
         super.viewDidLoad()
         Set2.priceRectX.removeAll()
+        alphaAPI.populateSet1Month()
         for xVal in Set3.shared.priceRectX {
             
             Set2.priceRectX.append(xVal*screenWidth/375)

@@ -137,9 +137,12 @@
 				06A914021E817E0900D032A9 /* firetail.entitlements */,
 				069FD1211E5382D4003BDFE2 /* AppDelegate.swift */,
 				06AE51491F2020C3008C5B3C /* ViewController */,
+				06DDBE241F7949E700C36CB6 /* BootingApp */,
+				06DDBE281F79B9F300C36CB6 /* FetchClasses */,
 				06AE514B1F202117008C5B3C /* Supporting */,
 				069FD1251E5382D4003BDFE2 /* Main.storyboard */,
 				069FD12B1E5382D4003BDFE2 /* Assets.xcassets */,
+				06DDBE271F79B9B400C36CB6 /* Archives */,
 				06AE514A1F2020F4008C5B3C /* font */,
 				06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */,
 				069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */,
@@ -158,7 +161,6 @@
 				06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */,
 				0609E4CC1E649578005965C5 /* SignupViewController.swift */,
 				0609E4CE1E649596005965C5 /* LoginViewController.swift */,
-				06DDBE241F7949E700C36CB6 /* BootingApp */,
 				0617DFA21E7C7E7F006D73C5 /* SettingsViewController.swift */,
 				069FD1231E5382D4003BDFE2 /* GraphViewController.swift */,
 				06110EA81EB925BF00C901C5 /* ChangePasswordViewController.swift */,
@@ -183,22 +185,19 @@
 		06AE514B1F202117008C5B3C /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
-				0609E4A91E635226005965C5 /* AlertBlockView.swift */,
-				063A02581F7326D700E530D5 /* CacheManager.swift */,
+				06DDBE251F795A5B00C36CB6 /* CustomColor.swift */,
+				06FDA8DF1E71B9960043BC90 /* Sets.swift */,
 				068D8D241E72F0D700E422DB /* Dot.swift */,
+				0609E4A91E635226005965C5 /* AlertBlockView.swift */,
 				06FDA8DB1E7094270043BC90 /* CompareScroll.swift */,
 				06AC27071E7319F700041D1F /* CompareScrollDot.swift */,
 				06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */,
 				062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */,
-				06F15E8F1ED7B3ED00288413 /* Google.swift */,
-				06813A711F616BEE00A420EF /* Alpha.swift */,
 				0617DFA01E7B6F81006D73C5 /* GridLine.swift */,
-				06FDA8DF1E71B9960043BC90 /* Sets.swift */,
 				0672601A1E67BD5B00F54500 /* StockGraphView2.swift */,
 				0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */,
 				06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */,
 				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
-				06DDBE251F795A5B00C36CB6 /* CustomColor.swift */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
@@ -209,6 +208,23 @@
 				06BB409B1F753E330068636E /* AppLoadingData.swift */,
 			);
 			name = BootingApp;
+			sourceTree = "<group>";
+		};
+		06DDBE271F79B9B400C36CB6 /* Archives */ = {
+			isa = PBXGroup;
+			children = (
+				06F15E8F1ED7B3ED00288413 /* Google.swift */,
+			);
+			name = Archives;
+			sourceTree = "<group>";
+		};
+		06DDBE281F79B9F300C36CB6 /* FetchClasses */ = {
+			isa = PBXGroup;
+			children = (
+				06813A711F616BEE00A420EF /* Alpha.swift */,
+				063A02581F7326D700E530D5 /* CacheManager.swift */,
+			);
+			name = FetchClasses;
 			sourceTree = "<group>";
 		};
 		259453A1E67893F45BCB5AE2 /* Frameworks */ = {

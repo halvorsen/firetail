@@ -135,6 +135,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(DashboardViewController.finishedFetchingTop3Stocks), name: NSNotification.Name(rawValue: updatedDataKey), object: nil)
+//        deinit {
+//        NSNotificationCenter.default.removeObserver(self)
+//        }
+        
         alertPan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.move(_:)))
         view.addGestureRecognizer(alertPan)
         
@@ -182,11 +187,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         
         premiumMember = Set1.premium
-        // longPress = UILongPressGestureRecognizer(target: self, action: #selector(DashboardViewController.longPress(_:)))
-        //   view.addGestureRecognizer(longPress)
-        //  longPress.delegate = self
-      //  pan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.pan(_:)))
-       // view.addGestureRecognizer(pan)
         self.view.backgroundColor = customColor.black33
         svs = [sv,sv1,sv2]
         let d = Calendar.current.dateComponents([.year, .month, .day], from: Date())
@@ -404,6 +404,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
     }
     
+    @objc private func finishedFetchingTop3Stocks() {
+        print("done fetching and received notification")
+    }
+    
     
     @objc func act(blockLongName: String) {
         print("act!!!")
@@ -538,7 +542,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     private func populateCompareGraph() {
-      //  print("Set1.ti: \(Set1.ti)")
+        print("Set1.ti: \(Set1.ti)")
         switch Set1.ti.count {
         case 0:
             break

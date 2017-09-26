@@ -11,7 +11,32 @@ import Firebase
 import FirebaseAuth
 import FirebaseCore
 
+let updatedDataKey = "com.rightBrothers.updatedData"
 class AppLoadingData {
+    let cacheManager = CacheManager()
+    private func loadTop3StocksFromCoreData() -> Bool {
+        let dataSets = cacheManager.loadData()
+        var count = 3
+        if Set1.ti.count < 3 {
+            guard Set1.ti.count > 0 else {print("Set1.ti.count == 0");return false}
+            count = Set1.ti.count
+        }
+        var savedCount = 0
+        for i in 0..<count {
+            loop: for dataSet in dataSets {
+                if dataSet.ticker == Set1.ti[i] {
+                    Set1.oneYearDictionary[dataSet.ticker] = dataSet.price
+                    savedCount += 1
+                    if savedCount == count {
+                        return true
+                    }
+                    break loop
+                }
+            }
+        }
+        return false
+    }
+    
     //FETCH FUNCTION
     // looking to set.ti or locally ti for all the tickers to fetch their data, only grabbing the first 6
     // getting that one year data and putting in the Set1.oneYearDictionary
@@ -19,24 +44,30 @@ class AppLoadingData {
     //calling a cont() function to segue
     
     // func get20YearHistoricalData(ticker: String, isOneYear: Bool = true, result: @escaping (_ stockDataTuple:([Double]?,[(String,Int)]?,Error?)) -> Void) {}
-    let alpha = Alpha()
-    private func fetch() {
+    let alphaAPI = Alpha()
+    private func fetch(callback: @escaping () -> Void) {
         var count = 3
         if Set1.ti.count < 3 {
             guard Set1.ti.count > 0 else {print("Set1.ti.count == 0");return}
             count = Set1.ti.count
         }
+        var savedCount = 0
         for i in 0..<count {
-            alpha.getOneYearData(stockName: Set1.ti[i]) {
-                if let data = $0 {
-                Set1.oneYearDictionary[$1] = data
+            alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i]) { dataSet in
+                if let dataSet = dataSet {
+                    Set1.oneYearDictionary[dataSet.ticker] = dataSet.price
+                    savedCount += 1
+                    if savedCount == count {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                        callback()
+                    }
                 }
             }
         }
     }
     // now this fetches and stores in dictionary, doesn't cause the cont() function to happen
-    // this fetch needs to tell dashboard view controller that it's done, notification?
-        
+    // this fetch needs to tell dashboard view controller that it's done
+    
     
     //loads the firebase stock info for the username - storing in Set1
     //if there are no alerts it segues to add stock ticker
@@ -56,7 +87,7 @@ class AppLoadingData {
             Set1.brokerURL = value?["brokerURL"] as? String ?? "none"
             Set1.weeklyAlerts = value?["weeklyAlerts"] as? [String:Int] ?? ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
             Set1.userAlerts = value?["userAlerts"] as? [String:String] ?? [:]
-         
+            
             
             if Set1.userAlerts.count > 0 {
                 
@@ -77,6 +108,7 @@ class AppLoadingData {
                     return aaa
                 }
                 let uA = Set1.userAlerts
+                var totalCount = 0
                 for i in (0..<Set1.userAlerts.count).reversed() {
                     if uA[alertID[i]] != nil {
                         ref.child("alerts").child(uA[alertID[i]]!).observeSingleEvent(of: .value, with: { (snapshot) in
@@ -100,19 +132,32 @@ class AppLoadingData {
                                 let _timestamp = value?["data1"] as? Int ?? 1
                                 Set1.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent, _timestamp)
                             }
-                            
-                            if Set1.ti.count != 0 {
-                                //at this point we know what stocks we need to fetch info need to fetch remote data on a backend thread and stored data immediately to segue
-                                DispatchQueue.global(qos: .background).async {
-                                self.fetch()
+                            totalCount += 1
+                            var haventSegued = true
+                            if Set1.userAlerts.count == totalCount {
+                                if Set1.ti.count != 0 {
+                                    //at this point we know what stocks we need to fetch info need to fetch remote data on a backend thread and stored data immediately to segue
+                                    
+                                    
+                                    DispatchQueue.global(qos: .background).async {
+                                        self.fetch() {_ in
+                                            if haventSegued {
+                                            result(false)
+                                            }
+                                        }
+                                    }
+                                    let success = self.loadTop3StocksFromCoreData()
+                                    Set1.saveUserInfo()
+                                    if success {
+                                        haventSegued = false
+                                        result(false)
+                                    }
+                                    
+                                } else {
+                                    Set1.saveUserInfo()
+                                    haventSegued = false
+                                    result(true)
                                 }
-                                //get data from coredata
-                                Set1.saveUserInfo()
-                                result(false)
-                                
-                            } else {
-                                Set1.saveUserInfo()
-                                result(true)
                             }
                             
                         }) { (error) in
@@ -124,7 +169,7 @@ class AppLoadingData {
             } else {
                 result(true)
             }
- 
+            
         }) { (error) in
             print(error.localizedDescription)
         }

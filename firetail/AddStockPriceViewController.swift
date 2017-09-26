@@ -292,30 +292,29 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     
     private func prepareGraph(result: @escaping (_ dateArray: [(String,Int)]?,_ closings: [Double]?) -> Void) {
         
-        let myAlpha = Alpha()
-        myAlpha.get20YearHistoricalData(ticker: self.newAlertTicker) { (stockDataTuple) in
-            let (_stockData,dates,error) = stockDataTuple
-            guard let stockData = _stockData else {return}
-            guard stockDataTuple.0!.count > 0 else {return}
-            if error != nil {
-                self.performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self)
-            }
+        let alphaAPI = Alpha()
+        alphaAPI.get20YearHistoricalData(ticker: self.newAlertTicker) { (dataSet) in
             
-            result(dates, stockData)
+            guard let dataSet = dataSet else {self.performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self);return}
+            
+            var dates = [(String,Int)]()
+            for i in 0..<dataSet.day.count {
+                dates.append((dataSet.month[i],dataSet.day[i]))
+            }
+            result(dates,dataSet.price)
+         
             
         }
         
     }
     
-    
+    let alphaAPI = Alpha()
     override func viewWillAppear(_ animated: Bool) {
-        
-        
-        
-        getOneYearData(stockName: newAlertTicker) {
-            
-            Set1.oneYearDictionary[$1] = $0
-            
+ 
+        alphaAPI.get20YearHistoricalData(ticker: newAlertTicker) { dataSet in
+            if let dataSet = dataSet {
+            Set1.oneYearDictionary[dataSet.ticker] = dataSet.price
+            }
         }
     }
     override func viewDidAppear(_ animated: Bool) {

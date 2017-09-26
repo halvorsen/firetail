@@ -443,20 +443,18 @@ class GraphViewController: ViewSetup {
     var keys = [String]()
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         let myAlpha = Alpha()
-        myAlpha.get20YearHistoricalData(ticker: stockName.uppercased(), isOneYear: false) { (stockDataTuple) in
-            let (_stockData,_,error) = stockDataTuple
-            guard error == nil else {
+        myAlpha.get20YearHistoricalData(ticker: stockName.uppercased(), isOneYear: false) { dataSet in
+          
+            guard dataSet != nil else {
                 self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
                 // had this error to "cancelled" once now just sending back to the Dashboard if an error occures. instead of showing an alert.
-                
-                
                 return
             }
-            guard let stockData = _stockData else {return}
-            guard stockDataTuple.0!.count > 0  else {return}
-            var __stockData = stockData
-            if stockData[stockData.count - 1] == stockData[stockData.count - 2] {
-                __stockData.remove(at: stockData.count - 1)
+            guard let dataSet = dataSet else {return}
+            //not seeing if dataSet has content in it, v1 had a guard to check that
+            var __stockData = dataSet.price
+            if dataSet.price[dataSet.price.count - 1] == dataSet.price[dataSet.price.count - 2] {
+                __stockData.remove(at: dataSet.price.count - 1)
             }
             let list = ["1y","5y","10y","1d","5d","1m","3m"]
             let amount = __stockData.count

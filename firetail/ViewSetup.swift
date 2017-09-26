@@ -77,9 +77,12 @@ class ViewSetup: UIViewController {
     }
     
     func removeNoInternetCover() {
-        if coverInternet.isDescendant(of: view) {
-            coverInternet.removeFromSuperview()
+        DispatchQueue.main.async {
+            if self.coverInternet.isDescendant(of: self.view) {
+                self.coverInternet.removeFromSuperview()
+            }
         }
+        
     }
     
     func addNoInternetCover() {

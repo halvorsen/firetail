@@ -36,6 +36,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var isFirstLoading = true
     var tap = UITapGestureRecognizer()
     var appLoadingData = AppLoadingData()
+    let alphaAPI = Alpha()
   
     override func viewDidAppear(_ animated: Bool) {
         reachabilityAddNotification()
@@ -49,7 +50,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             
             Set2.priceRectX.append(xVal*screenWidth/375)
         }
-        
+        alphaAPI.populateSet1Month()
         loadsave.loadUsername()
         coverView.frame = view.frame
         coverView.backgroundColor = customColor.black33
@@ -106,10 +107,13 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 self.authenticated = true
                 if Set1.username != "none" {
                    if self.isFirstLoading {
+                    //load stock list from firebase and start fetch
                     self.appLoadingData.loadUserInfoFromFirebase(firebaseUsername: Set1.username) {haveNoAlerts in
                         self.ti = Set1.ti
                         if haveNoAlerts {
                             self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
+                        } else {
+                            self.cont()
                         }
                         
                     }
