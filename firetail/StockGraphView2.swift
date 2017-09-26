@@ -18,33 +18,33 @@ public struct Label {
 
 class StockGraphView2: UIView {
     
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    let fontSizeMultiplier = UIScreen.main.bounds.width / 375
+    @objc let screenWidth = UIScreen.main.bounds.width
+    @objc let screenHeight = UIScreen.main.bounds.height
+    @objc let fontSizeMultiplier = UIScreen.main.bounds.width / 375
     let customColor = CustomColor()
-    let graphHeight: CGFloat = 6*UIScreen.main.bounds.width/7
-    var curvePath = UIBezierPath()
-    let (y1,y2,y3,y4,y5,x1,x2,x3,x4,x5,x6,x7) = (UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel())
-    var xs = [UILabel]()
-    var ys = [UILabel]()
+    @objc let graphHeight: CGFloat = 6*UIScreen.main.bounds.width/7
+    @objc var curvePath = UIBezierPath()
+    @objc let (y1,y2,y3,y4,y5,x1,x2,x3,x4,x5,x6,x7) = (UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel())
+    @objc var xs = [UILabel]()
+    @objc var ys = [UILabel]()
     var _stockData = StockData2()
-    var change = UILabel()
-    var percentChange = UILabel()
-    var cubicChartView = LineChartView()
-    var globalCGPath: CGMutablePath? = nil
-    var layerView = UIView()
-    var baseOfGraphView = BaseOfGraphView()
-    var base = UIView()
-    var countinueBouncing = true
-    var doneSquashing = false
-    var graphAppearsInView = true
-    var g = String()
-    var upDownArrowView = UIImageView()
-    var _outputValues = [Double]()
+    @objc var change = UILabel()
+    @objc var percentChange = UILabel()
+    @objc var cubicChartView = LineChartView()
+    @objc var globalCGPath: CGMutablePath? = nil
+    @objc var layerView = UIView()
+    @objc var baseOfGraphView = BaseOfGraphView()
+    @objc var base = UIView()
+    @objc var countinueBouncing = true
+    @objc var doneSquashing = false
+    @objc var graphAppearsInView = true
+    @objc var g = String()
+    @objc var upDownArrowView = UIImageView()
+    @objc var _outputValues = [Double]()
     
     
     // fills the graph view with the uploaded stock data on initialization and loaded by controller //
-    func fillChartViewWithSetsOfData(dataPoints: [Double], cubic: Bool = true) {
+    @objc func fillChartViewWithSetsOfData(dataPoints: [Double], cubic: Bool = true) {
         
         var yVal1 = [ChartDataEntry]()
         var yVal2 = [ChartDataEntry]()
@@ -107,7 +107,7 @@ class StockGraphView2: UIView {
     
     
     
-    func reduceDataPoints(original: [Double]) -> [Double] {
+    @objc func reduceDataPoints(original: [Double]) -> [Double] {
         let originalAmount = original.count
         var _original = original
         
@@ -144,8 +144,8 @@ class StockGraphView2: UIView {
         return _outputValues
         
     }
-    var _closingPrice = [Double]()
-    func animateIt() {
+    @objc var _closingPrice = [Double]()
+    @objc func animateIt() {
         self.baseOfGraphView.alpha = 1.0
         self.baseOfGraphView.frame = CGRect(x: 0, y: 565*self.bounds.height/636, width: self.bounds.width, height: 70*self.bounds.height/636)
         
@@ -304,7 +304,7 @@ class StockGraphView2: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int) {
+    @objc func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int) {
         
         name.text = text
         name.textColor = textColor

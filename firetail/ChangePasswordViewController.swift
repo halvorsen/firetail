@@ -13,12 +13,12 @@ import ReachabilitySwift
 
 class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
     var customColor = CustomColor()
-    var continueB = UIButton()
-    var getSupport = UIButton()
-    var accountSettings = UILabel()
-    var myTextFields = [UITextField]()
-    var doneLoading = false
-    var backArrow = UIButton()
+    @objc var continueB = UIButton()
+    @objc var getSupport = UIButton()
+    @objc var accountSettings = UILabel()
+    @objc var myTextFields = [UITextField]()
+    @objc var doneLoading = false
+    @objc var backArrow = UIButton()
     
     override func viewDidAppear(_ animated: Bool) {
         reachabilityAddNotification()
@@ -85,7 +85,7 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
     }
 
     
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    @objc func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
@@ -107,9 +107,9 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
 
     
    
-    var oldPass = String()
-    var newPass = String()
-    var newPass2 = String()
+    @objc var oldPass = String()
+    @objc var newPass = String()
+    @objc var newPass2 = String()
     //FIXIT: check password and change firebase password
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         

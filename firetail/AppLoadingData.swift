@@ -28,7 +28,7 @@ class AppLoadingData {
         for i in 0..<count {
             loop: for dataSet in dataSets.reversed() {
                 if dataSet.ticker == Set1.ti[i] {
-                    Set1.oneYearDictionary[dataSet.ticker] = dataSet.price
+                    Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252)) //Array(array.suffix(10))
                     savedCount += 1
                     if savedCount == count {
                         return true
@@ -154,7 +154,7 @@ class AppLoadingData {
                                     
                                     
                                     DispatchQueue.global(qos: .background).async {
-                                        self.fetch() {_ in
+                                        self.fetch() {
                                             print("finished fetch2")
                                             DispatchQueue.main.async {
                                             if haventSegued {

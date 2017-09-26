@@ -10,21 +10,21 @@ import UIKit
 
 class BaseOfGraphView: UIView {
     let customColor = CustomColor()
-    let bez = UIBezierPath()
-    var path = UIBezierPath()
-    var path2 = UIBezierPath()
-    var path3 = UIBezierPath()
-    var path4 = UIBezierPath()
-    var path5 = UIBezierPath()
-    var baseLayer = CAShapeLayer()
+    @objc let bez = UIBezierPath()
+    @objc var path = UIBezierPath()
+    @objc var path2 = UIBezierPath()
+    @objc var path3 = UIBezierPath()
+    @objc var path4 = UIBezierPath()
+    @objc var path5 = UIBezierPath()
+    @objc var baseLayer = CAShapeLayer()
     
     
-    let layerAnimation = CABasicAnimation(keyPath: "path")
-    let layerAnimation2 = CABasicAnimation(keyPath: "path")
-    let layerAnimation3 = CABasicAnimation(keyPath: "path")
-    let layerAnimation4 = CABasicAnimation(keyPath: "path")
-    let layerAnimation5 = CABasicAnimation(keyPath: "path")
-    let layerAnimation6 = CABasicAnimation(keyPath: "path")
+    @objc let layerAnimation = CABasicAnimation(keyPath: "path")
+    @objc let layerAnimation2 = CABasicAnimation(keyPath: "path")
+    @objc let layerAnimation3 = CABasicAnimation(keyPath: "path")
+    @objc let layerAnimation4 = CABasicAnimation(keyPath: "path")
+    @objc let layerAnimation5 = CABasicAnimation(keyPath: "path")
+    @objc let layerAnimation6 = CABasicAnimation(keyPath: "path")
     
     override func draw(_ rect: CGRect) {
         self.backgroundColor = customColor.black42

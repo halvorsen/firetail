@@ -12,17 +12,17 @@ import ReachabilitySwift
 
 class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MFMailComposeViewControllerDelegate {
     var customColor = CustomColor()
-    var continueB = UIButton()
-    var getSupport = UIButton()
-    var accountSettings = UILabel()
-    var myTextFields = [UITextField]()
-    var doneLoading = false
-    var backArrow = UIButton()
-    var myPicker = UIPickerView()
-    let toolBar = UIToolbar()
-    let myPickerBackground = UIColor(colorLiteralRed: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
-    let toolBarButtonColor = UIColor(colorLiteralRed: 140/255, green: 140/255, blue: 140/255, alpha: 1.0)
-    let toolBarColor = UIColor(colorLiteralRed: 64/255, green: 64/255, blue: 64/255, alpha: 1.0)
+    @objc var continueB = UIButton()
+    @objc var getSupport = UIButton()
+    @objc var accountSettings = UILabel()
+    @objc var myTextFields = [UITextField]()
+    @objc var doneLoading = false
+    @objc var backArrow = UIButton()
+    @objc var myPicker = UIPickerView()
+    @objc let toolBar = UIToolbar()
+    let myPickerBackground = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
+    let toolBarButtonColor = UIColor(red: 140/255, green: 140/255, blue: 140/255, alpha: 1.0)
+    let toolBarColor = UIColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 1.0)
     let pickerData = ["TD Ameritrade", "Chase", "Etrade", "Fidelity", "Scottrade", "Schwab", "Merrill Edge", "Trademonster", "Capital One Investing", "eOption", "Interactive Brokers", "TradeStation", "Ally", "Kapitall", "Lightspeed", "optionsXpress", "Zacks", "Trade King", "Sogo Trade", "Trading Block", "USAA", "Bank of America", "Vangaurd", "Wells Fargo", "Firstrade", "Robinhood"]
     
     override func viewDidAppear(_ animated: Bool) {
@@ -112,16 +112,16 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
         toolBar.sizeToFit()
         
         let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(SettingsViewController.donePicker))
-        doneButton.setTitleTextAttributes([NSForegroundColorAttributeName: toolBarButtonColor], for: .normal)
+        doneButton.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: toolBarButtonColor], for: .normal)
         
         let brokerLabel = UIBarButtonItem(title: "Broker", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-        brokerLabel.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.white], for: .normal)
+        brokerLabel.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.white], for: .normal)
         let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target:nil, action:nil)
     
         
         
         let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(SettingsViewController.donePicker))
-        cancelButton.setTitleTextAttributes([NSForegroundColorAttributeName: toolBarButtonColor], for: .normal)
+        cancelButton.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: toolBarButtonColor], for: .normal)
         
         toolBar.setItems([cancelButton, flexible, brokerLabel, flexible, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
@@ -132,7 +132,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
         myTextFields[2].inputAccessoryView = toolBar
     }
     
-    func donePicker() {
+    @objc func donePicker() {
         
         view.frame.origin.y = 0
         myPicker.removeFromSuperview()
@@ -157,7 +157,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
     }
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        return NSAttributedString(string: pickerData[row], attributes: [NSForegroundColorAttributeName:UIColor.white])
+        return NSAttributedString(string: pickerData[row], attributes: [NSAttributedStringKey.foregroundColor:UIColor.white])
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

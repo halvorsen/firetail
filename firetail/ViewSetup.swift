@@ -13,10 +13,10 @@ class ViewSetup: UIViewController {
     
     //Reachability
     
-    let coverInternet = UIView()
+    @objc let coverInternet = UIView()
     let reachability = Reachability()!
     
-    func reachabilityAddNotification() {
+    @objc func reachabilityAddNotification() {
         //declare this property where it won't go out of scope relative to your listener
         
         //declare this inside of viewWillAppear
@@ -47,7 +47,7 @@ class ViewSetup: UIViewController {
         
     }
     
-    func reachabilityRemoveNotification() {
+    @objc func reachabilityRemoveNotification() {
         reachability.stopNotifier()
         NotificationCenter.default.removeObserver(self,
                                                   name: ReachabilityChangedNotification,
@@ -55,7 +55,7 @@ class ViewSetup: UIViewController {
     }
     
     
-    func reachabilityChanged(note: NSNotification) {
+    @objc func reachabilityChanged(note: NSNotification) {
         
         let reachability = note.object as! Reachability
         
@@ -76,7 +76,7 @@ class ViewSetup: UIViewController {
         }
     }
     
-    func removeNoInternetCover() {
+    @objc func removeNoInternetCover() {
         DispatchQueue.main.async {
             if self.coverInternet.isDescendant(of: self.view) {
                 self.coverInternet.removeFromSuperview()
@@ -85,14 +85,14 @@ class ViewSetup: UIViewController {
         
     }
     
-    func addNoInternetCover() {
+    @objc func addNoInternetCover() {
         view.addSubview(coverInternet)
     }
 
-    var screenWidth: CGFloat {get{return UIScreen.main.bounds.width}}
-    var screenHeight: CGFloat {get{return UIScreen.main.bounds.height}}
-    var fontSizeMultiplier: CGFloat {get{return UIScreen.main.bounds.width / 375}}
-    var topMargin: CGFloat {get{return (269/1332)*UIScreen.main.bounds.height}}
+    @objc var screenWidth: CGFloat {get{return UIScreen.main.bounds.width}}
+    @objc var screenHeight: CGFloat {get{return UIScreen.main.bounds.height}}
+    @objc var fontSizeMultiplier: CGFloat {get{return UIScreen.main.bounds.width / 375}}
+    @objc var topMargin: CGFloat {get{return (269/1332)*UIScreen.main.bounds.height}}
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -100,7 +100,7 @@ class ViewSetup: UIViewController {
 
     
     
-    func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor, act:
+    @objc func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor, act:
         Selector, addSubview: Bool, alignment: UIControlContentHorizontalAlignment = .left) {
         name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: width*screenWidth/750, height: height*screenWidth/750)
         name.setTitle(title, for: UIControlState.normal)
@@ -117,7 +117,7 @@ class ViewSetup: UIViewController {
         }
     }
     
-    func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int) {
+    @objc func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int) {
         
         name.text = text
         name.textColor = textColor
@@ -149,18 +149,18 @@ class ViewSetup: UIViewController {
     
     class ProgressHUD: UIVisualEffectView {
         
-        var text: String? {
+        @objc var text: String? {
             didSet {
                 label.text = text
             }
         }
         
-        let activityIndictor: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
-        let label: UILabel = UILabel()
-        let blurEffect = UIBlurEffect(style: .light)
-        let vibrancyView: UIVisualEffectView
+        @objc let activityIndictor: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        @objc let label: UILabel = UILabel()
+        @objc let blurEffect = UIBlurEffect(style: .light)
+        @objc let vibrancyView: UIVisualEffectView
         
-        init(text: String) {
+        @objc init(text: String) {
             self.text = text
             self.vibrancyView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: blurEffect))
             super.init(effect: blurEffect)
@@ -174,7 +174,7 @@ class ViewSetup: UIViewController {
             self.setup()
         }
         
-        func setup() {
+        @objc func setup() {
             contentView.addSubview(vibrancyView)
             contentView.addSubview(activityIndictor)
             contentView.addSubview(label)
@@ -213,16 +213,16 @@ class ViewSetup: UIViewController {
             }
         }
         
-        func show() {
+        @objc func show() {
             self.isHidden = false
         }
         
-        func hide() {
+        @objc func hide() {
             self.isHidden = true
         }
     }
     
-    func userWarning(title: String, message: String, answer: String = "Okay") {
+    @objc func userWarning(title: String, message: String, answer: String = "Okay") {
         let refreshAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         
         refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
@@ -245,12 +245,12 @@ extension String {
     subscript(range: CountableRange<Int>) -> String {
         precondition(range.lowerBound >= 0, "range lowerBound can't be negative")
         let lowerIndex = index(startIndex, offsetBy: range.lowerBound, limitedBy: endIndex) ?? endIndex
-        return self[lowerIndex..<(index(lowerIndex, offsetBy: range.upperBound - range.lowerBound, limitedBy: endIndex) ?? endIndex)]
+        return String(self[lowerIndex..<(index(lowerIndex, offsetBy: range.upperBound - range.lowerBound, limitedBy: endIndex) ?? endIndex)])
     }
     subscript(range: ClosedRange<Int>) -> String {
         precondition(range.lowerBound >= 0, "range lowerBound can't be negative")
         let lowerIndex = index(startIndex, offsetBy: range.lowerBound, limitedBy: endIndex) ?? endIndex
-        return self[lowerIndex..<(index(lowerIndex, offsetBy: range.upperBound - range.lowerBound + 1, limitedBy: endIndex) ?? endIndex)]
+        return String(self[lowerIndex..<(index(lowerIndex, offsetBy: range.upperBound - range.lowerBound + 1, limitedBy: endIndex) ?? endIndex)])
     }
 }
 

@@ -21,57 +21,57 @@ import ReachabilitySwift
 
 class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
-    var activityView = UIActivityIndicatorView()
-    var premiumMember = false
-    var addTextField = UITextField()
-    var stringToPass = "#@$%"
+    @objc var activityView = UIActivityIndicatorView()
+    @objc var premiumMember = false
+    @objc var addTextField = UITextField()
+    @objc var stringToPass = "#@$%"
     let customColor = CustomColor()
-    var menu = UIButton()
-    var add = UIButton()
-    var stockAlerts = UILabel()
-    var slideView = UIView()
-    var returnTap = UITapGestureRecognizer()
-    var returnPan = UIPanGestureRecognizer()
-    var returnSwipe = UISwipeGestureRecognizer()
-    var date = UILabel()
-    var alertAmount = UILabel()
-    var alerts1102 = UILabel()
-    var daysOfTheWeek = UILabel()
-    var (alerts, changeEmail, addPhone, changeBroker, legal, support, goPremium) = (UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton())
-    var container = UIScrollView()
-    var container2 = UIScrollView()
-    var alertScroller = UIScrollView()
-    let mask = UIView()
-    var (monthIndicator,stock1,stock2,stock3) = (UILabel(), UILabel(), UILabel(), UILabel())
-    var dots = [Dot]()
-    let indicatorDotWidth: CGFloat = 33
-    var sv =  CompareScroll()
-    var sv1 =  CompareScroll()
-    var sv2 =  CompareScroll()
-    var svs = [CompareScroll]()
-    var svDot =  CompareScrollDot()
-    var svDot1 =  CompareScrollDot()
-    var svDot2 =  CompareScrollDot()
-    var svsDot = [CompareScrollDot]()
-    var myTimer = Timer()
-    var newAlertTicker = String()
-    var newAlertPrice = Double()
+    @objc var menu = UIButton()
+    @objc var add = UIButton()
+    @objc var stockAlerts = UILabel()
+    @objc var slideView = UIView()
+    @objc var returnTap = UITapGestureRecognizer()
+    @objc var returnPan = UIPanGestureRecognizer()
+    @objc var returnSwipe = UISwipeGestureRecognizer()
+    @objc var date = UILabel()
+    @objc var alertAmount = UILabel()
+    @objc var alerts1102 = UILabel()
+    @objc var daysOfTheWeek = UILabel()
+    @objc var (alerts, changeEmail, addPhone, changeBroker, legal, support, goPremium) = (UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton())
+    @objc var container = UIScrollView()
+    @objc var container2 = UIScrollView()
+    @objc var alertScroller = UIScrollView()
+    @objc let mask = UIView()
+    @objc var (monthIndicator,stock1,stock2,stock3) = (UILabel(), UILabel(), UILabel(), UILabel())
+    @objc var dots = [Dot]()
+    @objc let indicatorDotWidth: CGFloat = 33
+    @objc var sv =  CompareScroll()
+    @objc var sv1 =  CompareScroll()
+    @objc var sv2 =  CompareScroll()
+    @objc var svs = [CompareScroll]()
+    @objc var svDot =  CompareScrollDot()
+    @objc var svDot1 =  CompareScrollDot()
+    @objc var svDot2 =  CompareScrollDot()
+    @objc var svsDot = [CompareScrollDot]()
+    @objc var myTimer = Timer()
+    @objc var newAlertTicker = String()
+    @objc var newAlertPrice = Double()
     var newAlertBoolTuple = (false, false, false, false)
-    var amountOfBlocks = Int()
-    var blocks = [AlertBlockView]()
-    var newBlocks = [AlertBlockView]()
+    @objc var amountOfBlocks = Int()
+    @objc var blocks = [AlertBlockView]()
+    @objc var newBlocks = [AlertBlockView]()
     let loadsave = LoadSaveCoreData()
-    var pan = UIPanGestureRecognizer()
-    var canIScroll = true
-    var myTimer2 = Timer()
+    @objc var pan = UIPanGestureRecognizer()
+    @objc var canIScroll = true
+    @objc var myTimer2 = Timer()
     let myLoadSave = LoadSaveCoreData()
-    var savedFrameOrigin = CGPoint()
-    var l = 1
-    var k = 10000
-    var movingAlert = 9999
-    var alertInMotion = AlertBlockView()
-    var val = CGFloat()
-    var alertID: [String] {
+    @objc var savedFrameOrigin = CGPoint()
+    @objc var l = 1
+    @objc var k = 10000
+    @objc var movingAlert = 9999
+    @objc var alertInMotion = AlertBlockView()
+    @objc var val = CGFloat()
+    @objc var alertID: [String] {
         var aaa = [String]()
         for i in 0..<Set1.userAlerts.count {
             switch i {
@@ -87,8 +87,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         return aaa
     }
-    var scrolling = false
-    var alertPan = UIPanGestureRecognizer()
+    @objc var scrolling = false
+    @objc var alertPan = UIPanGestureRecognizer()
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -330,9 +330,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
     }
     
-    var movingBlock : AlertBlockView?
-    var startingLocationX = CGFloat()
-    var endingLocationX = CGFloat()
+    @objc var movingBlock : AlertBlockView?
+    @objc var startingLocationX = CGFloat()
+    @objc var endingLocationX = CGFloat()
     
     
     @objc private func move(_ gesture: UIGestureRecognizer) {
@@ -495,8 +495,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
     }
     
-    var startedPan = false
-    var q = Int()
+    @objc var startedPan = false
+    @objc var q = Int()
     @objc private func pan(_ gesture: UIPanGestureRecognizer) {
         guard gesture.location(in: view).y > sv.frame.maxY else {return}
         
@@ -516,7 +516,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
     }
     
-    var p = Int()
+    @objc var p = Int()
     
     
     
@@ -534,7 +534,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
     }
     
-    func reboot() {
+    @objc func reboot() {
         mask.frame = container.frame
         mask.alpha = 1.0
         for view in container.subviews{
@@ -625,7 +625,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     
     
-    func whoseOnFirst(_ scrollView: UIScrollView) {
+    @objc func whoseOnFirst(_ scrollView: UIScrollView) {
         
         for i in 0...12 {
             if scrollView.contentSize.width*CGFloat(Double(i+1)-2.3)/13...scrollView.contentSize.width*CGFloat(Double(i+1)-2.05)/13 ~= scrollView.contentOffset.x {
@@ -737,10 +737,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
     }
     
-    func updateDot() {
+    @objc func updateDot() {
         container2.setContentOffset(container.contentOffset, animated: false)
     }
-    func runSearch() {
+    @objc func runSearch() {
         
     }
     
@@ -831,7 +831,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         self.present(alertController, animated: true, completion: nil)
     }
     
-    func menuFunc() {
+    @objc func menuFunc() {
         returnAllAlertSlides()
         if slideView.frame.origin.x == 0 {
             UIView.animate(withDuration: 0.3) {self.slideView.frame.origin.x += 516*self.screenWidth/750}
@@ -850,7 +850,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             container.isUserInteractionEnabled = true
         }
     }
-    func menuReturnFunc(_ gesture: UIGestureRecognizer) {
+    @objc func menuReturnFunc(_ gesture: UIGestureRecognizer) {
         if slideView.frame.origin.x == 516*self.screenWidth/750 {
             
             UIView.animate(withDuration: 0.3) {self.slideView.frame.origin.x -= 516*self.screenWidth/750}
@@ -860,7 +860,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             container.isUserInteractionEnabled = true
         }
     }
-    var hitOnce = true
+    @objc var hitOnce = true
     @objc private func addFunc(_ sender: UIButton) {
         if hitOnce {
             hitOnce = false
@@ -911,7 +911,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
     }
     
-    func purchase(productId: String = "firetail.iap.premium") {
+    @objc func purchase(productId: String = "firetail.iap.premium") {
         
         activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         activityView.center = self.view.center
@@ -938,7 +938,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
     }
     
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         //        if gestureRecognizer is UIPanGestureRecognizer || gestureRecognizer is UILongPressGestureRecognizer {
         return true
         //        } else {
@@ -946,7 +946,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         //        }
     }
     
-    func sendEmail() {
+    @objc func sendEmail() {
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self
@@ -961,7 +961,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         controller.dismiss(animated: true)
     }
     
-    func populateAlertBars() {
+    @objc func populateAlertBars() {
         
         for (key,_) in Set1.weeklyAlerts {
             Set1.weeklyAlerts[key] = 0
@@ -1047,7 +1047,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
     }
     
-    func connectToFcm() {
+    @objc func connectToFcm() {
         
         // Won't connect since there is no token
         guard InstanceID.instanceID().token() != nil else {

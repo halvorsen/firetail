@@ -14,33 +14,33 @@ protocol deleteAlertDelegate: class {
 }
 
 class AlertBlockView: UIView, UIGestureRecognizerDelegate {
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    let fontSizeMultiplier = UIScreen.main.bounds.width / 375
-    var stockTickerLabel = UILabel()
-    var alertList = UILabel()
-    var stockPrice = UILabel()
+    @objc let screenWidth = UIScreen.main.bounds.width
+    @objc let screenHeight = UIScreen.main.bounds.height
+    @objc let fontSizeMultiplier = UIScreen.main.bounds.width / 375
+    @objc var stockTickerLabel = UILabel()
+    @objc var alertList = UILabel()
+    @objc var stockPrice = UILabel()
     let customColor = CustomColor()
-    let line = UILabel()
-    var slideView = UIView()
-    var tap = UITapGestureRecognizer()
+    @objc let line = UILabel()
+    @objc var slideView = UIView()
+    @objc var tap = UITapGestureRecognizer()
 
-    var ex = UIButton()
-    var stockTickerGlobal: String = ""
-    var currentPriceGlobal: String = ""
-    var smsGlobal: Bool = false
-    var emailGlobal: Bool = false
-    var flashGlobal: Bool = false
-    var urgentGlobal: Bool = false
-    var blockLongName = String()
-    var priceDouble = Double()
-    let xAlphaStart: CGFloat = 0.1
-    let xAlphaEnd: CGFloat = 1.0
-    var x = UIImageView()
+    @objc var ex = UIButton()
+    @objc var stockTickerGlobal: String = ""
+    @objc var currentPriceGlobal: String = ""
+    @objc var smsGlobal: Bool = false
+    @objc var emailGlobal: Bool = false
+    @objc var flashGlobal: Bool = false
+    @objc var urgentGlobal: Bool = false
+    @objc var blockLongName = String()
+    @objc var priceDouble = Double()
+    @objc let xAlphaStart: CGFloat = 0.1
+    @objc let xAlphaEnd: CGFloat = 1.0
+    @objc var x = UIImageView()
     var deleteDelegate:deleteAlertDelegate?
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
-    init(y: CGFloat, stockTicker: String, currentPrice: String, sms: Bool = false, email: Bool = false, flash: Bool = false, urgent: Bool = false, longName: String, push: Bool = false, isGreaterThan: Bool, timestamp: Int, triggered: Bool) {
+    @objc init(y: CGFloat, stockTicker: String, currentPrice: String, sms: Bool = false, email: Bool = false, flash: Bool = false, urgent: Bool = false, longName: String, push: Bool = false, isGreaterThan: Bool, timestamp: Int, triggered: Bool) {
         super.init(frame: CGRect(x: 0, y: y*screenHeight/1334, width: screenWidth, height: 120*screenHeight/1334))
         blockLongName = longName
         stockTickerGlobal = stockTicker
@@ -133,12 +133,12 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
 
     
     
-    func delay(_ delay:Double, closure:@escaping ()->()) {
+    @objc func delay(_ delay:Double, closure:@escaping ()->()) {
         let when = DispatchTime.now() + delay
         DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
     }
     
-    func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int, alpha: CGFloat = 1.0) {
+    @objc func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int, alpha: CGFloat = 1.0) {
         name.text = text
         name.textColor = textColor
         name.textAlignment = textAlignment
@@ -148,7 +148,7 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
         name.alpha = alpha
     }
     
-    func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor,  addSubview: Bool, alignment: UIControlContentHorizontalAlignment = .center) {
+    @objc func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor,  addSubview: Bool, alignment: UIControlContentHorizontalAlignment = .center) {
         name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: width*screenWidth/750, height: height*screenWidth/750)
         name.setTitle(title, for: UIControlState.normal)
         name.titleLabel!.font = UIFont(name: font, size: fontSizeMultiplier*fontSize)

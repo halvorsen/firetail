@@ -15,26 +15,26 @@ import FirebaseCore
 class LoginViewController: ViewSetup, UITextFieldDelegate {
 
     var customColor = CustomColor()
-    var login = UIButton()
-    var continueB = UIButton()
-    var createAccount = UIButton()
-    var myTextFields = [UITextField]()
-    var activityView = UIActivityIndicatorView()
+    @objc var login = UIButton()
+    @objc var continueB = UIButton()
+    @objc var createAccount = UIButton()
+    @objc var myTextFields = [UITextField]()
+    @objc var activityView = UIActivityIndicatorView()
     let loadsave = LoadSaveCoreData()
-    var myTimer = Timer()
-    var ti = [String]()
-    var alreadyAUser = false
-    let imageView = UIImageView()
-    let coverView = UIView()
-    var retry = false
-    var authenticated = false
-    var noNils = true
-    var tiLast = String()
+    @objc var myTimer = Timer()
+    @objc var ti = [String]()
+    @objc var alreadyAUser = false
+    @objc let imageView = UIImageView()
+    @objc let coverView = UIView()
+    @objc var retry = false
+    @objc var authenticated = false
+    @objc var noNils = true
+    @objc var tiLast = String()
  //   var _ti = [String]()
-    let firetail = UILabel()
+    @objc let firetail = UILabel()
     let myLoadSaveCoreData = LoadSaveCoreData()
-    var isFirstLoading = true
-    var tap = UITapGestureRecognizer()
+    @objc var isFirstLoading = true
+    @objc var tap = UITapGestureRecognizer()
     var appLoadingData = AppLoadingData()
     let alphaAPI = Alpha()
   
@@ -267,7 +267,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         self.view.addSubview(activityView)
     }
     
-    var isFirstTimeSeguing = true
+    @objc var isFirstTimeSeguing = true
     private func cont() {
         print("Set1.oneyearDictionary")
         print(Set1.oneYearDictionary)

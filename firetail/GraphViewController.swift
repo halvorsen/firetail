@@ -19,28 +19,28 @@ public var gingerBreadMan = CGMutablePath()
 class GraphViewController: ViewSetup {
     
     let customColor = CustomColor()
-    var enter = UIButton()
-    var graphViewSeen = StockGraphView2()
-    var stockName = String()
-    var tap = UITapGestureRecognizer()
+    @objc var enter = UIButton()
+    @objc var graphViewSeen = StockGraphView2()
+    @objc var stockName = String()
+    @objc var tap = UITapGestureRecognizer()
     var graphViews = [String:StockGraphView2?]()
-    var stockHeader = UILabel()
-    var currentPrice = UILabel()
-    var backArrow = UIButton()
-    var passedString = "Patriots"
-    let trade = UIButton()
-    var newTextKey = String()
-    var currentTextKey = "1y"
-    let layer = CAShapeLayer()
-    var start = CGFloat()
-    var switchable = true
-    var first = true
-    let list = ["1y","5y","10y","1d","5d","1m","3m"]
-    var orderOfGraphs = ["1y":0,"5y":1,"10y":2,"1d":3,"5d":4,"1m":5,"3m":6]
-    var orderofGraphsInverse = [Int:String]()
-    let orderOfLabels = ["10y":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
-    var loading = UILabel()
-    let brokersDictionary: [String:String] = [
+    @objc var stockHeader = UILabel()
+    @objc var currentPrice = UILabel()
+    @objc var backArrow = UIButton()
+    @objc var passedString = "Patriots"
+    @objc let trade = UIButton()
+    @objc var newTextKey = String()
+    @objc var currentTextKey = "1y"
+    @objc let layer = CAShapeLayer()
+    @objc var start = CGFloat()
+    @objc var switchable = true
+    @objc var first = true
+    @objc let list = ["1y","5y","10y","1d","5d","1m","3m"]
+    @objc var orderOfGraphs = ["1y":0,"5y":1,"10y":2,"1d":3,"5d":4,"1m":5,"3m":6]
+    @objc var orderofGraphsInverse = [Int:String]()
+    @objc let orderOfLabels = ["10y":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
+    @objc var loading = UILabel()
+    @objc let brokersDictionary: [String:String] = [
         "Ameritrade":"https://invest.ameritrade.com/grid/p/site",
         "Etrade":"https://us.etrade.com/e/t/user/login",
         "Scottrade":"https://trading.scottrade.com/",
@@ -95,7 +95,7 @@ class GraphViewController: ViewSetup {
         graphViewSeen = StockGraphView2(stockData: a, key: "", cubic: false)
         graphViewSeen.xs[2].textColor = customColor.yellow
     }
-    var activityView = UIActivityIndicatorView()
+    @objc var activityView = UIActivityIndicatorView()
     override func viewWillAppear(_ animated: Bool) {
         
         activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
@@ -244,7 +244,7 @@ class GraphViewController: ViewSetup {
         addButton(name: trade, x: 0, y: 1194, width: 750, height: 1334-1194, title: "TRADE", font: "HelveticaNeue-Bold", fontSize: 18, titleColor: customColor.white, bgColor: customColor.black, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.trade(_:)), addSubview: false, alignment: .center)
         
     }
-    var i = 0
+    @objc var i = 0
     var yVals = [String:(l1:String,l2:String,l3:String,l4:String,l5:String)]()
     
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
@@ -302,7 +302,7 @@ class GraphViewController: ViewSetup {
         }
     }
     
-    func showGraph() {
+    @objc func showGraph() {
         
         graphViews = ["1y":nil,"5y":nil,"10y":nil,"1d":nil,"5d":nil,"1m":nil,"3m":nil]
         
@@ -332,7 +332,7 @@ class GraphViewController: ViewSetup {
         }
     }
     
-    func checkDoneSquashing() {
+    @objc func checkDoneSquashing() {
         guard PodVariable.gingerBreadMan.count == 7 else {
             self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
             return
@@ -355,7 +355,7 @@ class GraphViewController: ViewSetup {
         // }
     }
     
-    func animateBase() {
+    @objc func animateBase() {
         graphViewSeen.base.backgroundColor = customColor.yellow
         graphViewSeen.base.alpha = 1.0
         
@@ -421,8 +421,8 @@ class GraphViewController: ViewSetup {
     }
     
     
-    var layerAnimation2 = CABasicAnimation(keyPath: "position.y")
-    var layerAnimation3 = CABasicAnimation(keyPath: "position.y")
+    @objc var layerAnimation2 = CABasicAnimation(keyPath: "position.y")
+    @objc var layerAnimation3 = CABasicAnimation(keyPath: "position.y")
     
     func findKeyForValue(value: StockGraphView2, dictionary: [String:StockGraphView2?]) ->String?
     {
@@ -438,9 +438,9 @@ class GraphViewController: ViewSetup {
         
         return nil
     }
-    var j = 0
+    @objc var j = 0
     // let serialQueue = DispatchQueue(label: "queuename")
-    var keys = [String]()
+    @objc var keys = [String]()
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         let myAlpha = Alpha()
         myAlpha.get20YearHistoricalData(ticker: stockName.uppercased(), isOneYear: false) { dataSet in

@@ -14,13 +14,13 @@ import ReachabilitySwift
 
 class SignupViewController: ViewSetup, UITextFieldDelegate {
     var customColor = CustomColor()
-    var login = UIButton()
-    var username = UILabel()
-    var continueB = UIButton()
-    var createAccount = UILabel()
-    var textFields = [UITextField]()
+    @objc var login = UIButton()
+    @objc var username = UILabel()
+    @objc var continueB = UIButton()
+    @objc var createAccount = UILabel()
+    @objc var textFields = [UITextField]()
     let loadsave = LoadSaveCoreData()
-    var tap = UITapGestureRecognizer()
+    @objc var tap = UITapGestureRecognizer()
     let alphaAPI = Alpha()
     
     //var ti = [String]()
@@ -107,7 +107,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
     }
-    var continueOnce = true
+    @objc var continueOnce = true
     @objc private func continueFunc(_ sender: UIButton) {
         guard continueOnce == true else {return}
         continueOnce = false

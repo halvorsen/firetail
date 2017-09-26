@@ -14,22 +14,22 @@ import UIKit
 
 class CompareScroll: UIView {
     
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    let fontSizeMultiplier = UIScreen.main.bounds.width / 375
+    @objc let screenWidth = UIScreen.main.bounds.width
+    @objc let screenHeight = UIScreen.main.bounds.height
+    @objc let fontSizeMultiplier = UIScreen.main.bounds.width / 375
     let customColor = CustomColor()
-    var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
-    var __set = [CGFloat]()
-    var passedColor = UIColor()
-    let rangeMultiplier: CGFloat = 10
-    let scale: CGFloat = 1.5
-    var stock = ""
-    var percentSet = [String]()
-    var percentSetVal = [CGFloat]()
+    @objc var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
+    @objc var __set = [CGFloat]()
+    @objc var passedColor = UIColor()
+    @objc let rangeMultiplier: CGFloat = 10
+    @objc let scale: CGFloat = 1.5
+    @objc var stock = ""
+    @objc var percentSet = [String]()
+    @objc var percentSetVal = [CGFloat]()
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
-    init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: 259*UIScreen.main.bounds.height/667)) {
+    @objc init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: 259*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
         var _graphData = graphData
         stock = stockName
@@ -53,20 +53,7 @@ class CompareScroll: UIView {
         percentSetVal = _set.map { $0 * 10 - 100 }
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
         data = __set
-        
-       // let mo = ["","January","Febrary","March","April","May","June","July","August","September","October","November","December"]
-    
-      //  let dComponent = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-//        let startLabel = UILabel()
-//        startLabel.frame = CGRect(x: screenWidth/4.9, y: screenHeight/7.2, width: 200, height: 50*screenHeight/667)
-//        startLabel.text = "12 Months Ago"
-//        
-//        //startLabel.text = "\(mo[dComponent.month! + 1]), \(dComponent.year! - 1)"
-//        startLabel.textColor = .white
-//        startLabel.alpha = 1.0
-//        startLabel.font = UIFont(name: "Roboto-Medium", size: 12*fontSizeMultiplier)
-//        self.addSubview(startLabel)
-        
+   
         setNeedsDisplay()
         
     }
@@ -99,15 +86,15 @@ class CompareScroll: UIView {
         
     }
     
-    var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
+    @objc var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
 
-    func coordXFor(index: Int) -> CGFloat {
+    @objc func coordXFor(index: Int) -> CGFloat {
         return bounds.height - bounds.height * data[index] / (data.max() ?? 0)
     }
     
     
     
-    func quadCurvedPath() -> UIBezierPath {
+    @objc func quadCurvedPath() -> UIBezierPath {
         let path = UIBezierPath()
         let step = bounds.width / CGFloat(data.count - 1) / (scale * 1.1)
         
@@ -154,7 +141,7 @@ class CompareScroll: UIView {
         return CGPoint(x: newX, y: newY)
     }
     
-    func midPointForPoints(p1: CGPoint, p2: CGPoint) -> CGPoint {
+    @objc func midPointForPoints(p1: CGPoint, p2: CGPoint) -> CGPoint {
         return CGPoint(x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2);
     }
     
@@ -209,7 +196,7 @@ class CompareScroll: UIView {
         return controlPoint
     }
     
-    func drawPoint(point: CGPoint, color: UIColor, radius: CGFloat) {
+    @objc func drawPoint(point: CGPoint, color: UIColor, radius: CGFloat) {
         let ovalPath = UIBezierPath(ovalIn: CGRect(x: scale*(point.x - radius), y: point.y - radius, width: radius * 2, height: radius * 2))
         color.setFill()
         ovalPath.fill()

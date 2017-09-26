@@ -10,18 +10,18 @@ import UIKit
 import ReachabilitySwift
 
 class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
-    var newAlertTicker = String()
-    var newAlertTickerLabel = UILabel()
-    var newAlertPrice = Double()
-    let backArrow = UIButton()
-    var graph = DailyGraphForAlertView()
-    var container = UIScrollView()
+    @objc var newAlertTicker = String()
+    @objc var newAlertTickerLabel = UILabel()
+    @objc var newAlertPrice = Double()
+    @objc let backArrow = UIButton()
+    @objc var graph = DailyGraphForAlertView()
+    @objc var container = UIScrollView()
     var customColor = CustomColor()
-    var dial = UIScrollView()
-    var displayValues = [Double]()
-    var priceLabel = UILabel()
-    var sett = UIButton()
-    var alertPrice: Double = 0.00 {
+    @objc var dial = UIScrollView()
+    @objc var displayValues = [Double]()
+    @objc var priceLabel = UILabel()
+    @objc var sett = UIButton()
+    @objc var alertPrice: Double = 0.00 {
         didSet{
             DispatchQueue.main.async {
                 
@@ -38,12 +38,12 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             }
         }
     }
-    let stockSymbol = UILabel()
-    var activityView = UIActivityIndicatorView()
-    var lastPrice = Double()
-    let setPriceAlert = UILabel()
-    let arrow = UIImageView()
-    var priceString = String()
+    @objc let stockSymbol = UILabel()
+    @objc var activityView = UIActivityIndicatorView()
+    @objc var lastPrice = Double()
+    @objc let setPriceAlert = UILabel()
+    @objc let arrow = UIImageView()
+    @objc var priceString = String()
     
     private func loadItAll() {
         
@@ -129,13 +129,13 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         
         
     }
-    var rectsLabelsTop = [CGFloat]()
-    var rectsLabelsBottom = [CGFloat]()
-    var rectsLabelsTopBig = [CGFloat]()
-    var rectsLabelsBottomBig = [CGFloat]()
-    var rectsLabelsPrice = [CGFloat]()
-    var dialPrice = Double()
-    var offset = CGFloat()
+    @objc var rectsLabelsTop = [CGFloat]()
+    @objc var rectsLabelsBottom = [CGFloat]()
+    @objc var rectsLabelsTopBig = [CGFloat]()
+    @objc var rectsLabelsBottomBig = [CGFloat]()
+    @objc var rectsLabelsPrice = [CGFloat]()
+    @objc var dialPrice = Double()
+    @objc var offset = CGFloat()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = customColor.black33
@@ -208,7 +208,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     }
     
     
-    func populateDisplayValues(currentPrice: Double) {
+    @objc func populateDisplayValues(currentPrice: Double) {
         if displayValues.count > 0 {
             displayValues.removeAll()
         }
@@ -231,7 +231,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         }
     }
     
-    func populateDialView() {
+    @objc func populateDialView() {
         
         let backdrop = UIView()
         backdrop.backgroundColor = customColor.black42
@@ -331,7 +331,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         reachabilityAddNotification()
     }
     
-    var isFirst = true
+    @objc var isFirst = true
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if scrollView == dial {

@@ -83,6 +83,22 @@ class Alpha {
                                 }
                             }
                         }
+                        //caching 10 years no matter what
+                        var cacheprices = [Double]()
+                        var cachedates = [(String,Int)]()
+                        
+                        if _prices.count > 2521  {
+                            cacheprices = Array(_prices[(_prices.count-2520)..<_prices.count])
+                            cachedates = Array(_dates[(_dates.count-2520)..<_dates.count])
+                        }
+                        var cachedays = [Int]()
+                        var cachemonths = [String]()
+                        for i in 0..<_prices.count {
+                            cachedays.append(cachedates[i].1)
+                            cachemonths.append(cachedates[i].0)
+                        }
+                        self.cacheManager.saveStockData(ticker: ticker, prices: cacheprices, days: cachedays, months: cachemonths)
+                       //end caching
                         
                         
                         if isOneYear {
@@ -103,7 +119,7 @@ class Alpha {
                             _days.append(_dates[i].1)
                             _months.append(_dates[i].0)
                         }
-                        self.cacheManager.saveStockData(ticker: ticker, prices: _prices, days: _days, months: _months)
+                        
                         result(DataSet(ticker: ticker, price: _prices, month: _months, day: _days))
                         
                     }

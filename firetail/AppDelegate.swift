@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         //load and print cached items
         let casheManager = CacheManager()
-        casheManager.loadData()
+        let _ = casheManager.loadData()
         
 
         return true
@@ -132,7 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         connectToFcm()
     }
     
-    func connectToFcm() {
+    @objc func connectToFcm() {
         // Won't connect since there is no token
         guard InstanceID.instanceID().token() != nil else {
             return

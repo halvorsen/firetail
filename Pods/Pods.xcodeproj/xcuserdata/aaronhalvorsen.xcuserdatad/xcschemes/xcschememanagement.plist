@@ -34,12 +34,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SwiftCharts.xcscheme</key>
+		<key>SwiftyStoreKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SwiftyStoreKit.xcscheme</key>
+		<key>leveldb-library.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -51,52 +51,6 @@
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
-	<dict>
-		<key>0732A67382D29303B956E31D1A65132E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>29C238939D85720FED2C67EA44FE5D6E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>3D71F295903606818D8D528C55988D3E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>6D5CEDECD3D8DC52EA507E0431BDA8A0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>960FB2E3195CD928C45A585142C767BE</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>965A50D6D3156F037659FB8048B51931</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>C052BEBFBD0AB5218CC64BA3450F6547</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E4DD95323C54A78F879DAB0F1508B8E7</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F307B842FF76B2DE6C55DB67C0885325</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-	</dict>
+	<dict/>
 </dict>
 </plist>

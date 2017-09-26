@@ -26,20 +26,20 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             
         }
     }
-    let backArrow = UIButton()
-    var newAlertTicker = String()
-    var newAlertPrice = Double()
+    @objc let backArrow = UIButton()
+    @objc var newAlertTicker = String()
+    @objc var newAlertPrice = Double()
     var customColor = CustomColor()
-    var newAlertTickerLabel = UILabel()
-    var newAlertPriceLabel = UILabel()
-    let priceAlert = UILabel()
-    let stockSymbol = UILabel()
-    var addAlert = UIButton()
+    @objc var newAlertTickerLabel = UILabel()
+    @objc var newAlertPriceLabel = UILabel()
+    @objc let priceAlert = UILabel()
+    @objc let stockSymbol = UILabel()
+    @objc var addAlert = UIButton()
     let myLoadSave = LoadSaveCoreData()
     var newAlertBoolTuple = (false, false, false, false, false)
-    var lastPrice = Double()
-    var newAlertLongID = String()
-    var alertID: [String] {
+    @objc var lastPrice = Double()
+    @objc var newAlertLongID = String()
+    @objc var alertID: [String] {
         var aaa = [String]()
         for i in 0...Set1.userAlerts.count {
             switch i {
@@ -56,8 +56,8 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         return aaa
     }
   //  var phoneTextField = UITextField()
-    var priceString = String()
-    let (mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
+    @objc var priceString = String()
+    @objc let (mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -413,7 +413,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
 //        phoneTextField.alpha = 0.0
 //    }
     
-    func connectToFcm() {
+    @objc func connectToFcm() {
         
         // Won't connect since there is no token
         guard InstanceID.instanceID().token() != nil else {

@@ -14,22 +14,22 @@ import UIKit
 
 class DailyGraphForAlertView: UIView {
     
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    let fontSizeMultiplier = UIScreen.main.bounds.width / 375
+    @objc let screenWidth = UIScreen.main.bounds.width
+    @objc let screenHeight = UIScreen.main.bounds.height
+    @objc let fontSizeMultiplier = UIScreen.main.bounds.width / 375
     let customColor = CustomColor()
-    var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
-    var __set = [CGFloat]()
-    var passedColor = UIColor()
-    let scale: CGFloat = 4
-    var stock = ""
-    var pointSet = [CGFloat]()
-    var labels = [UILabel]()
-    var allStockValues = [String]()
-    var grids = [GridLine]()
-    var dayLabels = [UILabel]()
-    var month = [String]()
-    var day = [Int]()
+    @objc var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
+    @objc var __set = [CGFloat]()
+    @objc var passedColor = UIColor()
+    @objc let scale: CGFloat = 4
+    @objc var stock = ""
+    @objc var pointSet = [CGFloat]()
+    @objc var labels = [UILabel]()
+    @objc var allStockValues = [String]()
+    @objc var grids = [GridLine]()
+    @objc var dayLabels = [UILabel]()
+    @objc var month = [String]()
+    @objc var day = [Int]()
     
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
@@ -100,16 +100,16 @@ class DailyGraphForAlertView: UIView {
         
     }
     
-    var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
+    @objc var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
     
-    func coordXFor(index: Int) -> CGFloat {
+    @objc func coordXFor(index: Int) -> CGFloat {
         return bounds.height / scale - (bounds.height/scale) * data[index] / (data.max() ?? 0)
     }
     
     
-    var points = [CGPoint]()
+    @objc var points = [CGPoint]()
     
-    func quadCurvedPath() -> UIBezierPath {
+    @objc func quadCurvedPath() -> UIBezierPath {
         let path = UIBezierPath()
         let step = bounds.width / CGFloat(data.count - 1) / (scale * 1.1)
         
@@ -223,7 +223,7 @@ class DailyGraphForAlertView: UIView {
         return CGPoint(x: newX, y: newY)
     }
     
-    func midPointForPoints(p1: CGPoint, p2: CGPoint) -> CGPoint {
+    @objc func midPointForPoints(p1: CGPoint, p2: CGPoint) -> CGPoint {
         return CGPoint(x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2);
     }
     
@@ -278,7 +278,7 @@ class DailyGraphForAlertView: UIView {
         return controlPoint
     }
     
-    func drawPoint(point: CGPoint, color: UIColor, radius: CGFloat) {
+    @objc func drawPoint(point: CGPoint, color: UIColor, radius: CGFloat) {
         let ovalPath = UIBezierPath(ovalIn: CGRect(x: point.x - radius, y: point.y - radius, width: radius * 2, height: radius * 2))
         color.setFill()
         ovalPath.fill()
