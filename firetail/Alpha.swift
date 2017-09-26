@@ -43,6 +43,7 @@ class Alpha {
                     }
                     catch {
                         print("error in JSONSerialization")
+                        result(nil)
                     }
                     
                     for (keyRoot,valueRoot) in json {

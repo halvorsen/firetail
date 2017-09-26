@@ -87,7 +87,7 @@ class AppLoadingData {
     //if there are no alerts it segues to add stock ticker
     
     func loadUserInfoFromFirebase(firebaseUsername: String, result: @escaping (_ haveNoAlerts: Bool) -> Void) {
-        
+        Set1.ti.removeAll()
         let ref = Database.database().reference()
         
         ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
