@@ -165,6 +165,7 @@
 				069FD1231E5382D4003BDFE2 /* GraphViewController.swift */,
 				06110EA81EB925BF00C901C5 /* ChangePasswordViewController.swift */,
 				0641936A1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift */,
+				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -197,7 +198,6 @@
 				0672601A1E67BD5B00F54500 /* StockGraphView2.swift */,
 				0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */,
 				06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */,
-				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
