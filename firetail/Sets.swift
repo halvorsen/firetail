@@ -31,6 +31,8 @@ public struct Set1 {
     
     public static var oneYearDictionary: [String:[Double]] = ["":[0.0]]
     
+    public static var tenYearDictionary: [String:[Double]] = ["":[0.0]]
+    
     public static var ti = [String]()
     
     public static var month = ["","","","","","","","","","","",""]

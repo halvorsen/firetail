@@ -13,53 +13,83 @@ import FirebaseCore
 
 let updatedDataKey = "com.rightBrothers.updatedData"
 class AppLoadingData {
+    
+    var fetchedTickers = [String]()
     let cacheManager = CacheManager()
-    private func loadTop3StocksFromCoreData() -> Bool {
+    let alphaAPI = Alpha()
+
+    private func loadStocksFromCoreData() -> Bool {
         let dataSets = cacheManager.loadData()
-        if dataSets.count > 50 {
+        if dataSets.count > 5000 {
             cacheManager.eraseAllStockCashe()
         }
-        var count = 3
-        if Set1.ti.count < 3 {
-            guard Set1.ti.count > 0 else {print("Set1.ti.count == 0");return false}
-            count = Set1.ti.count
-        }
-        var savedCount = 0
-        for i in 0..<count {
+        guard Set1.ti.count > 0 else {print("Set1.ti.count == 0");return false}
+        
+        for i in 0..<Set1.ti.count {
             loop: for dataSet in dataSets.reversed() {
                 if dataSet.ticker == Set1.ti[i] {
-                    Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252)) //Array(array.suffix(10))
-                    savedCount += 1
-                    if savedCount == count {
+                    Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                    Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+                    if i == (Set1.ti.count - 1) {
                         return true
                     }
-                    break loop
                 }
+                break loop
             }
         }
         return false
     }
     
-    private func fetchAllButFirst3Stocks() { //stop fetching after 8 stocks
-        var count = 3
+    private func fetchAllButFirst3Stocks() {
+        var count = 0
         if Set1.ti.count > 3 {
             count = Set1.ti.count
         }
+        guard count > 3 else {return}
+        var savedCount = 3
         for i in 3..<count {
-            guard i < 9 else {return}
-            let keyExists = Set1.oneYearDictionary[Set1.ti[i]] != nil
-            if !keyExists {
-            alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i]) { dataSet in
-                if let dataSet = dataSet {
-                    Set1.oneYearDictionary[dataSet.ticker] = dataSet.price
+            if !fetchedTickers.contains(Set1.ti[i]) {
+                
+                fetchedTickers.append(Set1.ti[i])
+                alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i]) { dataSet in
+                    savedCount += 1
+                    if let dataSet = dataSet {
+                        Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                        Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+                    }
+                    if savedCount >= count {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                    }
                 }
-            }
+            } else {
+                savedCount += 1
             }
         }
     }
-   
+    
+    func fetchAllStocks() {
+        var savedCount = 3
+        guard Set1.ti.count > 0 else {return}
+        for i in 0..<Set1.ti.count {
+            
+            if !fetchedTickers.contains(Set1.ti[i]) {
+                fetchedTickers.append(Set1.ti[i])
+                alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i]) { dataSet in
+                    savedCount += 1
+                    if let dataSet = dataSet {
+                        Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                        Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+                    }
+                    if savedCount >= Set1.ti.count {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                    }
+                }
+            } else {
+                savedCount += 1
+            }
+        }
+    }
 
-    let alphaAPI = Alpha()
     private func fetch(callback: @escaping () -> Void) {
         var count = 3
         if Set1.ti.count < 3 {
@@ -70,12 +100,13 @@ class AppLoadingData {
         for i in 0..<count {
             alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i]) { dataSet in
                 if let dataSet = dataSet {
-                    Set1.oneYearDictionary[dataSet.ticker] = dataSet.price
+                    Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                    Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
                     savedCount += 1
                     if savedCount == count {
                         self.fetchAllButFirst3Stocks()
                         NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                        print("finishedfetch1")
+                       
                         callback()
                     }
                 }
@@ -164,7 +195,7 @@ class AppLoadingData {
                                             }
                                         }
                                     }
-                                    let success = self.loadTop3StocksFromCoreData()
+                                    let success = self.loadStocksFromCoreData()
                                     Set1.saveUserInfo()
                                     if success {
                                         haventSegued = false

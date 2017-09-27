@@ -895,7 +895,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-               NotificationCenter.default.removeObserver(self)
+       NotificationCenter.default.removeObserver(self)
         if segue.identifier == "fromMainToGraph" {
             let graphView: GraphViewController = segue.destination as! GraphViewController
             

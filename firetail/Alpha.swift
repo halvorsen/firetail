@@ -93,7 +93,7 @@ class Alpha {
                         }
                         var cachedays = [Int]()
                         var cachemonths = [String]()
-                        for i in 0..<_prices.count {
+                        for i in 0..<cacheprices.count {
                             cachedays.append(cachedates[i].1)
                             cachemonths.append(cachedates[i].0)
                         }

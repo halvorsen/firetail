@@ -70,11 +70,27 @@ class GraphViewController: ViewSetup {
     ]
     
     
-    
+    @objc private func finishedFetchingStocks() {
+        print("received fetching notification in graphview controller")
+        //reload graphs
+        callCorrectGraph2FromCache(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
+            DispatchQueue.main.async {
+                
+                if stockData.0.count == 7 {
+                    print("stockdataCount111: \(stockData.1.count)")
+                    for i in 0..<stockData.0.count {
+                        self.orderOfGraphs[stockData.0[i]] = i
+                        self.orderofGraphsInverse[i] = stockData.0[i]
+                    }
+                    
+                    self.implementDrawSubviews(stockData: stockData)}
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+         NotificationCenter.default.addObserver(self, selector: #selector(GraphViewController.finishedFetchingStocks), name: NSNotification.Name(rawValue: updatedDataKey), object: nil)
         PodVariable.gingerBreadMan.removeAll()
         Label.changeValues.removeAll()
         Label.percentageValues.removeAll()
@@ -103,11 +119,37 @@ class GraphViewController: ViewSetup {
         activityView.startAnimating()
         activityView.alpha = 0.0
         self.view.addSubview(activityView)
-        UIView.animate(withDuration: 3.0) {
+        UIView.animate(withDuration: 1.0) {
             self.activityView.alpha = 1.0
         }
         showGraph()
         
+    }
+    
+    @objc func showGraph() {
+        
+        graphViews = ["1y":nil,"5y":nil,"10y":nil,"1d":nil,"5d":nil,"1m":nil,"3m":nil]
+        
+        self.view.endEditing(true)
+        if passedString != "Patriots" {
+            
+            stockName = passedString
+            stockHeader.text = passedString.uppercased()
+            
+            callCorrectGraph2FromCache(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
+                DispatchQueue.main.async {
+
+                    if stockData.0.count == 7 {
+                        print("stockdataCount111: \(stockData.1.count)")
+                        for i in 0..<stockData.0.count {
+                            self.orderOfGraphs[stockData.0[i]] = i
+                            self.orderofGraphsInverse[i] = stockData.0[i]
+                        }
+                        
+                        self.implementDrawSubviews(stockData: stockData)}
+                }
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -119,7 +161,7 @@ class GraphViewController: ViewSetup {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //     let mainView: DashboardViewController = segue.destination as! DashboardViewController
+        NotificationCenter.default.removeObserver(self)
     }
     
     @objc private func back(_ sender: UIButton) {
@@ -136,10 +178,7 @@ class GraphViewController: ViewSetup {
     }
     
     @objc private func pickGraph(_ tap: UITapGestureRecognizer) {
-//        guard PodVariable.gingerBreadMan.count == 7 else {
-//          self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
-//            return
-//        }
+
         let layerAnimation = CABasicAnimation(keyPath: "path")
         layerAnimation.duration = 0.7
         layerAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
@@ -302,35 +341,7 @@ class GraphViewController: ViewSetup {
         }
     }
     
-    @objc func showGraph() {
-        
-        graphViews = ["1y":nil,"5y":nil,"10y":nil,"1d":nil,"5d":nil,"1m":nil,"3m":nil]
-        
-        self.view.endEditing(true)
-        if passedString != "Patriots" {
-            
-            stockName = passedString
-            stockHeader.text = passedString.uppercased()
-            
-            
-            
-            callCorrectGraph2(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
-                DispatchQueue.main.async {
-                    
-                
-                if stockData.0.count == 7 {
-                    print("stockdataCount111: \(stockData.1.count)")
-                    for i in 0..<stockData.0.count {
-                        self.orderOfGraphs[stockData.0[i]] = i
-                        self.orderofGraphsInverse[i] = stockData.0[i]
-                    }
-                    
-                    self.implementDrawSubviews(stockData: stockData)}
-                }
-                
-            }
-        }
-    }
+   
     
     @objc func checkDoneSquashing() {
         guard PodVariable.gingerBreadMan.count == 7 else {
@@ -352,7 +363,6 @@ class GraphViewController: ViewSetup {
                 graph!.removeFromSuperview()
             }
         }
-        // }
     }
     
     @objc func animateBase() {
@@ -424,8 +434,7 @@ class GraphViewController: ViewSetup {
     @objc var layerAnimation2 = CABasicAnimation(keyPath: "position.y")
     @objc var layerAnimation3 = CABasicAnimation(keyPath: "position.y")
     
-    func findKeyForValue(value: StockGraphView2, dictionary: [String:StockGraphView2?]) ->String?
-    {
+    func findKeyForValue(value: StockGraphView2, dictionary: [String:StockGraphView2?]) ->String? {
         for (key, array) in dictionary
         {
             if array != nil {
@@ -438,12 +447,12 @@ class GraphViewController: ViewSetup {
         
         return nil
     }
+    
     @objc var j = 0
-    // let serialQueue = DispatchQueue(label: "queuename")
     @objc var keys = [String]()
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
-        let myAlpha = Alpha()
-        myAlpha.get20YearHistoricalData(ticker: stockName.uppercased(), isOneYear: false) { dataSet in
+        let alphaAPI = Alpha()
+        alphaAPI.get20YearHistoricalData(ticker: stockName.uppercased(), isOneYear: false) { dataSet in
           
             guard dataSet != nil else {
                 self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
@@ -553,6 +562,114 @@ class GraphViewController: ViewSetup {
             //                    result(([""],[nil]))
             
         }
+        
+    }
+    
+    func callCorrectGraph2FromCache(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
+
+            guard let tenYear = Set1.tenYearDictionary[stockName] else {self.performSegue(withIdentifier: "fromGraphToMain", sender: self);return}
+            var __stockData = tenYear
+        print("tenyearcount: \(tenYear.count)")
+            if tenYear[tenYear.count - 1] == tenYear[tenYear.count - 2] {
+                __stockData.remove(at: tenYear.count - 1)
+            }
+            let list = ["1y","5y","10y","1d","5d","1m","3m"]
+            let amount = __stockData.count
+            var stockDatas = [StockData2]()
+            //252 days in the trading year
+            for timeSpan in list {
+                var stockData2 = StockData2()
+                switch timeSpan {
+                case "1y":
+                    if amount < 252 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
+                        for i in (amount - 252)..<amount {
+                            
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    }
+                    stockDatas.append(stockData2)
+                case "5y":
+                    if amount < 252*5 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
+                        for i in (amount - 252*5)..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    }
+                    stockDatas.append(stockData2)
+                case "10y":
+                    if amount < 252*10 + 20 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
+                        for i in (amount - 252*10 + 20)..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    }
+                    stockDatas.append(stockData2)
+                case "1d":
+                    for i in (amount - 55)..<amount {
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
+                    //                    for i in (amount - 5)..<amount {
+                    //                        stockData2.closingPrice.append(stockData[i])
+                    //                    }
+                    // stockData2.closingPrice.append(stockData[amount - 1])
+                    stockDatas.append(stockData2)
+                case "5d":
+                    if amount < 5 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
+                        for i in (amount - 5)..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    }
+                    stockDatas.append(stockData2)
+                case "1m":
+                    if amount < 252/12 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
+                        for i in (amount-252/12)..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    }
+                    stockDatas.append(stockData2)
+                case "3m":
+                    if amount < 252/4 {
+                        for i in 0..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    } else {
+                        for i in (amount-252/4)..<amount {
+                            stockData2.closingPrice.append(__stockData[i])
+                        }
+                    }
+                    stockDatas.append(stockData2)
+                    result((list,stockDatas))
+                default: break
+                }
+                
+                
+            }
+            
+            //FIXIT add error message
+            //                }, { (error) in
+            //                    self.userWarning(title: "", message: error.description)
+            //                    print(error)
+            //                    result(([""],[nil]))
+            
+        
         
     }
     
