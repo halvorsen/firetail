@@ -527,7 +527,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             if frame.contains(gesture.location(in: view)) {
                 
                 stringToPass = block.stockTickerGlobal
-                self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
+                goToGraph()
             }
         }
         
@@ -559,6 +559,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             break
         case 1:
             guard Set1.oneYearDictionary[Set1.ti[0]] != nil else {return}
+            guard Set1.oneYearDictionary[Set1.ti[0]]!.count > 0 else {return}
             sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
             svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
             container.addSubview(sv)
@@ -566,28 +567,34 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             
         case 2:
             guard Set1.oneYearDictionary[Set1.ti[0]] != nil else {return}
+            guard Set1.oneYearDictionary[Set1.ti[0]]!.count > 0 else {return}
             sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
             container.addSubview(sv)
             svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
             container2.addSubview(svDot)
             guard Set1.oneYearDictionary[Set1.ti[1]] != nil else {return}
+            guard Set1.oneYearDictionary[Set1.ti[1]]!.count > 0 else {return}
             sv1 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
             container.addSubview(sv1)
             svDot1 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
             container2.addSubview(svDot1)
             
         default:
+            
             guard Set1.oneYearDictionary[Set1.ti[0]] != nil else {return}
+            guard Set1.oneYearDictionary[Set1.ti[0]]!.count > 0 else {return}
             sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
             container.addSubview(sv)
             svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
             container2.addSubview(svDot)
             guard Set1.oneYearDictionary[Set1.ti[1]] != nil else {return}
+            guard Set1.oneYearDictionary[Set1.ti[1]]!.count > 0 else {return}
             sv1 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
             container.addSubview(sv1)
             svDot1 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
             container2.addSubview(svDot1)
             guard Set1.oneYearDictionary[Set1.ti[2]] != nil else {return}
+            guard Set1.oneYearDictionary[Set1.ti[2]]!.count > 0 else {return}
             sv2 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[2]]!, stockName: Set1.ti[2], color: customColor.white209)
             container.addSubview(sv2)
             svDot2 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[2]]!, stockName: Set1.ti[2], color: customColor.white209)
@@ -906,9 +913,40 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             addView.newAlertTicker = "TICKER"
         }
     }
-    
+    var haventSeguedToDetail = true
+    var detailedTimer = Timer()
+    var tryFor3Secondscount = 0
     @objc private func goToGraph() {
+        print("cachedinthissession: \(Set1.cachedInThisSession)")
+//        if Set1.cachedInThisSession.contains(stringToPass) && haventSeguedToDetail {
+//        haventSeguedToDetail = false
+//        detailedTimer.invalidate()
+        if let prices = Set1.tenYearDictionary[stringToPass],
+            prices.count > 1 {
         self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
+        }
+//
+//        } else {
+//            tryFor3Secondscount += 1
+//            if !activityView.isDescendant(of: view) {
+//            activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+//            activityView.center = self.view.center
+//            activityView.startAnimating()
+//            activityView.alpha = 1.0
+//            view.addSubview(activityView)
+//            detailedTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: {_ in self.goToGraph()})
+//            detailedTimer.fire()
+//            }
+//            if tryFor3Secondscount == 7 {
+//                detailedTimer.invalidate()
+//                activityView.alpha = 0.0
+//                activityView.removeFromSuperview()
+//                tryFor3Secondscount = 0
+//            }
+//
+//        }
+//
+        
     }
     
     @objc func purchase(productId: String = "firetail.iap.premium") {

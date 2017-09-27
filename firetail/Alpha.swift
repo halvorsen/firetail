@@ -90,6 +90,9 @@ class Alpha {
                         if _prices.count > 2521  {
                             cacheprices = Array(_prices[(_prices.count-2520)..<_prices.count])
                             cachedates = Array(_dates[(_dates.count-2520)..<_dates.count])
+                        } else {
+                            cacheprices = _prices
+                            cachedates = _dates
                         }
                         var cachedays = [Int]()
                         var cachemonths = [String]()
@@ -99,8 +102,7 @@ class Alpha {
                         }
                         self.cacheManager.saveStockData(ticker: ticker, prices: cacheprices, days: cachedays, months: cachemonths)
                        //end caching
-                        
-                        
+
                         if isOneYear {
                             
                             if _prices.count > 253  {

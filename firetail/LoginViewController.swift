@@ -92,38 +92,15 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 if Set1.username != "none" {
                    if self.isFirstLoading {
                     //load stock list from firebase and start fetch, if loading takes long time move forward anyways after 8 seconds to dashboard
-                    Timer.scheduledTimer(withTimeInterval: 8.0, repeats: false, block: {_ in
+                    Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false, block: {_ in
                         if didntMoveForward {
-                            Timer.scheduledTimer(withTimeInterval: 8.0, repeats: false, block: {_ in
-                                if didntMoveForward {
-                                    print("triggered didntMoveForwardTimerTwice")
-                                    didntMoveForward = false
-                                    if self.isFirstTimeSeguing {
-                                        self.isFirstTimeSeguing = false
-                                    self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
-                                    }
-                                }
-                            })
-                            print("triggered didntMoveForwardTimer")
-                            self.appLoadingData.loadUserInfoFromFirebase(firebaseUsername: Set1.username) {haveNoAlerts in
-                                self.ti = Set1.ti
-                                print("finishedfetch4")
-                                if haveNoAlerts {
-                                    print("finishedfetch5")
-                                    didntMoveForward = false
-                                    self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
-                                } else {
-                                    print("finishedfetch6")
-                                    didntMoveForward = false
-                                    self.cont()
-                                }
-                                
+                            print("triggered didntMoveForwardTimerTwice")
+                            didntMoveForward = false
+                            if self.isFirstTimeSeguing {
+                                self.isFirstTimeSeguing = false
+                                self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
                             }
-                            
-                            
                         }
-                        
-                        
                     })
                     self.appLoadingData.loadUserInfoFromFirebase(firebaseUsername: Set1.username) {haveNoAlerts in
                         self.ti = Set1.ti

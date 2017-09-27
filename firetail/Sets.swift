@@ -27,7 +27,7 @@ public struct Set1 {
     
     public static var yesterday: Double = 0.0
     
-   // public static var alertCount: Int = 0
+    public static var cachedInThisSession = [String]()
     
     public static var oneYearDictionary: [String:[Double]] = ["":[0.0]]
     

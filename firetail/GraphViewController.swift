@@ -73,19 +73,19 @@ class GraphViewController: ViewSetup {
     @objc private func finishedFetchingStocks() {
         print("received fetching notification in graphview controller")
         //reload graphs
-        callCorrectGraph2FromCache(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
-            DispatchQueue.main.async {
-                
-                if stockData.0.count == 7 {
-                    print("stockdataCount111: \(stockData.1.count)")
-                    for i in 0..<stockData.0.count {
-                        self.orderOfGraphs[stockData.0[i]] = i
-                        self.orderofGraphsInverse[i] = stockData.0[i]
-                    }
-                    
-                    self.implementDrawSubviews(stockData: stockData)}
-            }
-        }
+        //this just need to be entirely remade if we want to reload while in the controller. issues are: drawing with Chart Pod, not doing asynch correctly (the charts get drawn and I used second delays to make sure I had the right order). the layers are then copied from the Chart pod and loaded in a complex view controll that has a ton of interdependancies. This just needs to be gutted and redone correctly. until then we just get old details until fetch is done before segueing to these details or we can turn on an indicator before seguing until the fetched data from loading comes in.
+//        callCorrectGraph2FromCache(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
+//            DispatchQueue.main.async {
+//
+//                if stockData.0.count == 7 {
+//                    for i in 0..<stockData.0.count {
+//                        self.orderOfGraphs[stockData.0[i]] = i
+//                        self.orderofGraphsInverse[i] = stockData.0[i]
+//                    }
+//
+//                    self.implementDrawSubviews(stockData: stockData)}
+//            }
+//        }
     }
     
     override func viewDidLoad() {
@@ -140,7 +140,7 @@ class GraphViewController: ViewSetup {
                 DispatchQueue.main.async {
 
                     if stockData.0.count == 7 {
-                        print("stockdataCount111: \(stockData.1.count)")
+                        
                         for i in 0..<stockData.0.count {
                             self.orderOfGraphs[stockData.0[i]] = i
                             self.orderofGraphsInverse[i] = stockData.0[i]
@@ -287,7 +287,7 @@ class GraphViewController: ViewSetup {
     var yVals = [String:(l1:String,l2:String,l3:String,l4:String,l5:String)]()
     
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
-        print("i:\(i)")
+      
         if stockData.1[self.i] != nil {
             
             let graphView = StockGraphView2(stockData: stockData.1[self.i]!, key: stockData.0[self.i], cubic: true)
@@ -569,7 +569,7 @@ class GraphViewController: ViewSetup {
 
             guard let tenYear = Set1.tenYearDictionary[stockName] else {self.performSegue(withIdentifier: "fromGraphToMain", sender: self);return}
             var __stockData = tenYear
-        print("tenyearcount: \(tenYear.count)")
+       
             if tenYear[tenYear.count - 1] == tenYear[tenYear.count - 2] {
                 __stockData.remove(at: tenYear.count - 1)
             }

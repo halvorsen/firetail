@@ -20,23 +20,42 @@ class AppLoadingData {
 
     private func loadStocksFromCoreData() -> Bool {
         let dataSets = cacheManager.loadData()
-        if dataSets.count > 5000 {
+        if dataSets.count > 500 {
             cacheManager.eraseAllStockCashe()
         }
         guard Set1.ti.count > 0 else {print("Set1.ti.count == 0");return false}
-        
+     
         for i in 0..<Set1.ti.count {
             loop: for dataSet in dataSets.reversed() {
                 if dataSet.ticker == Set1.ti[i] {
+                    
                     Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
                     Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
                     if i == (Set1.ti.count - 1) {
+                        
+                        for i in 0..<Set1.ti.count {
+                            if let prices = Set1.oneYearDictionary[Set1.ti[i]] {
+                                if prices.count < 2 {
+                                    print("blah1")
+                                    print(Set1.ti[i])
+                                    //GOPro is getting empty prices
+                                    print(prices)
+                                    return false
+                                }
+                            } else {
+                                print("blah2")
+                                return false
+                            }
+                        }
+                        print("blah3")
                         return true
                     }
+                    break loop
                 }
-                break loop
+                
             }
         }
+        print("blah4")
         return false
     }
     
@@ -51,9 +70,10 @@ class AppLoadingData {
             if !fetchedTickers.contains(Set1.ti[i]) {
                 
                 fetchedTickers.append(Set1.ti[i])
-                alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i]) { dataSet in
+                alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
                     savedCount += 1
                     if let dataSet = dataSet {
+                        Set1.cachedInThisSession.append(dataSet.ticker)
                         Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
                         Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
                     }
@@ -74,9 +94,10 @@ class AppLoadingData {
             
             if !fetchedTickers.contains(Set1.ti[i]) {
                 fetchedTickers.append(Set1.ti[i])
-                alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i]) { dataSet in
+                alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
                     savedCount += 1
                     if let dataSet = dataSet {
+                        Set1.cachedInThisSession.append(dataSet.ticker)
                         Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
                         Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
                     }
@@ -98,13 +119,16 @@ class AppLoadingData {
         }
         var savedCount = 0
         for i in 0..<count {
-            alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i]) { dataSet in
+            alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
                 if let dataSet = dataSet {
+                    Set1.cachedInThisSession.append(dataSet.ticker)
                     Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
                     Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
                     savedCount += 1
                     if savedCount == count {
+                        DispatchQueue.global(qos: .background).async {
                         self.fetchAllButFirst3Stocks()
+                        }
                         NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
                        
                         callback()
@@ -190,6 +214,7 @@ class AppLoadingData {
                                             DispatchQueue.main.async {
                                             if haventSegued {
                                                 print("finished fetch3")
+                                                
                                             result(false)
                                             }
                                             }
@@ -199,12 +224,14 @@ class AppLoadingData {
                                     Set1.saveUserInfo()
                                     if success {
                                         haventSegued = false
+                                        print("segue1")
                                         result(false)
                                     }
                                     
                                 } else {
                                     Set1.saveUserInfo()
                                     haventSegued = false
+                                    print("segue2")
                                     result(true)
                                 }
                             }
@@ -216,6 +243,7 @@ class AppLoadingData {
                 }
                 Set1.saveUserInfo()
             } else {
+                print("segue3")
                 result(true)
             }
             
