@@ -71,6 +71,20 @@ class AppLoadingData {
                 
                 fetchedTickers.append(Set1.ti[i])
                 alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+                    
+                    if dataSet == nil {
+                        self.alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+                            savedCount += 1
+                            if let dataSet = dataSet {
+                                Set1.cachedInThisSession.append(dataSet.ticker)
+                                Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                                Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+                            }
+                            if savedCount >= count {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                            }
+                        }
+                    } else {
                     savedCount += 1
                     if let dataSet = dataSet {
                         Set1.cachedInThisSession.append(dataSet.ticker)
@@ -79,6 +93,7 @@ class AppLoadingData {
                     }
                     if savedCount >= count {
                     NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                    }
                     }
                 }
             } else {
@@ -95,6 +110,20 @@ class AppLoadingData {
             if !fetchedTickers.contains(Set1.ti[i]) {
                 fetchedTickers.append(Set1.ti[i])
                 alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+                    
+                    if dataSet == nil {
+                        self.alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+                            savedCount += 1
+                            if let dataSet = dataSet {
+                                Set1.cachedInThisSession.append(dataSet.ticker)
+                                Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                                Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+                            }
+                            if savedCount >= Set1.ti.count {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                            }
+                        }
+                    } else {
                     savedCount += 1
                     if let dataSet = dataSet {
                         Set1.cachedInThisSession.append(dataSet.ticker)
@@ -103,6 +132,7 @@ class AppLoadingData {
                     }
                     if savedCount >= Set1.ti.count {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                    }
                     }
                 }
             } else {
@@ -120,6 +150,24 @@ class AppLoadingData {
         var savedCount = 0
         for i in 0..<count {
             alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+                if dataSet == nil {
+                    self.alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+                        if let dataSet = dataSet {
+                            Set1.cachedInThisSession.append(dataSet.ticker)
+                            Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                            Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+                            savedCount += 1
+                            if savedCount == count {
+                                DispatchQueue.global(qos: .background).async {
+                                    self.fetchAllButFirst3Stocks()
+                                }
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                                
+                                callback()
+                            }
+                        }
+                    }
+                } else {
                 if let dataSet = dataSet {
                     Set1.cachedInThisSession.append(dataSet.ticker)
                     Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
@@ -127,12 +175,13 @@ class AppLoadingData {
                     savedCount += 1
                     if savedCount == count {
                         DispatchQueue.global(qos: .background).async {
-                        self.fetchAllButFirst3Stocks()
+                            self.fetchAllButFirst3Stocks()
                         }
                         NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                       
+                        
                         callback()
                     }
+                }
                 }
             }
         }

@@ -295,26 +295,32 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     
     // here i'm giving it two chances to fetch the data otherwise it returns to addstockticker controller view with no error displayed to user
     private func prepareGraph(result: @escaping (_ dateArray: [(String,Int)]?,_ closings: [Double]?) -> Void) {
-     
+        
         let alphaAPI = Alpha()
-        alphaAPI.get20YearHistoricalData(ticker: self.newAlertTicker) { (dataSet) in
+        alphaAPI.get20YearHistoricalData(ticker: self.newAlertTicker, isOneYear: false) { (dataSet) in
             if dataSet == nil {
-            alphaAPI.get20YearHistoricalData(ticker: self.newAlertTicker) { (dataSet) in
-                guard let dataSet = dataSet else {self.performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self);return}
-                Set1.oneYearDictionary[dataSet.ticker] = dataSet.price
+                alphaAPI.get20YearHistoricalData(ticker: self.newAlertTicker, isOneYear: false) { (dataSet) in
+                    guard let dataSet = dataSet else {self.performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self);return}
+                    Set1.cachedInThisSession.append(dataSet.ticker)
+                    Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                    Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+                    
+                    var dates = [(String,Int)]()
+                    for i in 0..<dataSet.day.count {
+                        dates.append((dataSet.month[i],dataSet.day[i]))
+                    }
+                    result(dates,dataSet.price)
+                }
+            } else {
+                guard let dataSet = dataSet else {return}
+                Set1.cachedInThisSession.append(dataSet.ticker)
+                Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
                 var dates = [(String,Int)]()
                 for i in 0..<dataSet.day.count {
                     dates.append((dataSet.month[i],dataSet.day[i]))
                 }
                 result(dates,dataSet.price)
-            }
-            } else {
-             Set1.oneYearDictionary[dataSet!.ticker] = dataSet!.price
-            var dates = [(String,Int)]()
-            for i in 0..<dataSet!.day.count {
-                dates.append((dataSet!.month[i],dataSet!.day[i]))
-            }
-            result(dates,dataSet!.price)
             }
         }
     }

@@ -98,6 +98,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                             didntMoveForward = false
                             if self.isFirstTimeSeguing {
                                 self.isFirstTimeSeguing = false
+                                self.logoutFunc()
                                 self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
                             }
                         }
@@ -290,6 +291,33 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
+    }
+    
+    private func logoutFunc() {
+        
+        Set1.month = ["","","","","","","","","","","",""]
+        Set1.currentPrice = 0.0
+        Set1.yesterday = 0.0
+        Set1.token = "none"
+        Set1.oneYearDictionary.removeAll()
+        Set1.ti.removeAll()
+        Set1.phone = "none"
+        Set1.email = "none"
+        Set1.brokerName = "none"
+        Set1.username = "none"
+        Set1.fullName = "none"
+        Set1.premium = false
+        Set1.numOfAlerts.removeAll()
+        Set1.brokerURL = "none"
+        Set1.createdAt = "none"
+        Set1.weeklyAlerts = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
+        Set1.userAlerts.removeAll()
+        Set2.smallRectX.removeAll()
+        Set2.bigRectX.removeAll()
+        Set2.priceRectX.removeAll()
+        Set1.alerts.removeAll()
+        Set1.logoutFirebase()
+     
     }
     
     

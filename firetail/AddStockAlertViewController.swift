@@ -60,7 +60,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     @objc let (mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
     
     override func viewWillAppear(_ animated: Bool) {
-        
+       // Set1.cachedInThisSession.append(newAlertTicker)
         if newAlertPrice < 0.00 {
             newAlertPriceLabel.text = "$0.00"
             

@@ -185,7 +185,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         svs = [sv,sv1,sv2]
         let d = Calendar.current.dateComponents([.year, .month, .day], from: Date())
         let m = ["","JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"]
-        addLabel(name: date, text: "\(d.day!) \(m[d.month!].capitalized)", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 13, x: 84, y: 124, width: 150, height: 32, lines: 1)
+        addLabel(name: date, text: "\(d.day!) \(m[d.month!].capitalized)", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 13, x: 84, y: 124, width: 300, height: 32, lines: 1)
         view.addSubview(date)
         
         addLabel(name: alertAmount, text: String(Set1.userAlerts.count), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
