@@ -14,46 +14,38 @@ import UIKit
 
 class CompareScroll: UIView {
     
-    @objc let screenWidth = UIScreen.main.bounds.width
-    @objc let screenHeight = UIScreen.main.bounds.height
-    @objc let fontSizeMultiplier = UIScreen.main.bounds.width / 375
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    let fontSizeMultiplier = UIScreen.main.bounds.width / 375
     let customColor = CustomColor()
-    @objc var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
-    @objc var __set = [CGFloat]()
-    @objc var passedColor = UIColor()
-    @objc let rangeMultiplier: CGFloat = 10
-    @objc let scale: CGFloat = 1.5
-    @objc var stock = ""
-    @objc var percentSet = [String]()
-    @objc var percentSetVal = [CGFloat]()
+    var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
+    var __set = [CGFloat]()
+    var passedColor = UIColor()
+    let rangeMultiplier: CGFloat = 10
+    let scale: CGFloat = 2.0
+    var stock = ""
+    var percentSet = [String]()
+    var percentSetVal = [CGFloat]()
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
-    @objc init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: 259*UIScreen.main.bounds.height/667)) {
+    init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: 259*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
-        var _graphData = graphData
         stock = stockName
         self.backgroundColor = .clear
         passedColor = color
         var _set = [CGFloat]()
-        _set.append(CGFloat(_graphData.first!))
-        if _graphData.count < 252 {
-            while _graphData.count < 252 {
-                _graphData = [_graphData.first!] + _graphData
-            }
+        _set.append(CGFloat(graphData.first!))
+        for i in 1...10 {
+            _set.append(CGFloat(graphData[Int(21*i)]))
         }
-        for i in 1...11 {
-            _set.append(CGFloat(_graphData[Int(21*i)]))
-        }
-        _set.append(CGFloat(_graphData.last!))
+        _set.append(CGFloat(graphData.last!))
 
-        _set = _set.map { $0 * rangeMultiplier / CGFloat(_graphData.first!) }
+        _set = _set.map { $0 * rangeMultiplier / _set.first! }
         percentSet = _set.map { String(format: "%.1f", $0 * 10 - 100 ) }
-
         percentSetVal = _set.map { $0 * 10 - 100 }
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
         data = __set
-   
         setNeedsDisplay()
         
     }
@@ -86,22 +78,22 @@ class CompareScroll: UIView {
         
     }
     
-    @objc var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
+    var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
 
-    @objc func coordXFor(index: Int) -> CGFloat {
+    func coordXFor(index: Int) -> CGFloat {
         return bounds.height - bounds.height * data[index] / (data.max() ?? 0)
     }
     
     
     
-    @objc func quadCurvedPath() -> UIBezierPath {
+    func quadCurvedPath() -> UIBezierPath {
         let path = UIBezierPath()
         let step = bounds.width / CGFloat(data.count - 1) / (scale * 1.1)
         
         var p1 = CGPoint(x: 0, y: coordXFor(index: 0))
         path.move(to: p1)
         
-     //   drawPoint(point: p1, color: .green, radius: 3)
+ //       drawPoint(point: p1, color: .green, radius: 3)
         
         if (data.count == 2) {
             path.addLine(to: CGPoint(x: step, y: coordXFor(index: 1)))
@@ -112,7 +104,7 @@ class CompareScroll: UIView {
         
         for i in 1..<data.count {
             let p2 = CGPoint(x: step * CGFloat(i), y: coordXFor(index: i))
-      //      drawPoint(point: p2, color: .red, radius: 3)
+//            drawPoint(point: p2, color: .red, radius: 3)
             var p3: CGPoint?
             if i == data.count - 1 {
                 p3 = nil
@@ -141,7 +133,7 @@ class CompareScroll: UIView {
         return CGPoint(x: newX, y: newY)
     }
     
-    @objc func midPointForPoints(p1: CGPoint, p2: CGPoint) -> CGPoint {
+    func midPointForPoints(p1: CGPoint, p2: CGPoint) -> CGPoint {
         return CGPoint(x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2);
     }
     
@@ -196,7 +188,7 @@ class CompareScroll: UIView {
         return controlPoint
     }
     
-    @objc func drawPoint(point: CGPoint, color: UIColor, radius: CGFloat) {
+    func drawPoint(point: CGPoint, color: UIColor, radius: CGFloat) {
         let ovalPath = UIBezierPath(ovalIn: CGRect(x: scale*(point.x - radius), y: point.y - radius, width: radius * 2, height: radius * 2))
         color.setFill()
         ovalPath.fill()

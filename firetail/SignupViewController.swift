@@ -99,6 +99,18 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
             view.frame.origin.y = -170*screenHeight/1334
         case 2:
             view.frame.origin.y = -170*screenHeight/1334
+            
+            if UIDevice().userInterfaceIdiom == .phone {
+                switch UIScreen.main.nativeBounds.height {
+               
+                case 2436:
+                    print("iPhone X")
+                    view.frame.origin.y = -290*screenHeight/1334
+                default:
+                    print("unknown")
+                }
+            }
+            
         default:
             break
         }

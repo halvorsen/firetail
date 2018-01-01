@@ -204,6 +204,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addButton(name: legal, x: 82, y: 1055, width: 280, height: 75, title: "LEGAL", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.legalFunc(_:)), addSubview: true)
         addButton(name: support, x: 82, y: 1135, width: 280, height: 75, title: "SUPPORT", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.supportFunc(_:)), addSubview: true)
         addButton(name: goPremium, x: 82, y: 1215, width: 280, height: 75, title: "GO PREMIUM", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.goPremiumFunc(_:)), addSubview: true)
+        if Set1.premium == true {
+            self.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
+        }
         let indicator = UILabel(frame: CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667))
         indicator.backgroundColor = customColor.white77
         slideView.addSubview(indicator)
@@ -797,6 +800,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     @objc private func goPremiumFunc(_ sender: UIButton) {
         // Create the alert controller
+        if Set1.premium == false {
         let alertController = UIAlertController(title: "Go Premium", message: "Up to 50 Alerts for $2.99", preferredStyle: .alert)
         
         // Create the actions
@@ -817,6 +821,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     Set1.premium = true
                     //self.loadsave.savePurchase(purchase: "firetail.iap.premium")
                     self.premiumMember = true
+                    self.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
                 }
                 else {
                     print("Nothing to Restore")
@@ -836,6 +841,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         // Present the controller
         self.present(alertController, animated: true, completion: nil)
+        } else {
+            //already a member
+            let alert = UIAlertController(title: "Premium Member", message: "You are a premium member and can add up to 50 stock price alerts", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            self.present(alert, animated: true, completion: nil)
+           
+        }
     }
     
     @objc func menuFunc() {
@@ -963,6 +977,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             case .success( _):
                 self.premiumMember = true
                 Set1.premium = true
+                self.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
                 Set1.saveUserInfo()
                 self.activityView.removeFromSuperview()
             case .error(let error):
