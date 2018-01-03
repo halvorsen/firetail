@@ -176,7 +176,21 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                     self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                 }
             } else {
-                self.continueOnce = true
+                print("error not nil")
+                
+                Auth.auth().signIn(withEmail: email, password: password1, completion: { (user, error) in
+                    if error != nil{
+                        self.continueOnce = true
+                    } else {
+                        self.continueOnce = true
+                        self.username.text = email
+                        Set1.saveUserInfo()
+                            self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
+                        
+                    }
+                })
+                
+                
                // self.userWarning(title: "", message: (error!.localizedDescription))
             }
         }
