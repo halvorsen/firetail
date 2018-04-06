@@ -55,7 +55,7 @@ class Google {
                     }
                 }
                 var stringPrice = String()
-                let arrayData = Array(stringData.characters)
+                let arrayData = Array(stringData)
                 
                 dance: for i in 0..<arrayData.count {
                     if arrayData[i] == "l" {
@@ -138,7 +138,7 @@ class Google {
                         guard dataInArrays.count > 2 else {print("google data request error"); return}
                         for i in 1...(dataInArrays.count-2) {
                             if let _dataInArrays = Double(dataInArrays[i][4]) {
-                                let myd = dataInArrays[i][0].characters.map { String($0) }
+                                let myd = dataInArrays[i][0].map { String($0) }
                                 var m = String()
                                 var d = String()
                                 var dash = 0

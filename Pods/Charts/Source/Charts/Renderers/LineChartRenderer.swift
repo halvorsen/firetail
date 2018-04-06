@@ -16,6 +16,11 @@ import CoreGraphics
     import UIKit
 #endif
 
+//Aaron Halvorsen Edit
+public struct PodVariable {
+       public static var gingerBreadMan = [CGMutablePath]() //{ didSet { print("ggm");print(gingerBreadMan)}}
+    }
+//End Aaron Halvorsen Edit
 
 open class LineChartRenderer: LineRadarRenderer
 {
@@ -271,6 +276,14 @@ open class LineChartRenderer: LineRadarRenderer
         spline.addLine(to: pt1)
         spline.addLine(to: pt2)
         spline.closeSubpath()
+        
+            //Aaron Halvorsen Edit
+            
+            
+            
+                    PodVariable.gingerBreadMan.append(spline)// as! CGPath)
+            
+                // Aaron Halvorsen Done Edit
         
         if dataSet.fill != nil
         {

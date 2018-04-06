@@ -26,7 +26,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             DispatchQueue.main.async {
                 
                 self.priceLabel.text = "$" + String(format: "%.2f", self.alertPrice) //getPickerData()
-                let c = (self.priceLabel.text?.characters.map { String($0) })!
+                let c = (self.priceLabel.text?.map { String($0) })!
                 let s = self.priceLabel.text!
                 if c[c.count-2] == "." {
                     self.priceLabel.text = s + "0"

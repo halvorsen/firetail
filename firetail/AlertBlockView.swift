@@ -75,19 +75,19 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
             if email {
                 alerts += "Email"
             }
-            if alerts != "" && alerts.characters.last != " "  {
+            if alerts != "" && alerts.last != " "  {
                 alerts += ", "
             }
             if sms {
                 alerts += "SMS"
             }
-            if alerts != "" && alerts.characters.last != " " {
+            if alerts != "" && alerts.last != " " {
                 alerts += ", "
             }
             if push {
                 alerts += "Push"
             }
-            if alerts != "" && alerts.characters.last != " " {
+            if alerts != "" && alerts.last != " " {
                 alerts += ", "
             }
             
