@@ -94,20 +94,21 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         if Set1.userAlerts.count > 0 {
             for i in 0..<Set1.userAlerts.count {
-                
+                guard let userAlert = Set1.userAlerts[alertID[i]],
+                    let alert = Set1.alerts[userAlert] else {return}
                 let block = AlertBlockView(
                     y: CGFloat(Set1.userAlerts.count - 1 - i)*120,
-                    stockTicker: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.ticker,
-                    currentPrice: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.price,
-                    sms: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.sms,
-                    email: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.email,
-                    flash: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.flash,
-                    urgent: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.urgent,
-                    longName: Set1.userAlerts[alertID[i]]!,
-                    push: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.push,
-                    isGreaterThan: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.isGreaterThan,
-                    timestamp: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.timestamp,
-                    triggered: Set1.alerts[Set1.userAlerts[alertID[i]]!]!.triggered == "TRUE")
+                    stockTicker: alert.ticker,
+                    currentPrice: alert.price,
+                    sms: alert.sms,
+                    email: alert.email,
+                    flash: alert.flash,
+                    urgent: alert.urgent,
+                    longName: userAlert,
+                    push: alert.push,
+                    isGreaterThan: alert.isGreaterThan,
+                    timestamp: alert.timestamp,
+                    triggered: alert.triggered == "TRUE")
                 
                 block.deleteDelegate = self
                 blocks.append(block)
@@ -185,7 +186,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         svs = [sv,sv1,sv2]
         let d = Calendar.current.dateComponents([.year, .month, .day], from: Date())
         let m = ["","JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"]
-        addLabel(name: date, text: "\(d.day!) \(m[d.month!].capitalized)", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 13, x: 84, y: 124, width: 300, height: 32, lines: 1)
+        addLabel(name: date, text: "\(d.day ?? 0) \(m[d.month ?? 0].capitalized)", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 13, x: 84, y: 124, width: 300, height: 32, lines: 1)
         view.addSubview(date)
         
         addLabel(name: alertAmount, text: String(Set1.userAlerts.count), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
@@ -263,23 +264,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             line.frame.origin.x = 27*screenWidth/375 + CGFloat(i)*80*screenWidth/375
             slideView.addSubview(line)
         }
-        
-        //        myTextField = UITextField(frame: CGRect(x: 0,y: 400*screenHeight/667,width: screenWidth ,height: 100*screenHeight/1334))
-        //        myTextField.placeholder = "Search Ticker."
-        //        myTextField.textAlignment = .center
-        //        myTextField.setValue(customColor.white68, forKeyPath: "_placeholderLabel.textColor")
-        //        myTextField.font = UIFont.systemFont(ofSize: 15)
-        //        //myTextField.borderStyle = UITextBorderStyle.roundedRect
-        //        myTextField.autocorrectionType = UITextAutocorrectionType.no
-        //        myTextField.keyboardType = UIKeyboardType.default
-        //        myTextField.returnKeyType = UIReturnKeyType.done
-        
-        //        myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-        //        myTextField.delegate = self
-        //        myTextField.backgroundColor = customColor.background
-        //        myTextField.textColor = customColor.white68
-        //        myTextField.tag = 0
-        
+       
         addTextField = UITextField(frame: CGRect(x: 0,y: 200,width: screenWidth ,height: 200*screenHeight/1334))
         addTextField.placeholder = "   Enter Ticker"
         addTextField.setValue(customColor.white68, forKeyPath: "_placeholderLabel.textColor")
@@ -296,8 +281,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addTextField.tag = 1
         addTextField.keyboardAppearance = .dark
         
-        //    slideView.addSubview(myTextField)
-        // slideView.addSubview(addTextField)
         addButton(name: menu, x: 0, y: 0, width: 116, height: 122, title: "", font: "", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.menuFunc), addSubview: false)
         slideView.addSubview(menu)
         addButton(name: add, x: 638, y: 0, width: 112, height: 120, title: "", font: "", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.addFunc(_:)), addSubview: false)
@@ -424,7 +407,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     
     @objc func act(blockLongName: String) {
-        print("act!!!")
+       
         stock1.text = ""
         stock2.text = ""
         stock3.text = ""
@@ -440,7 +423,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
                 blocks[i].removeFromSuperview()
                 
-                let alertChanging = Set1.alerts[blocks[i].blockLongName]!
+                guard let alertChanging = Set1.alerts[blocks[i].blockLongName] else {return}
                 
                 var triggerStringNotBool = "false"
                 if alertChanging.triggered == "TRUE" {
@@ -556,51 +539,48 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     private func populateCompareGraph() {
-        print("Set1.ti: \(Set1.ti)")
+        guard let ti0 = Set1.oneYearDictionary[Set1.ti[0]],
+            ti0.count > 0 else {return}
         switch Set1.ti.count {
         case 0:
             break
         case 1:
-            guard Set1.oneYearDictionary[Set1.ti[0]] != nil else {return}
-            guard Set1.oneYearDictionary[Set1.ti[0]]!.count > 0 else {return}
-            sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
-            svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
+            
+            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
             container.addSubview(sv)
             container2.addSubview(svDot)
             
         case 2:
-            guard Set1.oneYearDictionary[Set1.ti[0]] != nil else {return}
-            guard Set1.oneYearDictionary[Set1.ti[0]]!.count > 0 else {return}
-            sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
+            
+            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
             container2.addSubview(svDot)
-            guard Set1.oneYearDictionary[Set1.ti[1]] != nil else {return}
-            guard Set1.oneYearDictionary[Set1.ti[1]]!.count > 0 else {return}
-            sv1 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
+            guard let ti1 = Set1.oneYearDictionary[Set1.ti[1]],
+                ti1.count > 0 else {return}
+            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.ti[1], color: customColor.white128)
             container.addSubview(sv1)
-            svDot1 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
+            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.ti[1], color: customColor.white128)
             container2.addSubview(svDot1)
             
         default:
             
-            guard Set1.oneYearDictionary[Set1.ti[0]] != nil else {return}
-            guard Set1.oneYearDictionary[Set1.ti[0]]!.count > 0 else {return}
-            sv =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[0]]!, stockName: Set1.ti[0], color: customColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
             container2.addSubview(svDot)
-            guard Set1.oneYearDictionary[Set1.ti[1]] != nil else {return}
-            guard Set1.oneYearDictionary[Set1.ti[1]]!.count > 0 else {return}
-            sv1 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
+            guard let ti1 = Set1.oneYearDictionary[Set1.ti[1]],
+                ti1.count > 0 else {return}
+            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.ti[1], color: customColor.white128)
             container.addSubview(sv1)
-            svDot1 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[1]]!, stockName: Set1.ti[1], color: customColor.white128)
+            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.ti[1], color: customColor.white128)
             container2.addSubview(svDot1)
-            guard Set1.oneYearDictionary[Set1.ti[2]] != nil else {return}
-            guard Set1.oneYearDictionary[Set1.ti[2]]!.count > 0 else {return}
-            sv2 =  CompareScroll(graphData: Set1.oneYearDictionary[Set1.ti[2]]!, stockName: Set1.ti[2], color: customColor.white209)
+            guard let ti2 = Set1.oneYearDictionary[Set1.ti[2]],
+                ti2.count > 0 else {return}
+            sv2 =  CompareScroll(graphData: ti2, stockName: Set1.ti[2], color: customColor.white209)
             container.addSubview(sv2)
-            svDot2 =  CompareScrollDot(graphData: Set1.oneYearDictionary[Set1.ti[2]]!, stockName: Set1.ti[2], color: customColor.white209)
+            svDot2 =  CompareScrollDot(graphData: ti2, stockName: Set1.ti[2], color: customColor.white209)
             container2.addSubview(svDot2
                 
             )
@@ -793,7 +773,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         self.performSegue(withIdentifier: "fromMainToLogin", sender: self)
     }
     @objc private func legalFunc(_ sender: UIButton) {
-        UIApplication.shared.open(URL(string: "http://firetailapp.com/legal")!)
+        if let url = URL(string: "http://firetailapp.com/legal") {
+        UIApplication.shared.open(url)
+        }
     }
     @objc private func supportFunc(_ sender: UIButton) {
         sendEmail()
@@ -907,7 +889,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         } else if textField.tag == 1 {
             if addTextField.text != nil && addTextField.delegate != nil {
                 
-                stringToPass = addTextField.text!
+                stringToPass = addTextField.text ?? ""
                 self.performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
             }
         }
@@ -918,48 +900,24 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        NotificationCenter.default.removeObserver(self)
         if segue.identifier == "fromMainToGraph" {
-            let graphView: GraphViewController = segue.destination as! GraphViewController
-            
+            if let graphView: GraphViewController = segue.destination as? GraphViewController {
             graphView.passedString = stringToPass
+            }
         } else if segue.identifier == "fromMainToAddStockTicker" {
-            let addView: AddStockTickerViewController = segue.destination as! AddStockTickerViewController
-            
+            if let addView: AddStockTickerViewController = segue.destination as? AddStockTickerViewController {
             addView.newAlertTicker = "TICKER"
+            }
         }
     }
     var haventSeguedToDetail = true
     var detailedTimer = Timer()
     var tryFor3Secondscount = 0
     @objc private func goToGraph() {
-        print("cachedinthissession: \(Set1.cachedInThisSession)")
-//        if Set1.cachedInThisSession.contains(stringToPass) && haventSeguedToDetail {
-//        haventSeguedToDetail = false
-//        detailedTimer.invalidate()
+
         if let prices = Set1.tenYearDictionary[stringToPass],
             prices.count > 1 {
         self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
         }
-//
-//        } else {
-//            tryFor3Secondscount += 1
-//            if !activityView.isDescendant(of: view) {
-//            activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-//            activityView.center = self.view.center
-//            activityView.startAnimating()
-//            activityView.alpha = 1.0
-//            view.addSubview(activityView)
-//            detailedTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: {_ in self.goToGraph()})
-//            detailedTimer.fire()
-//            }
-//            if tryFor3Secondscount == 7 {
-//                detailedTimer.invalidate()
-//                activityView.alpha = 0.0
-//                activityView.removeFromSuperview()
-//                tryFor3Secondscount = 0
-//            }
-//
-//        }
-//
         
     }
     
@@ -1022,11 +980,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         for (_,myTuple) in Set1.alerts {
             if myTuple.timestamp != 1 {
-                print(Date().timeIntervalSince1970)
-                print(Int.max)
+                
                 let currentTimestamp = Int(Date().timeIntervalSince1970)
                 let seconds = currentTimestamp - myTuple.timestamp
-                let dayOfTheWeek = Date().dayNumberOfWeek()!
+                let dayOfTheWeek = Date().dayNumberOfWeek() ?? 0
                 let secondsInADay = 86400000
                 let hour = Calendar.current.component(.hour, from: Date())
                 let m = Calendar.current.component(.minute, from: Date())
@@ -1043,7 +1000,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 case 5*secondsInADay + secondsSinceMidnight..<(6*secondsInADay) + secondsSinceMidnight: addAlertToThisDay = dayOfTheWeek - 6
                 default: break
                 }
-                //public static var weeklyAlerts: [String:Int] = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
                 
                 if addAlertToThisDay < 1 {
                     addAlertToThisDay += 7
