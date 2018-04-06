@@ -94,11 +94,11 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
             if flash {
                 alerts += "Flash"
             }
-            if alerts != "" && alerts.characters.last != " "  {
+            if alerts != "" && alerts.last != " "  {
                 alerts += ", "
             }
             
-            if alerts.characters.last == " "  {
+            if alerts.last == " "  {
                 alerts.remove(at: alerts.index(before: alerts.endIndex))
                 alerts.remove(at: alerts.index(before: alerts.endIndex))
             }

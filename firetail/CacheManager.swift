@@ -109,7 +109,7 @@ class CacheManager {
         do {
             try context.execute(deleteRequest)  //(deleteRequest, withContext: context)
         } catch let a as NSError {
-            // TODO: handle the error
+            print(a)// TODO: handle the error
         }
 
         

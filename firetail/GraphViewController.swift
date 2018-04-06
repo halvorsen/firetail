@@ -199,7 +199,7 @@ class GraphViewController: ViewSetup {
                 currentTextKey = newTextKey
                 layer.add(layerAnimation, forKey: nil)
                 graphViewSeen.change.text = Label.changeValues[orderOfGraphs[newTextKey]!]
-                if let symbol = Label.changeValues[orderOfGraphs[newTextKey]!].characters.first {
+                if let symbol = Label.changeValues[orderOfGraphs[newTextKey]!].first {
                     if symbol == "-" {
                         graphViewSeen.percentChange.textColor = customColor.red
                         graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
@@ -252,7 +252,7 @@ class GraphViewController: ViewSetup {
             currentTextKey = newTextKey
             layer.add(layerAnimation, forKey: nil)
             graphViewSeen.change.text = Label.changeValues[orderOfGraphs[newTextKey]!]
-            if let symbol = Label.changeValues[orderOfGraphs[newTextKey]!].characters.first {
+            if let symbol = Label.changeValues[orderOfGraphs[newTextKey]!].first {
                 if symbol == "-" {
                     graphViewSeen.percentChange.textColor = customColor.red
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
@@ -394,7 +394,7 @@ class GraphViewController: ViewSetup {
             
             graphViewSeen.change.text = Label.changeValues[orderOfGraphs["1y"]!]
             graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs["1y"]!]
-            if let symbol = Label.changeValues[orderOfGraphs["1y"]!].characters.first {
+            if let symbol = Label.changeValues[orderOfGraphs["1y"]!].first {
                 if symbol == "-" {
                     graphViewSeen.percentChange.textColor = customColor.red
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")

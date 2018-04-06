@@ -84,7 +84,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         if IndexListOfStocks.amex.contains(newAlertTicker) || IndexListOfStocks.nyse.contains(newAlertTicker) || IndexListOfStocks.nasdaq.contains(newAlertTicker) || IndexListOfStocks.otcmkts.contains(newAlertTicker) {
            
             isGoodToGo = true
-            let charArray = newAlertTicker.characters.map { String($0) }
+            let charArray = newAlertTicker.map { String($0) }
    
             for char in charArray {
                 if char == "^" || char == "~" {

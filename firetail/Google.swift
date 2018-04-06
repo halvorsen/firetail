@@ -120,7 +120,7 @@ class Google {
         let endDateDay = String(describing: endDateComponents.day!)
         let stringComponents: [String] = ["https://www.google.com/finance/historical?q=",index,":",ticker,"&startdate=",startDateMonth,"+",startDateDay,"%2C+",startDateYear,"&enddate=",endDateMonth,"+",endDateDay,"%2C+",endDateYear,"&output=csv"]
         
-        let urlString = stringComponents.flatMap({$0}).joined()
+        let urlString = stringComponents.compactMap({$0}).joined()
         let url = URL(string: urlString)
         var priceData = [(Double,String,Int)]()
         
