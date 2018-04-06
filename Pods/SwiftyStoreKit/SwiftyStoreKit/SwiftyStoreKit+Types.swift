@@ -26,7 +26,7 @@ import StoreKit
 
 // MARK: Purchases
 
-// Purchased or restored product
+// Restored product
 public struct Purchase {
     public let productId: String
     public let quantity: Int
@@ -35,23 +35,27 @@ public struct Purchase {
     public let needsFinishTransaction: Bool
 }
 
+// Purchased product
 public struct PurchaseDetails {
     public let productId: String
     public let quantity: Int
     public let product: SKProduct
     public let transaction: PaymentTransaction
+    public let originalTransaction: PaymentTransaction?
     public let needsFinishTransaction: Bool
 }
 
 //Conform to this protocol to provide custom receipt validator
 public protocol ReceiptValidator {
-	func validate(receipt: String, password autoRenewPassword: String?, completion: @escaping (VerifyReceiptResult) -> Void)
+	func validate(receiptData: Data, completion: @escaping (VerifyReceiptResult) -> Void)
 }
 
 // Payment transaction
 public protocol PaymentTransaction {
+    var transactionDate: Date? { get }
     var transactionState: SKPaymentTransactionState { get }
     var transactionIdentifier: String? { get }
+    var downloads: [SKDownload] { get }
 }
 
 // Add PaymentTransaction conformance to SKPaymentTransaction
@@ -77,16 +81,17 @@ public struct RestoreResults {
 }
 
 public typealias ShouldAddStorePaymentHandler = (_ payment: SKPayment, _ product: SKProduct) -> Bool
+public typealias UpdatedDownloadsHandler = (_ downloads: [SKDownload]) -> Void
 
 // MARK: Receipt verification
 
 // Info for receipt returned by server
 public typealias ReceiptInfo = [String: AnyObject]
 
-// Refresh receipt result
-public enum RefreshReceiptResult {
+// Fetch receipt result
+public enum FetchReceiptResult {
     case success(receiptData: Data)
-    case error(error: Error)
+    case error(error: ReceiptError)
 }
 
 // Verify receipt result
