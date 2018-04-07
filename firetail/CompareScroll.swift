@@ -22,7 +22,7 @@ class CompareScroll: UIView {
     var __set = [CGFloat]()
     var passedColor = UIColor()
     let rangeMultiplier: CGFloat = 10
-    let scale: CGFloat = 2.0
+    let scale: CGFloat = 1.5
     var stock = ""
     var percentSet = [String]()
     var percentSetVal = [CGFloat]()
@@ -31,17 +31,23 @@ class CompareScroll: UIView {
     
     init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: 259*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
+        var _graphData = graphData
         stock = stockName
         self.backgroundColor = .clear
         passedColor = color
         var _set = [CGFloat]()
-        _set.append(CGFloat(graphData.first!))
-        for i in 1...10 {
-            _set.append(CGFloat(graphData[Int(21*i)]))
+                _set.append(CGFloat(_graphData.first!))
+                if _graphData.count < 252 {
+                        while _graphData.count < 252 {
+                                _graphData = [_graphData.first!] + _graphData
+                            }
+                    }
+                for i in 1...11 {
+                        _set.append(CGFloat(_graphData[Int(21*i)]))
         }
         _set.append(CGFloat(graphData.last!))
 
-        _set = _set.map { $0 * rangeMultiplier / _set.first! }
+        _set = _set.map { $0 * rangeMultiplier / CGFloat(_graphData.first!) }
         percentSet = _set.map { String(format: "%.1f", $0 * 10 - 100 ) }
         print("percentset: \(percentSet.count)")
         print(percentSet)
