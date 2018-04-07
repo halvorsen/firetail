@@ -10,12 +10,14 @@ import UIKit
 import ReachabilitySwift
 
 class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
+    
     let backArrow = UIButton()
     let quickPick = UILabel()
     let customColor = CustomColor()
     var stockSymbolTextField = UITextField()
     let stockSymbol = UILabel()
     var newAlertTicker = String()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = customColor.black24
@@ -36,7 +38,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
             (40,520,"TWTR"),
             (304,520,"SNAP"),
             (568,520,"VZ")
-            //216x70
+          
         ]
         
         for (x,y,ticker) in boxButtons {
