@@ -541,14 +541,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     private func populateCompareGraph() {
         guard let ti0 = Set1.oneYearDictionary[Set1.ti[0]],
             ti0.count > 0 else {return}
+        print("ti0: \(ti0)")
         switch Set1.ti.count {
         case 0:
             break
         case 1:
             
             sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
             container.addSubview(sv)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
             container2.addSubview(svDot)
             
         case 2:
@@ -617,7 +618,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     @objc func whoseOnFirst(_ scrollView: UIScrollView) {
         
-        for i in 0...12 {
+        for i in 0...11 {
             if scrollView.contentSize.width*CGFloat(Double(i+1)-2.3)/13...scrollView.contentSize.width*CGFloat(Double(i+1)-2.05)/13 ~= scrollView.contentOffset.x {
                 var value = CGFloat()
                 var value2 = CGFloat()
