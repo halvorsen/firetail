@@ -76,7 +76,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func back(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromAddStockTickerToMain", sender: self)
+        performSegue(withIdentifier: "fromAddStockTickerToMain", sender: self)
     }
     
     @objc private func quickPickFunc(callback: (_ isGoodToGo: Bool) -> Void) {
@@ -106,14 +106,14 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     
     private func __quickPickFunc() {
         
-        quickPickFunc() { (isGoodToGo) -> Void in
-            
+        quickPickFunc() { [weak self] (isGoodToGo) -> Void in
+            guard let weakself = self else {return}
             if isGoodToGo {
-                self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
+                weakself.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: weakself)
             } else {
                 let alert = UIAlertController(title: "", message: "Ticker Not Found", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                weakself.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -122,16 +122,16 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         guard let title = sender.titleLabel,
             let newAlertTicker = title.text else {return}
         
-        quickPickFunc() { (isGoodToGo) -> Void in
-            
+        quickPickFunc() { [weak self] (isGoodToGo) -> Void in
+            guard let weakself = self else {return}
             if isGoodToGo {
                 
-                self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
+                weakself.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: weakself)
             } else {
                 
                 let alert = UIAlertController(title: "", message: "Ticker Not Found", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                weakself.present(alert, animated: true, completion: nil)
             }
         }
     }

@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "firetail/AddStockPriceViewController.swift"
-            timestampString = "528311774.268606"
+            timestampString = "544840751.807153"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "loadItAll()"
             landmarkType = "7">
          </BreakpointContent>
@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "firetail/AddStockPriceViewController.swift"
-            timestampString = "528311774.268718"
+            timestampString = "544840751.807368"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
             landmarkName = "loadItAll()"
             landmarkType = "7">
          </BreakpointContent>
@@ -52,12 +52,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "firetail/AddStockPriceViewController.swift"
-            timestampString = "528311774.268908"
+            timestampString = "544840751.807423"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
-            landmarkName = "loadItAll()"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -68,11 +68,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "firetail/AddStockPriceViewController.swift"
-            timestampString = "528311774.268967"
+            timestampString = "544840751.807488"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "235"
-            endingLineNumber = "235"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
             landmarkName = "populateDialView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -84,11 +84,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "firetail/AddStockPriceViewController.swift"
-            timestampString = "528311774.26902"
+            timestampString = "544840751.807548"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
+            startingLineNumber = "233"
+            endingLineNumber = "233"
             landmarkName = "populateDialView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -100,12 +100,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "firetail/AddStockPriceViewController.swift"
-            timestampString = "528311774.269065"
+            timestampString = "544840751.807601"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "266"
-            endingLineNumber = "266"
-            landmarkName = "populateDialView()"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
+            landmarkName = "setFunc(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -116,12 +116,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "firetail/AddStockPriceViewController.swift"
-            timestampString = "528311774.269141"
+            timestampString = "544840751.807655"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "275"
-            endingLineNumber = "275"
-            landmarkName = "populateDialView()"
+            startingLineNumber = "259"
+            endingLineNumber = "259"
+            landmarkName = "prepare(for:sender:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -154,8 +154,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
                 UNUserNotificationCenter.current().requestAuthorization(
                     options: authOptions,
-                    completionHandler: {_, _ in
-                        
+                    completionHandler: {[weak self] _, _ in
+                        guard let weakself = self else {return}
                         if let refreshedToken = InstanceID.instanceID().token() {
                             print("InstanceID token: \(refreshedToken)")
                             Set1.token = refreshedToken
@@ -163,7 +163,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                         }
                         
                         // Connect to FCM since connection may have failed when attempted before having a token.
-                        self.connectToFcm()
+                        weakself.connectToFcm()
                         
                 })
                 
@@ -182,7 +182,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         
         premiumMember = Set1.premium
-        self.view.backgroundColor = customColor.black33
+        view.backgroundColor = customColor.black33
         svs = [sv,sv1,sv2]
         let d = Calendar.current.dateComponents([.year, .month, .day], from: Date())
         let m = ["","JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"]
@@ -206,7 +206,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addButton(name: support, x: 82, y: 1135, width: 280, height: 75, title: "SUPPORT", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.supportFunc(_:)), addSubview: true)
         addButton(name: goPremium, x: 82, y: 1215, width: 280, height: 75, title: "GO PREMIUM", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.goPremiumFunc(_:)), addSubview: true)
         if Set1.premium == true {
-            self.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
+           goPremium.setTitle("PREMIUM MEMBER", for: .normal)
         }
         let indicator = UILabel(frame: CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667))
         indicator.backgroundColor = customColor.white77
@@ -330,25 +330,27 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 if block.frame.contains(gesture.location(in: alertScroller)) && alertScroller.frame.contains(gesture.location(in: view)) {
                     movingBlock = block
                 }
-                self.startingLocationX = gesture.location(in: alertScroller).x
-                self.endingLocationX = gesture.location(in: alertScroller).x
+                startingLocationX = gesture.location(in: alertScroller).x
+                endingLocationX = gesture.location(in: alertScroller).x
             }
             
         case .changed:
             guard let _movingBlock = movingBlock else {return}
-            self.endingLocationX = gesture.location(in: alertScroller).x
-            var currentAlpha = abs(self.startingLocationX - self.endingLocationX)/(70*screenWidth/375)
+            endingLocationX = gesture.location(in: alertScroller).x
+            var currentAlpha = abs(startingLocationX - endingLocationX)/(70*screenWidth/375)
             
             if currentAlpha > 1.0 { currentAlpha = 1.0 }
             _movingBlock.x.alpha = currentAlpha
-            if self.endingLocationX - self.startingLocationX < -60*self.screenWidth/375 {
-                UIView.animate(withDuration: 0.1) {
-                    _movingBlock.ex.frame.origin.x = self.screenWidth + (self.endingLocationX - self.startingLocationX)
+            if endingLocationX - startingLocationX < -60*screenWidth/375 {
+                UIView.animate(withDuration: 0.1) { [weak self] in
+                    guard let weakself = self else {return}
+                    _movingBlock.ex.frame.origin.x = weakself.screenWidth + (weakself.endingLocationX - weakself.startingLocationX)
                 }
             }
-            if self.endingLocationX - self.startingLocationX < 0 {//check if another alert is scrolling first
-                UIView.animate(withDuration: 0.1) {
-                    _movingBlock.slideView.frame.origin.x = self.endingLocationX - self.startingLocationX
+            if endingLocationX - startingLocationX < 0 {//check if another alert is scrolling first
+                UIView.animate(withDuration: 0.1) { [weak self] in
+                    guard let weakself = self else {return}
+                    _movingBlock.slideView.frame.origin.x = weakself.endingLocationX - weakself.startingLocationX
                     
                 }
                 
@@ -362,14 +364,16 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         case .ended:
             guard let _movingBlock = movingBlock else {return}
             movingBlock = nil
-            if _movingBlock.slideView.frame.origin.x < -60*self.screenWidth/375 {
-                UIView.animate(withDuration: 0.2) {
-                    _movingBlock.slideView.frame.origin.x = -self.screenWidth*435/375
-                    _movingBlock.ex.frame.origin.x = -60*self.screenWidth/375
+            if _movingBlock.slideView.frame.origin.x < -60*screenWidth/375 {
+                UIView.animate(withDuration: 0.2) { [weak self] in
+                    guard let weakself = self else {return}
+                    _movingBlock.slideView.frame.origin.x = -weakself.screenWidth*435/375
+                    _movingBlock.ex.frame.origin.x = -60*weakself.screenWidth/375
                 }
                 view.removeGestureRecognizer(alertPan)
-                delay(bySeconds: 0.3) {
-                    self.act(blockLongName: _movingBlock.blockLongName)
+                delay(bySeconds: 0.3) { [weak self] in
+                    guard let weakself = self else {return}
+                    weakself.act(blockLongName: _movingBlock.blockLongName)
                 }
                 
             } else {
@@ -386,20 +390,21 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     @objc private func finishedFetchingTop3Stocks() {
         print("done fetching and received notification")
-        DispatchQueue.main.async {
-            self.sv.removeFromSuperview()
-            self.sv1.removeFromSuperview()
-            self.sv2.removeFromSuperview()
-            self.svDot.removeFromSuperview()
-            self.svDot1.removeFromSuperview()
-            self.svDot2.removeFromSuperview()
-            self.populateCompareGraph()
-            guard self.amountOfBlocks > 0 else {return}
-            self.stock1.text = "\(self.sv.stock): \(self.sv.percentSet[1])%"
-            guard self.amountOfBlocks > 1 else {return}
-            self.stock2.text = "\(self.sv1.stock): \(self.sv1.percentSet[1])%"
-            guard self.amountOfBlocks > 2 else {return}
-            self.stock3.text = "\(self.sv2.stock): \(self.sv2.percentSet[1])%"
+        DispatchQueue.main.async { [weak self] in
+            guard let weakself = self else {return}
+            weakself.sv.removeFromSuperview()
+            weakself.sv1.removeFromSuperview()
+            weakself.sv2.removeFromSuperview()
+            weakself.svDot.removeFromSuperview()
+            weakself.svDot1.removeFromSuperview()
+            weakself.svDot2.removeFromSuperview()
+            weakself.populateCompareGraph()
+            guard weakself.amountOfBlocks > 0 else {return}
+            weakself.stock1.text = "\(weakself.sv.stock): \(weakself.sv.percentSet[1])%"
+            guard weakself.amountOfBlocks > 1 else {return}
+            weakself.stock2.text = "\(weakself.sv1.stock): \(weakself.sv1.percentSet[1])%"
+            guard weakself.amountOfBlocks > 2 else {return}
+            weakself.stock3.text = "\(weakself.sv2.stock): \(weakself.sv2.percentSet[1])%"
         }
         
         
@@ -418,7 +423,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         for i in 0..<blocks.count {
             
             
-            if blockLongName == self.blocks[i].blockLongName {
+            if blockLongName == blocks[i].blockLongName {
                 Set1.ti.removeAll()
                 
                 blocks[i].removeFromSuperview()
@@ -434,14 +439,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
                 check = true
                 for k in 0..<i {
-                    self.blocks[k].layer.zPosition = position; position += 1
+                    blocks[k].layer.zPosition = position; position += 1
                     newBlocks.append(blocks[k])
                     _setTi.append(blocks[k].stockTickerGlobal)
                     
                 }
                 if i != (blocks.count - 1) {
                     for k in (i+1)..<blocks.count {
-                        self.blocks[k].layer.zPosition = position; position += 1
+                        blocks[k].layer.zPosition = position; position += 1
                         newBlocks.append(blocks[k])
                         _setTi.append(blocks[k].stockTickerGlobal)
                         
@@ -450,7 +455,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             }
             
             if !check {
-                UIView.animate(withDuration: 0.6) { self.blocks[i].frame.origin.y -= 120*self.screenHeight/1334 }
+                UIView.animate(withDuration: 0.6) { [weak self] in
+                    guard let weakself = self else {return}
+                    weakself.blocks[i].frame.origin.y -= 120*weakself.screenHeight/1334
+                    
+                }
             }
         }
         Set1.ti = _setTi.reversed()
@@ -462,11 +471,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
         alertScroller.backgroundColor = customColor.black33
         alertScroller.showsVerticalScrollIndicator = false
-     //   Set1.alertCount = amountOfBlocks
-        
+ 
         loadsave.resaveBlocks(blocks: blocks)
-     //   Set1.alertCount = amountOfBlocks
-        
+    
         reboot()
         
         Set1.saveUserInfo()
@@ -481,8 +488,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
     }
     
-    @objc var startedPan = false
-    @objc var q = Int()
+    var startedPan = false
+    var q = Int()
     @objc private func pan(_ gesture: UIPanGestureRecognizer) {
         guard gesture.location(in: view).y > sv.frame.maxY else {return}
         
@@ -495,16 +502,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         for i in 0..<blocks.count {
             // print("origin: \(blocks[i].frame.origin.x)")
             if blocks[i].slideView.frame.origin.x < -1 {
-                UIView.animate(withDuration: 0.6) {
-                    self.blocks[i].slideView.frame.origin.x = 0
+                UIView.animate(withDuration: 0.6) { [weak self] in
+                    guard let weakself = self else {return}
+                    weakself.blocks[i].slideView.frame.origin.x = 0
                 }
             }
         }
     }
     
-    @objc var p = Int()
-    
-    
+    var p = Int()
     
     @objc private func detail(_ gesture: UIGestureRecognizer) {
         for block in blocks {
@@ -534,14 +540,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         whoseOnFirst(container)
         
-        UIView.animate(withDuration: 2.0) {
-            self.mask.frame.origin.x += 2.5*11*self.screenWidth/5; self.monthIndicator.alpha = 1.0; self.stock3.alpha = 1.0; self.stock2.alpha = 1.0; self.stock1.alpha = 1.0}
+        UIView.animate(withDuration: 2.0) { [weak self] in
+            guard let weakself = self else {return}
+            weakself.mask.frame.origin.x += 2.5*11*weakself.screenWidth/5; weakself.monthIndicator.alpha = 1.0; weakself.stock3.alpha = 1.0; weakself.stock2.alpha = 1.0; weakself.stock1.alpha = 1.0}
     }
     
     private func populateCompareGraph() {
         guard let ti0 = Set1.oneYearDictionary[Set1.ti[0]],
             ti0.count > 0 else {return}
-        print("ti0: \(ti0)")
+      
         switch Set1.ti.count {
         case 0:
             break
@@ -656,53 +663,55 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 case 0:
                     break
                 case 1:
-                    self.stock1.frame.origin.y = 24*self.screenHeight/1334
-                    self.stock2.frame.origin.y = 72*self.screenHeight/1334
-                    self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                    stock1.frame.origin.y = 24*screenHeight/1334
+                    stock2.frame.origin.y = 72*screenHeight/1334
+                    stock3.frame.origin.y = 120*screenHeight/1334
                 case 2:
-                    UIView.animate(withDuration: 0.5) {
+                    UIView.animate(withDuration: 0.5) { [weak self] in
+                        guard let weakself = self else {return}
                         if value > value1 {
                             
-                            self.stock1.frame.origin.y = 24*self.screenHeight/1334
-                            self.stock2.frame.origin.y = 72*self.screenHeight/1334
-                            self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                            weakself.stock1.frame.origin.y = 24*weakself.screenHeight/1334
+                            weakself.stock2.frame.origin.y = 72*weakself.screenHeight/1334
+                            weakself.stock3.frame.origin.y = 120*weakself.screenHeight/1334
                         } else {
-                            self.stock1.frame.origin.y = 72*self.screenHeight/1334
-                            self.stock3.frame.origin.y = 120*self.screenHeight/1334
-                            self.stock2.frame.origin.y = 24*self.screenHeight/1334
+                            weakself.stock1.frame.origin.y = 72*weakself.screenHeight/1334
+                            weakself.stock3.frame.origin.y = 120*weakself.screenHeight/1334
+                            weakself.stock2.frame.origin.y = 24*weakself.screenHeight/1334
                         }
                         
                     }
                 default:
-                    UIView.animate(withDuration: 0.5) {
+                    UIView.animate(withDuration: 0.5) { [weak self] in
+                        guard let weakself = self else {return}
                         if value > value1 {
                             if value > value2 {
-                                self.stock1.frame.origin.y = 24*self.screenHeight/1334
+                                weakself.stock1.frame.origin.y = 24*weakself.screenHeight/1334
                                 if value1 > value2 {
-                                    self.stock2.frame.origin.y = 72*self.screenHeight/1334
-                                    self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                                    weakself.stock2.frame.origin.y = 72*weakself.screenHeight/1334
+                                    weakself.stock3.frame.origin.y = 120*weakself.screenHeight/1334
                                 } else {
-                                    self.stock3.frame.origin.y = 72*self.screenHeight/1334
-                                    self.stock2.frame.origin.y = 120*self.screenHeight/1334
+                                    weakself.stock3.frame.origin.y = 72*weakself.screenHeight/1334
+                                    weakself.stock2.frame.origin.y = 120*weakself.screenHeight/1334
                                 }
                             } else {
-                                self.stock3.frame.origin.y = 24*self.screenHeight/1334
-                                self.stock1.frame.origin.y = 72*self.screenHeight/1334
-                                self.stock2.frame.origin.y = 120*self.screenHeight/1334
+                                weakself.stock3.frame.origin.y = 24*weakself.screenHeight/1334
+                                weakself.stock1.frame.origin.y = 72*weakself.screenHeight/1334
+                                weakself.stock2.frame.origin.y = 120*weakself.screenHeight/1334
                             }
                         } else {
                             if value > value2 {
-                                self.stock1.frame.origin.y = 72*self.screenHeight/1334
-                                self.stock2.frame.origin.y = 24*self.screenHeight/1334
-                                self.stock3.frame.origin.y = 120*self.screenHeight/1334
+                                weakself.stock1.frame.origin.y = 72*weakself.screenHeight/1334
+                                weakself.stock2.frame.origin.y = 24*weakself.screenHeight/1334
+                                weakself.stock3.frame.origin.y = 120*weakself.screenHeight/1334
                             } else {
-                                self.stock1.frame.origin.y = 120*self.screenHeight/1334
+                                weakself.stock1.frame.origin.y = 120*weakself.screenHeight/1334
                                 if value1 > value2 {
-                                    self.stock2.frame.origin.y = 24*self.screenHeight/1334
-                                    self.stock3.frame.origin.y = 72*self.screenHeight/1334
+                                    weakself.stock2.frame.origin.y = 24*weakself.screenHeight/1334
+                                    weakself.stock3.frame.origin.y = 72*weakself.screenHeight/1334
                                 } else {
-                                    self.stock2.frame.origin.y = 72*self.screenHeight/1334
-                                    self.stock3.frame.origin.y = 24*self.screenHeight/1334
+                                    weakself.stock2.frame.origin.y = 72*weakself.screenHeight/1334
+                                    weakself.stock3.frame.origin.y = 24*weakself.screenHeight/1334
                                 }
                             }
                         }
@@ -715,16 +724,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        UIView.animate(withDuration: 2.0) {
-            self.mask.frame.origin.x += 2.5*11*self.screenWidth/5; self.monthIndicator.alpha = 1.0; self.stock3.alpha = 1.0; self.stock2.alpha = 1.0; self.stock1.alpha = 1.0}
+        UIView.animate(withDuration: 2.0) { [weak self] in
+            guard let weakself = self else {return}
+            weakself.mask.frame.origin.x += 2.5*11*weakself.screenWidth/5; weakself.monthIndicator.alpha = 1.0; weakself.stock3.alpha = 1.0; weakself.stock2.alpha = 1.0; weakself.stock1.alpha = 1.0}
         
         runSearch()
         
-        self.myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(DashboardViewController.updateDot), userInfo: nil, repeats: true)
+        myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(DashboardViewController.updateDot), userInfo: nil, repeats: true)
         
-       
             reachabilityAddNotification()
-        
         
     }
     
@@ -739,10 +747,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         menuFunc()
     }
     @objc private func changeEmailFunc(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromMainToSettings", sender: self)
+        performSegue(withIdentifier: "fromMainToSettings", sender: self)
     }
     @objc private func addPhoneFunc(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromMainToSettings", sender: self)
+        performSegue(withIdentifier: "fromMainToSettings", sender: self)
     }
     @objc private func logoutFunc(_ sender: UIButton) {
         
@@ -771,7 +779,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         Set1.alerts.removeAll()
         
         Set1.logoutFirebase()
-        self.performSegue(withIdentifier: "fromMainToLogin", sender: self)
+        performSegue(withIdentifier: "fromMainToLogin", sender: self)
     }
     @objc private func legalFunc(_ sender: UIButton) {
         if let url = URL(string: "http://firetailapp.com/legal") {
@@ -787,14 +795,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         let alertController = UIAlertController(title: "Go Premium", message: "Up to 50 Alerts for $2.99", preferredStyle: .alert)
         
         // Create the actions
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
-            UIAlertAction in
-            self.purchase()
+            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { [weak self] UIAlertAction in
+                guard let weakself = self else {return}
+            weakself.purchase()
             
         }
-        let restoreAction = UIAlertAction(title: "Restore Purchase", style: UIAlertActionStyle.default) {
-            UIAlertAction in
-            
+        let restoreAction = UIAlertAction(title: "Restore Purchase", style: UIAlertActionStyle.default) { [weak self] UIAlertAction in
+            guard let weakself = self else {return}
             SwiftyStoreKit.restorePurchases(atomically: true) { results in
                 if results.restoreFailedPurchases.count > 0 {
                     print("Restore Failed: \(results.restoreFailedPurchases)")
@@ -802,9 +809,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 else if results.restoredPurchases.count > 0 {
                     
                     Set1.premium = true
-                    //self.loadsave.savePurchase(purchase: "firetail.iap.premium")
-                    self.premiumMember = true
-                    self.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
+                    //weakself.loadsave.savePurchase(purchase: "firetail.iap.premium")
+                    weakself.premiumMember = true
+                    weakself.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
                 }
                 else {
                     print("Nothing to Restore")
@@ -817,20 +824,17 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             print("Cancel Pressed")
         }
         
-        // Add the actions
         alertController.addAction(okAction)
         alertController.addAction(restoreAction)
         alertController.addAction(cancelAction)
-        
-        // Present the controller
-        self.present(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
         } else {
-            //already a member
+           
             let alert = UIAlertController(title: "Premium Member", message: "You are a premium member and can add up to 50 stock price alerts", preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             
-            self.present(alert, animated: true, completion: nil)
+            present(alert, animated: true, completion: nil)
            
         }
     }
@@ -838,7 +842,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     @objc func menuFunc() {
         returnAllAlertSlides()
         if slideView.frame.origin.x == 0 {
-            UIView.animate(withDuration: 0.3) {self.slideView.frame.origin.x += 516*self.screenWidth/750}
+            UIView.animate(withDuration: 0.3) {[weak self] in
+                guard let weakself = self else {return}
+                weakself.slideView.frame.origin.x += 516*weakself.screenWidth/750
+                
+            }
             
             slideView.addGestureRecognizer(returnTap)
             slideView.addGestureRecognizer(returnSwipe)
@@ -846,8 +854,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             container.isUserInteractionEnabled = false
             
             
-        } else if slideView.frame.origin.x == 516*self.screenWidth/750 {
-            UIView.animate(withDuration: 0.3) {self.slideView.frame.origin.x -= 516*self.screenWidth/750}
+        } else if slideView.frame.origin.x == 516*screenWidth/750 {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                guard let weakself = self else {return}
+            weakself.slideView.frame.origin.x -= 516*weakself.screenWidth/750}
             slideView.removeGestureRecognizer(returnTap)
             slideView.removeGestureRecognizer(returnSwipe)
             slideView.removeGestureRecognizer(returnPan)
@@ -855,9 +865,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
     }
     @objc func menuReturnFunc(_ gesture: UIGestureRecognizer) {
-        if slideView.frame.origin.x == 516*self.screenWidth/750 {
+        if slideView.frame.origin.x == 516*screenWidth/750 {
             
-            UIView.animate(withDuration: 0.3) {self.slideView.frame.origin.x -= 516*self.screenWidth/750}
+            UIView.animate(withDuration: 0.3) {[weak self] in
+                guard let weakself = self else {return}
+                
+                weakself.slideView.frame.origin.x -= 516*weakself.screenWidth/750
+                
+            }
             slideView.removeGestureRecognizer(returnTap)
             slideView.removeGestureRecognizer(returnSwipe)
             slideView.removeGestureRecognizer(returnPan)
@@ -870,7 +885,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             hitOnce = false
             if (premiumMember || Set1.userAlerts.count < 3) && Set1.userAlerts.count < 50 {
                 
-                self.performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
+                performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
                 
             } else if !premiumMember && Set1.userAlerts.count < 50 {
                 
@@ -879,7 +894,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
                 let alert = UIAlertController(title: "", message: " 50 maximum alerts reached", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -891,7 +906,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             if addTextField.text != nil && addTextField.delegate != nil {
                 
                 stringToPass = addTextField.text ?? ""
-                self.performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
+                performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
             }
         }
         
@@ -917,7 +932,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
 
         if let prices = Set1.tenYearDictionary[stringToPass],
             prices.count > 1 {
-        self.performSegue(withIdentifier: "fromMainToGraph", sender: self)
+        performSegue(withIdentifier: "fromMainToGraph", sender: self)
         }
         
     }
@@ -925,25 +940,26 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     @objc func purchase(productId: String = "firetail.iap.premium") {
         
         activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-        activityView.center = self.view.center
+        activityView.center = view.center
         activityView.startAnimating()
         activityView.alpha = 1.0
-        self.view.addSubview(activityView)
-        SwiftyStoreKit.purchaseProduct(productId) { result in
-            self.hitOnce = true
+        view.addSubview(activityView)
+        SwiftyStoreKit.purchaseProduct(productId) { [weak self] result in
+            guard let weakself = self else {return}
+            weakself.hitOnce = true
             switch result {
                 
             case .success( _):
-                self.premiumMember = true
+                weakself.premiumMember = true
                 Set1.premium = true
-                self.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
+                weakself.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
                 Set1.saveUserInfo()
-                self.activityView.removeFromSuperview()
+                weakself.activityView.removeFromSuperview()
             case .error(let error):
                 
                 print("error: \(error)")
                 print("Purchase Failed: \(error)")
-                self.activityView.removeFromSuperview()
+                weakself.activityView.removeFromSuperview()
             }
         }
         
@@ -951,11 +967,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        //        if gestureRecognizer is UIPanGestureRecognizer || gestureRecognizer is UILongPressGestureRecognizer {
         return true
-        //        } else {
-        //        return false
-        //        }
     }
     
     @objc func sendEmail() {
