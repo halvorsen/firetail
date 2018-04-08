@@ -121,7 +121,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     @objc private func _quickPickFunc(_ sender: UIButton) {
         guard let title = sender.titleLabel,
             let newAlertTicker = title.text else {return}
-        
+        self.newAlertTicker = newAlertTicker
         quickPickFunc() { [weak self] (isGoodToGo) -> Void in
             guard let weakself = self else {return}
             if isGoodToGo {
