@@ -19,28 +19,28 @@ public var gingerBreadMan = CGMutablePath()
 class GraphViewController: ViewSetup {
     
     let customColor = CustomColor()
-    @objc var enter = UIButton()
-    @objc var graphViewSeen = StockGraphView2()
-    @objc var stockName = String()
-    @objc var tap = UITapGestureRecognizer()
+    var enter = UIButton()
+    var graphViewSeen = StockGraphView2()
+    var stockName = String()
+    var tap = UITapGestureRecognizer()
     var graphViews = [String:StockGraphView2?]()
-    @objc var stockHeader = UILabel()
-    @objc var currentPrice = UILabel()
-    @objc var backArrow = UIButton()
-    @objc var passedString = "Patriots"
-    @objc let trade = UIButton()
-    @objc var newTextKey = String()
-    @objc var currentTextKey = "1y"
-    @objc let layer = CAShapeLayer()
-    @objc var start = CGFloat()
-    @objc var switchable = true
-    @objc var first = true
-    @objc let list = ["1y","5y","10y","1d","5d","1m","3m"]
-    @objc var orderOfGraphs = ["1y":0,"5y":1,"10y":2,"1d":3,"5d":4,"1m":5,"3m":6]
-    @objc var orderofGraphsInverse = [Int:String]()
-    @objc let orderOfLabels = ["10y":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
-    @objc var loading = UILabel()
-    @objc let brokersDictionary: [String:String] = [
+    var stockHeader = UILabel()
+    var currentPrice = UILabel()
+    var backArrow = UIButton()
+    var passedString = "Patriots"
+    let trade = UIButton()
+    var newTextKey = String()
+    var currentTextKey = "1y"
+    let layer = CAShapeLayer()
+    var start = CGFloat()
+    var switchable = true
+    var first = true
+    let list = ["1y","5y","10y","1d","5d","1m","3m"]
+    var orderOfGraphs = ["1y":0,"5y":1,"10y":2,"1d":3,"5d":4,"1m":5,"3m":6]
+    var orderofGraphsInverse = [Int:String]()
+    let orderOfLabels = ["10y":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
+    var loading = UILabel()
+    let brokersDictionary: [String:String] = [
         "Ameritrade":"https://invest.ameritrade.com/grid/p/site",
         "Etrade":"https://us.etrade.com/e/t/user/login",
         "Scottrade":"https://trading.scottrade.com/",
@@ -69,28 +69,9 @@ class GraphViewController: ViewSetup {
         "Chase": "https://jpmorgan.chase.com/"
     ]
     
-    
-    @objc private func finishedFetchingStocks() {
-        print("received fetching notification in graphview controller")
-        //reload graphs
-        //this just need to be entirely remade if we want to reload while in the controller. issues are: drawing with Chart Pod, not doing asynch correctly (the charts get drawn and I used second delays to make sure I had the right order). the layers are then copied from the Chart pod and loaded in a complex view controll that has a ton of interdependancies. This just needs to be gutted and redone correctly. until then we just get old details until fetch is done before segueing to these details or we can turn on an indicator before seguing until the fetched data from loading comes in.
-//        callCorrectGraph2FromCache(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
-//            DispatchQueue.main.async {
-//
-//                if stockData.0.count == 7 {
-//                    for i in 0..<stockData.0.count {
-//                        self.orderOfGraphs[stockData.0[i]] = i
-//                        self.orderofGraphsInverse[i] = stockData.0[i]
-//                    }
-//
-//                    self.implementDrawSubviews(stockData: stockData)}
-//            }
-//        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-         NotificationCenter.default.addObserver(self, selector: #selector(GraphViewController.finishedFetchingStocks), name: NSNotification.Name(rawValue: updatedDataKey), object: nil)
+       
         PodVariable.gingerBreadMan.removeAll()
         Label.changeValues.removeAll()
         Label.percentageValues.removeAll()
@@ -170,7 +151,9 @@ class GraphViewController: ViewSetup {
     
     @objc private func trade(_ sender: UIButton) {
         if Set1.brokerName != "none" {
-            UIApplication.shared.open(URL(string: brokersDictionary[Set1.brokerName]!)!)
+            guard let name = brokersDictionary[Set1.brokerName],
+                let url = URL(string: name) else { return }
+            UIApplication.shared.open(url)
         } else {
             self.userWarning(title: "", message: "Add Broker in Firetail Settings")
             
@@ -184,22 +167,30 @@ class GraphViewController: ViewSetup {
         layerAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         layerAnimation.fillMode = kCAFillModeBoth
         layerAnimation.isRemovedOnCompletion = false
-        layerAnimation.fromValue = PodVariable.gingerBreadMan[orderOfGraphs[currentTextKey]!]
-        
-        var center = tap.location(in: view!)
+        guard let order = orderOfGraphs[currentTextKey],
+            PodVariable.gingerBreadMan.count > order else {return}
+        layerAnimation.fromValue = PodVariable.gingerBreadMan[order]
+        guard let myView = view else {return}
+        var center = tap.location(in: myView)
         center.y -= 388*screenHeight/1334
         
         for xLabel in (graphViewSeen.xs) {
             if xLabel.frame.contains(center) {
-                graphViewSeen.xs[orderOfLabels[currentTextKey]!].textColor = customColor.labelGray
-                newTextKey = xLabel.text!
-                graphViewSeen.xs[orderOfLabels[newTextKey]!].textColor = customColor.yellow
-                layerAnimation.toValue = PodVariable.gingerBreadMan[orderOfGraphs[newTextKey]!]
+                guard let currentOrder = orderOfLabels[currentTextKey],
+                    let newOrder = orderOfLabels[newTextKey],
+                    let newGraphs = orderOfGraphs[newTextKey],
+                    let xText = xLabel.text,
+                    graphViewSeen.xs.count > currentOrder,
+                    graphViewSeen.xs.count > newOrder else {return}
+                graphViewSeen.xs[currentOrder].textColor = customColor.labelGray
+                newTextKey = xText
+                graphViewSeen.xs[newOrder].textColor = customColor.yellow
+                layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
                 
                 currentTextKey = newTextKey
                 layer.add(layerAnimation, forKey: nil)
-                graphViewSeen.change.text = Label.changeValues[orderOfGraphs[newTextKey]!]
-                if let symbol = Label.changeValues[orderOfGraphs[newTextKey]!].first {
+                graphViewSeen.change.text = Label.changeValues[newGraphs]
+                if let symbol = Label.changeValues[newGraphs].first {
                     if symbol == "-" {
                         graphViewSeen.percentChange.textColor = customColor.red
                         graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
@@ -208,15 +199,15 @@ class GraphViewController: ViewSetup {
                         graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
                     }
                 }
-                graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs[newTextKey]!]
-                
+                graphViewSeen.percentChange.text = Label.percentageValues[newGraphs]
+                guard let newY = yVals[newTextKey] else {return}
                 for i in 0..<graphViewSeen.ys.count {
                     switch i {
-                    case 0: graphViewSeen.ys[i].text = yVals[newTextKey]!.4
-                    case 1: graphViewSeen.ys[i].text = yVals[newTextKey]!.3
-                    case 2: graphViewSeen.ys[i].text = yVals[newTextKey]!.2
-                    case 3: graphViewSeen.ys[i].text = yVals[newTextKey]!.1
-                    case 4: graphViewSeen.ys[i].text = yVals[newTextKey]!.0
+                    case 0: graphViewSeen.ys[i].text = newY.4
+                    case 1: graphViewSeen.ys[i].text = newY.3
+                    case 2: graphViewSeen.ys[i].text = newY.2
+                    case 3: graphViewSeen.ys[i].text = newY.1
+                    case 4: graphViewSeen.ys[i].text = newY.0
                     default: break
                     }
                     
@@ -224,7 +215,8 @@ class GraphViewController: ViewSetup {
                 return
             }
         }
-        if tap.location(in: view!).y > 100 && tap.location(in: view!).y < 550 {
+   
+        if tap.location(in: myView).y > 100 && tap.location(in: myView).y < 550 {
             var xLabel = graphViewSeen.xs[0]
             
             switch currentTextKey {
@@ -244,15 +236,22 @@ class GraphViewController: ViewSetup {
                 break
             }
             
-            graphViewSeen.xs[orderOfLabels[currentTextKey]!].textColor = customColor.labelGray
-            newTextKey = xLabel.text!
-            graphViewSeen.xs[orderOfLabels[newTextKey]!].textColor = customColor.yellow
-            layerAnimation.toValue = PodVariable.gingerBreadMan[orderOfGraphs[newTextKey]!]
+            guard let currentOrder = orderOfLabels[currentTextKey],
+                let newOrder = orderOfLabels[newTextKey],
+                let newGraphs = orderOfGraphs[newTextKey],
+                let xText = xLabel.text,
+                graphViewSeen.xs.count > currentOrder,
+                graphViewSeen.xs.count > newOrder else {return}
+            
+            graphViewSeen.xs[currentOrder].textColor = customColor.labelGray
+            newTextKey = xText
+            graphViewSeen.xs[newOrder].textColor = customColor.yellow
+            layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
             
             currentTextKey = newTextKey
             layer.add(layerAnimation, forKey: nil)
-            graphViewSeen.change.text = Label.changeValues[orderOfGraphs[newTextKey]!]
-            if let symbol = Label.changeValues[orderOfGraphs[newTextKey]!].first {
+            graphViewSeen.change.text = Label.changeValues[newGraphs]
+            if let symbol = Label.changeValues[newGraphs].first {
                 if symbol == "-" {
                     graphViewSeen.percentChange.textColor = customColor.red
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
@@ -261,15 +260,15 @@ class GraphViewController: ViewSetup {
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
                 }
             }
-            graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs[newTextKey]!]
-            
+            graphViewSeen.percentChange.text = Label.percentageValues[newGraphs]
+            guard let newY = yVals[newTextKey] else {return}
             for i in 0..<graphViewSeen.ys.count {
                 switch i {
-                case 0: graphViewSeen.ys[i].text = yVals[newTextKey]!.4
-                case 1: graphViewSeen.ys[i].text = yVals[newTextKey]!.3
-                case 2: graphViewSeen.ys[i].text = yVals[newTextKey]!.2
-                case 3: graphViewSeen.ys[i].text = yVals[newTextKey]!.1
-                case 4: graphViewSeen.ys[i].text = yVals[newTextKey]!.0
+                case 0: graphViewSeen.ys[i].text = newY.4
+                case 1: graphViewSeen.ys[i].text = newY.3
+                case 2: graphViewSeen.ys[i].text = newY.2
+                case 3: graphViewSeen.ys[i].text = newY.1
+                case 4: graphViewSeen.ys[i].text = newY.0
                 default: break
                 }
                 
@@ -287,16 +286,17 @@ class GraphViewController: ViewSetup {
     var yVals = [String:(l1:String,l2:String,l3:String,l4:String,l5:String)]()
     
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
-      
-        if stockData.1[self.i] != nil {
+        guard let data1 = stockData.1[self.i],
+            let closeMax = data1.closingPrice.max(),
+            let closeMin = data1.closingPrice.min() else {return}
+    
+            let graphView = StockGraphView2(stockData: data1, key: stockData.0[self.i], cubic: true)
             
-            let graphView = StockGraphView2(stockData: stockData.1[self.i]!, key: stockData.0[self.i], cubic: true)
+            let ma = closeMax //from unfiltered highs and lows
+            let mi = closeMin //from unfiltered
             
-            let ma = stockData.1[self.i]!.closingPrice.max()! //from unfiltered highs and lows
-            let mi = stockData.1[self.i]!.closingPrice.min()! //from unfiltered
-            
-            let ma2 = graphView._outputValues.max()! //from averages for middle of graph
-            let mi2 = graphView._outputValues.min()!// from averages for middle of graph
+            guard let ma2 = graphView._outputValues.max(), //from averages for middle of graph
+                let mi2 = graphView._outputValues.min() else {return}// from averages for middle of graph
             
             //basically what this does to the yellow detailed graphs is gives the actual max and min values as the top and bottom y labels. the graph is all averages execpt for the current price, last point on graph, which is the current prices. As you can imagine this makes for a graph that isn't totally lined up with it's legends but gives you a good point at the end and top and bottom, then everything else is approximation curve through averaged prices
             
@@ -323,7 +323,7 @@ class GraphViewController: ViewSetup {
             
             if stockData.0[self.i] == "1d" {
                 
-                self.currentPrice.text = String(format: "%.2f", stockData.1[self.i]!.closingPrice.last!)
+                self.currentPrice.text = String(format: "%.2f", closeMax)
             } else if stockData.0[self.i] == "3m" {
                 
                 delay(bySeconds: 1.0) {
@@ -338,7 +338,7 @@ class GraphViewController: ViewSetup {
                     
                 }
             }
-        }
+        
     }
     
    
@@ -358,9 +358,10 @@ class GraphViewController: ViewSetup {
         UIView.animate(withDuration: 0.3) {
             self.backArrow.alpha = 1.0
         }
-        for (_,graph) in self.graphViews {
-            if graph != nil && (graph?.isDescendant(of: self.view))! {
-                graph!.removeFromSuperview()
+        for (_,_graph) in self.graphViews {
+            guard let graph = _graph else {return}
+            if graph.isDescendant(of: self.view) {
+                graph.removeFromSuperview()
             }
         }
     }
@@ -379,8 +380,9 @@ class GraphViewController: ViewSetup {
         if PodVariable.gingerBreadMan.count > 0 {
             animateBase()
             view.addSubview(graphViewSeen)
-            
-            layer.path = PodVariable.gingerBreadMan[orderOfGraphs["1y"]!]
+            guard let oneOrder = orderOfGraphs["1y"],
+                PodVariable.gingerBreadMan.count > oneOrder else {return}
+            layer.path = PodVariable.gingerBreadMan[oneOrder]
             layer.fillColor = customColor.yellow.cgColor
             layer.shadowColor = customColor.black.cgColor
             layer.shadowOpacity = 1.0
@@ -392,9 +394,9 @@ class GraphViewController: ViewSetup {
             
             graphViewSeen.layerView.layer.addSublayer(layer)
             
-            graphViewSeen.change.text = Label.changeValues[orderOfGraphs["1y"]!]
-            graphViewSeen.percentChange.text = Label.percentageValues[orderOfGraphs["1y"]!]
-            if let symbol = Label.changeValues[orderOfGraphs["1y"]!].first {
+            graphViewSeen.change.text = Label.changeValues[oneOrder]
+            graphViewSeen.percentChange.text = Label.percentageValues[oneOrder]
+            if let symbol = Label.changeValues[oneOrder].first {
                 if symbol == "-" {
                     graphViewSeen.percentChange.textColor = customColor.red
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
@@ -410,14 +412,14 @@ class GraphViewController: ViewSetup {
             view.addSubview(currentPrice)
             view.addSubview(trade)
             view.addSubview(stockHeader)
-            
+            guard let yVal = yVals["1y"] else {return}
             for i in 0..<graphViewSeen.ys.count {
                 switch i {
-                case 0: graphViewSeen.ys[i].text = yVals["1y"]!.4
-                case 1: graphViewSeen.ys[i].text = yVals["1y"]!.3
-                case 2: graphViewSeen.ys[i].text = yVals["1y"]!.2
-                case 3: graphViewSeen.ys[i].text = yVals["1y"]!.1
-                case 4: graphViewSeen.ys[i].text = yVals["1y"]!.0
+                case 0: graphViewSeen.ys[i].text = yVal.4
+                case 1: graphViewSeen.ys[i].text = yVal.3
+                case 2: graphViewSeen.ys[i].text = yVal.2
+                case 3: graphViewSeen.ys[i].text = yVal.1
+                case 4: graphViewSeen.ys[i].text = yVal.0
                 default: break
                 }
                 
