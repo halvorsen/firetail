@@ -163,5 +163,4 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         reachabilityRemoveNotification()
     }
     
-    
 }
