@@ -15,26 +15,25 @@ import FirebaseCore
 class LoginViewController: ViewSetup, UITextFieldDelegate {
 
     var customColor = CustomColor()
-    @objc var login = UIButton()
-    @objc var continueB = UIButton()
-    @objc var createAccount = UIButton()
-    @objc var myTextFields = [UITextField]()
-    @objc var activityView = UIActivityIndicatorView()
+    var login = UIButton()
+    var continueB = UIButton()
+    var createAccount = UIButton()
+    var myTextFields = [UITextField]()
+    var activityView = UIActivityIndicatorView()
     let loadsave = LoadSaveCoreData()
-    @objc var myTimer = Timer()
-    @objc var ti = [String]()
-    @objc var alreadyAUser = false
-    @objc let imageView = UIImageView()
-    @objc let coverView = UIView()
-    @objc var retry = false
-    @objc var authenticated = false
-    @objc var noNils = true
-    @objc var tiLast = String()
- //   var _ti = [String]()
-    @objc let firetail = UILabel()
+    var myTimer = Timer()
+    var ti = [String]()
+    var alreadyAUser = false
+    let imageView = UIImageView()
+    let coverView = UIView()
+    var retry = false
+    var authenticated = false
+    var noNils = true
+    var tiLast = String()
+    let firetail = UILabel()
     let myLoadSaveCoreData = LoadSaveCoreData()
-    @objc var isFirstLoading = true
-    @objc var tap = UITapGestureRecognizer()
+    var isFirstLoading = true
+    var tap = UITapGestureRecognizer()
     var appLoadingData = AppLoadingData()
     let alphaAPI = Alpha()
   
@@ -217,8 +216,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func continueFunc(_ sender: UIButton) {
-        
-        var cleanString = myTextFields[0].text!
+        guard let myText = myTextFields[0].text,
+            let myText2 = myTextFields[1].text else {return}
+        var cleanString = myText
         cleanString = cleanString.replacingOccurrences(of: ".", with: ",")
         cleanString = cleanString.replacingOccurrences(of: "$", with: "")
         cleanString = cleanString.replacingOccurrences(of: "#", with: "")
@@ -229,7 +229,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         loadsave.saveUsername(username: cleanString)
         Set1.username = cleanString
         
-        Auth.auth().signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!, completion: { (user, error) in
+        Auth.auth().signIn(withEmail: myText, password: myText2, completion: { (user, error) in
             if error != nil{
                 self.activityView.removeFromSuperview()
                 let alert = UIAlertController(title: "Warning", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
@@ -245,11 +245,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         self.view.addSubview(activityView)
     }
     
-    @objc var isFirstTimeSeguing = true
+    var isFirstTimeSeguing = true
     private func cont() {
-        print("Set1.oneyearDictionary")
-        print(Set1.oneYearDictionary)
-        
+      
         if ti == [""] {
             if isFirstTimeSeguing {
                 isFirstTimeSeguing = false
@@ -273,11 +271,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
         view.removeGestureRecognizer(tap)
         self.view.endEditing(true)
-        if textField.text != nil && textField.delegate != nil {
-            
-            //do something with the --> textField.text!
-            
-        }
+      
         return false
     }
     
@@ -319,6 +313,5 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         Set1.logoutFirebase()
      
     }
-    
     
 }
