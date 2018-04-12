@@ -7,7 +7,6 @@
 //
 
 import UIKit
-
 import Firebase
 import FirebaseAuth
 import ReachabilitySwift
@@ -135,7 +134,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         
         loadsave.saveUsername(username: cleanString)
         Set1.username = cleanString
-        Set1.email = textFields[0].text!
+        Set1.email = textFields[0].text ?? ""
         let emailField = textFields[0].text
         let passwordField = textFields[1].text
         let passwordField2 = textFields[2].text
@@ -190,8 +189,6 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                     }
                 })
                 
-                
-               // self.userWarning(title: "", message: (error!.localizedDescription))
             }
         }
     }
@@ -206,12 +203,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         view.frame.origin.y = 0
         view.removeGestureRecognizer(tap)
         self.view.endEditing(true)
-        if textField.text != nil && textField.delegate != nil {
-            
-            //do something with the --> textField.text!
-            
-        }
-        
+
         switch textField.tag {
         case 0:
             textFields[1].becomeFirstResponder()
