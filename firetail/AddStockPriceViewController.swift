@@ -59,7 +59,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         
         addLabel(name: setPriceAlert, text: "Set Price Alert", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 56, y: 885, width: 300, height: 80, lines: 1)
         
-        addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif", fontSize: 20, x: 60, y: 606, width: 200, height: 56, lines: 1)
+        addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif", fontSize: 20, x: 60, y: 606*screenHeight/667, width: 200, height: 56, lines: 1)
         
         
         addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 56, y: 657, width: 240, height: 80, lines: 1)
@@ -249,7 +249,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         }
         
         let dialMask = UILabel()
-        dialMask.frame = CGRect(x: 0, y: 514*screenWidth/375, width: screenWidth, height: 60*screenWidth/375)
+        dialMask.frame = CGRect(x: 0, y: 514*screenHeight/667, width: screenWidth, height: 60*screenWidth/375)
         dialMask.backgroundColor = customColor.black42Alpha0
         
         view.addSubview(dialMask)

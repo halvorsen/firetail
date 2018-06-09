@@ -18,6 +18,8 @@ import UserNotifications
 import QuartzCore
 import ReachabilitySwift
 
+let widthScalar = UIScreen.main.bounds.width/375
+let heightScalar = UIScreen.main.bounds.height/667
 
 class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
@@ -89,7 +91,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     @objc var scrolling = false
     @objc var alertPan = UIPanGestureRecognizer()
-    
+    var labelTop: CGFloat = 24*UIScreen.main.bounds.height/1334
+    var labelMiddle: CGFloat = 72*UIScreen.main.bounds.height/1334
+    var labelBottom: CGFloat = 120*UIScreen.main.bounds.height/1334
+
     override func viewWillAppear(_ animated: Bool) {
         
         if Set1.userAlerts.count > 0 {
@@ -126,7 +131,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         
         Set1.saveUserInfo()
-        
+       
         
         
     }
@@ -135,7 +140,16 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self, selector: #selector(DashboardViewController.finishedFetchingTop3Stocks), name: NSNotification.Name(rawValue: updatedDataKey), object: nil)
-
+        if UIDevice().userInterfaceIdiom == .phone {
+            if UIScreen.main.nativeBounds.height == 2436 {
+                
+                labelTop += 30
+                labelBottom += 30
+                labelMiddle += 30
+                
+            }
+            
+        }
         
         alertPan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.move(_:)))
         view.addGestureRecognizer(alertPan)
@@ -227,9 +241,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         container.showsVerticalScrollIndicator = false
         addLabel(name: monthIndicator, text: Set1.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 30, lines: 1)
         
-        addLabel(name: stock1, text: "", textColor: customColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 24, width: 352, height: 48, lines: 0)
-        addLabel(name: stock2, text: "", textColor: customColor.white128, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 72, width: 352, height: 48, lines: 0)
-        addLabel(name: stock3, text: "", textColor: customColor.white209, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 120, width: 352, height: 48, lines: 0)
+        addLabel(name: stock1, text: "", textColor: customColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
+        addLabel(name: stock2, text: "", textColor: customColor.white128, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
+        addLabel(name: stock3, text: "", textColor: customColor.white209, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
+        stock1.frame.origin.y = labelTop
+        stock2.frame.origin.y = labelMiddle
+        stock3.frame.origin.y = labelBottom
         
         switch Set1.userAlerts.count {
         case 0:
@@ -546,7 +563,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     private func populateCompareGraph() {
-        guard let ti0 = Set1.oneYearDictionary[Set1.ti[0]],
+        guard Set1.ti.count > 0,
+            let ti0 = Set1.oneYearDictionary[Set1.ti[0]],
             ti0.count > 0 else {return}
       
         switch Set1.ti.count {
@@ -565,7 +583,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             container.addSubview(sv)
             svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
             container2.addSubview(svDot)
-            guard let ti1 = Set1.oneYearDictionary[Set1.ti[1]],
+            guard Set1.ti.count > 1,
+                let ti1 = Set1.oneYearDictionary[Set1.ti[1]],
                 ti1.count > 0 else {return}
             sv1 =  CompareScroll(graphData: ti1, stockName: Set1.ti[1], color: customColor.white128)
             container.addSubview(sv1)
@@ -578,13 +597,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             container.addSubview(sv)
             svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
             container2.addSubview(svDot)
-            guard let ti1 = Set1.oneYearDictionary[Set1.ti[1]],
+            guard Set1.ti.count > 1,
+                let ti1 = Set1.oneYearDictionary[Set1.ti[1]],
                 ti1.count > 0 else {return}
             sv1 =  CompareScroll(graphData: ti1, stockName: Set1.ti[1], color: customColor.white128)
             container.addSubview(sv1)
             svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.ti[1], color: customColor.white128)
             container2.addSubview(svDot1)
-            guard let ti2 = Set1.oneYearDictionary[Set1.ti[2]],
+            guard Set1.ti.count > 2,
+                let ti2 = Set1.oneYearDictionary[Set1.ti[2]],
                 ti2.count > 0 else {return}
             sv2 =  CompareScroll(graphData: ti2, stockName: Set1.ti[2], color: customColor.white209)
             container.addSubview(sv2)
@@ -663,21 +684,21 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 case 0:
                     break
                 case 1:
-                    stock1.frame.origin.y = 24*screenHeight/1334
-                    stock2.frame.origin.y = 72*screenHeight/1334
-                    stock3.frame.origin.y = 120*screenHeight/1334
+                    stock1.frame.origin.y = labelTop
+                    stock2.frame.origin.y = labelMiddle
+                    stock3.frame.origin.y = labelBottom
                 case 2:
                     UIView.animate(withDuration: 0.5) { [weak self] in
                         guard let weakself = self else {return}
                         if value > value1 {
                             
-                            weakself.stock1.frame.origin.y = 24*weakself.screenHeight/1334
-                            weakself.stock2.frame.origin.y = 72*weakself.screenHeight/1334
-                            weakself.stock3.frame.origin.y = 120*weakself.screenHeight/1334
+                            weakself.stock1.frame.origin.y = weakself.labelTop
+                            weakself.stock2.frame.origin.y = weakself.labelMiddle
+                            weakself.stock3.frame.origin.y = weakself.labelBottom
                         } else {
-                            weakself.stock1.frame.origin.y = 72*weakself.screenHeight/1334
-                            weakself.stock3.frame.origin.y = 120*weakself.screenHeight/1334
-                            weakself.stock2.frame.origin.y = 24*weakself.screenHeight/1334
+                            weakself.stock1.frame.origin.y = weakself.labelMiddle
+                            weakself.stock3.frame.origin.y = weakself.labelBottom
+                            weakself.stock2.frame.origin.y = weakself.labelTop
                         }
                         
                     }
@@ -686,32 +707,32 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                         guard let weakself = self else {return}
                         if value > value1 {
                             if value > value2 {
-                                weakself.stock1.frame.origin.y = 24*weakself.screenHeight/1334
+                                weakself.stock1.frame.origin.y = weakself.labelTop
                                 if value1 > value2 {
-                                    weakself.stock2.frame.origin.y = 72*weakself.screenHeight/1334
-                                    weakself.stock3.frame.origin.y = 120*weakself.screenHeight/1334
+                                    weakself.stock2.frame.origin.y = weakself.labelMiddle
+                                    weakself.stock3.frame.origin.y = weakself.labelBottom
                                 } else {
-                                    weakself.stock3.frame.origin.y = 72*weakself.screenHeight/1334
-                                    weakself.stock2.frame.origin.y = 120*weakself.screenHeight/1334
+                                    weakself.stock3.frame.origin.y = weakself.labelMiddle
+                                    weakself.stock2.frame.origin.y = weakself.labelBottom
                                 }
                             } else {
-                                weakself.stock3.frame.origin.y = 24*weakself.screenHeight/1334
-                                weakself.stock1.frame.origin.y = 72*weakself.screenHeight/1334
-                                weakself.stock2.frame.origin.y = 120*weakself.screenHeight/1334
+                                weakself.stock3.frame.origin.y = weakself.labelTop
+                                weakself.stock1.frame.origin.y = weakself.labelMiddle
+                                weakself.stock2.frame.origin.y = weakself.labelBottom
                             }
                         } else {
                             if value > value2 {
-                                weakself.stock1.frame.origin.y = 72*weakself.screenHeight/1334
-                                weakself.stock2.frame.origin.y = 24*weakself.screenHeight/1334
-                                weakself.stock3.frame.origin.y = 120*weakself.screenHeight/1334
+                                weakself.stock1.frame.origin.y = weakself.labelMiddle
+                                weakself.stock2.frame.origin.y = weakself.labelTop
+                                weakself.stock3.frame.origin.y = weakself.labelBottom
                             } else {
-                                weakself.stock1.frame.origin.y = 120*weakself.screenHeight/1334
+                                weakself.stock1.frame.origin.y = weakself.labelBottom
                                 if value1 > value2 {
-                                    weakself.stock2.frame.origin.y = 24*weakself.screenHeight/1334
-                                    weakself.stock3.frame.origin.y = 72*weakself.screenHeight/1334
+                                    weakself.stock2.frame.origin.y = weakself.labelTop
+                                    weakself.stock3.frame.origin.y = weakself.labelMiddle
                                 } else {
-                                    weakself.stock2.frame.origin.y = 72*weakself.screenHeight/1334
-                                    weakself.stock3.frame.origin.y = 24*weakself.screenHeight/1334
+                                    weakself.stock2.frame.origin.y = weakself.labelMiddle
+                                    weakself.stock3.frame.origin.y = weakself.labelTop
                                 }
                             }
                         }
@@ -787,6 +808,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
     }
     @objc private func supportFunc(_ sender: UIButton) {
+        print("SUPPORT")
         sendEmail()
     }
     @objc private func goPremiumFunc(_ sender: UIButton) {
@@ -970,18 +992,21 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         return true
     }
     
+    var mail: MFMailComposeViewController?
     @objc func sendEmail() {
+        mail = MFMailComposeViewController()
         if MFMailComposeViewController.canSendMail() {
-            let mail = MFMailComposeViewController()
-            mail.mailComposeDelegate = self
-            mail.setToRecipients(["support@firetailapp.com"])
-            present(mail, animated: true)
+            
+            mail?.mailComposeDelegate = self
+            mail?.setToRecipients(["support@firetailapp.com"])
+            present(mail!, animated: true)
         } else {
             // show failure alert
         }
     }
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        print("send email dismiss")
         controller.dismiss(animated: true)
     }
     

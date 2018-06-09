@@ -139,7 +139,7 @@ class StockGraphView2: UIView {
         }
         
         _outputValues = outputValues.map { $0 / Double(setAmount) }
-      
+        
         _closingPrice = _outputValues
         return _outputValues
         
@@ -213,13 +213,13 @@ class StockGraphView2: UIView {
         
         var dataEntries = GraphSet2()
         if stockData.closingPrice.count == 5 {
-          
+            
             let __stockData = [stockData.closingPrice[0],stockData.closingPrice[0],stockData.closingPrice[0],
-                              stockData.closingPrice[1],stockData.closingPrice[1],stockData.closingPrice[1],
-                              stockData.closingPrice[2],stockData.closingPrice[2],stockData.closingPrice[2],
-                              stockData.closingPrice[3],stockData.closingPrice[3],stockData.closingPrice[3],
-                              stockData.closingPrice[4],stockData.closingPrice[4],stockData.closingPrice[4],
-                              ]
+                               stockData.closingPrice[1],stockData.closingPrice[1],stockData.closingPrice[1],
+                               stockData.closingPrice[2],stockData.closingPrice[2],stockData.closingPrice[2],
+                               stockData.closingPrice[3],stockData.closingPrice[3],stockData.closingPrice[3],
+                               stockData.closingPrice[4],stockData.closingPrice[4],stockData.closingPrice[4],
+                               ]
             fillChartViewWithSetsOfData(dataPoints: __stockData, cubic: cubic)
             _outputValues = stockData.closingPrice
             _closingPrice = __stockData
@@ -240,7 +240,7 @@ class StockGraphView2: UIView {
                     } else {
                         _changeValue = String(format: "%.2f", Float((_closingPrice.last)! - (_closingPrice.first)!))
                     }
-               
+                    
                     return _changeValue
                 }
             }
@@ -256,7 +256,7 @@ class StockGraphView2: UIView {
                         Label.percentageValuesIsPositive.append(false)
                         _changeValue = String(format: "%.2f", Float(100*(_closingPrice.first! - _closingPrice.last!)/_closingPrice.first!)) + "%"
                     }
-                 
+                    
                     return _changeValue
                 }
             }
@@ -289,15 +289,29 @@ class StockGraphView2: UIView {
             // }
         }
         
-        //make a switch for different graph ranges
-        
-        for i in 0...5 {
-            addLabel(name: xs[i], text: xLabels[i], textColor: customColor.labelGray, textAlignment: .center, fontName: "Roboto-Regular", fontSize: 12, x: (screenWidth/8)*(CGFloat(i)+1)*1334/screenHeight + 20, y: graphHeight*1334/screenHeight + 20, width: 60, height: 75, lines: 1)
-            if xs[i].text == key {
-                xs[i].textColor = customColor.yellow
+        if (UIDevice().userInterfaceIdiom == .phone) && UIScreen.main.nativeBounds.height == 2436 {
+            
+            for i in 0...5 {
+                addLabel(name: xs[i], text: xLabels[i], textColor: customColor.labelGray, textAlignment: .center, fontName: "Roboto-Regular", fontSize: 12, x: (screenWidth/4)*(CGFloat(i)+1) + 20, y: 540*heightScalar, width: 60, height: 75, lines: 1)
+                if xs[i].text == key {
+                    xs[i].textColor = customColor.yellow
+                }
+                xs[i].isUserInteractionEnabled = false
+                self.addSubview(xs[i])
             }
-            self.addSubview(xs[i])
+            
+            
         }
+        else {
+            for i in 0...5 {
+                addLabel(name: xs[i], text: xLabels[i], textColor: customColor.labelGray, textAlignment: .center, fontName: "Roboto-Regular", fontSize: 12, x: (screenWidth/8)*(CGFloat(i)+1)*1334/screenHeight + 20, y: graphHeight*1334/screenHeight + 20, width: 60, height: 75, lines: 1)
+                if xs[i].text == key {
+                    xs[i].textColor = customColor.yellow
+                }
+                self.addSubview(xs[i])
+            }
+        }
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

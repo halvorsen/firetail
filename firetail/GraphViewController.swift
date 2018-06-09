@@ -16,7 +16,7 @@ public struct MyVariables {
 
 public var gingerBreadMan = CGMutablePath()
 
-class GraphViewController: ViewSetup {
+class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
     let customColor = CustomColor()
     var enter = UIButton()
@@ -29,7 +29,7 @@ class GraphViewController: ViewSetup {
     var backArrow = UIButton()
     var passedString = "Patriots"
     let trade = UIButton()
-    var newTextKey = String()
+    var newTextKey = "3m"
     var currentTextKey = "1y"
     let layer = CAShapeLayer()
     var start = CGFloat()
@@ -68,7 +68,7 @@ class GraphViewController: ViewSetup {
         "Firstrade": "https://invest.firstrade.com/cgi-bin/login",
         "Chase": "https://jpmorgan.chase.com/"
     ]
-    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
        
@@ -77,9 +77,18 @@ class GraphViewController: ViewSetup {
         Label.percentageValues.removeAll()
         self.view.backgroundColor = customColor.black33
         addLabelsAndButtons()
-        tap = UITapGestureRecognizer(target: self, action: #selector(GraphViewController.pickGraph(_:)))
-        view.addGestureRecognizer(tap)
+//        tap = UITapGestureRecognizer(target: self, action: #selector(GraphViewController.pickGraph(_:)))
+//        view.addGestureRecognizer(tap)
+//        graphViewSeen.addGestureRecognizer(tap)
         addLabel(name: stockHeader, text: "", textColor: .white, textAlignment: .center, fontName: "Roboto-Bold", fontSize: 18, x: 0, y: 0, width: 750, height: 136, lines: 1)
+        if UIDevice().userInterfaceIdiom == .phone {
+            if UIScreen.main.nativeBounds.height == 2436 {
+                
+                stockHeader.frame.origin.y += 15
+                
+            }
+            
+        }
         addLabel(name: currentPrice, text: "", textColor: .white, textAlignment: .left, fontName: "Roboto-Light", fontSize: 40, x: 60, y: 180, width: 400, height: 106, lines: 1)
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.back(_:)), addSubview: false)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
@@ -104,7 +113,12 @@ class GraphViewController: ViewSetup {
             self.activityView.alpha = 1.0
         }
         showGraph()
-        
+      
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("touches began")
+        pickGraph(touches.first!)
     }
     
     @objc func showGraph() {
@@ -160,22 +174,22 @@ class GraphViewController: ViewSetup {
         }
     }
     
-    @objc private func pickGraph(_ tap: UITapGestureRecognizer) {
+    @objc private func pickGraph(_ touch: UITouch) {
 
         let layerAnimation = CABasicAnimation(keyPath: "path")
         layerAnimation.duration = 0.7
         layerAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         layerAnimation.fillMode = kCAFillModeBoth
         layerAnimation.isRemovedOnCompletion = false
+    
         guard let order = orderOfGraphs[currentTextKey],
             PodVariable.gingerBreadMan.count > order else {return}
         layerAnimation.fromValue = PodVariable.gingerBreadMan[order]
-        guard let myView = view else {return}
-        var center = tap.location(in: myView)
-        center.y -= 388*screenHeight/1334
-        
+   
+        let center = touch.location(in: graphViewSeen)
         for xLabel in (graphViewSeen.xs) {
             if xLabel.frame.contains(center) {
+                newTextKey = xLabel.text!
                 guard let currentOrder = orderOfLabels[currentTextKey],
                     let newOrder = orderOfLabels[newTextKey],
                     let newGraphs = orderOfGraphs[newTextKey],
@@ -186,7 +200,7 @@ class GraphViewController: ViewSetup {
                 newTextKey = xText
                 graphViewSeen.xs[newOrder].textColor = customColor.yellow
                 layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
-                
+
                 currentTextKey = newTextKey
                 layer.add(layerAnimation, forKey: nil)
                 graphViewSeen.change.text = Label.changeValues[newGraphs]
@@ -210,13 +224,13 @@ class GraphViewController: ViewSetup {
                     case 4: graphViewSeen.ys[i].text = newY.0
                     default: break
                     }
-                    
+
                 }
                 return
             }
         }
-   
-        if tap.location(in: myView).y > 100 && tap.location(in: myView).y < 550 {
+
+        if (center.y > 100*heightScalar && center.y < 550*widthScalar) {
             var xLabel = graphViewSeen.xs[0]
             
             switch currentTextKey {
@@ -235,16 +249,15 @@ class GraphViewController: ViewSetup {
             default:
                 break
             }
-            
+            newTextKey = xLabel.text!
             guard let currentOrder = orderOfLabels[currentTextKey],
                 let newOrder = orderOfLabels[newTextKey],
                 let newGraphs = orderOfGraphs[newTextKey],
-                let xText = xLabel.text,
                 graphViewSeen.xs.count > currentOrder,
                 graphViewSeen.xs.count > newOrder else {return}
-            
+        
             graphViewSeen.xs[currentOrder].textColor = customColor.labelGray
-            newTextKey = xText
+
             graphViewSeen.xs[newOrder].textColor = customColor.yellow
             layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
             
@@ -262,6 +275,7 @@ class GraphViewController: ViewSetup {
             }
             graphViewSeen.percentChange.text = Label.percentageValues[newGraphs]
             guard let newY = yVals[newTextKey] else {return}
+   
             for i in 0..<graphViewSeen.ys.count {
                 switch i {
                 case 0: graphViewSeen.ys[i].text = newY.4
@@ -275,6 +289,7 @@ class GraphViewController: ViewSetup {
             }
             
         }
+        print("ENDED")
     }
     
     private func addLabelsAndButtons() {
@@ -312,9 +327,7 @@ class GraphViewController: ViewSetup {
             default:
                 self.yVals[stockData.0[self.i]] = (String(Int(ma)), String(Int(mi2 + 3*(ma2-mi2)/4)), String(Int(mi2 + 2*(ma2-mi2)/4)),String(Int(mi2 + (ma2-mi2)/4)),String(Int(mi)))
             }
-            
-            graphView.isUserInteractionEnabled = false
-            
+        
             graphView.frame.origin.x = self.screenWidth
             
             self.view.addSubview(graphView)

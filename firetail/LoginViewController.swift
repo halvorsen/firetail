@@ -24,13 +24,13 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var myTimer = Timer()
     var ti = [String]()
     var alreadyAUser = false
-    let imageView = UIImageView()
+ 
     let coverView = UIView()
     var retry = false
     var authenticated = false
     var noNils = true
     var tiLast = String()
-    let firetail = UILabel()
+ 
     let myLoadSaveCoreData = LoadSaveCoreData()
     var isFirstLoading = true
     var tap = UITapGestureRecognizer()
@@ -55,23 +55,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         coverView.backgroundColor = customColor.black33
         coverView.layer.zPosition = 10
         view.addSubview(coverView)
-        imageView.frame.size = CGSize(width: 98*screenWidth/375, height: 95*screenHeight/667)
-        imageView.image = #imageLiteral(resourceName: "logo98x95")
-        imageView.frame.origin.x = 140*screenWidth/375
-        imageView.frame.origin.y = 170*screenHeight/667
-        imageView.layer.zPosition = 11
-        view.addSubview(imageView)
         
-        //reachabilityAddNotification()
-        
-        firetail.frame = CGRect(x: 0, y: 328*screenHeight/667, width: screenWidth, height: 58*screenHeight/667)
-        firetail.text = "FIRETAIL"
-        firetail.font = UIFont(name: "Roboto-Bold", size: 27*fontSizeMultiplier)
-        firetail.textAlignment = .center
-        firetail.textColor = .white
-        firetail.backgroundColor = .clear
-        firetail.layer.zPosition = 11
-        view.addSubview(firetail)
 
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore")
@@ -122,9 +106,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 }    
             } else {
                 UIView.animate(withDuration: 0.2) {
-                    self.imageView.alpha = 0.0
+             
                     self.coverView.alpha = 0.0
-                    self.firetail.alpha = 0.0
+                    
                 }
                 if !self.continueB.isDescendant(of: self.view) {
                     self.populateView()

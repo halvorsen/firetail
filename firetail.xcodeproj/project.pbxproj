@@ -38,7 +38,6 @@
 		069FD1271E5382D4003BDFE2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD1251E5382D4003BDFE2 /* Main.storyboard */; };
 		069FD12A1E5382D4003BDFE2 /* firetail.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1281E5382D4003BDFE2 /* firetail.xcdatamodeld */; };
 		069FD12C1E5382D4003BDFE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 069FD12B1E5382D4003BDFE2 /* Assets.xcassets */; };
-		069FD12F1E5382D4003BDFE2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */; };
 		069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1361E538926003BDFE2 /* ViewSetup.swift */; };
 		06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC27071E7319F700041D1F /* CompareScrollDot.swift */; };
 		06BB409C1F753E330068636E /* AppLoadingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BB409B1F753E330068636E /* AppLoadingData.swift */; };
@@ -84,7 +83,6 @@
 		069FD1261E5382D4003BDFE2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		069FD1291E5382D4003BDFE2 /* firetail.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = firetail.xcdatamodel; sourceTree = "<group>"; };
 		069FD12B1E5382D4003BDFE2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		069FD12E1E5382D4003BDFE2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		069FD1301E5382D4003BDFE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		069FD1361E538926003BDFE2 /* ViewSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewSetup.swift; sourceTree = "<group>"; };
 		06A914021E817E0900D032A9 /* firetail.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = firetail.entitlements; sourceTree = "<group>"; };
@@ -145,7 +143,6 @@
 				06DDBE271F79B9B400C36CB6 /* Archives */,
 				06AE514A1F2020F4008C5B3C /* font */,
 				06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */,
-				069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */,
 				069FD1301E5382D4003BDFE2 /* Info.plist */,
 				069FD1281E5382D4003BDFE2 /* firetail.xcdatamodeld */,
 			);
@@ -325,7 +322,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				064193691F08483600B7B3FE /* DroidSerif-Regular.ttf in Resources */,
-				069FD12F1E5382D4003BDFE2 /* LaunchScreen.storyboard in Resources */,
 				069FD12C1E5382D4003BDFE2 /* Assets.xcassets in Resources */,
 				06478E6D1EE38E390016DF88 /* GoogleService-Info.plist in Resources */,
 				061306901E626FC9008E5898 /* Roboto-Light.ttf in Resources */,
@@ -466,14 +462,6 @@
 				069FD1261E5382D4003BDFE2 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		069FD12D1E5382D4003BDFE2 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				069FD12E1E5382D4003BDFE2 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
