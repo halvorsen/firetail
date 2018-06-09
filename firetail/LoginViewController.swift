@@ -93,7 +93,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     //load stock list from firebase and start fetch, if loading takes long time move forward anyways after 8 seconds to dashboard
                     Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false, block: {_ in
                         if didntMoveForward {
-                            print("triggered didntMoveForwardTimerTwice")
+                    
                             didntMoveForward = false
                             if self.isFirstTimeSeguing {
                                 self.isFirstTimeSeguing = false
@@ -104,13 +104,13 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     })
                     self.appLoadingData.loadUserInfoFromFirebase(firebaseUsername: Set1.username) {haveNoAlerts in
                         self.ti = Set1.ti
-                        print("finishedfetch4")
+            
                         if haveNoAlerts {
-                            print("finishedfetch5")
+                         
                             didntMoveForward = false
                             self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
                         } else {
-                            print("finishedfetch6")
+                       
                             didntMoveForward = false
                             self.cont()
                         }
@@ -145,20 +145,26 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
 
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-    }
-    
-
-
-    
-    func textFieldDidBeginEditing(_ textField : UITextField)
-        
-    {
+    func textFieldDidBeginEditing(_ textField : UITextField) {
         view.addGestureRecognizer(tap)
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
+        
+        animateViewMoving(up: true, moveValue: 100)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        animateViewMoving(up: false, moveValue: 100)
+    }
+    func animateViewMoving (up: Bool, moveValue: CGFloat) {
+        let movementDuration:TimeInterval = 0.3
+        let movement: CGFloat = ( up ? -moveValue : moveValue)
+        UIView.beginAnimations( "animateView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(movementDuration)
+        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: movement)
+        UIView.commitAnimations()
     }
     
     private func populateView() {

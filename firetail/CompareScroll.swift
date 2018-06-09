@@ -49,8 +49,6 @@ class CompareScroll: UIView {
 
         _set = _set.map { $0 * rangeMultiplier / CGFloat(_graphData.first!) }
         percentSet = _set.map { String(format: "%.1f", $0 * 10 - 100 ) }
-        print("percentset: \(percentSet.count)")
-        print(percentSet)
         percentSetVal = _set.map { $0 * 10 - 100 }
        
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends

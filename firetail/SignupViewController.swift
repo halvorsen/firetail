@@ -91,34 +91,28 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField : UITextField)
     {
         view.addGestureRecognizer(tap)
-        switch textField.tag {
-        case 0:
-            view.frame.origin.y = -50*screenHeight/1334
-        case 1:
-            view.frame.origin.y = -170*screenHeight/1334
-        case 2:
-            view.frame.origin.y = -170*screenHeight/1334
-            
-            if UIDevice().userInterfaceIdiom == .phone {
-                switch UIScreen.main.nativeBounds.height {
-               
-                case 2436:
-                    print("iPhone X")
-                    view.frame.origin.y = -290*screenHeight/1334
-                default:
-                    print("unknown")
-                }
-            }
-            
-        default:
-            break
-        }
         
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
+        animateViewMoving(up: true, moveValue: 150)
     }
-    @objc var continueOnce = true
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        animateViewMoving(up: false, moveValue: 150)
+    }
+    func animateViewMoving (up: Bool, moveValue: CGFloat) {
+        let movementDuration:TimeInterval = 0.3
+        let movement: CGFloat = ( up ? -moveValue : moveValue)
+        UIView.beginAnimations( "animateView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(movementDuration)
+        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: movement)
+        UIView.commitAnimations()
+    }
+    
+    
+    var continueOnce = true
     @objc private func continueFunc(_ sender: UIButton) {
         guard continueOnce == true else {return}
         continueOnce = false
@@ -184,7 +178,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                         self.continueOnce = true
                         self.username.text = email
                         Set1.saveUserInfo()
-                            self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
+                        self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                         
                     }
                 })
@@ -203,7 +197,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         view.frame.origin.y = 0
         view.removeGestureRecognizer(tap)
         self.view.endEditing(true)
-
+        
         switch textField.tag {
         case 0:
             textFields[1].becomeFirstResponder()

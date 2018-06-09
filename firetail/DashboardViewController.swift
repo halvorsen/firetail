@@ -389,7 +389,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     @objc private func finishedFetchingTop3Stocks() {
-        print("done fetching and received notification")
+    
         DispatchQueue.main.async { [weak self] in
             guard let weakself = self else {return}
             weakself.sv.removeFromSuperview()

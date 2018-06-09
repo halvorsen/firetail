@@ -52,7 +52,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let casheManager = CacheManager()
         let _ = casheManager.loadData()
-        
+        let token = Messaging.messaging().fcmToken
+        print("FCM token: \(token ?? "")")
         return true
     }
     
@@ -79,7 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         if let refreshedToken = InstanceID.instanceID().token() {
-            print("InstanceID token: \(refreshedToken)")
+    
             Set1.token = refreshedToken
         }
         Set1.cachedInThisSession.removeAll()
@@ -87,7 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         let appLoadingData = AppLoadingData()
-        print("ENTERED FOREGROUND AND STARTING FETCH")
+  
          DispatchQueue.global(qos: .background).async {
         appLoadingData.fetchAllStocks()
         }

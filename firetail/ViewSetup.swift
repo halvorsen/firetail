@@ -62,14 +62,8 @@ class ViewSetup: UIViewController {
         if reachability.isReachable {
             
             removeNoInternetCover()
-            
-            if reachability.isReachableViaWiFi {
-                print("Reachable via WiFi")
-            } else {
-                print("Reachable via Cellular")
-            }
+           
         } else {
-            print("Network not reachable")
             DispatchQueue.main.async {
                 self.addNoInternetCover()
             }
