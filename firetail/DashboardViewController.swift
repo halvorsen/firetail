@@ -357,7 +357,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             var currentAlpha = abs(startingLocationX - endingLocationX)/(70*screenWidth/375)
             
             if currentAlpha > 1.0 { currentAlpha = 1.0 }
-            _movingBlock.x.alpha = currentAlpha
+            _movingBlock.ex.alpha = currentAlpha
             if endingLocationX - startingLocationX < -60*screenWidth/375 {
                 UIView.animate(withDuration: 0.1) { [weak self] in
                     guard let weakself = self else {return}

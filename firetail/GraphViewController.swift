@@ -117,7 +117,6 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("touches began")
         pickGraph(touches.first!)
     }
     
@@ -289,7 +288,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             }
             
         }
-        print("ENDED")
+
     }
     
     private func addLabelsAndButtons() {
