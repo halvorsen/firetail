@@ -18,7 +18,6 @@ public var gingerBreadMan = CGMutablePath()
 
 class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
-    let customColor = CustomColor()
     var enter = UIButton()
     var graphViewSeen = StockGraphView2()
     var stockName = String()
@@ -75,7 +74,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         PodVariable.gingerBreadMan.removeAll()
         Label.changeValues.removeAll()
         Label.percentageValues.removeAll()
-        self.view.backgroundColor = customColor.black33
+        self.view.backgroundColor = CustomColor.black33
         addLabelsAndButtons()
 //        tap = UITapGestureRecognizer(target: self, action: #selector(GraphViewController.pickGraph(_:)))
 //        view.addGestureRecognizer(tap)
@@ -99,9 +98,9 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         
         let a = StockData2()
         graphViewSeen = StockGraphView2(stockData: a, key: "", cubic: false)
-        graphViewSeen.xs[2].textColor = customColor.yellow
+        graphViewSeen.xs[2].textColor = CustomColor.yellow
     }
-    @objc var activityView = UIActivityIndicatorView()
+    var activityView = UIActivityIndicatorView()
     override func viewWillAppear(_ animated: Bool) {
         
         activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
@@ -195,9 +194,9 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                     let xText = xLabel.text,
                     graphViewSeen.xs.count > currentOrder,
                     graphViewSeen.xs.count > newOrder else {return}
-                graphViewSeen.xs[currentOrder].textColor = customColor.labelGray
+                graphViewSeen.xs[currentOrder].textColor = CustomColor.labelGray
                 newTextKey = xText
-                graphViewSeen.xs[newOrder].textColor = customColor.yellow
+                graphViewSeen.xs[newOrder].textColor = CustomColor.yellow
                 layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
 
                 currentTextKey = newTextKey
@@ -205,10 +204,10 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                 graphViewSeen.change.text = Label.changeValues[newGraphs]
                 if let symbol = Label.changeValues[newGraphs].first {
                     if symbol == "-" {
-                        graphViewSeen.percentChange.textColor = customColor.red
+                        graphViewSeen.percentChange.textColor = CustomColor.red
                         graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
                     } else {
-                        graphViewSeen.percentChange.textColor = customColor.yellow
+                        graphViewSeen.percentChange.textColor = CustomColor.yellow
                         graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
                     }
                 }
@@ -255,9 +254,9 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                 graphViewSeen.xs.count > currentOrder,
                 graphViewSeen.xs.count > newOrder else {return}
         
-            graphViewSeen.xs[currentOrder].textColor = customColor.labelGray
+            graphViewSeen.xs[currentOrder].textColor = CustomColor.labelGray
 
-            graphViewSeen.xs[newOrder].textColor = customColor.yellow
+            graphViewSeen.xs[newOrder].textColor = CustomColor.yellow
             layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
             
             currentTextKey = newTextKey
@@ -265,10 +264,10 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             graphViewSeen.change.text = Label.changeValues[newGraphs]
             if let symbol = Label.changeValues[newGraphs].first {
                 if symbol == "-" {
-                    graphViewSeen.percentChange.textColor = customColor.red
+                    graphViewSeen.percentChange.textColor = CustomColor.red
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
                 } else {
-                    graphViewSeen.percentChange.textColor = customColor.yellow
+                    graphViewSeen.percentChange.textColor = CustomColor.yellow
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
                 }
             }
@@ -293,10 +292,10 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
     private func addLabelsAndButtons() {
         
-        addButton(name: trade, x: 0, y: 1194, width: 750, height: 1334-1194, title: "TRADE", font: "HelveticaNeue-Bold", fontSize: 18, titleColor: customColor.white, bgColor: customColor.black, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.trade(_:)), addSubview: false, alignment: .center)
+        addButton(name: trade, x: 0, y: 1194, width: 750, height: 1334-1194, title: "TRADE", font: "HelveticaNeue-Bold", fontSize: 18, titleColor: CustomColor.white, bgColor: CustomColor.black, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.trade(_:)), addSubview: false, alignment: .center)
         
     }
-    @objc var i = 0
+    var i = 0
     var yVals = [String:(l1:String,l2:String,l3:String,l4:String,l5:String)]()
     
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
@@ -379,7 +378,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     }
     
     @objc func animateBase() {
-        graphViewSeen.base.backgroundColor = customColor.yellow
+        graphViewSeen.base.backgroundColor = CustomColor.yellow
         graphViewSeen.base.alpha = 1.0
         
         UIView.animate(withDuration: 0.6) {
@@ -395,8 +394,8 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             guard let oneOrder = orderOfGraphs["1y"],
                 PodVariable.gingerBreadMan.count > oneOrder else {return}
             layer.path = PodVariable.gingerBreadMan[oneOrder]
-            layer.fillColor = customColor.yellow.cgColor
-            layer.shadowColor = customColor.black.cgColor
+            layer.fillColor = CustomColor.yellow.cgColor
+            layer.shadowColor = CustomColor.black.cgColor
             layer.shadowOpacity = 1.0
             layer.shadowOffset = CGSize.zero
             layer.shadowRadius = 10
@@ -410,10 +409,10 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             graphViewSeen.percentChange.text = Label.percentageValues[oneOrder]
             if let symbol = Label.changeValues[oneOrder].first {
                 if symbol == "-" {
-                    graphViewSeen.percentChange.textColor = customColor.red
+                    graphViewSeen.percentChange.textColor = CustomColor.red
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "downArrow")
                 } else {
-                    graphViewSeen.percentChange.textColor = customColor.yellow
+                    graphViewSeen.percentChange.textColor = CustomColor.yellow
                     graphViewSeen.upDownArrowView.image = #imageLiteral(resourceName: "upArrow")
                 }
             }
@@ -445,8 +444,8 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     }
     
     
-    @objc var layerAnimation2 = CABasicAnimation(keyPath: "position.y")
-    @objc var layerAnimation3 = CABasicAnimation(keyPath: "position.y")
+    var layerAnimation2 = CABasicAnimation(keyPath: "position.y")
+    var layerAnimation3 = CABasicAnimation(keyPath: "position.y")
     
     func findKeyForValue(value: StockGraphView2, dictionary: [String:StockGraphView2?]) ->String? {
         for (key, array) in dictionary
@@ -462,8 +461,8 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         return nil
     }
     
-    @objc var j = 0
-    @objc var keys = [String]()
+    var j = 0
+    var keys = [String]()
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         let alphaAPI = Alpha()
         alphaAPI.get20YearHistoricalData(ticker: stockName.uppercased(), isOneYear: false) { dataSet in

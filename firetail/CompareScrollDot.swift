@@ -14,15 +14,15 @@ import UIKit
 
 class CompareScrollDot: UIView {
     
-    @objc let screenWidth = UIScreen.main.bounds.width
-    @objc let screenHeight = UIScreen.main.bounds.height
-    @objc let fontSizeMultiplier = UIScreen.main.bounds.width / 375
-    let customColor = CustomColor()
-    @objc var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
-    @objc var __set = [CGFloat]()
-    @objc var passedColor = UIColor()
-    @objc let rangeMultiplier: CGFloat = 10
-    @objc let scale: CGFloat = 1.5
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    let fontSizeMultiplier = UIScreen.main.bounds.width / 375
+ 
+    var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
+    var __set = [CGFloat]()
+    var passedColor = UIColor()
+    let rangeMultiplier: CGFloat = 10
+    let scale: CGFloat = 1.5
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
@@ -75,7 +75,7 @@ class CompareScrollDot: UIView {
         
     }
     
-    @objc var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
+    var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
 
     @objc func coordXFor(index: Int) -> CGFloat {
         return bounds.height - bounds.height * data[index] / (data.max() ?? 0)
@@ -101,7 +101,7 @@ class CompareScrollDot: UIView {
         
         for i in 1..<data.count {
             let p2 = CGPoint(x: step * CGFloat(i), y: coordXFor(index: i))
-        //    drawPoint(point: p2, color: customColor.fieldLines, radius: 3)
+        //    drawPoint(point: p2, color: CustomColor.fieldLines, radius: 3)
             var p3: CGPoint?
             if i == data.count - 1 {
                 p3 = nil

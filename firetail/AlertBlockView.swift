@@ -20,7 +20,6 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
     var stockTickerLabel = UILabel()
     var alertList = UILabel()
     var stockPrice = UILabel()
-    let customColor = CustomColor()
     let line = UILabel()
     var slideView = UIView()
     var tap = UITapGestureRecognizer()
@@ -50,14 +49,14 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
         flashGlobal = flash
         urgentGlobal = urgent
         priceDouble = Double(currentPriceGlobal.chopPrefix())!
-        self.backgroundColor = customColor.white249
+        self.backgroundColor = CustomColor.white249
         
-        addButton(name: ex, x: 750 - 120, y: 0, width: 120, height: 120, title: "", font: "HelveticaNeue-light", fontSize: 40, titleColor: customColor.black33, bgColor: customColor.white249, cornerRad: 0, boarderW: 0, boarderColor: .clear, addSubview: true)
+        addButton(name: ex, x: 750 - 120, y: 0, width: 120, height: 120, title: "", font: "HelveticaNeue-light", fontSize: 40, titleColor: CustomColor.black33, bgColor: CustomColor.white249, cornerRad: 0, boarderW: 0, boarderColor: .clear, addSubview: true)
         ex.setImage(#imageLiteral(resourceName: "ex"), for: .normal)
         ex.alpha = xAlphaStart
         
         ex.setTitle(longName, for: .disabled)
-        slideView.backgroundColor = customColor.background
+        slideView.backgroundColor = CustomColor.background
         slideView.frame = self.bounds
         self.addSubview(slideView)
         
@@ -102,9 +101,9 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
         addLabel(name: alertList, text: alerts, textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 260, y: 70, width: 352, height: 36, lines: 1, alpha: 0.5)
         slideView.addSubview(alertList)
         let _currentPrice = currentPrice //"$" + String(format: "%.2f", currentPrice)
-        addLabel(name: stockPrice, text: _currentPrice, textColor: customColor.yellow, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 13, x: 620, y: 70, width: 130, height: 36, lines: 1)
+        addLabel(name: stockPrice, text: _currentPrice, textColor: CustomColor.yellow, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 13, x: 620, y: 70, width: 130, height: 36, lines: 1)
         if !isGreaterThan {
-            stockPrice.textColor = customColor.red
+            stockPrice.textColor = CustomColor.red
         }
         if triggered {
             stockPrice.textColor = .white
@@ -116,7 +115,7 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
         }
         slideView.addSubview(stockPrice)
         addLabel(name: line, text: "", textColor: .clear, textAlignment: .center, fontName: "", fontSize: 1, x: 0, y: 118, width: 750, height: 2, lines: 0)
-        line.backgroundColor = customColor.alertLines
+        line.backgroundColor = CustomColor.alertLines
         
         slideView.addSubview(line)
         

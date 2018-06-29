@@ -9,25 +9,25 @@
 import UIKit
 
 class BaseOfGraphView: UIView {
-    let customColor = CustomColor()
-    @objc let bez = UIBezierPath()
-    @objc var path = UIBezierPath()
-    @objc var path2 = UIBezierPath()
-    @objc var path3 = UIBezierPath()
-    @objc var path4 = UIBezierPath()
-    @objc var path5 = UIBezierPath()
-    @objc var baseLayer = CAShapeLayer()
+   
+    let bez = UIBezierPath()
+    var path = UIBezierPath()
+    var path2 = UIBezierPath()
+    var path3 = UIBezierPath()
+    var path4 = UIBezierPath()
+    var path5 = UIBezierPath()
+    var baseLayer = CAShapeLayer()
     
     
-    @objc let layerAnimation = CABasicAnimation(keyPath: "path")
-    @objc let layerAnimation2 = CABasicAnimation(keyPath: "path")
-    @objc let layerAnimation3 = CABasicAnimation(keyPath: "path")
-    @objc let layerAnimation4 = CABasicAnimation(keyPath: "path")
-    @objc let layerAnimation5 = CABasicAnimation(keyPath: "path")
-    @objc let layerAnimation6 = CABasicAnimation(keyPath: "path")
+    let layerAnimation = CABasicAnimation(keyPath: "path")
+    let layerAnimation2 = CABasicAnimation(keyPath: "path")
+    let layerAnimation3 = CABasicAnimation(keyPath: "path")
+    let layerAnimation4 = CABasicAnimation(keyPath: "path")
+    let layerAnimation5 = CABasicAnimation(keyPath: "path")
+    let layerAnimation6 = CABasicAnimation(keyPath: "path")
     
     override func draw(_ rect: CGRect) {
-        self.backgroundColor = customColor.black42
+        self.backgroundColor = CustomColor.black42
 //        bez.move(to: CGPoint(x: 0, y: 0))
 //        bez.addLine(to: CGPoint(x:0, y: 70*superview!.bounds.height/636))
 //        bez.addLine(to: CGPoint(x: superview!.bounds.width, y: 70*superview!.bounds.height/636))
@@ -54,7 +54,7 @@ class BaseOfGraphView: UIView {
 //        let pathcg4 = path4.cgPath
         
 //        let pathcg5 = path5.cgPath
-//        baseLayer.fillColor = customColor.yellow.cgColor
+//        baseLayer.fillColor = CustomColor.yellow.cgColor
 ////        baseLayer.path = pathcg2
 //        
 //        

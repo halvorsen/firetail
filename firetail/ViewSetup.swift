@@ -13,7 +13,7 @@ class ViewSetup: UIViewController {
     
     //Reachability
     
-    @objc let coverInternet = UIView()
+    let coverInternet = UIView()
     let reachability = Reachability()!
     
     @objc func reachabilityAddNotification() {
@@ -83,10 +83,10 @@ class ViewSetup: UIViewController {
         view.addSubview(coverInternet)
     }
 
-    @objc var screenWidth: CGFloat {get{return UIScreen.main.bounds.width}}
-    @objc var screenHeight: CGFloat {get{return UIScreen.main.bounds.height}}
-    @objc var fontSizeMultiplier: CGFloat {get{return UIScreen.main.bounds.width / 375}}
-    @objc var topMargin: CGFloat {get{return (269/1332)*UIScreen.main.bounds.height}}
+    var screenWidth: CGFloat {get{return UIScreen.main.bounds.width}}
+    var screenHeight: CGFloat {get{return UIScreen.main.bounds.height}}
+    var fontSizeMultiplier: CGFloat {get{return UIScreen.main.bounds.width / 375}}
+    var topMargin: CGFloat {get{return (269/1332)*UIScreen.main.bounds.height}}
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -143,16 +143,16 @@ class ViewSetup: UIViewController {
     
     class ProgressHUD: UIVisualEffectView {
         
-        @objc var text: String? {
+        var text: String? {
             didSet {
                 label.text = text
             }
         }
         
-        @objc let activityIndictor: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
-        @objc let label: UILabel = UILabel()
-        @objc let blurEffect = UIBlurEffect(style: .light)
-        @objc let vibrancyView: UIVisualEffectView
+        let activityIndictor: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        let label: UILabel = UILabel()
+        let blurEffect = UIBlurEffect(style: .light)
+        let vibrancyView: UIVisualEffectView
         
         @objc init(text: String) {
             self.text = text

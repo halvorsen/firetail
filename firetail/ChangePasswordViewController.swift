@@ -12,13 +12,13 @@ import FirebaseAuth
 import ReachabilitySwift
 
 class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
-    var customColor = CustomColor()
-    @objc var continueB = UIButton()
-    @objc var getSupport = UIButton()
-    @objc var accountSettings = UILabel()
-    @objc var myTextFields = [UITextField]()
-    @objc var doneLoading = false
-    @objc var backArrow = UIButton()
+
+    var continueB = UIButton()
+    var getSupport = UIButton()
+    var accountSettings = UILabel()
+    var myTextFields = [UITextField]()
+    var doneLoading = false
+    var backArrow = UIButton()
     
     override func viewDidAppear(_ animated: Bool) {
         reachabilityAddNotification()
@@ -27,22 +27,22 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = customColor.black33
+        view.backgroundColor = CustomColor.black33
         
-        addButton(name: continueB, x: 0, y: 1194, width: 750, height: 140, title: "SAVE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: customColor.black42, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(ChangePasswordViewController.saveFunc(_:)), addSubview: true, alignment: .center)
+        addButton(name: continueB, x: 0, y: 1194, width: 750, height: 140, title: "SAVE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: CustomColor.black42, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(ChangePasswordViewController.saveFunc(_:)), addSubview: true, alignment: .center)
 
         
         addLabel(name: accountSettings, text: "CHANGE PASSWORD", textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 80, y: 334, width: 360, height: 30, lines: 1)
         view.addSubview(accountSettings)
         for i in 0...2 {
             let line = UILabel(frame: CGRect(x: 180*screenWidth/375, y: 271*screenHeight/667 + CGFloat(i)*60*screenHeight/667, width: 195*screenWidth/375, height: 2*screenHeight/667))
-            line.backgroundColor = customColor.fieldLines
+            line.backgroundColor = CustomColor.fieldLines
             view.addSubview(line)
             
             
             let l = UILabel()
             let name = ["Old Password","New Password","Confirm Password"]
-            addLabel(name: l, text: name[i], textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 56, y: 500 + CGFloat(i)*120, width: 300, height: 40, lines: 0)
+            addLabel(name: l, text: name[i], textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 56, y: 500 + CGFloat(i)*120, width: 300, height: 40, lines: 0)
             view.addSubview(l)
             
             
@@ -107,9 +107,9 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
 
     
    
-    @objc var oldPass = String()
-    @objc var newPass = String()
-    @objc var newPass2 = String()
+    var oldPass = String()
+    var newPass = String()
+    var newPass2 = String()
     //FIXIT: check password and change firebase password
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         

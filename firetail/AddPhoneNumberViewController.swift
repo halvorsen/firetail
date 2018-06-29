@@ -11,20 +11,20 @@ import MessageUI
 import ReachabilitySwift
 
 class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MFMailComposeViewControllerDelegate {
-    var customColor = CustomColor()
-    @objc var continueB = UIButton()
-    @objc var getSupport = UIButton()
-    @objc var accountSettings = UILabel()
-    @objc var myTextFields = [UITextField]()
-    @objc var doneLoading = false
-    @objc var backArrow = UIButton()
-    @objc var myPicker = UIPickerView()
-    @objc let toolBar = UIToolbar()
+ 
+    var continueB = UIButton()
+    var getSupport = UIButton()
+    var accountSettings = UILabel()
+    var myTextFields = [UITextField]()
+    var doneLoading = false
+    var backArrow = UIButton()
+    var myPicker = UIPickerView()
+    let toolBar = UIToolbar()
     let myLoadSave = LoadSaveCoreData()
-    @objc let myPickerBackground = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
-    @objc let toolBarButtonColor = UIColor(red: 140/255, green: 140/255, blue: 140/255, alpha: 1.0)
-    @objc let toolBarColor = UIColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 1.0)
-    @objc let pickerData = ["TD Ameritrade", "Chase", "Etrade", "Fidelity", "Scottrade", "Schwab", "Merrill Edge", "Trademonster", "Capital One Investing", "eOption", "Interactive Brokers", "TradeStation", "Ally", "Kapitall", "Lightspeed", "optionsXpress", "Zacks", "Trade King", "Sogo Trade", "Trading Block", "USAA", "Bank of America", "Vangaurd", "Wells Fargo", "Firstrade", "Robinhood"]
+    let myPickerBackground = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
+    let toolBarButtonColor = UIColor(red: 140/255, green: 140/255, blue: 140/255, alpha: 1.0)
+    let toolBarColor = UIColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 1.0)
+    let pickerData = ["TD Ameritrade", "Chase", "Etrade", "Fidelity", "Scottrade", "Schwab", "Merrill Edge", "Trademonster", "Capital One Investing", "eOption", "Interactive Brokers", "TradeStation", "Ally", "Kapitall", "Lightspeed", "optionsXpress", "Zacks", "Trade King", "Sogo Trade", "Trading Block", "USAA", "Bank of America", "Vangaurd", "Wells Fargo", "Firstrade", "Robinhood"]
     
     var alertInfo = (String(),String(),Double(),Bool(),Bool(),Bool(),Bool(),Bool(),Bool(),String(),Bool(),String(),String())
     
@@ -39,25 +39,25 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         super.viewDidLoad()
         
         
-        view.backgroundColor = customColor.black33
+        view.backgroundColor = CustomColor.black33
         let logo = UIImageView(frame: CGRect(x: 28*screenWidth/375, y: 75*screenHeight/667, width: 50*screenWidth/375, height: 64*screenWidth/375))
         logo.image = #imageLiteral(resourceName: "logo50x64")
         view.addSubview(logo)
         
-        addButton(name: continueB, x: 0, y: 1194, width: 750, height: 140, title: "SAVE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: customColor.black42, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddPhoneNumberViewController.saveFunc(_:)), addSubview: true, alignment: .center)
-        addButton(name: getSupport, x: 0, y: 982, width: 750, height: 212, title: "Get Support.", font: "Roboto-Regular", fontSize: 15, titleColor: customColor.white115, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddPhoneNumberViewController.supportFunc(_:)), addSubview: true, alignment: .center)
+        addButton(name: continueB, x: 0, y: 1194, width: 750, height: 140, title: "SAVE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: CustomColor.black42, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddPhoneNumberViewController.saveFunc(_:)), addSubview: true, alignment: .center)
+        addButton(name: getSupport, x: 0, y: 982, width: 750, height: 212, title: "Get Support.", font: "Roboto-Regular", fontSize: 15, titleColor: CustomColor.white115, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddPhoneNumberViewController.supportFunc(_:)), addSubview: true, alignment: .center)
         
         addLabel(name: accountSettings, text: "ADD PHONE NUMBER", textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 56, y: 334, width: 360, height: 30, lines: 1)
         view.addSubview(accountSettings)
         for i in 0...3 {
             let line = UILabel(frame: CGRect(x: 180*screenWidth/375, y: 271*screenHeight/667 + CGFloat(i)*60*screenHeight/667, width: 195*screenWidth/375, height: 2*screenHeight/667))
-            line.backgroundColor = customColor.fieldLines
+            line.backgroundColor = CustomColor.fieldLines
             view.addSubview(line)
             
             
             let l = UILabel()
             let name = ["Email","Phone","Broker","Password"]
-            addLabel(name: l, text: name[i], textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 56, y: 500 + CGFloat(i)*120, width: 150, height: 40, lines: 0)
+            addLabel(name: l, text: name[i], textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 56, y: 500 + CGFloat(i)*120, width: 150, height: 40, lines: 0)
             view.addSubview(l)
             
             

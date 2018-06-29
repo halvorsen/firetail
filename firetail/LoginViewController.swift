@@ -14,7 +14,6 @@ import FirebaseCore
 
 class LoginViewController: ViewSetup, UITextFieldDelegate {
 
-    var customColor = CustomColor()
     var login = UIButton()
     var continueB = UIButton()
     var createAccount = UIButton()
@@ -52,7 +51,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         alphaAPI.populateSet1Month()
         loadsave.loadUsername()
         coverView.frame = view.frame
-        coverView.backgroundColor = customColor.black33
+        coverView.backgroundColor = CustomColor.black33
         coverView.layer.zPosition = 10
         view.addSubview(coverView)
         
@@ -153,7 +152,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     private func populateView() {
         if !alreadyAUser {
-            view.backgroundColor = customColor.black33
+            view.backgroundColor = CustomColor.black33
             let logo = UIImageView(frame: CGRect(x: screenWidth/2 - 93*screenHeight/1334, y: 42*screenHeight/667, width: 93*screenHeight/667, height: 119*screenHeight/667))
             logo.image = #imageLiteral(resourceName: "logo93x119")
             view.addSubview(logo)
@@ -163,13 +162,13 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             addButton(name: continueB, x: 0, y: 740, width: 750, height: 140, title: "CONTINUE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.continueFunc(_:)), addSubview: true, alignment: .center)
             
             
-            addButton(name: createAccount, x: 0, y: 1146, width: 750, height: 188, title: "         CREATE ACCOUNT", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: customColor.black30, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.createAccountFunc(_:)), addSubview: true)
+            addButton(name: createAccount, x: 0, y: 1146, width: 750, height: 188, title: "         CREATE ACCOUNT", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: CustomColor.black30, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.createAccountFunc(_:)), addSubview: true)
             let arrowView = UIImageView(frame: CGRect(x: screenWidth - 70*screenHeight/667, y: 370*screenHeight/667, width: 70*screenHeight/667, height: 70*screenHeight/667))
             arrowView.image = #imageLiteral(resourceName: "forwardarrow")
             view.addSubview(arrowView)
             for i in 0...1 {
                 let line = UILabel(frame: CGRect(x: 38*screenWidth/375, y: 306*screenHeight/667 + CGFloat(i)*60*screenHeight/667, width: 300*screenWidth/375, height: 2*screenHeight/667))
-                line.backgroundColor = customColor.fieldLines
+                line.backgroundColor = CustomColor.fieldLines
                 view.addSubview(line)
                 
                 

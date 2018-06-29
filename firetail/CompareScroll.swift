@@ -17,7 +17,7 @@ class CompareScroll: UIView {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     let fontSizeMultiplier = UIScreen.main.bounds.width / 375
-    let customColor = CustomColor()
+
     var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
     var __set = [CGFloat]()
     var passedColor = UIColor()
@@ -74,7 +74,7 @@ class CompareScroll: UIView {
         
         
         
-        customColor.black33.setStroke()
+        CustomColor.black33.setStroke()
         path.lineWidth = 10/scale
         path.stroke()
         
