@@ -14,6 +14,12 @@ final class AlertCollectionViewCell: UICollectionViewCell {
     private var alertList = UILabel()
     private var price = UILabel()
     
+    private var moveableView = UIView()
+    private var xImageView = UIImageView(image: #imageLiteral(resourceName: "ex"))
+    
+    internal let xAlphaStart: CGFloat = 0.1
+    internal let xAlphaEnd: CGFloat = 1.0
+    
     var layoutContraints = [NSLayoutConstraint]()
     
     internal func set(tickerText: String, alertListText: String, priceText: String) {
@@ -24,6 +30,11 @@ final class AlertCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        xImageView.alpha = xAlphaStart
+        
+        backgroundColor = CustomColor.white249
+        moveableView.backgroundColor = CustomColor.background
         
         ticker.textColor = .white
         ticker.textAlignment = .left
@@ -39,9 +50,11 @@ final class AlertCollectionViewCell: UICollectionViewCell {
         price.textAlignment = .right
         price.font = UIFont(name: "Roboto-Medium", size: 13*widthScalar)
         price.alpha = 0.5
+        addSubview(xImageView)
+        addSubview(moveableView)
         
         for view in [ticker, alertList, price] as [UIView] {
-            addSubview(view)
+            moveableView.addSubview(view)
         }
     
         setupLayoutConstraints()
@@ -49,7 +62,22 @@ final class AlertCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func setupLayoutConstraints() {
+    lazy var moveableXConstraint: NSLayoutConstraint = moveableView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0)
+    lazy var xImageViewRightConstraint: NSLayoutConstraint = xImageView.rightAnchor.constraint(equalTo: rightAnchor, constant: -30*widthScalar)
+    lazy var xImageViewRightConstraintInMotion: NSLayoutConstraint = xImageView.centerXAnchor.constraint(equalTo: moveableView.rightAnchor, constant: 30*widthScalar)
+    
+   private func setupLayoutConstraints() {
+        
+        xImageView.translatesAutoresizingMaskIntoConstraints = false
+        layoutContraints.append(xImageView.centerYAnchor.constraint(equalTo: centerYAnchor))
+        layoutContraints.append(xImageViewRightConstraint)
+        
+        moveableView.translatesAutoresizingMaskIntoConstraints = false
+        layoutContraints.append(moveableView.widthAnchor.constraint(equalTo: widthAnchor))
+        layoutContraints.append(moveableView.heightAnchor.constraint(equalTo: heightAnchor))
+        layoutContraints.append(moveableView.topAnchor.constraint(equalTo: topAnchor))
+        layoutContraints.append(moveableXConstraint)
+        
         ticker.translatesAutoresizingMaskIntoConstraints = false
         layoutContraints.append(ticker.leftAnchor.constraint(equalTo: leftAnchor, constant: 30*widthScalar))
         layoutContraints.append(ticker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 13*heightScalar))
@@ -63,12 +91,19 @@ final class AlertCollectionViewCell: UICollectionViewCell {
         layoutContraints.append(price.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 13*heightScalar))
     }
     
-    func activateLayoutConstraints() {
+    private func activateLayoutConstraints() {
         NSLayoutConstraint.activate(layoutContraints)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         activateLayoutConstraints()
+    }
+    
+    private func animate() {
+        UIView.animate(withDuration: 5) {
+            self.moveableXConstraint.constant = 0
+            self.layoutIfNeeded()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
