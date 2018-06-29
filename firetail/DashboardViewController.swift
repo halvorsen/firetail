@@ -984,8 +984,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 weakself.activityView.removeFromSuperview()
             }
         }
-        
-        
     }
     
     @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -1091,7 +1089,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             }
             i += 1
         }
-        
     }
     
     @objc func connectToFcm() {
@@ -1101,7 +1098,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             return
         }
         Messaging.messaging().shouldEstablishDirectChannel = true
-        
     }
     
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
@@ -1109,14 +1105,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             print("InstanceID token: \(refreshedToken)")
             Set1.token = refreshedToken
             Set1.saveUserInfo()
-            
-            
         }
     }
  
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
     }
-    
-    
 }
