@@ -20,9 +20,11 @@ import ReachabilitySwift
 
 let widthScalar = UIScreen.main.bounds.width/375
 let heightScalar = UIScreen.main.bounds.height/667
+let commonScalar = UIScreen.main.bounds.width/375
 
 class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
-
+    var collectionView: AlertCollectionView?
+    let alertsForCollectionView = Set1.alerts.sorted { $0.value.name < $1.value.name }
     var activityView = UIActivityIndicatorView()
     var premiumMember = false
     var addTextField = UITextField()
@@ -93,6 +95,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var labelTop: CGFloat = 24*UIScreen.main.bounds.height/1334
     var labelMiddle: CGFloat = 72*UIScreen.main.bounds.height/1334
     var labelBottom: CGFloat = 120*UIScreen.main.bounds.height/1334
+    let alertCollectionCellID = "alertCell"
 
     override func viewWillAppear(_ animated: Bool) {
         
@@ -329,6 +332,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         amountOfBlocks = Set1.userAlerts.count
         whoseOnFirst(container)
         
+        
+        // START VERSION 2
+        let collectionLayout = UICollectionViewFlowLayout()
+        
+        collectionView = AlertCollectionView(frame: alertScroller.frame, collectionViewLayout: collectionLayout, delegate: self, dataSource: self, cellID: alertCollectionCellID)
+        collectionView?.frame.origin.y -= collectionView!.bounds.height
+        slideView.addSubview(collectionView!)
         
     }
     
@@ -1110,4 +1120,30 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
     }
+    
+    // ##START V2
+    
+    
+    
+    
+}
+
+extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return alertsForCollectionView.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
+        let alert = alertsForCollectionView[indexPath.row].value
+        cell.set(tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price)
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 375*commonScalar, height: 60*commonScalar)
+    }
+    
 }
