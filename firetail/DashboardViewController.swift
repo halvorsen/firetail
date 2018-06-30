@@ -24,7 +24,10 @@ let commonScalar = UIScreen.main.bounds.width/375
 
 class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     var collectionView: AlertCollectionView?
-    let alertsForCollectionView = Set1.alerts.sorted { $0.value.name < $1.value.name }
+    var alertsForCollectionView = Set1.alerts.sorted { $0.value.name < $1.value.name }
+    // #TODO persist dictionary with stock name and order in json locally on the device, make sure it doesn't become unsynced.
+//    var alertsForCollectionViewStocks = Set1.alerts.filter { $0.value.name[0...5] == "Alert" }.sorted { stockOrderPersisted[$0.value.name] < stockOrderPersisted[$1.value.name] }
+//    var alertsForCollectionViewCrypto = Set1.alerts.filter { $0.value.name[0...5] == "Crypt" }.sorted { $0.value.name < $1.value.name }
     var activityView = UIActivityIndicatorView()
     var premiumMember = false
     var addTextField = UITextField()
@@ -1128,7 +1131,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
 }
 
-extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AlertCellDelegate {
+    func deleteCell(atIndex: Int) {
+        // ##TODO: delete cell
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return alertsForCollectionView.count
@@ -1137,7 +1143,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
         let alert = alertsForCollectionView[indexPath.row].value
-        cell.set(tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price)
+        cell.set(tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, cellIndex: indexPath.row, delegate: self)
         
         return cell
     }

@@ -8,24 +8,55 @@
 
 import UIKit
 
+protocol AlertCellDelegate: class {
+    func deleteCell(atIndex: Int)
+}
+
 final class AlertCollectionViewCell: UICollectionViewCell {
     
     private var ticker = UILabel()
     private var alertList = UILabel()
     private var price = UILabel()
+    private var currentCellIndex = 0
+    private let line = UILabel()
+    internal weak var alertCellDelegate: AlertCellDelegate?
     
     private var moveableView = UIView()
     private var xImageView = UIImageView(image: #imageLiteral(resourceName: "ex"))
     
-    internal let xAlphaStart: CGFloat = 0.1
-    internal let xAlphaEnd: CGFloat = 1.0
+    private let xAlphaStart: CGFloat = 0.1
+    private let xAlphaEnd: CGFloat = 1.0
+    internal var currentXAlpha: CGFloat = 0.1 {
+        didSet {
+            xImageView.alpha = currentXAlpha
+        }
+    }
+    
+    private let deleteGesture = UIPanGestureRecognizer(target: self, action: #selector(deletePan(_:)))
     
     var layoutContraints = [NSLayoutConstraint]()
     
-    internal func set(tickerText: String, alertListText: String, priceText: String) {
+    @objc private func deletePan(_ gesture: UIPanGestureRecognizer) {
+        moveableXConstraint.constant = gesture.translation(in: moveableView).x
+        layoutIfNeeded()
+        
+        if gesture.state == .ended {
+            if moveableXConstraint.constant > 60 {
+                UIView.animate(withDuration: 0.3) {
+                    self.moveableXConstraint.constant = -375*widthScalar
+                    self.layoutIfNeeded()
+                    self.alertCellDelegate?.deleteCell(atIndex: self.currentCellIndex)
+                }
+            }
+        }
+    }
+    
+    internal func set(tickerText: String, alertListText: String, priceText: String, cellIndex: Int, delegate: AlertCellDelegate) {
         ticker.text = tickerText
         alertList.text = alertListText
         price.text = priceText
+        currentCellIndex = cellIndex
+        alertCellDelegate = delegate
     }
     
     override init(frame: CGRect) {
@@ -35,6 +66,7 @@ final class AlertCollectionViewCell: UICollectionViewCell {
         
         backgroundColor = CustomColor.white249
         moveableView.backgroundColor = CustomColor.background
+        moveableView.addGestureRecognizer(deleteGesture)
         
         ticker.textColor = .white
         ticker.textAlignment = .left
@@ -50,12 +82,11 @@ final class AlertCollectionViewCell: UICollectionViewCell {
         price.textAlignment = .right
         price.font = UIFont(name: "Roboto-Medium", size: 13*widthScalar)
         price.alpha = 0.5
-        addSubview(xImageView)
-        addSubview(moveableView)
+    
+        line.backgroundColor = CustomColor.alertLines
         
-        for view in [ticker, alertList, price] as [UIView] {
-            moveableView.addSubview(view)
-        }
+        [xImageView, moveableView].forEach { addSubview($0) }
+        [ticker, alertList, price, line].forEach { moveableView.addSubview($0) }
     
         setupLayoutConstraints()
         activateLayoutConstraints()
@@ -67,6 +98,12 @@ final class AlertCollectionViewCell: UICollectionViewCell {
     lazy var xImageViewRightConstraintInMotion: NSLayoutConstraint = xImageView.centerXAnchor.constraint(equalTo: moveableView.rightAnchor, constant: 30*widthScalar)
     
    private func setupLayoutConstraints() {
+    
+        line.translatesAutoresizingMaskIntoConstraints = false
+        layoutContraints.append(line.bottomAnchor.constraint(equalTo: bottomAnchor))
+        layoutContraints.append(line.leftAnchor.constraint(equalTo: leftAnchor))
+        layoutContraints.append(line.rightAnchor.constraint(equalTo: rightAnchor))
+        layoutContraints.append(line.heightAnchor.constraint(equalToConstant: 1))
         
         xImageView.translatesAutoresizingMaskIntoConstraints = false
         layoutContraints.append(xImageView.centerYAnchor.constraint(equalTo: centerYAnchor))
