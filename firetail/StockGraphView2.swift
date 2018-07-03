@@ -72,11 +72,11 @@ class StockGraphView2: UIView {
         set1.drawCircleHoleEnabled = false
         set1.circleRadius = 3
         set1.cubicIntensity = 0.2
-        set1.setColor(self.CustomColor.yellow, alpha: 1.0)
-        set1.circleColors = [self.CustomColor.white]
+        set1.setColor(CustomColor.yellow, alpha: 1.0)
+        set1.circleColors = [CustomColor.white]
         set1.lineWidth = 2
         set1.drawFilledEnabled = true
-        set1.fillColor = self.CustomColor.yellow
+        set1.fillColor = CustomColor.yellow
         set1.fillAlpha = 1.0
         
         for i in 0..<dataPoints.count {
@@ -172,7 +172,7 @@ class StockGraphView2: UIView {
                 let gridShape = CAShapeLayer()
                 gridShape.zPosition = 7
                 gridShape.path = horizontalGridPath.cgPath
-                gridShape.fillColor = self.CustomColor.gridGray.cgColor
+                gridShape.fillColor = CustomColor.gridGray.cgColor
                 self.layer.addSublayer(gridShape)
                 for i in 0...5 {
                     vGridPath.move(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: 0))
@@ -187,7 +187,7 @@ class StockGraphView2: UIView {
                 let gridShape2 = CAShapeLayer()
                 gridShape2.zPosition = 7
                 gridShape2.path = vGridPath.cgPath
-                gridShape2.fillColor = self.CustomColor.gridGray.cgColor
+                gridShape2.fillColor = CustomColor.gridGray.cgColor
                 self.layer.addSublayer(gridShape2)
             }
         }

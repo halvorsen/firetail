@@ -158,14 +158,14 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     
     @objc private func add(_ button: UIButton) {
         
-       // Set1.ti.append(newAlertTicker)
         Set1.ti = [newAlertTicker] + Set1.ti
         let finalAlertPrice = newAlertPrice
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID =  timestamp + newAlertTicker.uppercased()
+        AlertSort.shared.addToStack(alert: newAlertLongID)
         Set1.userAlerts[alertID[Set1.userAlerts.count]] = newAlertLongID
-        // Set1.alertCount += 1
+   
         var alertTriggerWhenGreaterThan = false
         if finalAlertPrice > lastPrice {
             alertTriggerWhenGreaterThan = true

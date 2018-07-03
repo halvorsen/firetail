@@ -12,7 +12,7 @@ protocol AlertCellDelegate: class {
     func deleteCell(atIndex: Int)
 }
 
-final class AlertCollectionViewCell: UICollectionViewCell {
+final class AlertCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     private var ticker = UILabel()
     private var alertList = UILabel()
@@ -32,16 +32,17 @@ final class AlertCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    private let deleteGesture = UIPanGestureRecognizer(target: self, action: #selector(deletePan(_:)))
-    
     var layoutContraints = [NSLayoutConstraint]()
     
     @objc private func deletePan(_ gesture: UIPanGestureRecognizer) {
-        moveableXConstraint.constant = gesture.translation(in: moveableView).x
+        let translationX = gesture.translation(in: moveableView).x
+        guard translationX < 0 else { return }
+        moveableXConstraint.constant = translationX
+        xImageView.alpha = -translationX/60
         layoutIfNeeded()
-        
+       
         if gesture.state == .ended {
-            if moveableXConstraint.constant > 60 {
+            if moveableXConstraint.constant < 60 {
                 UIView.animate(withDuration: 0.3) {
                     self.moveableXConstraint.constant = -375*widthScalar
                     self.layoutIfNeeded()
@@ -58,15 +59,16 @@ final class AlertCollectionViewCell: UICollectionViewCell {
         currentCellIndex = cellIndex
         alertCellDelegate = delegate
     }
-    
+  
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         xImageView.alpha = xAlphaStart
         
         backgroundColor = CustomColor.white249
+        moveableView.isUserInteractionEnabled = true
         moveableView.backgroundColor = CustomColor.background
-        moveableView.addGestureRecognizer(deleteGesture)
+        moveableView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(deletePan(_:))))
         
         ticker.textColor = .white
         ticker.textAlignment = .left
@@ -81,7 +83,6 @@ final class AlertCollectionViewCell: UICollectionViewCell {
         price.textColor = CustomColor.yellow
         price.textAlignment = .right
         price.font = UIFont(name: "Roboto-Medium", size: 13*widthScalar)
-        price.alpha = 0.5
     
         line.backgroundColor = CustomColor.alertLines
         
@@ -117,15 +118,15 @@ final class AlertCollectionViewCell: UICollectionViewCell {
         
         ticker.translatesAutoresizingMaskIntoConstraints = false
         layoutContraints.append(ticker.leftAnchor.constraint(equalTo: leftAnchor, constant: 30*widthScalar))
-        layoutContraints.append(ticker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 13*heightScalar))
+        layoutContraints.append(ticker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -13*heightScalar))
         
         alertList.translatesAutoresizingMaskIntoConstraints = false
         layoutContraints.append(alertList.leftAnchor.constraint(equalTo: leftAnchor, constant: 130*widthScalar))
-        layoutContraints.append(alertList.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 13*heightScalar))
+        layoutContraints.append(alertList.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -13*heightScalar))
         
         price.translatesAutoresizingMaskIntoConstraints = false
         layoutContraints.append(price.leftAnchor.constraint(equalTo: leftAnchor, constant: 310*widthScalar))
-        layoutContraints.append(price.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 13*heightScalar))
+        layoutContraints.append(price.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -13*heightScalar))
     }
     
     private func activateLayoutConstraints() {

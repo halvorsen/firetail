@@ -17,6 +17,7 @@ final class AlertCollectionView: UICollectionView {
         self.dataSource = dataSource
         self.register(AlertCollectionViewCell.self, forCellWithReuseIdentifier: cellID)
         self.showsVerticalScrollIndicator = false
+        isUserInteractionEnabled = true
         
     }
 

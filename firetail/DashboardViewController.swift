@@ -24,10 +24,7 @@ let commonScalar = UIScreen.main.bounds.width/375
 
 class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     var collectionView: AlertCollectionView?
-    var alertsForCollectionView = Set1.alerts.sorted { $0.value.name < $1.value.name }
-    // #TODO persist dictionary with stock name and order in json locally on the device, make sure it doesn't become unsynced.
-//    var alertsForCollectionViewStocks = Set1.alerts.filter { $0.value.name[0...5] == "Alert" }.sorted { stockOrderPersisted[$0.value.name] < stockOrderPersisted[$1.value.name] }
-//    var alertsForCollectionViewCrypto = Set1.alerts.filter { $0.value.name[0...5] == "Crypt" }.sorted { $0.value.name < $1.value.name }
+    var alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
     var activityView = UIActivityIndicatorView()
     var premiumMember = false
     var addTextField = UITextField()
@@ -155,7 +152,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             }
             
         }
-        
+        print("sorted alerts: \(alertsForCollectionView)")
         alertPan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.move(_:)))
         view.addGestureRecognizer(alertPan)
         
@@ -338,7 +335,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         // START VERSION 2
         let collectionLayout = UICollectionViewFlowLayout()
-        
+        collectionLayout.minimumInteritemSpacing = 0
+        collectionLayout.minimumLineSpacing = 0
         collectionView = AlertCollectionView(frame: alertScroller.frame, collectionViewLayout: collectionLayout, delegate: self, dataSource: self, cellID: alertCollectionCellID)
         collectionView?.frame.origin.y -= collectionView!.bounds.height
         slideView.addSubview(collectionView!)
@@ -1142,9 +1140,11 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
-        let alert = alertsForCollectionView[indexPath.row].value
+        if let alert = Set1.alerts[alertsForCollectionView[indexPath.row]] {
         cell.set(tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, cellIndex: indexPath.row, delegate: self)
-        
+        } else {
+            print("error in collection view")
+        }
         return cell
     }
     
