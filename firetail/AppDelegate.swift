@@ -55,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let token = Messaging.messaging().fcmToken
         print("FCM token: \(token ?? "")")
         
-        //        Set1.premium = true : toggle in development
+        Set1.premium = true //: toggle in development
         
         return true
     }

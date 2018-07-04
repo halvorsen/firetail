@@ -197,7 +197,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             
         }
         
-        premiumMember = Set1.premium
+        premiumMember = true  // ##TODO: turn off premium premiumMember = Set1.premium
         view.backgroundColor = CustomColor.black33
         svs = [sv,sv1,sv2]
         let d = Calendar.current.dateComponents([.year, .month, .day], from: Date())
@@ -341,8 +341,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         collectionView?.frame.origin.y -= collectionView!.bounds.height
         slideView.addSubview(collectionView!)
         
+        longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressFunc(_:)))
+        collectionView?.addGestureRecognizer(longPress)
+        
     }
     
+    var longPress = UILongPressGestureRecognizer()
     var movingBlock : AlertBlockView?
     var startingLocationX = CGFloat()
     var endingLocationX = CGFloat()
@@ -1142,6 +1146,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        collectionView.contentSize.height = CGFloat(alertsForCollectionView.count) * 60 * commonScalar
         return alertsForCollectionView.count
     }
     
@@ -1157,6 +1162,34 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 375*commonScalar, height: 60*commonScalar)
+    }
+    
+    @objc private func longPressFunc(_ sender: UILongPressGestureRecognizer) {
+
+        guard let collectionView = collectionView else { return }
+        let point = sender.location(in: collectionView)
+        switch sender.state {
+        case .began:
+            guard let indexPath = collectionView.indexPathForItem(at: point) else {
+                return
+            }
+            _ = collectionView.beginInteractiveMovementForItem(at: indexPath)
+        case .changed:
+            collectionView.updateInteractiveMovementTargetPosition(point)
+        case .ended:
+            collectionView.endInteractiveMovement()
+            
+            
+        default:
+            collectionView.cancelInteractiveMovement()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        
+        let startIndex = sourceIndexPath.row
+        let endIndex = destinationIndexPath.row
+        
     }
     
 }
