@@ -12,7 +12,7 @@ protocol AlertCellDelegate: class {
     func deleteCell(atIndex: Int)
 }
 
-final class AlertCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
+final class AlertCollectionViewCell: UICollectionViewCell {
     
     private var ticker = UILabel()
     private var alertList = UILabel()
@@ -31,17 +31,19 @@ final class AlertCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDe
             xImageView.alpha = currentXAlpha
         }
     }
-    
+   
+  
     var layoutContraints = [NSLayoutConstraint]()
     
     @objc private func deletePan(_ gesture: UIPanGestureRecognizer) {
         let translationX = gesture.translation(in: moveableView).x
-        guard translationX < 0 else { return }
+        if translationX < 0 {
         moveableXConstraint.constant = translationX
+        }
         xImageView.alpha = -translationX/60
         layoutIfNeeded()
-       
-        if gesture.state == .ended {
+        
+        if gesture.state == .ended || gesture.state == .cancelled || gesture.state == .failed {
             if moveableXConstraint.constant < -60 {
                 UIView.animate(withDuration: 0.3) {
                     self.moveableXConstraint.constant = -375*widthScalar
@@ -64,16 +66,22 @@ final class AlertCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDe
         currentCellIndex = cellIndex
         alertCellDelegate = delegate
     }
+    
+//    let pan = UIPanGestureRecognizer(target: self, action: #selector(deletePan(_:)))
   
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        
+        
         xImageView.alpha = xAlphaStart
         
         backgroundColor = CustomColor.white249
-        moveableView.isUserInteractionEnabled = true
         moveableView.backgroundColor = CustomColor.background
-        moveableView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(deletePan(_:))))
+//        pan.cancelsTouchesInView = false
+        isUserInteractionEnabled = true
+        moveableView.isUserInteractionEnabled = false
+        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(deletePan(_:))))
         
         ticker.textColor = .white
         ticker.textAlignment = .left
@@ -151,6 +159,10 @@ final class AlertCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDe
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
     
