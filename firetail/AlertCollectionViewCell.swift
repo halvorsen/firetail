@@ -42,11 +42,16 @@ final class AlertCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDe
         layoutIfNeeded()
        
         if gesture.state == .ended {
-            if moveableXConstraint.constant < 60 {
+            if moveableXConstraint.constant < -60 {
                 UIView.animate(withDuration: 0.3) {
                     self.moveableXConstraint.constant = -375*widthScalar
                     self.layoutIfNeeded()
                     self.alertCellDelegate?.deleteCell(atIndex: self.currentCellIndex)
+                }
+            } else {
+                UIView.animate(withDuration: 0.3) {
+                    self.moveableXConstraint.constant = 0
+                    self.layoutIfNeeded()
                 }
             }
         }

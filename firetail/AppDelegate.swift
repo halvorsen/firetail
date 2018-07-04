@@ -54,6 +54,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let _ = casheManager.loadData()
         let token = Messaging.messaging().fcmToken
         print("FCM token: \(token ?? "")")
+        
+        //        Set1.premium = true : toggle in development
+        
         return true
     }
     

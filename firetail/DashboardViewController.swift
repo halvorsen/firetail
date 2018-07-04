@@ -98,7 +98,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     let alertCollectionCellID = "alertCell"
 
     override func viewWillAppear(_ animated: Bool) {
-        
+        print("stock alerts in array: \(alertsForCollectionView)")
         if Set1.userAlerts.count > 0 {
             for i in 0..<Set1.userAlerts.count {
                 guard let userAlert = Set1.userAlerts[alertID[i]],
@@ -841,7 +841,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 else if results.restoredPurchases.count > 0 {
                     
                     Set1.premium = true
-                    //weakself.loadsave.savePurchase(purchase: "firetail.iap.premium")
                     weakself.premiumMember = true
                     weakself.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
                 }
@@ -1131,8 +1130,16 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
 
 extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AlertCellDelegate {
     func deleteCell(atIndex: Int) {
-        // ##TODO: delete cell
+      
+        guard let alertDeleting = Set1.alerts[alertsForCollectionView[atIndex]] else {print("error in deleteing"); return}
+        myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
+        AlertSort.shared.delete(alertDeleting.name)
+        alertsForCollectionView.remove(at: atIndex)
+        collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
+        act(blockLongName: alertDeleting.name)
+       
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return alertsForCollectionView.count

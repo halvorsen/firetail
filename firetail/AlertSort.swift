@@ -29,11 +29,25 @@ final class AlertSort {
         
         if let dictionary = MyFileManager.readAlertOrderFile(named: "Crypto") {
             cryptoDictionary = dictionary
+            cryptoArray = dictionary.map {($0.key, $0.value)}.sorted {$0.1 < $1.1}.map {$0.0}
         }
         
         if let dictionary = MyFileManager.readAlertOrderFile(named: "Stock") {
             stockDictionary = dictionary
+            stockArray = dictionary.map {($0.key, $0.value)}.sorted {$0.1 < $1.1}.map {$0.0}
         }
+        
+        if stockDictionary.count != Set1.alerts.count {
+            print("stock data models have become unsynced, resetting order")
+            // reorders by timestamp and spits out array of alert name strings in ascending timestamp order
+            setSortedStockAlerts(array: Set1.alerts.map { ($0.key, $0.value.timestamp) }.sorted {$0.1 < $1.1}.map {$0.0})
+        }
+        //TODO: Add this check for crypto:
+//        if cryptoDictionary.count != Set1.alertsCrypto.count {
+//            print("crypto data models have become unsynced, resetting order")
+//            // reorders by timestamp and spits out array of alert name strings in ascending timestamp order
+//            setSortedStockAlerts(array: Set1.alertsCrypto.map { ($0.key, $0.value.timestamp) }.sorted {$0.1 < $1.1}.map {$0.0})
+//        }
         
     }
     
@@ -66,12 +80,33 @@ final class AlertSort {
     internal func addToIndex(_ index: Int, alert: String) {
         if alert[0...5] == "Crypto" {
             cryptoArray.insert(alert, at: index)
-            for alert in stockArray.enumerated() {
+            for alert in cryptoArray.enumerated() {
                 cryptoDictionary[alert.element] = alert.offset
             }
         }
         else {
             stockArray.insert(alert, at: index)
+            for alert in stockArray.enumerated() {
+                stockDictionary[alert.element] = alert.offset
+            }
+        }
+    }
+    
+    internal func delete(_ alert: String) {
+        if alert[0...5] == "Crypto" {
+            guard let index = cryptoDictionary[alert] else { return }
+            cryptoArray.remove(at: index)
+            cryptoDictionary.removeAll()
+            for alert in cryptoArray.enumerated() {
+                cryptoDictionary[alert.element] = alert.offset
+            }
+        }
+        else {
+            guard let index = stockDictionary[alert] else { return }
+            print("stockArray: \(stockArray)")
+            print("stockDic: \(stockDictionary)")
+            stockArray.remove(at: index)
+            stockDictionary.removeAll()
             for alert in stockArray.enumerated() {
                 stockDictionary[alert.element] = alert.offset
             }
