@@ -55,7 +55,7 @@ class Google {
                     }
                 }
                 var stringPrice = String()
-                let arrayData = Array(stringData.characters)
+                let arrayData = Array(stringData)
                 
                 dance: for i in 0..<arrayData.count {
                     if arrayData[i] == "l" {
@@ -120,7 +120,7 @@ class Google {
         let endDateDay = String(describing: endDateComponents.day!)
         let stringComponents: [String] = ["https://www.google.com/finance/historical?q=",index,":",ticker,"&startdate=",startDateMonth,"+",startDateDay,"%2C+",startDateYear,"&enddate=",endDateMonth,"+",endDateDay,"%2C+",endDateYear,"&output=csv"]
         
-        let urlString = stringComponents.flatMap({$0}).joined()
+        let urlString = stringComponents.compactMap({$0}).joined()
         let url = URL(string: urlString)
         var priceData = [(Double,String,Int)]()
         
@@ -138,7 +138,7 @@ class Google {
                         guard dataInArrays.count > 2 else {print("google data request error"); return}
                         for i in 1...(dataInArrays.count-2) {
                             if let _dataInArrays = Double(dataInArrays[i][4]) {
-                                let myd = dataInArrays[i][0].characters.map { String($0) }
+                                let myd = dataInArrays[i][0].map { String($0) }
                                 var m = String()
                                 var d = String()
                                 var dash = 0

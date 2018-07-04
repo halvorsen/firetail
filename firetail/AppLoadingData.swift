@@ -23,7 +23,7 @@ class AppLoadingData {
         if dataSets.count > 500 {
             cacheManager.eraseAllStockCashe()
         }
-        guard Set1.ti.count > 0 else {print("Set1.ti.count == 0");return false}
+        guard Set1.ti.count > 0 else {return false}
      
         for i in 0..<Set1.ti.count {
             loop: for dataSet in dataSets.reversed() {
@@ -36,18 +36,15 @@ class AppLoadingData {
                         for i in 0..<Set1.ti.count {
                             if let prices = Set1.oneYearDictionary[Set1.ti[i]] {
                                 if prices.count < 2 {
-                                    print("blah1")
-                                    print(Set1.ti[i])
-                                    //GOPro is getting empty prices
-                                    print(prices)
+                              
                                     return false
                                 }
                             } else {
-                                print("blah2")
+                            
                                 return false
                             }
                         }
-                        print("blah3")
+                  
                         return true
                     }
                     break loop
@@ -55,7 +52,7 @@ class AppLoadingData {
                 
             }
         }
-        print("blah4")
+   
         return false
     }
     
@@ -144,11 +141,12 @@ class AppLoadingData {
     private func fetch(callback: @escaping () -> Void) {
         var count = 3
         if Set1.ti.count < 3 {
-            guard Set1.ti.count > 0 else {print("Set1.ti.count == 0");return}
+            guard Set1.ti.count > 0 else {return}
             count = Set1.ti.count
         }
         var savedCount = 0
         for i in 0..<count {
+            guard i < Set1.ti.count else {return}
             alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
                 if dataSet == nil {
                     self.alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
@@ -259,10 +257,10 @@ class AppLoadingData {
                                     
                                     DispatchQueue.global(qos: .background).async {
                                         self.fetch() {
-                                            print("finished fetch2")
+                                       
                                             DispatchQueue.main.async {
                                             if haventSegued {
-                                                print("finished fetch3")
+                                              
                                                 
                                             result(false)
                                             }
@@ -273,14 +271,14 @@ class AppLoadingData {
                                     Set1.saveUserInfo()
                                     if success {
                                         haventSegued = false
-                                        print("segue1")
+                                     
                                         result(false)
                                     }
                                     
                                 } else {
                                     Set1.saveUserInfo()
                                     haventSegued = false
-                                    print("segue2")
+                               
                                     result(true)
                                 }
                             }
@@ -292,7 +290,7 @@ class AppLoadingData {
                 }
                 Set1.saveUserInfo()
             } else {
-                print("segue3")
+           
                 result(true)
             }
             

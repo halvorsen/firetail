@@ -11,7 +11,6 @@ import UserNotifications
 import QuartzCore
 import Firebase
 import ReachabilitySwift
-//import FirebaseMessaging
 
 class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIApplicationDelegate {
     /// This method will be called whenever FCM receives a new, default FCM token for your
@@ -22,8 +21,6 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             print("InstanceID token: \(refreshedToken)")
             Set1.token = refreshedToken
             Set1.saveUserInfo()
-            
-            
         }
     }
     @objc let backArrow = UIButton()
@@ -200,11 +197,13 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     var alertInfo = (String(),String(),Double(),Bool(),Bool(),Bool(),Bool(),Bool(),Bool(),String(),Bool(),String(),String())
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "fromAddStockAlertToPhone" {
-            let phoneView: AddPhoneNumberViewController = segue.destination as! AddPhoneNumberViewController
+            if let phoneView: AddPhoneNumberViewController = segue.destination as? AddPhoneNumberViewController {
             phoneView.alertInfo = alertInfo
+            }
         } else if segue.identifier == "fromAddStockAlertToAddStockPrice" {
-            let addStockPriceVC: AddStockPriceViewController = segue.destination as! AddStockPriceViewController
+            if let addStockPriceVC: AddStockPriceViewController = segue.destination as? AddStockPriceViewController {
             addStockPriceVC.newAlertTicker = newAlertTicker
+            }
         }
     }
     
@@ -246,7 +245,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
     }
     
-    @objc private func switchChanged(_ sender: UISwitch!) {
+    @objc private func switchChanged(_ sender: UISwitch) {
         if sender.isOn {
             switch sender.tag {
             case 0:
@@ -363,8 +362,8 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+        guard let myText = textField.text else {return false}
+        let newString = (myText as NSString).replacingCharacters(in: range, with: string)
         let components = (newString as NSString).components(separatedBy: NSCharacterSet.decimalDigits.inverted)
         
         let decimalString = components.joined(separator: "") as NSString
@@ -372,7 +371,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         let hasLeadingOne = length > 0 && decimalString.character(at: 0) == (1 as unichar)
         
         if length == 0 || (length > 10 && !hasLeadingOne) || length > 11 {
-            let newLength = (textField.text! as NSString).length + (string as NSString).length - range.length as Int
+            let newLength = (myText as NSString).length + (string as NSString).length - range.length as Int
             
             return (newLength > 10) ? false : true
         }
@@ -399,43 +398,18 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         textField.text = formattedString as String
         return false
     }
-    
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//      //  phoneTextField.alpha = 0.0
-////        if phoneTextField.text != nil {
-////            Set1.phone = phoneTextField.text!
-////        }
-//        textField.resignFirstResponder()
-//        return false
-//    }
-//    
-//    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
-//        phoneTextField.alpha = 0.0
-//    }
-    
+ 
     @objc func connectToFcm() {
         
-        // Won't connect since there is no token
         guard InstanceID.instanceID().token() != nil else {
             return
         }
-        
-        // Disconnect previous FCM connection if it exists.
-     //   Messaging.messaging().disconnect()
-        
+  
         Messaging.messaging().shouldEstablishDirectChannel = true
         
-//        connect { (error) in
-//            if error != nil {
-//                print("Unable to connect with FCM. \(error?.localizedDescription ?? "")")
-//            } else {
-//                print("Connected to FCM.")
-//            }
-//        }
     }
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
     }
-    
     
 }

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-
 import Firebase
 import FirebaseAuth
 import ReachabilitySwift
@@ -92,34 +91,28 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField : UITextField)
     {
         view.addGestureRecognizer(tap)
-        switch textField.tag {
-        case 0:
-            view.frame.origin.y = -50*screenHeight/1334
-        case 1:
-            view.frame.origin.y = -170*screenHeight/1334
-        case 2:
-            view.frame.origin.y = -170*screenHeight/1334
-            
-            if UIDevice().userInterfaceIdiom == .phone {
-                switch UIScreen.main.nativeBounds.height {
-               
-                case 2436:
-                    print("iPhone X")
-                    view.frame.origin.y = -290*screenHeight/1334
-                default:
-                    print("unknown")
-                }
-            }
-            
-        default:
-            break
-        }
         
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
+        animateViewMoving(up: true, moveValue: 150)
     }
-    @objc var continueOnce = true
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        animateViewMoving(up: false, moveValue: 150)
+    }
+    func animateViewMoving (up: Bool, moveValue: CGFloat) {
+        let movementDuration:TimeInterval = 0.3
+        let movement: CGFloat = ( up ? -moveValue : moveValue)
+        UIView.beginAnimations( "animateView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(movementDuration)
+        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: movement)
+        UIView.commitAnimations()
+    }
+    
+    
+    var continueOnce = true
     @objc private func continueFunc(_ sender: UIButton) {
         guard continueOnce == true else {return}
         continueOnce = false
@@ -135,7 +128,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         
         loadsave.saveUsername(username: cleanString)
         Set1.username = cleanString
-        Set1.email = textFields[0].text!
+        Set1.email = textFields[0].text ?? ""
         let emailField = textFields[0].text
         let passwordField = textFields[1].text
         let passwordField2 = textFields[2].text
@@ -185,13 +178,11 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                         self.continueOnce = true
                         self.username.text = email
                         Set1.saveUserInfo()
-                            self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
+                        self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                         
                     }
                 })
                 
-                
-               // self.userWarning(title: "", message: (error!.localizedDescription))
             }
         }
     }
@@ -206,11 +197,6 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         view.frame.origin.y = 0
         view.removeGestureRecognizer(tap)
         self.view.endEditing(true)
-        if textField.text != nil && textField.delegate != nil {
-            
-            //do something with the --> textField.text!
-            
-        }
         
         switch textField.tag {
         case 0:

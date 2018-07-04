@@ -41,13 +41,13 @@ public struct Set1 {
     
     public static var email = "none"
     
-    public static var brokerName = "none" {didSet{print("brokername: \(brokerName)")}}
+    public static var brokerName = "none"
     
     public static var username = "none"
     
     public static var fullName = "none"
     
-    public static var premium = false {didSet{print("preimum: \(premium)")}}
+    public static var premium = false
     
     public static var numOfAlerts = [Int]()
     

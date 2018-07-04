@@ -15,26 +15,25 @@ import FirebaseCore
 class LoginViewController: ViewSetup, UITextFieldDelegate {
 
     var customColor = CustomColor()
-    @objc var login = UIButton()
-    @objc var continueB = UIButton()
-    @objc var createAccount = UIButton()
-    @objc var myTextFields = [UITextField]()
-    @objc var activityView = UIActivityIndicatorView()
+    var login = UIButton()
+    var continueB = UIButton()
+    var createAccount = UIButton()
+    var myTextFields = [UITextField]()
+    var activityView = UIActivityIndicatorView()
     let loadsave = LoadSaveCoreData()
-    @objc var myTimer = Timer()
-    @objc var ti = [String]()
-    @objc var alreadyAUser = false
-    @objc let imageView = UIImageView()
-    @objc let coverView = UIView()
-    @objc var retry = false
-    @objc var authenticated = false
-    @objc var noNils = true
-    @objc var tiLast = String()
- //   var _ti = [String]()
-    @objc let firetail = UILabel()
+    var myTimer = Timer()
+    var ti = [String]()
+    var alreadyAUser = false
+ 
+    let coverView = UIView()
+    var retry = false
+    var authenticated = false
+    var noNils = true
+    var tiLast = String()
+ 
     let myLoadSaveCoreData = LoadSaveCoreData()
-    @objc var isFirstLoading = true
-    @objc var tap = UITapGestureRecognizer()
+    var isFirstLoading = true
+    var tap = UITapGestureRecognizer()
     var appLoadingData = AppLoadingData()
     let alphaAPI = Alpha()
   
@@ -56,23 +55,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         coverView.backgroundColor = customColor.black33
         coverView.layer.zPosition = 10
         view.addSubview(coverView)
-        imageView.frame.size = CGSize(width: 98*screenWidth/375, height: 95*screenHeight/667)
-        imageView.image = #imageLiteral(resourceName: "logo98x95")
-        imageView.frame.origin.x = 140*screenWidth/375
-        imageView.frame.origin.y = 170*screenHeight/667
-        imageView.layer.zPosition = 11
-        view.addSubview(imageView)
         
-        //reachabilityAddNotification()
-        
-        firetail.frame = CGRect(x: 0, y: 328*screenHeight/667, width: screenWidth, height: 58*screenHeight/667)
-        firetail.text = "FIRETAIL"
-        firetail.font = UIFont(name: "Roboto-Bold", size: 27*fontSizeMultiplier)
-        firetail.textAlignment = .center
-        firetail.textColor = .white
-        firetail.backgroundColor = .clear
-        firetail.layer.zPosition = 11
-        view.addSubview(firetail)
 
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore")
@@ -94,7 +77,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     //load stock list from firebase and start fetch, if loading takes long time move forward anyways after 8 seconds to dashboard
                     Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false, block: {_ in
                         if didntMoveForward {
-                            print("triggered didntMoveForwardTimerTwice")
+                    
                             didntMoveForward = false
                             if self.isFirstTimeSeguing {
                                 self.isFirstTimeSeguing = false
@@ -105,13 +88,13 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                     })
                     self.appLoadingData.loadUserInfoFromFirebase(firebaseUsername: Set1.username) {haveNoAlerts in
                         self.ti = Set1.ti
-                        print("finishedfetch4")
+            
                         if haveNoAlerts {
-                            print("finishedfetch5")
+                         
                             didntMoveForward = false
                             self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
                         } else {
-                            print("finishedfetch6")
+                       
                             didntMoveForward = false
                             self.cont()
                         }
@@ -123,9 +106,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 }    
             } else {
                 UIView.animate(withDuration: 0.2) {
-                    self.imageView.alpha = 0.0
+             
                     self.coverView.alpha = 0.0
-                    self.firetail.alpha = 0.0
+                    
                 }
                 if !self.continueB.isDescendant(of: self.view) {
                     self.populateView()
@@ -146,20 +129,26 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
 
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-    }
-    
-
-
-    
-    func textFieldDidBeginEditing(_ textField : UITextField)
-        
-    {
+    func textFieldDidBeginEditing(_ textField : UITextField) {
         view.addGestureRecognizer(tap)
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
+        
+        animateViewMoving(up: true, moveValue: 100)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        animateViewMoving(up: false, moveValue: 100)
+    }
+    func animateViewMoving (up: Bool, moveValue: CGFloat) {
+        let movementDuration:TimeInterval = 0.3
+        let movement: CGFloat = ( up ? -moveValue : moveValue)
+        UIView.beginAnimations( "animateView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(movementDuration)
+        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: movement)
+        UIView.commitAnimations()
     }
     
     private func populateView() {
@@ -217,8 +206,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func continueFunc(_ sender: UIButton) {
-        
-        var cleanString = myTextFields[0].text!
+        guard let myText = myTextFields[0].text,
+            let myText2 = myTextFields[1].text else {return}
+        var cleanString = myText
         cleanString = cleanString.replacingOccurrences(of: ".", with: ",")
         cleanString = cleanString.replacingOccurrences(of: "$", with: "")
         cleanString = cleanString.replacingOccurrences(of: "#", with: "")
@@ -229,7 +219,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         loadsave.saveUsername(username: cleanString)
         Set1.username = cleanString
         
-        Auth.auth().signIn(withEmail: myTextFields[0].text!, password: myTextFields[1].text!, completion: { (user, error) in
+        Auth.auth().signIn(withEmail: myText, password: myText2, completion: { (user, error) in
             if error != nil{
                 self.activityView.removeFromSuperview()
                 let alert = UIAlertController(title: "Warning", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
@@ -245,11 +235,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         self.view.addSubview(activityView)
     }
     
-    @objc var isFirstTimeSeguing = true
+    var isFirstTimeSeguing = true
     private func cont() {
-        print("Set1.oneyearDictionary")
-        print(Set1.oneYearDictionary)
-        
+      
         if ti == [""] {
             if isFirstTimeSeguing {
                 isFirstTimeSeguing = false
@@ -273,11 +261,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
         view.removeGestureRecognizer(tap)
         self.view.endEditing(true)
-        if textField.text != nil && textField.delegate != nil {
-            
-            //do something with the --> textField.text!
-            
-        }
+      
         return false
     }
     
@@ -319,6 +303,5 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         Set1.logoutFirebase()
      
     }
-    
     
 }

@@ -10,12 +10,14 @@ import UIKit
 import ReachabilitySwift
 
 class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
-    @objc let backArrow = UIButton()
-    @objc let quickPick = UILabel()
+    
+    let backArrow = UIButton()
+    let quickPick = UILabel()
     let customColor = CustomColor()
-    @objc var stockSymbolTextField = UITextField()
-    @objc let stockSymbol = UILabel()
-    @objc var newAlertTicker = String()
+    var stockSymbolTextField = UITextField()
+    let stockSymbol = UILabel()
+    var newAlertTicker = String()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = customColor.black24
@@ -24,7 +26,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         addLabel(name: quickPick, text: "QUICK PICK", textColor: customColor.labelGray, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 11, x: 36, y: 180, width: 200, height: 44, lines: 1)
         view.addSubview(quickPick)
         let boxButtons:[(CGFloat,CGFloat,String)] = [
-        
+            
             (220,164,"TSLA"),
             (484,164,"AAPL"),
             (40,282,"AMZN"),
@@ -36,7 +38,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
             (40,520,"TWTR"),
             (304,520,"SNAP"),
             (568,520,"VZ")
-            //216x70
+          
         ]
         
         for (x,y,ticker) in boxButtons {
@@ -63,88 +65,84 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         stockSymbolTextField.textColor = .white
         stockSymbolTextField.keyboardAppearance = .dark
         view.addSubview(stockSymbolTextField)
-      
+        
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         stockSymbolTextField.becomeFirstResponder()
-       
-            reachabilityAddNotification()
+        
+        reachabilityAddNotification()
         
     }
     
     @objc private func back(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromAddStockTickerToMain", sender: self)
+        performSegue(withIdentifier: "fromAddStockTickerToMain", sender: self)
     }
     
     @objc private func quickPickFunc(callback: (_ isGoodToGo: Bool) -> Void) {
         
         var isGoodToGo = false
-       
+        
         if IndexListOfStocks.amex.contains(newAlertTicker) || IndexListOfStocks.nyse.contains(newAlertTicker) || IndexListOfStocks.nasdaq.contains(newAlertTicker) || IndexListOfStocks.otcmkts.contains(newAlertTicker) {
-           
+            
             isGoodToGo = true
-            let charArray = newAlertTicker.characters.map { String($0) }
-   
+            let charArray = newAlertTicker.map { String($0) }
+            
             for char in charArray {
                 if char == "^" || char == "~" {
                     isGoodToGo = false
-               
+                    
                     callback(isGoodToGo)
                 }
             }
-       
+            
             callback(isGoodToGo)
         } else {
-        
+            
             callback(isGoodToGo)
         }
-   
+        
     }
     
     private func __quickPickFunc() {
         
-        quickPickFunc() { (isGoodToGo) -> Void in
-      
+        quickPickFunc() { [weak self] (isGoodToGo) -> Void in
+            guard let weakself = self else {return}
             if isGoodToGo {
-                self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
+                weakself.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: weakself)
             } else {
                 let alert = UIAlertController(title: "", message: "Ticker Not Found", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                weakself.present(alert, animated: true, completion: nil)
             }
         }
     }
     
     @objc private func _quickPickFunc(_ sender: UIButton) {
-        
-        newAlertTicker = (sender.titleLabel?.text!)!
-        quickPickFunc() { (isGoodToGo) -> Void in
-       
+        guard let title = sender.titleLabel,
+            let newAlertTicker = title.text else {return}
+        self.newAlertTicker = newAlertTicker
+        quickPickFunc() { [weak self] (isGoodToGo) -> Void in
+            guard let weakself = self else {return}
             if isGoodToGo {
-            
-                self.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: self)
+                
+                weakself.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: weakself)
             } else {
-           
+                
                 let alert = UIAlertController(title: "", message: "Ticker Not Found", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                weakself.present(alert, animated: true, completion: nil)
             }
         }
     }
-
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.text = ""
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .allCharacters
         textField.spellCheckingType = .no
     }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        
-        
-    }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if stockSymbolTextField.text != nil && stockSymbolTextField.delegate != nil {
             newAlertTicker = stockSymbolTextField.text!.uppercased()
@@ -155,9 +153,9 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "fromAddStockTickerToAddStockPrice" {
-            let destinationViewController: AddStockPriceViewController = segue.destination as! AddStockPriceViewController
-            
-            destinationViewController.newAlertTicker = newAlertTicker
+            if let destinationViewController: AddStockPriceViewController = segue.destination as? AddStockPriceViewController {
+                destinationViewController.newAlertTicker = newAlertTicker
+            }
         }
     }
     
@@ -165,5 +163,4 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         reachabilityRemoveNotification()
     }
     
-
 }

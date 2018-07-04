@@ -91,7 +91,7 @@ class CacheManager {
         
                 let dataEntry = DataSet(ticker: ticker, price: myPrices, month: myMonths, day: myDays)
                 data.append(dataEntry)
-                print("ticker: \(ticker)")
+//                print("ticker: \(ticker)")
                
                 }
                 
@@ -108,8 +108,8 @@ class CacheManager {
         
         do {
             try context.execute(deleteRequest)  //(deleteRequest, withContext: context)
-        } catch let _ as NSError {
-            // TODO: handle the error
+        } catch let a as NSError {
+            print(a)// TODO: handle the error
         }
 
         
