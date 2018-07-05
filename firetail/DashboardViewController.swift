@@ -22,7 +22,7 @@ let widthScalar = UIScreen.main.bounds.width/375
 let heightScalar = UIScreen.main.bounds.height/667
 let commonScalar = UIScreen.main.bounds.width/375
 
-class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
+class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIGestureRecognizerDelegate {
     var collectionView: AlertCollectionView?
     var alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
     var activityView = UIActivityIndicatorView()
@@ -90,7 +90,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         return aaa
     }
-    var scrolling = false
+
     var alertPan = UIPanGestureRecognizer()
     var labelTop: CGFloat = 24*UIScreen.main.bounds.height/1334
     var labelMiddle: CGFloat = 72*UIScreen.main.bounds.height/1334
@@ -117,7 +117,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     timestamp: alert.timestamp,
                     triggered: alert.triggered == "TRUE")
                 
-                block.deleteDelegate = self
                 blocks.append(block)
                 alertScroller.addSubview(block)
                 
@@ -343,6 +342,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressFunc(_:)))
         collectionView?.addGestureRecognizer(longPress)
+        
+        
         
     }
     
@@ -636,15 +637,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
     }
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        scrolling = false
-    }
-    
-    
+   
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == alertScroller {
-            scrolling = true
-        }
         
         if scrollView == container {
             
@@ -999,7 +993,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
     }
     
-    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
     
@@ -1126,13 +1120,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     // ##START V2
-    
+    var index: Int = 0
+
     
     
     
 }
 
 extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AlertCellDelegate {
+    
     func deleteCell(atIndex: Int) {
       
         guard let alertDeleting = Set1.alerts[alertsForCollectionView[atIndex]] else {print("error in deleteing"); return}
@@ -1141,7 +1137,8 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
         alertsForCollectionView.remove(at: atIndex)
         collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
         act(blockLongName: alertDeleting.name)
-       
+        alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
+        collectionView?.reloadData()
     }
     
     
@@ -1153,7 +1150,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
         if let alert = Set1.alerts[alertsForCollectionView[indexPath.row]] {
-        cell.set(tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, cellIndex: indexPath.row, delegate: self)
+            cell.set(tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)
         } else {
             print("error in collection view")
         }
@@ -1173,14 +1170,17 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
             guard let indexPath = collectionView.indexPathForItem(at: point) else {
                 return
             }
+            collectionView.allowScrolling = false
             _ = collectionView.beginInteractiveMovementForItem(at: indexPath)
         case .changed:
             collectionView.updateInteractiveMovementTargetPosition(point)
         case .ended:
+            collectionView.allowScrolling = true
             collectionView.endInteractiveMovement()
             
             
         default:
+            collectionView.allowScrolling = true
             collectionView.cancelInteractiveMovement()
         }
     }
@@ -1190,6 +1190,15 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
         let startIndex = sourceIndexPath.row
         let endIndex = destinationIndexPath.row
         
+        AlertSort.shared.moveItem(alert: alertsForCollectionView[startIndex], at: startIndex, to: endIndex)
+        alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        index = indexPath.row
+        print("index: \(index)")
+    }
+    
+    
     
 }

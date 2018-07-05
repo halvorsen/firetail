@@ -8,11 +8,6 @@
 
 import UIKit
 
-protocol deleteAlertDelegate: class {
-    func act(blockLongName: String)
-    var scrolling:Bool {get}
-}
-
 class AlertBlockView: UIView, UIGestureRecognizerDelegate {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -36,7 +31,6 @@ class AlertBlockView: UIView, UIGestureRecognizerDelegate {
     let xAlphaStart: CGFloat = 0.1
     let xAlphaEnd: CGFloat = 1.0
     var x = UIImageView()
-    var deleteDelegate:deleteAlertDelegate?
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     init(y: CGFloat, stockTicker: String, currentPrice: String, sms: Bool = false, email: Bool = false, flash: Bool = false, urgent: Bool = false, longName: String, push: Bool = false, isGreaterThan: Bool, timestamp: Int, triggered: Bool) {

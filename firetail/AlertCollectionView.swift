@@ -8,17 +8,25 @@
 
 import UIKit
 
-final class AlertCollectionView: UICollectionView {
+final class AlertCollectionView: UICollectionView, UIGestureRecognizerDelegate {
+    
+    internal var allowScrolling = true
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return allowScrolling
+    }
     
     init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout, delegate: UICollectionViewDelegate, dataSource: UICollectionViewDataSource, cellID: String) {
         super.init(frame: frame, collectionViewLayout: layout)
        
         self.delegate = delegate
         self.dataSource = dataSource
-        self.register(AlertCollectionViewCell.self, forCellWithReuseIdentifier: cellID)
-        self.showsVerticalScrollIndicator = false
+        register(AlertCollectionViewCell.self, forCellWithReuseIdentifier: cellID)
+        showsVerticalScrollIndicator = false
         isUserInteractionEnabled = true
-        
+        backgroundColor = CustomColor.background
+       
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -63,4 +71,5 @@ final class AlertCollectionView: UICollectionView {
         }
         return alerts
     }
+    
 }

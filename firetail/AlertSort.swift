@@ -113,4 +113,30 @@ final class AlertSort {
         }
     }
     
+    internal func moveItem(alert: String, at: Int, to: Int) {
+        if alert[0...5] == "Crypto" {
+            cryptoArray = rearrange(array: cryptoArray, at: at, to: to)
+            cryptoDictionary.removeAll()
+            for alert in cryptoArray.enumerated() {
+                cryptoDictionary[alert.element] = alert.offset
+            }
+        }
+        else {
+            stockArray = rearrange(array: stockArray, at: at, to: to)
+            stockDictionary.removeAll()
+            for alert in stockArray.enumerated() {
+                stockDictionary[alert.element] = alert.offset
+            }
+        }
+        
+    }
+    
+    private func rearrange<T>(array: Array<T>, at: Int, to: Int) -> Array<T>{
+        var arr = array
+        let element = arr.remove(at: at)
+        arr.insert(element, at: to)
+        
+        return arr
+    }
+    
 }
