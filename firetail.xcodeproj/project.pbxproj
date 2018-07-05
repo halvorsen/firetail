@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0609E4A61E6284DD005965C5 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */; };
 		0609E4A81E632DF4005965C5 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4A71E632DF4005965C5 /* DashboardViewController.swift */; };
-		0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4A91E635226005965C5 /* AlertBlockView.swift */; };
 		0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4CC1E649578005965C5 /* SignupViewController.swift */; };
 		0609E4CF1E649596005965C5 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4CE1E649596005965C5 /* LoginViewController.swift */; };
 		0609E4D11E64A5EA005965C5 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0609E4D01E64A5EA005965C5 /* Roboto-Italic.ttf */; };
@@ -56,7 +55,6 @@
 /* Begin PBXFileReference section */
 		0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		0609E4A71E632DF4005965C5 /* DashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
-		0609E4A91E635226005965C5 /* AlertBlockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertBlockView.swift; sourceTree = "<group>"; };
 		0609E4CC1E649578005965C5 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		0609E4CE1E649596005965C5 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0609E4D01E64A5EA005965C5 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Italic.ttf"; sourceTree = "<group>"; };
@@ -206,7 +204,6 @@
 				06DDBE251F795A5B00C36CB6 /* CustomColor.swift */,
 				06FDA8DF1E71B9960043BC90 /* Sets.swift */,
 				068D8D241E72F0D700E422DB /* Dot.swift */,
-				0609E4A91E635226005965C5 /* AlertBlockView.swift */,
 				0681F42C1FDC3F8400082DCC /* CompareScroll.swift */,
 				06AC27071E7319F700041D1F /* CompareScrollDot.swift */,
 				06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */,
@@ -465,7 +462,6 @@
 				063A02591F7326D700E530D5 /* CacheManager.swift in Sources */,
 				06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */,
 				06110EA91EB925BF00C901C5 /* ChangePasswordViewController.swift in Sources */,
-				0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */,
 				062BD2DC20E5C7A7002C5E3C /* AlertCollectionViewCell.swift in Sources */,
 				06DDBE261F795A5B00C36CB6 /* CustomColor.swift in Sources */,
 				0609E4A81E632DF4005965C5 /* DashboardViewController.swift in Sources */,

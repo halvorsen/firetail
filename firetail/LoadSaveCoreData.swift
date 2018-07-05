@@ -32,18 +32,16 @@ class LoadSaveCoreData {
         return aaa
     }
 
-    func resaveBlocks(blocks: [AlertBlockView]) {
+    func resaveUser(alerts: [String]) {
         var _userAlerts = [String:String]()
 
-       // Set1.userAlerts.removeAll()
-       
-       
-        for i in 0..<blocks.count {
+        for i in 0..<alerts.count {
            
-            _userAlerts[alertID[i]] = blocks[i].blockLongName
+            _userAlerts[alertID[i]] = alerts[i]
         }
         Set1.userAlerts = _userAlerts
     }
+    
     private var persistentContainer: NSPersistentContainer = {
         
         let container = NSPersistentContainer(name: "firetail")
