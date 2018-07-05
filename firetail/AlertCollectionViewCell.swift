@@ -9,7 +9,7 @@
 import UIKit
 
 protocol AlertCellDelegate: class {
-    func deleteCell(atIndex: Int)
+    func deleteCell(withAlert: String)
 }
 
 final class AlertCollectionViewCell: UICollectionViewCell {
@@ -17,7 +17,7 @@ final class AlertCollectionViewCell: UICollectionViewCell {
     private var ticker = UILabel()
     private var alertList = UILabel()
     private var price = UILabel()
-    private var currentCellIndex = 0
+    private var alertName = ""
     private let line = UILabel()
     private let lighteningBolt = UIImageView(image: #imageLiteral(resourceName: "lighteningBolt"))
     internal weak var alertCellDelegate: AlertCellDelegate?
@@ -39,11 +39,11 @@ final class AlertCollectionViewCell: UICollectionViewCell {
     private var isGreaterThan: Bool = false
     private var isTriggered: Bool = false
     
-    internal func set(tickerText: String, alertListText: String, priceText: String, isTriggered: String, isGreaterThan: Bool, cellIndex: Int, delegate: AlertCellDelegate) {
+    internal func set(alertName: String, tickerText: String, alertListText: String, priceText: String, isTriggered: String, isGreaterThan: Bool, cellIndex: Int, delegate: AlertCellDelegate) {
         ticker.text = tickerText
         alertList.text = alertListText
         price.text = priceText
-        currentCellIndex = cellIndex
+        self.alertName = alertName
         alertCellDelegate = delegate
         if isTriggered.lowercased() == "true" {
             self.isTriggered = true
@@ -105,8 +105,6 @@ final class AlertCollectionViewCell: UICollectionViewCell {
     }
     
     lazy var moveableXConstraint: NSLayoutConstraint = moveableView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0)
-    lazy var xImageViewRightConstraint: NSLayoutConstraint = xImageView.rightAnchor.constraint(equalTo: rightAnchor, constant: -30*widthScalar)
-    lazy var xImageViewRightConstraintInMotion: NSLayoutConstraint = xImageView.centerXAnchor.constraint(equalTo: moveableView.rightAnchor, constant: 30*widthScalar)
     
    private func setupLayoutConstraints() {
 
@@ -180,7 +178,7 @@ final class AlertCollectionViewCell: UICollectionViewCell {
                 UIView.animate(withDuration: 0.3) {
                     self.moveableXConstraint.constant = -375*widthScalar
                     self.layoutIfNeeded()
-                    self.alertCellDelegate?.deleteCell(atIndex: self.currentCellIndex)
+                    self.alertCellDelegate?.deleteCell(withAlert: self.alertName)
                 }
             } else {
                 UIView.animate(withDuration: 0.3) {

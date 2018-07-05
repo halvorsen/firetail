@@ -1129,8 +1129,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
 
 extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AlertCellDelegate {
     
-    func deleteCell(atIndex: Int) {
-      
+    func deleteCell(withAlert: String) {
+        guard let atIndex = alertsForCollectionView.index(of: withAlert) else { return }
         guard let alertDeleting = Set1.alerts[alertsForCollectionView[atIndex]] else {print("error in deleteing"); return}
         myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
         AlertSort.shared.delete(alertDeleting.name)
@@ -1138,7 +1138,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
         collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
         act(blockLongName: alertDeleting.name)
         alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
-        collectionView?.reloadData()
+    
     }
     
     
@@ -1150,7 +1150,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
         if let alert = Set1.alerts[alertsForCollectionView[indexPath.row]] {
-            cell.set(tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)
+            cell.set(alertName: alert.name, tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)
         } else {
             print("error in collection view")
         }
@@ -1192,13 +1192,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
         
         AlertSort.shared.moveItem(alert: alertsForCollectionView[startIndex], at: startIndex, to: endIndex)
         alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
+     
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        index = indexPath.row
-        print("index: \(index)")
-    }
-    
-    
-    
+ 
 }
