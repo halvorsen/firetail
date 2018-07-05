@@ -37,7 +37,7 @@ open class PieChartData: ChartData
         }
     }
 
-    @objc var dataSet: IPieChartDataSet?
+    var dataSet: IPieChartDataSet?
     {
         get
         {

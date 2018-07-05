@@ -20,60 +20,59 @@ import ReachabilitySwift
 
 let widthScalar = UIScreen.main.bounds.width/375
 let heightScalar = UIScreen.main.bounds.height/667
+let commonScalar = UIScreen.main.bounds.width/375
 
-class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, deleteAlertDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
-
-    @objc var activityView = UIActivityIndicatorView()
-    @objc var premiumMember = false
-    @objc var addTextField = UITextField()
-    @objc var stringToPass = "#@$%"
-    let customColor = CustomColor()
-    @objc var menu = UIButton()
-    @objc var add = UIButton()
-    @objc var stockAlerts = UILabel()
-    @objc var slideView = UIView()
-    @objc var returnTap = UITapGestureRecognizer()
-    @objc var returnPan = UIPanGestureRecognizer()
-    @objc var returnSwipe = UISwipeGestureRecognizer()
-    @objc var date = UILabel()
-    @objc var alertAmount = UILabel()
-    @objc var alerts1102 = UILabel()
-    @objc var daysOfTheWeek = UILabel()
-    @objc var (alerts, changeEmail, addPhone, changeBroker, legal, support, goPremium) = (UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton())
-    @objc var container = UIScrollView()
-    @objc var container2 = UIScrollView()
-    @objc var alertScroller = UIScrollView()
-    @objc let mask = UIView()
-    @objc var (monthIndicator,stock1,stock2,stock3) = (UILabel(), UILabel(), UILabel(), UILabel())
-    @objc var dots = [Dot]()
-    @objc let indicatorDotWidth: CGFloat = 33
-    @objc var sv =  CompareScroll()
-    @objc var sv1 =  CompareScroll()
-    @objc var sv2 =  CompareScroll()
-    @objc var svs = [CompareScroll]()
-    @objc var svDot =  CompareScrollDot()
-    @objc var svDot1 =  CompareScrollDot()
-    @objc var svDot2 =  CompareScrollDot()
-    @objc var svsDot = [CompareScrollDot]()
-    @objc var myTimer = Timer()
-    @objc var newAlertTicker = String()
-    @objc var newAlertPrice = Double()
+class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIGestureRecognizerDelegate {
+    var collectionView: AlertCollectionView?
+    var alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
+    var activityView = UIActivityIndicatorView()
+    var premiumMember = false
+    var addTextField = UITextField()
+    var stringToPass = "#@$%"
+    var menu = UIButton()
+    var add = UIButton()
+    var stockAlerts = UILabel()
+    var slideView = UIView()
+    var returnTap = UITapGestureRecognizer()
+    var returnPan = UIPanGestureRecognizer()
+    var returnSwipe = UISwipeGestureRecognizer()
+    var date = UILabel()
+    var alertAmount = UILabel()
+    var alerts1102 = UILabel()
+    var daysOfTheWeek = UILabel()
+    var (alerts, changeEmail, addPhone, changeBroker, legal, support, goPremium) = (UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton())
+    var container = UIScrollView()
+    var container2 = UIScrollView()
+  
+    let mask = UIView()
+    var (monthIndicator,stock1,stock2,stock3) = (UILabel(), UILabel(), UILabel(), UILabel())
+    var dots = [Dot]()
+    let indicatorDotWidth: CGFloat = 33
+    var sv =  CompareScroll()
+    var sv1 =  CompareScroll()
+    var sv2 =  CompareScroll()
+    var svs = [CompareScroll]()
+    var svDot =  CompareScrollDot()
+    var svDot1 =  CompareScrollDot()
+    var svDot2 =  CompareScrollDot()
+    var svsDot = [CompareScrollDot]()
+    var myTimer = Timer()
+    var newAlertTicker = String()
+    var newAlertPrice = Double()
     var newAlertBoolTuple = (false, false, false, false)
-    @objc var amountOfBlocks = Int()
-    @objc var blocks = [AlertBlockView]()
-    @objc var newBlocks = [AlertBlockView]()
+    var amountOfBlocks = Int()
+  
     let loadsave = LoadSaveCoreData()
-    @objc var pan = UIPanGestureRecognizer()
-    @objc var canIScroll = true
-    @objc var myTimer2 = Timer()
+    var pan = UIPanGestureRecognizer()
+    var canIScroll = true
+    var myTimer2 = Timer()
     let myLoadSave = LoadSaveCoreData()
-    @objc var savedFrameOrigin = CGPoint()
-    @objc var l = 1
-    @objc var k = 10000
-    @objc var movingAlert = 9999
-    @objc var alertInMotion = AlertBlockView()
-    @objc var val = CGFloat()
-    @objc var alertID: [String] {
+    var savedFrameOrigin = CGPoint()
+    var l = 1
+    var k = 10000
+    var movingAlert = 9999
+  
+    var alertID: [String] {
         var aaa = [String]()
         for i in 0..<Set1.userAlerts.count {
             switch i {
@@ -89,46 +88,17 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         return aaa
     }
-    @objc var scrolling = false
-    @objc var alertPan = UIPanGestureRecognizer()
+
+    var alertPan = UIPanGestureRecognizer()
     var labelTop: CGFloat = 24*UIScreen.main.bounds.height/1334
     var labelMiddle: CGFloat = 72*UIScreen.main.bounds.height/1334
     var labelBottom: CGFloat = 120*UIScreen.main.bounds.height/1334
+    let alertCollectionCellID = "alertCell"
 
     override func viewWillAppear(_ animated: Bool) {
-        
-        if Set1.userAlerts.count > 0 {
-            for i in 0..<Set1.userAlerts.count {
-                guard let userAlert = Set1.userAlerts[alertID[i]],
-                    let alert = Set1.alerts[userAlert] else {return}
-                let block = AlertBlockView(
-                    y: CGFloat(Set1.userAlerts.count - 1 - i)*120,
-                    stockTicker: alert.ticker,
-                    currentPrice: alert.price,
-                    sms: alert.sms,
-                    email: alert.email,
-                    flash: alert.flash,
-                    urgent: alert.urgent,
-                    longName: userAlert,
-                    push: alert.push,
-                    isGreaterThan: alert.isGreaterThan,
-                    timestamp: alert.timestamp,
-                    triggered: alert.triggered == "TRUE")
-                
-                block.deleteDelegate = self
-                blocks.append(block)
-                alertScroller.addSubview(block)
-                
-            }
-            alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
-        }
+       
         let alertTap = UITapGestureRecognizer(target: self, action: #selector(DashboardViewController.detail(_:)))
         view.addGestureRecognizer(alertTap)
-        if blocks.count > 3 {
-            val = blocks[amountOfBlocks - 2].frame.maxY
-        } else {
-            val = 0
-        }
         
         Set1.saveUserInfo()
        
@@ -150,10 +120,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             }
             
         }
-        
-        alertPan = UIPanGestureRecognizer(target: self, action: #selector(DashboardViewController.move(_:)))
-        view.addGestureRecognizer(alertPan)
-        
+       
         if Set1.token == "none" && Set1.userAlerts.count > 0 {
             if let refreshedToken = InstanceID.instanceID().token() {
                 print("InstanceID token: \(refreshedToken)")
@@ -195,8 +162,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             
         }
         
-        premiumMember = Set1.premium
-        view.backgroundColor = customColor.black33
+        premiumMember = true  // ##TODO: turn off premium premiumMember = Set1.premium
+        view.backgroundColor = CustomColor.black33
         svs = [sv,sv1,sv2]
         let d = Calendar.current.dateComponents([.year, .month, .day], from: Date())
         let m = ["","JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"]
@@ -223,12 +190,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
            goPremium.setTitle("PREMIUM MEMBER", for: .normal)
         }
         let indicator = UILabel(frame: CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667))
-        indicator.backgroundColor = customColor.white77
+        indicator.backgroundColor = CustomColor.white77
         slideView.addSubview(indicator)
         container.frame = CGRect(x: 0, y: 86*screenHeight/667, width: screenWidth, height: 259*screenHeight/667)
         slideView.addSubview(container)
         container.delegate = self
-        alertScroller.delegate = self
+   
         container2.frame = CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667)
         container2.isUserInteractionEnabled = false
         container2.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
@@ -241,9 +208,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         container.showsVerticalScrollIndicator = false
         addLabel(name: monthIndicator, text: Set1.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 30, lines: 1)
         
-        addLabel(name: stock1, text: "", textColor: customColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
-        addLabel(name: stock2, text: "", textColor: customColor.white128, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
-        addLabel(name: stock3, text: "", textColor: customColor.white209, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
+        addLabel(name: stock1, text: "", textColor: CustomColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
+        addLabel(name: stock2, text: "", textColor: CustomColor.white128, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
+        addLabel(name: stock3, text: "", textColor: CustomColor.white209, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
         stock1.frame.origin.y = labelTop
         stock2.frame.origin.y = labelMiddle
         stock3.frame.origin.y = labelBottom
@@ -270,7 +237,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         //slideview stuff//
         slideView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         view.addSubview(slideView)
-        slideView.backgroundColor = customColor.black33
+        slideView.backgroundColor = CustomColor.black33
         
         for i in 0...4 {
             let line = UIView()
@@ -284,7 +251,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
        
         addTextField = UITextField(frame: CGRect(x: 0,y: 200,width: screenWidth ,height: 200*screenHeight/1334))
         addTextField.placeholder = "   Enter Ticker"
-        addTextField.setValue(customColor.white68, forKeyPath: "_placeholderLabel.textColor")
+        addTextField.setValue(CustomColor.white68, forKeyPath: "_placeholderLabel.textColor")
         addTextField.font = UIFont.systemFont(ofSize: 25)
         addTextField.autocorrectionType = UITextAutocorrectionType.no
         addTextField.keyboardType = UIKeyboardType.default
@@ -292,8 +259,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         addTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         addTextField.delegate = self
-        addTextField.backgroundColor = customColor.background
-        addTextField.textColor = customColor.white68
+        addTextField.backgroundColor = CustomColor.background
+        addTextField.textColor = CustomColor.white68
         addTextField.alpha = 0
         addTextField.tag = 1
         addTextField.keyboardAppearance = .dark
@@ -308,13 +275,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         slideView.addSubview(stockAlerts)
         let line = UILabel()
         addLabel(name: line, text: "", textColor: .clear, textAlignment: .center, fontName: "", fontSize: 1, x: 0, y: 968, width: 750, height: 2, lines: 0)
-        line.backgroundColor = customColor.alertLines
+        line.backgroundColor = CustomColor.alertLines
         slideView.addSubview(line)
-        alertScroller.frame = CGRect(x: 0, y: 974*screenHeight/1334, width: screenWidth, height: 360*screenHeight/1334)
-        alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(Set1.userAlerts.count)*120*screenHeight/1334)
-        slideView.addSubview(alertScroller)
-        
-        //alertScroller.addSubview(googBlock)
         slideView.layer.shadowColor = UIColor.black.cgColor
         slideView.layer.shadowOpacity = 1
         slideView.layer.shadowOffset = CGSize.zero
@@ -324,86 +286,32 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         returnSwipe = UISwipeGestureRecognizer(target: self, action: #selector(DashboardViewController.menuReturnFunc(_:)))
         
         mask.frame = container.frame
-        mask.backgroundColor = customColor.black33
+        mask.backgroundColor = CustomColor.black33
         slideView.addSubview(mask)
         //amountOfBlocks = loadsave.amount()
         amountOfBlocks = Set1.userAlerts.count
         whoseOnFirst(container)
         
         
-    }
+        // START VERSION 2
+        let collectionLayout = UICollectionViewFlowLayout()
+        collectionLayout.minimumInteritemSpacing = 0
+        collectionLayout.minimumLineSpacing = 0
+        let frame = CGRect(x: 0, y: 974*screenHeight/1334, width: screenWidth, height: 360*screenHeight/1334)
+        collectionView = AlertCollectionView(frame: frame, collectionViewLayout: collectionLayout, delegate: self, dataSource: self, cellID: alertCollectionCellID)
     
-    @objc var movingBlock : AlertBlockView?
-    @objc var startingLocationX = CGFloat()
-    @objc var endingLocationX = CGFloat()
-    
-    
-    @objc private func move(_ gesture: UIGestureRecognizer) {
+        slideView.addSubview(collectionView!)
         
-        switch gesture.state {
-            
-        case .began:
-            for block in blocks {
-                if block.frame.contains(gesture.location(in: alertScroller)) && alertScroller.frame.contains(gesture.location(in: view)) {
-                    movingBlock = block
-                }
-                startingLocationX = gesture.location(in: alertScroller).x
-                endingLocationX = gesture.location(in: alertScroller).x
-            }
-            
-        case .changed:
-            guard let _movingBlock = movingBlock else {return}
-            endingLocationX = gesture.location(in: alertScroller).x
-            var currentAlpha = abs(startingLocationX - endingLocationX)/(70*screenWidth/375)
-            
-            if currentAlpha > 1.0 { currentAlpha = 1.0 }
-            _movingBlock.ex.alpha = currentAlpha
-            if endingLocationX - startingLocationX < -60*screenWidth/375 {
-                UIView.animate(withDuration: 0.1) { [weak self] in
-                    guard let weakself = self else {return}
-                    _movingBlock.ex.frame.origin.x = weakself.screenWidth + (weakself.endingLocationX - weakself.startingLocationX)
-                }
-            }
-            if endingLocationX - startingLocationX < 0 {//check if another alert is scrolling first
-                UIView.animate(withDuration: 0.1) { [weak self] in
-                    guard let weakself = self else {return}
-                    _movingBlock.slideView.frame.origin.x = weakself.endingLocationX - weakself.startingLocationX
-                    
-                }
-                
-            } else {
-                UIView.animate(withDuration: 0.5) {
-                    _movingBlock.slideView.frame.origin.x = 0
-                }
-            }
-            
-            
-        case .ended:
-            guard let _movingBlock = movingBlock else {return}
-            movingBlock = nil
-            if _movingBlock.slideView.frame.origin.x < -60*screenWidth/375 {
-                UIView.animate(withDuration: 0.2) { [weak self] in
-                    guard let weakself = self else {return}
-                    _movingBlock.slideView.frame.origin.x = -weakself.screenWidth*435/375
-                    _movingBlock.ex.frame.origin.x = -60*weakself.screenWidth/375
-                }
-                view.removeGestureRecognizer(alertPan)
-                delay(bySeconds: 0.3) { [weak self] in
-                    guard let weakself = self else {return}
-                    weakself.act(blockLongName: _movingBlock.blockLongName)
-                }
-                
-            } else {
-                UIView.animate(withDuration: 0.1) {
-                    _movingBlock.slideView.frame.origin.x = 0
-                }
-
-            }
-            
-        default: break
-            
-        }
+        longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressFunc(_:)))
+        collectionView?.addGestureRecognizer(longPress)
+        
+        
+        
     }
+    
+    var longPress = UILongPressGestureRecognizer()
+    var startingLocationX = CGFloat()
+    var endingLocationX = CGFloat()
     
     @objc private func finishedFetchingTop3Stocks() {
     
@@ -433,63 +341,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         stock1.text = ""
         stock2.text = ""
         stock3.text = ""
-        var check = false
-        var position: CGFloat = 1
-        var _setTi = [String]()
         
-        for i in 0..<blocks.count {
-            
-            
-            if blockLongName == blocks[i].blockLongName {
-                Set1.ti.removeAll()
-                
-                blocks[i].removeFromSuperview()
-                
-                guard let alertChanging = Set1.alerts[blocks[i].blockLongName] else {return}
-                
-                var triggerStringNotBool = "false"
-                if alertChanging.triggered == "TRUE" {
-                    triggerStringNotBool = "true"
-                }
-                //   alertSafetyShuffle()
-                myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: alertChanging.ticker, price: blocks[i].priceDouble, isGreaterThan: alertChanging.isGreaterThan, deleted: true, email: alertChanging.email, sms: alertChanging.sms, flash: alertChanging.flash, urgent: alertChanging.urgent, triggered: triggerStringNotBool, push: alertChanging.push, alertLongName: blocks[i].blockLongName, priceString: blocks[i].currentPriceGlobal)
-                
-                check = true
-                for k in 0..<i {
-                    blocks[k].layer.zPosition = position; position += 1
-                    newBlocks.append(blocks[k])
-                    _setTi.append(blocks[k].stockTickerGlobal)
-                    
-                }
-                if i != (blocks.count - 1) {
-                    for k in (i+1)..<blocks.count {
-                        blocks[k].layer.zPosition = position; position += 1
-                        newBlocks.append(blocks[k])
-                        _setTi.append(blocks[k].stockTickerGlobal)
-                        
-                    }
-                }
-            }
-            
-            if !check {
-                UIView.animate(withDuration: 0.6) { [weak self] in
-                    guard let weakself = self else {return}
-                    weakself.blocks[i].frame.origin.y -= 120*weakself.screenHeight/1334
-                    
-                }
-            }
-        }
-        Set1.ti = _setTi.reversed()
-        blocks = newBlocks
-        newBlocks.removeAll()
+        Set1.ti = alertsForCollectionView
+       
         amountOfBlocks -= 1
         
         alertAmount.text = String(amountOfBlocks)
-        alertScroller.contentSize = CGSize(width: screenWidth, height: CGFloat(amountOfBlocks)*120*screenHeight/1334)
-        alertScroller.backgroundColor = customColor.black33
-        alertScroller.showsVerticalScrollIndicator = false
  
-        loadsave.resaveBlocks(blocks: blocks)
+        loadsave.resaveUser(alerts: alertsForCollectionView)
     
         reboot()
         
@@ -512,35 +371,21 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         startedPan = true
     }
-    
-    
-    
-    private func returnAllAlertSlides() {
-        for i in 0..<blocks.count {
-            // print("origin: \(blocks[i].frame.origin.x)")
-            if blocks[i].slideView.frame.origin.x < -1 {
-                UIView.animate(withDuration: 0.6) { [weak self] in
-                    guard let weakself = self else {return}
-                    weakself.blocks[i].slideView.frame.origin.x = 0
-                }
-            }
-        }
-    }
-    
+   
     var p = Int()
     
     @objc private func detail(_ gesture: UIGestureRecognizer) {
-        for block in blocks {
-            
-            let frame = view.convert(block.frame, from:alertScroller)
-            if frame.contains(gesture.location(in: view)) {
-                
-                stringToPass = block.stockTickerGlobal
-                goToGraph()
-            }
-        }
-        
-        
+//        for block in blocks {
+//
+//            let frame = view.convert(block.frame, from:alertScroller)
+//            if frame.contains(gesture.location(in: view)) {
+//
+//                stringToPass = block.stockTickerGlobal
+//                goToGraph()
+//            }
+//        }
+//
+
     }
     
     @objc func reboot() {
@@ -572,44 +417,44 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             break
         case 1:
             
-            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
             container2.addSubview(svDot)
             
         case 2:
             
-            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
             container2.addSubview(svDot)
             guard Set1.ti.count > 1,
                 let ti1 = Set1.oneYearDictionary[Set1.ti[1]],
                 ti1.count > 0 else {return}
-            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.ti[1], color: customColor.white128)
+            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.ti[1], color: CustomColor.white128)
             container.addSubview(sv1)
-            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.ti[1], color: customColor.white128)
+            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.ti[1], color: CustomColor.white128)
             container2.addSubview(svDot1)
             
         default:
             
-            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: customColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
             container2.addSubview(svDot)
             guard Set1.ti.count > 1,
                 let ti1 = Set1.oneYearDictionary[Set1.ti[1]],
                 ti1.count > 0 else {return}
-            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.ti[1], color: customColor.white128)
+            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.ti[1], color: CustomColor.white128)
             container.addSubview(sv1)
-            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.ti[1], color: customColor.white128)
+            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.ti[1], color: CustomColor.white128)
             container2.addSubview(svDot1)
             guard Set1.ti.count > 2,
                 let ti2 = Set1.oneYearDictionary[Set1.ti[2]],
                 ti2.count > 0 else {return}
-            sv2 =  CompareScroll(graphData: ti2, stockName: Set1.ti[2], color: customColor.white209)
+            sv2 =  CompareScroll(graphData: ti2, stockName: Set1.ti[2], color: CustomColor.white209)
             container.addSubview(sv2)
-            svDot2 =  CompareScrollDot(graphData: ti2, stockName: Set1.ti[2], color: customColor.white209)
+            svDot2 =  CompareScrollDot(graphData: ti2, stockName: Set1.ti[2], color: CustomColor.white209)
             container2.addSubview(svDot2
                 
             )
@@ -622,15 +467,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
     }
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        scrolling = false
-    }
-    
-    
+   
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == alertScroller {
-            scrolling = true
-        }
         
         if scrollView == container {
             
@@ -639,7 +477,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             whoseOnFirst(scrollView)
         }
         
-        returnAllAlertSlides()
     }
     
     
@@ -831,7 +668,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 else if results.restoredPurchases.count > 0 {
                     
                     Set1.premium = true
-                    //weakself.loadsave.savePurchase(purchase: "firetail.iap.premium")
                     weakself.premiumMember = true
                     weakself.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
                 }
@@ -862,7 +698,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     @objc func menuFunc() {
-        returnAllAlertSlides()
+   
         if slideView.frame.origin.x == 0 {
             UIView.animate(withDuration: 0.3) {[weak self] in
                 guard let weakself = self else {return}
@@ -901,7 +737,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             container.isUserInteractionEnabled = true
         }
     }
-    @objc var hitOnce = true
+    var hitOnce = true
     @objc private func addFunc(_ sender: UIButton) {
         if hitOnce {
             hitOnce = false
@@ -986,7 +822,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
     }
     
-    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
     
@@ -1068,11 +904,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             var bar = UILabel()
             if day > 1 {
                 bar = UILabel(frame: CGRect(x: 93*screenWidth/750, y: 406*screenHeight/1334, width: 6*screenWidth/750, height: 74*screenHeight/1334))
-                bar.backgroundColor = customColor.yellow
+                bar.backgroundColor = CustomColor.yellow
                 view.addSubview(bar)
             } else if day == 1 {
                 bar = UILabel(frame: CGRect(x: 93*screenWidth/750, y: 446*screenHeight/1334, width: 6*screenWidth/750, height: 34*screenHeight/1334))
-                bar.backgroundColor = customColor.yellow
+                bar.backgroundColor = CustomColor.yellow
                 view.addSubview(bar)
             }
             switch i {
@@ -1111,4 +947,81 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
     }
+    
+    // ##START V2
+    var index: Int = 0
+
+    
+    
+    
+}
+
+extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AlertCellDelegate {
+    
+    func deleteCell(withAlert: String) {
+        guard let atIndex = alertsForCollectionView.index(of: withAlert) else { return }
+        guard let alertDeleting = Set1.alerts[alertsForCollectionView[atIndex]] else {print("error in deleteing"); return}
+        myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
+        AlertSort.shared.delete(alertDeleting.name)
+        alertsForCollectionView.remove(at: atIndex)
+        collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
+        act(blockLongName: alertDeleting.name)
+        alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
+    
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        collectionView.contentSize.height = CGFloat(alertsForCollectionView.count) * 60 * commonScalar
+        return alertsForCollectionView.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
+        if let alert = Set1.alerts[alertsForCollectionView[indexPath.row]] {
+            cell.set(alertName: alert.name, tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)
+        } else {
+            print("error in collection view")
+        }
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 375*commonScalar, height: 60*commonScalar)
+    }
+    
+    @objc private func longPressFunc(_ sender: UILongPressGestureRecognizer) {
+
+        guard let collectionView = collectionView else { return }
+        let point = sender.location(in: collectionView)
+        switch sender.state {
+        case .began:
+            guard let indexPath = collectionView.indexPathForItem(at: point) else {
+                return
+            }
+            collectionView.allowScrolling = false
+            _ = collectionView.beginInteractiveMovementForItem(at: indexPath)
+        case .changed:
+            collectionView.updateInteractiveMovementTargetPosition(point)
+        case .ended:
+            collectionView.allowScrolling = true
+            collectionView.endInteractiveMovement()
+            
+            
+        default:
+            collectionView.allowScrolling = true
+            collectionView.cancelInteractiveMovement()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        
+        let startIndex = sourceIndexPath.row
+        let endIndex = destinationIndexPath.row
+        
+        AlertSort.shared.moveItem(alert: alertsForCollectionView[startIndex], at: startIndex, to: endIndex)
+        alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
+     
+    }
+ 
 }

@@ -13,17 +13,16 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     
     let backArrow = UIButton()
     let quickPick = UILabel()
-    let customColor = CustomColor()
     var stockSymbolTextField = UITextField()
     let stockSymbol = UILabel()
     var newAlertTicker = String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = customColor.black24
+        view.backgroundColor = CustomColor.black24
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockTickerViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
-        addLabel(name: quickPick, text: "QUICK PICK", textColor: customColor.labelGray, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 11, x: 36, y: 180, width: 200, height: 44, lines: 1)
+        addLabel(name: quickPick, text: "QUICK PICK", textColor: CustomColor.labelGray, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 11, x: 36, y: 180, width: 200, height: 44, lines: 1)
         view.addSubview(quickPick)
         let boxButtons:[(CGFloat,CGFloat,String)] = [
             
@@ -47,7 +46,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
             myButton.contentHorizontalAlignment = .center
         }
         
-        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.labelGray, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 808, width: 400, height: 42, lines: 1)
+        addLabel(name: stockSymbol, text: "stock symbol", textColor: CustomColor.labelGray, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 808, width: 400, height: 42, lines: 1)
         view.addSubview(stockSymbol)
         stockSymbolTextField.delegate = self
         stockSymbolTextField = UITextField(frame: CGRect(x: 30*screenWidth/375,y: 368*screenHeight/667,width: 110*screenWidth/375 ,height: 28*screenHeight/667))

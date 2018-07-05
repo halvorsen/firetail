@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0609E4A61E6284DD005965C5 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */; };
 		0609E4A81E632DF4005965C5 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4A71E632DF4005965C5 /* DashboardViewController.swift */; };
-		0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4A91E635226005965C5 /* AlertBlockView.swift */; };
 		0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4CC1E649578005965C5 /* SignupViewController.swift */; };
 		0609E4CF1E649596005965C5 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4CE1E649596005965C5 /* LoginViewController.swift */; };
 		0609E4D11E64A5EA005965C5 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0609E4D01E64A5EA005965C5 /* Roboto-Italic.ttf */; };
@@ -20,6 +19,8 @@
 		0617DFA11E7B6F81006D73C5 /* GridLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0617DFA01E7B6F81006D73C5 /* GridLine.swift */; };
 		0617DFA31E7C7E7F006D73C5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0617DFA21E7C7E7F006D73C5 /* SettingsViewController.swift */; };
 		0617DFA51E7DBDC7006D73C5 /* LoadSaveCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */; };
+		062BD2DC20E5C7A7002C5E3C /* AlertCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062BD2DB20E5C7A7002C5E3C /* AlertCollectionViewCell.swift */; };
+		062BD2DE20E6EC81002C5E3C /* AlertCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062BD2DD20E6EC81002C5E3C /* AlertCollectionView.swift */; };
 		062CC7371EDCA66400E2520A /* IndexListOfStocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */; };
 		063A02591F7326D700E530D5 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063A02581F7326D700E530D5 /* CacheManager.swift */; };
 		064193691F08483600B7B3FE /* DroidSerif-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 064193681F0847C500B7B3FE /* DroidSerif-Regular.ttf */; };
@@ -41,6 +42,8 @@
 		069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1361E538926003BDFE2 /* ViewSetup.swift */; };
 		06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC27071E7319F700041D1F /* CompareScrollDot.swift */; };
 		06BB409C1F753E330068636E /* AppLoadingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BB409B1F753E330068636E /* AppLoadingData.swift */; };
+		06DBD44820EB14C500EFD6AB /* AlertSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44720EB14C500EFD6AB /* AlertSort.swift */; };
+		06DBD44A20EB152200EFD6AB /* MyFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44920EB152200EFD6AB /* MyFileManager.swift */; };
 		06DDBE261F795A5B00C36CB6 /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DDBE251F795A5B00C36CB6 /* CustomColor.swift */; };
 		06F15E901ED7B3ED00288413 /* Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F15E8F1ED7B3ED00288413 /* Google.swift */; };
 		06FC95B91E77415500DF7559 /* DailyGraphForAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */; };
@@ -52,7 +55,6 @@
 /* Begin PBXFileReference section */
 		0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		0609E4A71E632DF4005965C5 /* DashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
-		0609E4A91E635226005965C5 /* AlertBlockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertBlockView.swift; sourceTree = "<group>"; };
 		0609E4CC1E649578005965C5 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		0609E4CE1E649596005965C5 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0609E4D01E64A5EA005965C5 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Italic.ttf"; sourceTree = "<group>"; };
@@ -63,6 +65,8 @@
 		0617DFA01E7B6F81006D73C5 /* GridLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLine.swift; sourceTree = "<group>"; };
 		0617DFA21E7C7E7F006D73C5 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadSaveCoreData.swift; sourceTree = "<group>"; };
+		062BD2DB20E5C7A7002C5E3C /* AlertCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertCollectionViewCell.swift; sourceTree = "<group>"; };
+		062BD2DD20E6EC81002C5E3C /* AlertCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertCollectionView.swift; sourceTree = "<group>"; };
 		062CC7361EDCA66400E2520A /* IndexListOfStocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexListOfStocks.swift; sourceTree = "<group>"; };
 		063A02581F7326D700E530D5 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		063A025A1F741E0A00E530D5 /* firetail v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "firetail v2.xcdatamodel"; sourceTree = "<group>"; };
@@ -88,6 +92,8 @@
 		06A914021E817E0900D032A9 /* firetail.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = firetail.entitlements; sourceTree = "<group>"; };
 		06AC27071E7319F700041D1F /* CompareScrollDot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScrollDot.swift; sourceTree = "<group>"; };
 		06BB409B1F753E330068636E /* AppLoadingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingData.swift; sourceTree = "<group>"; };
+		06DBD44720EB14C500EFD6AB /* AlertSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSort.swift; sourceTree = "<group>"; };
+		06DBD44920EB152200EFD6AB /* MyFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFileManager.swift; sourceTree = "<group>"; };
 		06DDBE251F795A5B00C36CB6 /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
 		06F15E8F1ED7B3ED00288413 /* Google.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Google.swift; sourceTree = "<group>"; };
 		06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyGraphForAlertView.swift; sourceTree = "<group>"; };
@@ -111,6 +117,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		062BD2DF20E6EC98002C5E3C /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				062BD2DB20E5C7A7002C5E3C /* AlertCollectionViewCell.swift */,
+				062BD2DD20E6EC81002C5E3C /* AlertCollectionView.swift */,
+				06DBD44720EB14C500EFD6AB /* AlertSort.swift */,
+				06DBD44920EB152200EFD6AB /* MyFileManager.swift */,
+			);
+			name = Dashboard;
+			sourceTree = "<group>";
+		};
 		069FD1151E5382D3003BDFE2 = {
 			isa = PBXGroup;
 			children = (
@@ -145,6 +162,7 @@
 				06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */,
 				069FD1301E5382D4003BDFE2 /* Info.plist */,
 				069FD1281E5382D4003BDFE2 /* firetail.xcdatamodeld */,
+				062BD2DF20E6EC98002C5E3C /* Dashboard */,
 			);
 			path = firetail;
 			sourceTree = "<group>";
@@ -186,7 +204,6 @@
 				06DDBE251F795A5B00C36CB6 /* CustomColor.swift */,
 				06FDA8DF1E71B9960043BC90 /* Sets.swift */,
 				068D8D241E72F0D700E422DB /* Dot.swift */,
-				0609E4A91E635226005965C5 /* AlertBlockView.swift */,
 				0681F42C1FDC3F8400082DCC /* CompareScroll.swift */,
 				06AC27071E7319F700041D1F /* CompareScrollDot.swift */,
 				06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */,
@@ -415,6 +432,7 @@
 				069FD1241E5382D4003BDFE2 /* GraphViewController.swift in Sources */,
 				069FD12A1E5382D4003BDFE2 /* firetail.xcdatamodeld in Sources */,
 				06FC95B91E77415500DF7559 /* DailyGraphForAlertView.swift in Sources */,
+				06DBD44820EB14C500EFD6AB /* AlertSort.swift in Sources */,
 				06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */,
 				06F15E901ED7B3ED00288413 /* Google.swift in Sources */,
 				0681F42D1FDC3F8400082DCC /* CompareScroll.swift in Sources */,
@@ -422,18 +440,20 @@
 				062CC7371EDCA66400E2520A /* IndexListOfStocks.swift in Sources */,
 				0641936B1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift in Sources */,
 				0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */,
+				06DBD44A20EB152200EFD6AB /* MyFileManager.swift in Sources */,
 				0617DFA11E7B6F81006D73C5 /* GridLine.swift in Sources */,
 				06478E6F1EE5CC100016DF88 /* AddStockTickerViewController.swift in Sources */,
 				063A02591F7326D700E530D5 /* CacheManager.swift in Sources */,
 				06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */,
 				06110EA91EB925BF00C901C5 /* ChangePasswordViewController.swift in Sources */,
-				0609E4AA1E635226005965C5 /* AlertBlockView.swift in Sources */,
+				062BD2DC20E5C7A7002C5E3C /* AlertCollectionViewCell.swift in Sources */,
 				06DDBE261F795A5B00C36CB6 /* CustomColor.swift in Sources */,
 				0609E4A81E632DF4005965C5 /* DashboardViewController.swift in Sources */,
 				06BB409C1F753E330068636E /* AppLoadingData.swift in Sources */,
 				069FD1221E5382D4003BDFE2 /* AppDelegate.swift in Sources */,
 				069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */,
 				0617DFA31E7C7E7F006D73C5 /* SettingsViewController.swift in Sources */,
+				062BD2DE20E6EC81002C5E3C /* AlertCollectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

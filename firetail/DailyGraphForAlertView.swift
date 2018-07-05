@@ -14,22 +14,22 @@ import UIKit
 
 class DailyGraphForAlertView: UIView {
     
-    @objc let screenWidth = UIScreen.main.bounds.width
-    @objc let screenHeight = UIScreen.main.bounds.height
-    @objc let fontSizeMultiplier = UIScreen.main.bounds.width / 375
-    let customColor = CustomColor()
-    @objc var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
-    @objc var __set = [CGFloat]()
-    @objc var passedColor = UIColor()
-    @objc let scale: CGFloat = 4
-    @objc var stock = ""
-    @objc var pointSet = [CGFloat]()
-    @objc var labels = [UILabel]()
-    @objc var allStockValues = [String]()
-    @objc var grids = [GridLine]()
-    @objc var dayLabels = [UILabel]()
-    @objc var month = [String]()
-    @objc var day = [Int]()
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    let fontSizeMultiplier = UIScreen.main.bounds.width / 375
+
+    var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
+    var __set = [CGFloat]()
+    var passedColor = UIColor()
+    let scale: CGFloat = 4
+    var stock = ""
+    var pointSet = [CGFloat]()
+    var labels = [UILabel]()
+    var allStockValues = [String]()
+    var grids = [GridLine]()
+    var dayLabels = [UILabel]()
+    var month = [String]()
+    var day = [Int]()
     
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
@@ -37,7 +37,7 @@ class DailyGraphForAlertView: UIView {
     init(graphData: [Double], dateArray: [(String,Int)], frame: CGRect = CGRect(x: 0, y:0*UIScreen.main.bounds.height/667, width: 4*UIScreen.main.bounds.width, height: 160*UIScreen.main.bounds.height/667)) {
 
         super.init(frame: frame)
-        self.backgroundColor = customColor.black33
+        self.backgroundColor = CustomColor.black33
         var _graphData = [Double]()
         var a = 0; if String(format:"%.2f", graphData[dateArray.count-1]) == String(format:"%.2f", graphData[dateArray.count-2]) { a = 1 }
         for i in 0..<20 {
@@ -86,8 +86,8 @@ class DailyGraphForAlertView: UIView {
         path.close()
         
         
-       // customColor.whiteAlpha.setStroke()
-        customColor.black21.setFill()
+       // CustomColor.whiteAlpha.setStroke()
+        CustomColor.black21.setFill()
         path.lineWidth = 1
         path.fill()
        // path.stroke()
@@ -100,14 +100,14 @@ class DailyGraphForAlertView: UIView {
         
     }
     
-    @objc var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
+    var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
     
     @objc func coordXFor(index: Int) -> CGFloat {
         return bounds.height / scale - (bounds.height/scale) * data[index] / (data.max() ?? 0)
     }
     
     
-    @objc var points = [CGPoint]()
+    var points = [CGPoint]()
     
     @objc func quadCurvedPath() -> UIBezierPath {
         let path = UIBezierPath()
@@ -147,24 +147,24 @@ class DailyGraphForAlertView: UIView {
             
         }
         let v = UIView(frame: CGRect(x: 0, y: -50*screenHeight/667, width: self.frame.width, height: 50*screenHeight/667))
-        v.backgroundColor = customColor.black21
+        v.backgroundColor = CustomColor.black21
       
         self.addSubview(v)
         
         guard points.first != nil else {return path}
         guard points.last != nil else {return path}
         let w = UIView(frame: CGRect(x: -400, y: -50*screenHeight/667, width: 400, height: 0.9*4*points.first!.y + 55*screenHeight/667))
-        w.backgroundColor = customColor.black21
+        w.backgroundColor = CustomColor.black21
         
         self.addSubview(w)
         
         let ww = UIView(frame: CGRect(x: self.frame.maxX, y: -50*screenHeight/667, width: 400, height: 0.9*4*points.last!.y + 55*screenHeight/667))
-        ww.backgroundColor = customColor.black21
+        ww.backgroundColor = CustomColor.black21
       
         self.addSubview(ww)
         
         let extraBottomGray = UIView(frame: CGRect(x: 0, y: 160*screenHeight/667, width: screenWidth*5, height: 30*screenHeight/667))
-        extraBottomGray.backgroundColor = customColor.black33
+        extraBottomGray.backgroundColor = CustomColor.black33
      
         self.addSubview(extraBottomGray)
         
@@ -190,7 +190,7 @@ class DailyGraphForAlertView: UIView {
             k.text = dayString + " " + monthString.lowercased()
             k.frame = CGRect(x: scale*(points[i].x)-18*screenWidth/375, y: 155*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
             k.font = UIFont(name: "Roboto-Regular", size: 13*fontSizeMultiplier)
-            k.textColor = customColor.whiteAlpha30
+            k.textColor = CustomColor.whiteAlpha30
             k.textAlignment = .center
             k.alpha = 0.0
          
@@ -201,7 +201,7 @@ class DailyGraphForAlertView: UIView {
             
             let grid = GridLine()
             grid.frame = CGRect(x: 4*points[i].x, y: -100*screenWidth/667, width: screenWidth/375, height: 245*screenHeight/667)
-            grid.backgroundColor = customColor.whiteAlpha
+            grid.backgroundColor = CustomColor.whiteAlpha
        
             self.addSubview(grid)
             

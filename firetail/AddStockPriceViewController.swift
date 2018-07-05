@@ -16,7 +16,6 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     let backArrow = UIButton()
     var graph = DailyGraphForAlertView()
     var container = UIScrollView()
-    var customColor = CustomColor()
     var dial = UIScrollView()
     var displayValues = [Double]()
     var priceLabel = UILabel()
@@ -51,23 +50,23 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         
         let blockInBackground = UIView()
         blockInBackground.frame = CGRect(x: 0, y: 424*screenHeight/667, width: screenWidth, height: 70*screenHeight/667)
-        blockInBackground.backgroundColor = customColor.black24
+        blockInBackground.backgroundColor = CustomColor.black24
         
         
         arrow.frame = CGRect(x: 212*screenWidth/375, y: 456*screenHeight/667, width: 10*screenWidth/375, height: 11*screenWidth/375)
         
         
-        addLabel(name: setPriceAlert, text: "Set Price Alert", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 56, y: 885, width: 300, height: 80, lines: 1)
+        addLabel(name: setPriceAlert, text: "Set Price Alert", textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 56, y: 885, width: 300, height: 80, lines: 1)
         
         addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif", fontSize: 20, x: 60, y: 606, width: 200, height: 56, lines: 1)
         
         
-        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 56, y: 657, width: 240, height: 80, lines: 1)
+        addLabel(name: stockSymbol, text: "stock symbol", textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 56, y: 657, width: 240, height: 80, lines: 1)
         
         
         container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 260*screenHeight/667))
         container.contentSize = CGSize(width: 3.8*screenWidth, height: container.bounds.height)
-        container.backgroundColor = customColor.black33
+        container.backgroundColor = CustomColor.black33
         container.contentOffset =  CGPoint(x: 2.7*screenWidth, y: 0)
         container.clipsToBounds = false
         container.showsHorizontalScrollIndicator = false
@@ -78,7 +77,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         priceLabel.textAlignment = .right
         priceLabel.textColor = .white
         
-        dial.backgroundColor = customColor.black42
+        dial.backgroundColor = CustomColor.black42
         dial.frame = CGRect(x: 0, y: 494*screenHeight/667, width: screenWidth, height: 103*screenWidth/375)
         dial.contentSize = CGSize(width: 400.182*screenWidth, height: dial.bounds.height)
         
@@ -104,7 +103,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         myBezier.close()
         let myLayer = CAShapeLayer()
         myLayer.path = myBezier.cgPath
-        myLayer.fillColor = customColor.black24.cgColor
+        myLayer.fillColor = CustomColor.black24.cgColor
         
         addButton(name: sett, x: 0, y: bottomOfDial, width: 750, height: 1334 - bottomOfDial, title: "SET", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.setFunc(_:)), addSubview: true)
         sett.contentHorizontalAlignment = .center
@@ -126,7 +125,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = customColor.black33
+        view.backgroundColor = CustomColor.black33
         activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         activityView.center.y = view.center.y
         activityView.center.x = view.center.x
@@ -218,7 +217,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     func populateDialView() {
         
         let backdrop = UIView()
-        backdrop.backgroundColor = customColor.black42
+        backdrop.backgroundColor = CustomColor.black42
         backdrop.frame.size = dial.contentSize
         backdrop.frame.origin = CGPoint(x: 0, y: 0)
         for i in 0...50 {
@@ -250,12 +249,12 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         
         let dialMask = UILabel()
         dialMask.frame = CGRect(x: 0, y: 514*screenHeight/667, width: screenWidth, height: 60*screenWidth/375)
-        dialMask.backgroundColor = customColor.black42Alpha0
+        dialMask.backgroundColor = CustomColor.black42Alpha0
         
         view.addSubview(dialMask)
         
-        addGradient(mask: dialMask, color1: customColor.black42, color2: customColor.black42Alpha0, start: CGPoint(x: -0.2, y: 0.0), end: CGPoint(x: 0.45, y: 0.0))
-        addGradient(mask: dialMask, color1: customColor.black42Alpha0, color2: customColor.black42, start: CGPoint(x: 0.55, y: 0.0), end: CGPoint(x: 1.2, y: 0.0))
+        addGradient(mask: dialMask, color1: CustomColor.black42, color2: CustomColor.black42Alpha0, start: CGPoint(x: -0.2, y: 0.0), end: CGPoint(x: 0.45, y: 0.0))
+        addGradient(mask: dialMask, color1: CustomColor.black42Alpha0, color2: CustomColor.black42, start: CGPoint(x: 0.55, y: 0.0), end: CGPoint(x: 1.2, y: 0.0))
         
     }
     

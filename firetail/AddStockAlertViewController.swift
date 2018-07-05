@@ -23,20 +23,19 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             Set1.saveUserInfo()
         }
     }
-    @objc let backArrow = UIButton()
-    @objc var newAlertTicker = String()
-    @objc var newAlertPrice = Double()
-    var customColor = CustomColor()
-    @objc var newAlertTickerLabel = UILabel()
-    @objc var newAlertPriceLabel = UILabel()
-    @objc let priceAlert = UILabel()
-    @objc let stockSymbol = UILabel()
-    @objc var addAlert = UIButton()
+    let backArrow = UIButton()
+    var newAlertTicker = String()
+    var newAlertPrice = Double()
+    var newAlertTickerLabel = UILabel()
+    var newAlertPriceLabel = UILabel()
+    let priceAlert = UILabel()
+    let stockSymbol = UILabel()
+    var addAlert = UIButton()
     let myLoadSave = LoadSaveCoreData()
     var newAlertBoolTuple = (false, false, false, false, false)
-    @objc var lastPrice = Double()
-    @objc var newAlertLongID = String()
-    @objc var alertID: [String] {
+    var lastPrice = Double()
+    var newAlertLongID = String()
+    var alertID: [String] {
         var aaa = [String]()
         for i in 0...Set1.userAlerts.count {
             switch i {
@@ -53,8 +52,8 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         return aaa
     }
   //  var phoneTextField = UITextField()
-    @objc var priceString = String()
-    @objc let (mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
+    var priceString = String()
+    let (mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
     
     override func viewWillAppear(_ animated: Bool) {
        // Set1.cachedInThisSession.append(newAlertTicker)
@@ -82,15 +81,15 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = customColor.black24
+        view.backgroundColor = CustomColor.black24
         
-        addLabel(name: priceAlert, text: "price alert", textColor: customColor.white115, textAlignment: .right, fontName: "Roboto-Regular", fontSize: 15, x: 490, y: 234, width: 200, height: 48, lines: 1)
+        addLabel(name: priceAlert, text: "price alert", textColor: CustomColor.white115, textAlignment: .right, fontName: "Roboto-Regular", fontSize: 15, x: 490, y: 234, width: 200, height: 48, lines: 1)
         view.addSubview(priceAlert)
         
         addLabel(name: newAlertPriceLabel, text: "", textColor: .white, textAlignment: .right, fontName: "DroidSerif", fontSize: 20, x: 490, y: 162, width: 200, height: 56, lines: 1)
         view.addSubview(newAlertPriceLabel)
         
-        addLabel(name: stockSymbol, text: "stock symbol", textColor: customColor.white115, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 54, y: 234, width: 240, height: 48, lines: 1)
+        addLabel(name: stockSymbol, text: "stock symbol", textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 54, y: 234, width: 240, height: 48, lines: 1)
         view.addSubview(stockSymbol)
         
         addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif", fontSize: 20, x: 54, y: 162, width: 200, height: 56, lines: 1)
@@ -123,10 +122,10 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             
             s.frame = CGRect(x: 27*screenWidth/375, y: y*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
             s.setOn(false, animated: false)
-            s.tintColor = customColor.white229
+            s.tintColor = CustomColor.white229
             s.layer.cornerRadius = 16
             s.backgroundColor = .white
-            s.onTintColor = customColor.yellow
+            s.onTintColor = CustomColor.yellow
             s.addTarget(self, action: #selector(AddStockAlertViewController.switchChanged(_:)), for: UIControlEvents.valueChanged)
             s.tag = tag
             view.addSubview(s)
@@ -159,14 +158,14 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     
     @objc private func add(_ button: UIButton) {
         
-       // Set1.ti.append(newAlertTicker)
         Set1.ti = [newAlertTicker] + Set1.ti
         let finalAlertPrice = newAlertPrice
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID =  timestamp + newAlertTicker.uppercased()
+        AlertSort.shared.addToStack(alert: newAlertLongID)
         Set1.userAlerts[alertID[Set1.userAlerts.count]] = newAlertLongID
-        // Set1.alertCount += 1
+   
         var alertTriggerWhenGreaterThan = false
         if finalAlertPrice > lastPrice {
             alertTriggerWhenGreaterThan = true

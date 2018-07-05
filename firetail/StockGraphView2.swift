@@ -18,29 +18,29 @@ public struct Label {
 
 class StockGraphView2: UIView {
     
-    @objc let screenWidth = UIScreen.main.bounds.width
-    @objc let screenHeight = UIScreen.main.bounds.height
-    @objc let fontSizeMultiplier = UIScreen.main.bounds.width / 375
-    let customColor = CustomColor()
-    @objc let graphHeight: CGFloat = 6*UIScreen.main.bounds.width/7
-    @objc var curvePath = UIBezierPath()
-    @objc let (y1,y2,y3,y4,y5,x1,x2,x3,x4,x5,x6,x7) = (UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel())
-    @objc var xs = [UILabel]()
-    @objc var ys = [UILabel]()
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    let fontSizeMultiplier = UIScreen.main.bounds.width / 375
+ 
+    let graphHeight: CGFloat = 6*UIScreen.main.bounds.width/7
+    var curvePath = UIBezierPath()
+    let (y1,y2,y3,y4,y5,x1,x2,x3,x4,x5,x6,x7) = (UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel(),UILabel())
+    var xs = [UILabel]()
+    var ys = [UILabel]()
     var _stockData = StockData2()
-    @objc var change = UILabel()
-    @objc var percentChange = UILabel()
-    @objc var cubicChartView = LineChartView()
-    @objc var globalCGPath: CGMutablePath? = nil
-    @objc var layerView = UIView()
-    @objc var baseOfGraphView = BaseOfGraphView()
-    @objc var base = UIView()
-    @objc var countinueBouncing = true
-    @objc var doneSquashing = false
-    @objc var graphAppearsInView = true
-    @objc var g = String()
-    @objc var upDownArrowView = UIImageView()
-    @objc var _outputValues = [Double]()
+    var change = UILabel()
+    var percentChange = UILabel()
+    var cubicChartView = LineChartView()
+    var globalCGPath: CGMutablePath? = nil
+    var layerView = UIView()
+    var baseOfGraphView = BaseOfGraphView()
+    var base = UIView()
+    var countinueBouncing = true
+    var doneSquashing = false
+    var graphAppearsInView = true
+    var g = String()
+    var upDownArrowView = UIImageView()
+    var _outputValues = [Double]()
     
     
     // fills the graph view with the uploaded stock data on initialization and loaded by controller //
@@ -72,11 +72,11 @@ class StockGraphView2: UIView {
         set1.drawCircleHoleEnabled = false
         set1.circleRadius = 3
         set1.cubicIntensity = 0.2
-        set1.setColor(self.customColor.yellow, alpha: 1.0)
-        set1.circleColors = [self.customColor.white]
+        set1.setColor(CustomColor.yellow, alpha: 1.0)
+        set1.circleColors = [CustomColor.white]
         set1.lineWidth = 2
         set1.drawFilledEnabled = true
-        set1.fillColor = self.customColor.yellow
+        set1.fillColor = CustomColor.yellow
         set1.fillAlpha = 1.0
         
         for i in 0..<dataPoints.count {
@@ -144,13 +144,13 @@ class StockGraphView2: UIView {
         return _outputValues
         
     }
-    @objc var _closingPrice = [Double]()
+    var _closingPrice = [Double]()
     @objc func animateIt() {
         self.baseOfGraphView.alpha = 1.0
         self.baseOfGraphView.frame = CGRect(x: 0, y: 565*self.bounds.height/636, width: self.bounds.width, height: 70*self.bounds.height/636)
         
         //        baseOfGraphView.baseLayer.path = baseOfGraphView.bez.cgPath
-        //        baseOfGraphView.baseLayer.fillColor = customColor.yellow.cgColor
+        //        baseOfGraphView.baseLayer.fillColor = CustomColor.yellow.cgColor
         //        baseOfGraphView.layer.addSublayer(baseOfGraphView.baseLayer)
         
     }
@@ -172,7 +172,7 @@ class StockGraphView2: UIView {
                 let gridShape = CAShapeLayer()
                 gridShape.zPosition = 7
                 gridShape.path = horizontalGridPath.cgPath
-                gridShape.fillColor = self.customColor.gridGray.cgColor
+                gridShape.fillColor = CustomColor.gridGray.cgColor
                 self.layer.addSublayer(gridShape)
                 for i in 0...5 {
                     vGridPath.move(to: CGPoint(x: CGFloat(i)*self.screenWidth/7 + self.screenWidth/7 - self.screenWidth/750, y: 0))
@@ -187,7 +187,7 @@ class StockGraphView2: UIView {
                 let gridShape2 = CAShapeLayer()
                 gridShape2.zPosition = 7
                 gridShape2.path = vGridPath.cgPath
-                gridShape2.fillColor = self.customColor.gridGray.cgColor
+                gridShape2.fillColor = CustomColor.gridGray.cgColor
                 self.layer.addSublayer(gridShape2)
             }
         }
@@ -205,7 +205,7 @@ class StockGraphView2: UIView {
         baseOfGraphView.layer.zPosition = 5
         self.addSubview(baseOfGraphView)
         base.frame = CGRect(x: 0, y: self.bounds.height, width: self.bounds.width, height: 1)
-        base.backgroundColor = customColor.yellow
+        base.backgroundColor = CustomColor.yellow
         base.alpha = 0.0
         base.layer.zPosition = 5
         self.addSubview(base)
@@ -266,12 +266,12 @@ class StockGraphView2: UIView {
         
         addLabel(name: change, text: "", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 66, y: -86, width: 120, height: 32, lines: 1)
         self.addSubview(change)
-        addLabel(name: percentChange, text: "", textColor: customColor.yellow, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 220, y: -86, width: 300, height: 32, lines: 1)
+        addLabel(name: percentChange, text: "", textColor: CustomColor.yellow, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 15, x: 220, y: -86, width: 300, height: 32, lines: 1)
         self.addSubview(percentChange)
         upDownArrowView.frame = CGRect(x: 188*screenWidth/750, y: -44*screenHeight/667, width: 10*screenWidth/375, height: 11*screenWidth/375)
         self.addSubview(upDownArrowView)
         
-        self.backgroundColor = customColor.gray
+        self.backgroundColor = CustomColor.gray
         layerView.frame = self.bounds
         self.addSubview(layerView)
         var xLabels: [String] {
@@ -282,7 +282,7 @@ class StockGraphView2: UIView {
         }
         for i in 0...4 {
             let yY = (1111.66-222.33*CGFloat(i))*graphHeight/screenHeight - 9
-            addLabel(name: ys[i], text: "", textColor: customColor.labelGray, textAlignment: .right, fontName: "Roboto-Regular", fontSize: 12, x: 0, y: yY, width: 85, height: 20, lines: 1)
+            addLabel(name: ys[i], text: "", textColor: CustomColor.labelGray, textAlignment: .right, fontName: "Roboto-Regular", fontSize: 12, x: 0, y: yY, width: 85, height: 20, lines: 1)
             ys[i].layer.zPosition = 7
             // if i == 0 || i == 4 { // leave the middle graph labels out
             self.addSubview(ys[i])
@@ -292,9 +292,9 @@ class StockGraphView2: UIView {
         if (UIDevice().userInterfaceIdiom == .phone) && UIScreen.main.nativeBounds.height == 2436 {
             
             for i in 0...5 {
-                addLabel(name: xs[i], text: xLabels[i], textColor: customColor.labelGray, textAlignment: .center, fontName: "Roboto-Regular", fontSize: 12, x: (screenWidth/4)*(CGFloat(i)+1) + 20, y: 540*heightScalar, width: 60, height: 75, lines: 1)
+                addLabel(name: xs[i], text: xLabels[i], textColor: CustomColor.labelGray, textAlignment: .center, fontName: "Roboto-Regular", fontSize: 12, x: (screenWidth/4)*(CGFloat(i)+1) + 20, y: 540*heightScalar, width: 60, height: 75, lines: 1)
                 if xs[i].text == key {
-                    xs[i].textColor = customColor.yellow
+                    xs[i].textColor = CustomColor.yellow
                 }
                 xs[i].isUserInteractionEnabled = false
                 self.addSubview(xs[i])
@@ -304,9 +304,9 @@ class StockGraphView2: UIView {
         }
         else {
             for i in 0...5 {
-                addLabel(name: xs[i], text: xLabels[i], textColor: customColor.labelGray, textAlignment: .center, fontName: "Roboto-Regular", fontSize: 12, x: (screenWidth/8)*(CGFloat(i)+1)*1334/screenHeight + 20, y: graphHeight*1334/screenHeight + 20, width: 60, height: 75, lines: 1)
+                addLabel(name: xs[i], text: xLabels[i], textColor: CustomColor.labelGray, textAlignment: .center, fontName: "Roboto-Regular", fontSize: 12, x: (screenWidth/8)*(CGFloat(i)+1)*1334/screenHeight + 20, y: graphHeight*1334/screenHeight + 20, width: 60, height: 75, lines: 1)
                 if xs[i].text == key {
-                    xs[i].textColor = customColor.yellow
+                    xs[i].textColor = CustomColor.yellow
                 }
                 self.addSubview(xs[i])
             }
