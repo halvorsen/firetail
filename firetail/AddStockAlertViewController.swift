@@ -16,11 +16,12 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     /// This method will be called whenever FCM receives a new, default FCM token for your
     /// Firebase project's Sender ID.
     /// You can send this token to your application server to send notifications to this device.
-    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
-        if let refreshedToken = InstanceID.instanceID().token() {
-            print("InstanceID token: \(refreshedToken)")
-            Set1.token = refreshedToken
-            Set1.saveUserInfo()
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        InstanceID.instanceID().instanceID { (_result, error) in
+            if let result = _result {
+                Set1.token = result.token
+                Set1.saveUserInfo()
+            }
         }
     }
     let backArrow = UIButton()
@@ -220,10 +221,11 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 options: authOptions,
                 completionHandler: {_, _ in
                     
-                    if let refreshedToken = InstanceID.instanceID().token() {
-                        print("InstanceID token: \(refreshedToken)")
-                        Set1.token = refreshedToken
-                        Set1.saveUserInfo()
+                    InstanceID.instanceID().instanceID { (_result, error) in
+                        if let result = _result {
+                            Set1.token = result.token
+                            Set1.saveUserInfo()
+                        }
                     }
                     
                     // Connect to FCM since connection may have failed when attempted before having a token.
@@ -399,11 +401,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     }
  
     @objc func connectToFcm() {
-        
-        guard InstanceID.instanceID().token() != nil else {
-            return
-        }
-  
+       
         Messaging.messaging().shouldEstablishDirectChannel = true
         
     }

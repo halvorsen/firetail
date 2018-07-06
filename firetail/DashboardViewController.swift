@@ -122,10 +122,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
        
         if Set1.token == "none" && Set1.userAlerts.count > 0 {
-            if let refreshedToken = InstanceID.instanceID().token() {
-                print("InstanceID token: \(refreshedToken)")
-                Set1.token = refreshedToken
-                Set1.saveUserInfo()
+            InstanceID.instanceID().instanceID { (_result, error) in
+                if let result = _result {
+                    Set1.token = result.token
+                    Set1.saveUserInfo()
+                }
             }
             
             if #available(iOS 10.0, *) {
@@ -137,10 +138,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     options: authOptions,
                     completionHandler: {[weak self] _, _ in
                         guard let weakself = self else {return}
-                        if let refreshedToken = InstanceID.instanceID().token() {
-                            print("InstanceID token: \(refreshedToken)")
-                            Set1.token = refreshedToken
-                            Set1.saveUserInfo()
+                        InstanceID.instanceID().instanceID { (_result, error) in
+                            if let result = _result {
+                                Set1.token = result.token
+                                Set1.saveUserInfo()
+                            }
                         }
                         
                         // Connect to FCM since connection may have failed when attempted before having a token.
@@ -930,17 +932,20 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     @objc func connectToFcm() {
         
         // Won't connect since there is no token
-        guard InstanceID.instanceID().token() != nil else {
-            return
+        InstanceID.instanceID().instanceID { (_result, error) in
+            if let result = _result {
+                Set1.token = result.token
+            }
         }
         Messaging.messaging().shouldEstablishDirectChannel = true
     }
     
-    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
-        if let refreshedToken = InstanceID.instanceID().token() {
-            print("InstanceID token: \(refreshedToken)")
-            Set1.token = refreshedToken
-            Set1.saveUserInfo()
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        InstanceID.instanceID().instanceID { (_result, error) in
+            if let result = _result {
+                Set1.token = result.token
+                Set1.saveUserInfo()
+            }
         }
     }
  

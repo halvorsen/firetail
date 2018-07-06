@@ -24,9 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Fabric.with([Crashlytics.self])
         FirebaseApp.configure()
      
-        if let refreshedToken = InstanceID.instanceID().token() {
-            print("InstanceID token: \(refreshedToken)")
-            Set1.token = refreshedToken
+        InstanceID.instanceID().instanceID { (_result, error) in
+            if let result = _result {
+                Set1.token = result.token
+            }
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotification(_:)),name: NSNotification.Name.InstanceIDTokenRefresh, object: nil)
@@ -67,12 +68,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Messaging.messaging().apnsToken = deviceToken
     }
     
-    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
-        if let refreshedToken = InstanceID.instanceID().token() {
-            print("InstanceID token: \(refreshedToken)")
-            Set1.token = refreshedToken
-            
-            
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        InstanceID.instanceID().instanceID { (_result, error) in
+            if let result = _result {
+                Set1.token = result.token
+            }
         }
     }
 
@@ -82,9 +82,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        if let refreshedToken = InstanceID.instanceID().token() {
-    
-            Set1.token = refreshedToken
+        InstanceID.instanceID().instanceID { (_result, error) in
+            if let result = _result {
+                Set1.token = result.token
+            }
         }
         Set1.cachedInThisSession.removeAll()
     }
@@ -107,20 +108,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     @objc private func tokenRefreshNotification(_ notification: Notification) {
-        if let refreshedToken = InstanceID.instanceID().token() {
-            print("InstanceID token: \(refreshedToken)")
-            Set1.token = refreshedToken
+        InstanceID.instanceID().instanceID { (_result, error) in
+            if let result = _result {
+                Set1.token = result.token
+            }
         }
-        
+     
         connectToFcm()
     }
     
     @objc func connectToFcm() {
-     
-        guard InstanceID.instanceID().token() != nil else {
-            return
-        }
-        
+       
         Messaging.messaging().shouldEstablishDirectChannel = true
         
     }

@@ -165,8 +165,7 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
         let newPassword = password1
         
         let credential = EmailAuthProvider.credential(withEmail: Set1.email, password: oldPassword)
-        
-        user?.reauthenticate(with: credential, completion: { (error) in
+        user?.reauthenticateAndRetrieveData(with: credential, completion: { (result, error) in
             if error != nil{
                 let alert = UIAlertController(title: "Error", message: "Error reauthenticating user", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
@@ -178,7 +177,7 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
                         alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                     }
-                 self.performSegue(withIdentifier: "fromChangePasswordToSettings", sender: self)
+                    self.performSegue(withIdentifier: "fromChangePasswordToSettings", sender: self)
                 }
             }
         })

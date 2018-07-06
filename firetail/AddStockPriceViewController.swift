@@ -32,8 +32,8 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                     }
                 }
                 if weakself.alertPrice > 999.99 {
-                    if let priceText = weakself.priceLabel.text?.chopPrefix(1) {
-                        weakself.priceLabel.text = priceText
+                    if let priceText = weakself.priceLabel.text?.dropFirst() {
+                        weakself.priceLabel.text = String(priceText)
                     }
                 }
             }
@@ -341,8 +341,8 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 priceString = String(format: "%.1f", price) + "0"
             }
             if price > 999.99 {
-                if let textString = priceLabel.text?.chopPrefix(1) {
-                    priceLabel.text = textString
+                if let textString = priceLabel.text?.dropFirst() {
+                    priceLabel.text = String(textString)
                 }
             }
             if let priceDoub = Double(priceString) {

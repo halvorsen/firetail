@@ -44,6 +44,7 @@
 		06BB409C1F753E330068636E /* AppLoadingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BB409B1F753E330068636E /* AppLoadingData.swift */; };
 		06DBD44820EB14C500EFD6AB /* AlertSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44720EB14C500EFD6AB /* AlertSort.swift */; };
 		06DBD44A20EB152200EFD6AB /* MyFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44920EB152200EFD6AB /* MyFileManager.swift */; };
+		06DBD44C20EF0CB500EFD6AB /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44B20EF0CB500EFD6AB /* Firebase.swift */; };
 		06DDBE261F795A5B00C36CB6 /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DDBE251F795A5B00C36CB6 /* CustomColor.swift */; };
 		06F15E901ED7B3ED00288413 /* Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F15E8F1ED7B3ED00288413 /* Google.swift */; };
 		06FC95B91E77415500DF7559 /* DailyGraphForAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */; };
@@ -94,6 +95,7 @@
 		06BB409B1F753E330068636E /* AppLoadingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingData.swift; sourceTree = "<group>"; };
 		06DBD44720EB14C500EFD6AB /* AlertSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSort.swift; sourceTree = "<group>"; };
 		06DBD44920EB152200EFD6AB /* MyFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFileManager.swift; sourceTree = "<group>"; };
+		06DBD44B20EF0CB500EFD6AB /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		06DDBE251F795A5B00C36CB6 /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
 		06F15E8F1ED7B3ED00288413 /* Google.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Google.swift; sourceTree = "<group>"; };
 		06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyGraphForAlertView.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				0672601A1E67BD5B00F54500 /* StockGraphView2.swift */,
 				0617DFA41E7DBDC7006D73C5 /* LoadSaveCoreData.swift */,
 				06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */,
+				06DBD44B20EF0CB500EFD6AB /* Firebase.swift */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
@@ -440,6 +443,7 @@
 				062CC7371EDCA66400E2520A /* IndexListOfStocks.swift in Sources */,
 				0641936B1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift in Sources */,
 				0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */,
+				06DBD44C20EF0CB500EFD6AB /* Firebase.swift in Sources */,
 				06DBD44A20EB152200EFD6AB /* MyFileManager.swift in Sources */,
 				0617DFA11E7B6F81006D73C5 /* GridLine.swift in Sources */,
 				06478E6F1EE5CC100016DF88 /* AddStockTickerViewController.swift in Sources */,
