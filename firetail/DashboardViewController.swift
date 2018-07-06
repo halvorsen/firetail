@@ -9,7 +9,6 @@
 
 import UIKit
 
-import Charts
 import SwiftyStoreKit
 import StoreKit
 import MessageUI

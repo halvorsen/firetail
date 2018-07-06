@@ -76,9 +76,6 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         Label.percentageValues.removeAll()
         self.view.backgroundColor = CustomColor.black33
         addLabelsAndButtons()
-//        tap = UITapGestureRecognizer(target: self, action: #selector(GraphViewController.pickGraph(_:)))
-//        view.addGestureRecognizer(tap)
-//        graphViewSeen.addGestureRecognizer(tap)
         addLabel(name: stockHeader, text: "", textColor: .white, textAlignment: .center, fontName: "Roboto-Bold", fontSize: 18, x: 0, y: 0, width: 750, height: 136, lines: 1)
         if UIDevice().userInterfaceIdiom == .phone {
             if UIScreen.main.nativeBounds.height == 2436 {
@@ -568,11 +565,6 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                 
             }
             
-            //FIXIT add error message
-            //                }, { (error) in
-            //                    self.userWarning(title: "", message: error.description)
-            //                    print(error)
-            //                    result(([""],[nil]))
             
         }
         
@@ -675,13 +667,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                 
                 
             }
-            
-            //FIXIT add error message
-            //                }, { (error) in
-            //                    self.userWarning(title: "", message: error.description)
-            //                    print(error)
-            //                    result(([""],[nil]))
-            
+        
         
         
     }

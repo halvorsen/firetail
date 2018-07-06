@@ -45,6 +45,7 @@
 		06DBD44820EB14C500EFD6AB /* AlertSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44720EB14C500EFD6AB /* AlertSort.swift */; };
 		06DBD44A20EB152200EFD6AB /* MyFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44920EB152200EFD6AB /* MyFileManager.swift */; };
 		06DBD44C20EF0CB500EFD6AB /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44B20EF0CB500EFD6AB /* Firebase.swift */; };
+		06DBD44E20EF1A1B00EFD6AB /* AnimatedGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44D20EF1A1B00EFD6AB /* AnimatedGraph.swift */; };
 		06DDBE261F795A5B00C36CB6 /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DDBE251F795A5B00C36CB6 /* CustomColor.swift */; };
 		06F15E901ED7B3ED00288413 /* Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F15E8F1ED7B3ED00288413 /* Google.swift */; };
 		06FC95B91E77415500DF7559 /* DailyGraphForAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */; };
@@ -96,6 +97,7 @@
 		06DBD44720EB14C500EFD6AB /* AlertSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSort.swift; sourceTree = "<group>"; };
 		06DBD44920EB152200EFD6AB /* MyFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFileManager.swift; sourceTree = "<group>"; };
 		06DBD44B20EF0CB500EFD6AB /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
+		06DBD44D20EF1A1B00EFD6AB /* AnimatedGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGraph.swift; sourceTree = "<group>"; };
 		06DDBE251F795A5B00C36CB6 /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
 		06F15E8F1ED7B3ED00288413 /* Google.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Google.swift; sourceTree = "<group>"; };
 		06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyGraphForAlertView.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				069FD1301E5382D4003BDFE2 /* Info.plist */,
 				069FD1281E5382D4003BDFE2 /* firetail.xcdatamodeld */,
 				062BD2DF20E6EC98002C5E3C /* Dashboard */,
+				06DBD44F20EF23B000EFD6AB /* GraphViewController */,
 			);
 			path = firetail;
 			sourceTree = "<group>";
@@ -217,6 +220,14 @@
 				06DBD44B20EF0CB500EFD6AB /* Firebase.swift */,
 			);
 			name = Supporting;
+			sourceTree = "<group>";
+		};
+		06DBD44F20EF23B000EFD6AB /* GraphViewController */ = {
+			isa = PBXGroup;
+			children = (
+				06DBD44D20EF1A1B00EFD6AB /* AnimatedGraph.swift */,
+			);
+			name = GraphViewController;
 			sourceTree = "<group>";
 		};
 		06DDBE241F7949E700C36CB6 /* BootingApp */ = {
@@ -426,6 +437,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				06FDA8E01E71B9960043BC90 /* Sets.swift in Sources */,
+				06DBD44E20EF1A1B00EFD6AB /* AnimatedGraph.swift in Sources */,
 				0609E4CF1E649596005965C5 /* LoginViewController.swift in Sources */,
 				0617DFA51E7DBDC7006D73C5 /* LoadSaveCoreData.swift in Sources */,
 				0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */,
