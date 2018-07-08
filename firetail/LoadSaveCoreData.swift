@@ -13,8 +13,6 @@ import Firebase
 
 class LoadSaveCoreData {
     
-    
-    
     var alertID: [String] {
         var aaa = [String]()
         for i in 0..<Set1.userAlerts.count {
