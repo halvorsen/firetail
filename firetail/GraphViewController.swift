@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Charts
 import ReachabilitySwift
 
 var graphMutablePaths: [String:CGMutablePath] = [:]

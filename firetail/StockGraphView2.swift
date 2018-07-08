@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Charts
 
 public struct Label {
     public static var percentageValues = [String]()
@@ -29,7 +28,6 @@ class StockGraphView2: UIView {
     var _stockData = StockData2()
     var change = UILabel()
     var percentChange = UILabel()
-    var cubicChartView = LineChartView()
     var globalCGPath: CGMutablePath? = nil
     var layerView = UIView()
     var baseOfGraphView = BaseOfGraphView()
@@ -40,131 +38,6 @@ class StockGraphView2: UIView {
     var g = String()
     var upDownArrowView = UIImageView()
     var _outputValues = [Double]()
-    
-    
-//    // fills the graph view with the uploaded stock data on initialization and loaded by controller //
-//    @objc func fillChartViewWithSetsOfData(dataPoints: [Double], cubic: Bool = true) {
-//
-//        var yVal1 = [ChartDataEntry]()
-//        var yVal2 = [ChartDataEntry]()
-//        self.cubicChartView.xAxis.drawLabelsEnabled = false
-//        if cubic {
-//            self.cubicChartView.minOffset = 0
-//            self.cubicChartView.legend.enabled = false
-//
-//            self.cubicChartView.rightAxis.enabled = false
-//            self.cubicChartView.legend.enabled = false
-//            self.cubicChartView.leftAxis.enabled = false
-//            self.cubicChartView.xAxis.labelPosition = .bottom
-//            self.cubicChartView.xAxis.drawGridLinesEnabled = false
-//            self.cubicChartView.xAxis.drawAxisLineEnabled = false
-//            self.cubicChartView.chartDescription?.text = ""
-//        }
-//
-//        for i in 0..<dataPoints.count {
-//            let dataEntry = ChartDataEntry(x: Double(i), y: dataPoints[i])
-//            yVal1.append(dataEntry)
-//        }
-//
-//        let set1 = LineChartDataSet(values: yVal1, label: "")
-//        set1.mode = .horizontalBezier
-//        set1.drawCircleHoleEnabled = false
-//        set1.circleRadius = 3
-//        set1.cubicIntensity = 0.2
-//        set1.setColor(CustomColor.yellow, alpha: 1.0)
-//        set1.circleColors = [CustomColor.white]
-//        set1.lineWidth = 2
-//        set1.drawFilledEnabled = true
-//        set1.fillColor = CustomColor.yellow
-//        set1.fillAlpha = 1.0
-//
-//        for i in 0..<dataPoints.count {
-//            let dataEntry = ChartDataEntry(x: Double(i), y: dataPoints[i]-3.0)
-//            yVal2.append(dataEntry)
-//        }
-//
-//        let set2 = LineChartDataSet(values: yVal2, label: "")
-//        set2.mode = .cubicBezier
-//        set2.drawCircleHoleEnabled = false
-//        set2.circleRadius = 2
-//        set2.cubicIntensity = 0.2
-//
-//        var dataSets : [LineChartDataSet] = [LineChartDataSet]()
-//        dataSets.append(set1)
-//        let data: LineChartData = LineChartData(dataSets: dataSets)
-//        data.setValueTextColor(UIColor.white)
-//        if cubic {
-//
-//            self.cubicChartView.autoScaleMinMaxEnabled = false
-//            self.cubicChartView.frame = self.bounds
-//            self.cubicChartView.backgroundColor = UIColor.clear
-//            self.cubicChartView.data = data
-//        }
-//
-//    }
-    
-    @objc func fillChartViewWithSetsOfData(dataPoints: [Double], cubic: Bool = true) {
-        
-        var yVal1 = [ChartDataEntry]()
-        var yVal2 = [ChartDataEntry]()
-        self.cubicChartView.xAxis.drawLabelsEnabled = false
-        if cubic {
-            self.cubicChartView.minOffset = 0
-            self.cubicChartView.legend.enabled = false
-            
-            self.cubicChartView.rightAxis.enabled = false
-            self.cubicChartView.legend.enabled = false
-            self.cubicChartView.leftAxis.enabled = false
-            self.cubicChartView.xAxis.labelPosition = .bottom
-            self.cubicChartView.xAxis.drawGridLinesEnabled = false
-            self.cubicChartView.xAxis.drawAxisLineEnabled = false
-            self.cubicChartView.chartDescription?.text = ""
-        }
-        
-        for i in 0..<dataPoints.count {
-            let dataEntry = ChartDataEntry(x: Double(i), y: dataPoints[i])
-            yVal1.append(dataEntry)
-        }
-        
-        let set1 = LineChartDataSet(values: yVal1, label: "")
-        set1.mode = .horizontalBezier
-        set1.drawCircleHoleEnabled = false
-        set1.circleRadius = 3
-        set1.cubicIntensity = 0.2
-        set1.setColor(CustomColor.yellow, alpha: 1.0)
-        set1.circleColors = [CustomColor.white]
-        set1.lineWidth = 2
-        set1.drawFilledEnabled = true
-        set1.fillColor = CustomColor.yellow
-        set1.fillAlpha = 1.0
-        
-        for i in 0..<dataPoints.count {
-            let dataEntry = ChartDataEntry(x: Double(i), y: dataPoints[i]-3.0)
-            yVal2.append(dataEntry)
-        }
-        
-        let set2 = LineChartDataSet(values: yVal2, label: "")
-        set2.mode = .cubicBezier
-        set2.drawCircleHoleEnabled = false
-        set2.circleRadius = 2
-        set2.cubicIntensity = 0.2
-        
-        var dataSets : [LineChartDataSet] = [LineChartDataSet]()
-        dataSets.append(set1)
-        let data: LineChartData = LineChartData(dataSets: dataSets)
-        data.setValueTextColor(UIColor.white)
-        if cubic {
-            
-            self.cubicChartView.autoScaleMinMaxEnabled = false
-            self.cubicChartView.frame = self.bounds
-            self.cubicChartView.backgroundColor = UIColor.clear
-            self.cubicChartView.data = data
-        }
-        
-    }
-    
-    
-    
     
     @objc func reduceDataPoints(original: [Double]) -> [Double] {
         let originalAmount = original.count
@@ -279,16 +152,14 @@ class StockGraphView2: UIView {
                                stockData.closingPrice[3],stockData.closingPrice[3],stockData.closingPrice[3],
                                stockData.closingPrice[4],stockData.closingPrice[4],stockData.closingPrice[4],
                                ]
-            fillChartViewWithSetsOfData(dataPoints: __stockData, cubic: cubic)
+         
             _outputValues = stockData.closingPrice
             _closingPrice = __stockData
         } else if stockData.closingPrice.count > 14  {
-            
-            fillChartViewWithSetsOfData(dataPoints: reduceDataPoints(original: stockData.closingPrice), cubic: cubic)
+            _closingPrice = reduceDataPoints(original: stockData.closingPrice)
+        
         }
-        if cubic {
-            self.addSubview(cubicChartView)
-        }
+      
         if cubic {
             var changeValue: String {
                 get {

@@ -1,7 +1,4 @@
 PODS:
-  - Charts (3.1.1):
-    - Charts/Core (= 3.1.1)
-  - Charts/Core (3.1.1)
   - Crashlytics (3.10.3):
     - Fabric (~> 1.7.8)
   - Fabric (1.7.8)
@@ -56,7 +53,6 @@ PODS:
   - SwiftyStoreKit (0.13.2)
 
 DEPENDENCIES:
-  - Charts
   - Crashlytics
   - Fabric
   - Firebase/Auth
@@ -68,7 +64,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - Charts
     - Crashlytics
     - Fabric
     - Firebase
@@ -87,7 +82,6 @@ SPEC REPOS:
     - SwiftyStoreKit
 
 SPEC CHECKSUMS:
-  Charts: 90a4d61da0f6e06684c591e3bcab11940fe61736
   Crashlytics: 2aea305161a2122492698c75af27f2b98aa49a25
   Fabric: fba4684a95df789565b0b27fc5b6e68f1755af32
   Firebase: d66f4f29c23f22d96808d9abc174d81d8eee968f
@@ -105,6 +99,6 @@ SPEC CHECKSUMS:
   ReachabilitySwift: f5b9bb30a0777fac8f09ce8b067e32faeb29bb64
   SwiftyStoreKit: b7563505440a68c9d9fa70bc43d8a97015519409
 
-PODFILE CHECKSUM: 38a50d4be9570fab766b5ff14b30a770f49ee270
+PODFILE CHECKSUM: 868a27b139669ab93316b348fac68f64fd32dbd8
 
 COCOAPODS: 1.5.3
