@@ -41,7 +41,7 @@ final class AlertCollectionViewCell: UICollectionViewCell {
     private var isTriggered: Bool = false
     
     @objc private func tapped() {
-        print("tapped")
+     
         if let ticker = ticker.text {
         alertCellDelegate?.tappedCell(withAlertTicker: ticker)
         }

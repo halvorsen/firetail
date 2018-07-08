@@ -29,9 +29,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     var start = CGFloat()
     var switchable = true
     var first = true
-    let list = ["1y","5y","10y","1d","5d","1m","3m"]
     var orderOfGraphs = ["1y":0,"5y":1,"10y":2,"1d":3,"5d":4,"1m":5,"3m":6]
-    var orderofGraphsInverse = [Int:String]()
     let orderOfLabels = ["10y":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
     var loading = UILabel()
     let brokersDictionary: [String:String] = [
@@ -82,29 +80,14 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         addLabel(name: currentPrice, text: "", textColor: .white, textAlignment: .left, fontName: "Roboto-Light", fontSize: 40, x: 60, y: 180, width: 400, height: 106, lines: 1)
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.back(_:)), addSubview: false)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
-        addLabel(name: loading, text: "", textColor: .white, textAlignment: .center, fontName: "Roboto-Bold", fontSize: 20, x: 0, y: (1334-150), width: 750, height: 150, lines: 1)
-        loading.layer.zPosition = 15
-        loading.alpha = 0.0
-        view.addSubview(loading)
+      
         
         let a = StockData2()
         graphViewSeen = StockGraphView2(stockData: a, key: "", cubic: false)
         graphMutablePaths["1y"] = AnimatedGraph.createGraphs(dataPoints: reduceDataPoints(original: a.closingPrice))
         graphViewSeen.xs[2].textColor = CustomColor.yellow
-    }
-    var activityView = UIActivityIndicatorView()
-    override func viewWillAppear(_ animated: Bool) {
-        
-        activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-        activityView.center = self.view.center
-        activityView.startAnimating()
-        activityView.alpha = 0.0
-        self.view.addSubview(activityView)
-        UIView.animate(withDuration: 1.0) {
-            self.activityView.alpha = 1.0
-        }
+        view.addSubview(backArrow)
         showGraph()
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -128,7 +111,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                         
                         for i in 0..<stockData.0.count {
                             self.orderOfGraphs[stockData.0[i]] = i
-                            self.orderofGraphsInverse[i] = stockData.0[i]
+                   
                         }
                         
                         self.implementDrawSubviews(stockData: stockData)}
@@ -141,8 +124,6 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         
         reachabilityAddNotification()
         
-        UIView.animate(withDuration: 0.5) {
-            self.graphViewSeen.alpha = 1.0; self.loading.alpha = 1.0}
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -281,87 +262,54 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         addButton(name: trade, x: 0, y: 1194, width: 750, height: 1334-1194, title: "TRADE", font: "HelveticaNeue-Bold", fontSize: 18, titleColor: CustomColor.white, bgColor: CustomColor.black, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GraphViewController.trade(_:)), addSubview: false, alignment: .center)
         
     }
-    var i = 0
+   
     var yVals = [String:(l1:String,l2:String,l3:String,l4:String,l5:String)]()
     
     func implementDrawSubviews(stockData: ([String],[StockData2?])) {
-        guard let data1 = stockData.1[self.i],
-            let closeMax = data1.closingPrice.max(),
-            let closeMin = data1.closingPrice.min() else {return}
-        
-        let graphView = StockGraphView2(stockData: data1, key: stockData.0[self.i], cubic: true)
-        graphMutablePaths[stockData.0[self.i]] = AnimatedGraph.createGraphs(dataPoints: reduceDataPoints(original:  data1.closingPrice))
-        let ma = closeMax //from unfiltered highs and lows
-        let mi = closeMin //from unfiltered
-        
-        guard let ma2 = graphView._outputValues.max(), //from averages for middle of graph
-            let mi2 = graphView._outputValues.min() else {return}// from averages for middle of graph
-        
-        //basically what this does to the yellow detailed graphs is gives the actual max and min values as the top and bottom y labels. the graph is all averages execpt for the current price, last point on graph, which is the current prices. As you can imagine this makes for a graph that isn't totally lined up with it's legends but gives you a good point at the end and top and bottom, then everything else is approximation curve through averaged prices
-        
-        let range = ma - mi
-        
-        switch range {
-        case 0...0.06:
-            self.yVals[stockData.0[self.i]] = (String(format: "%.2f", ma),"","","",String(format: "%.2f", mi))
-        case 0.061...0.6:
-            self.yVals[stockData.0[self.i]] = (String(format: "%.2f", ma), String(format: "%.2f", mi2 + 3*(ma2-mi2)/4), String(format: "%.2f", mi2 + 2*(ma2-mi2)/4),String(format: "%.2f", mi2 + (ma2-mi2)/4),String(format: "%.2f", mi))
-        case 0.61...7:
-            self.yVals[stockData.0[self.i]] = (String(format: "%.1f", ma)+"0", String(format: "%.1f", mi2 + 3*(ma2-mi2)/4)+"0", String(format: "%.1f", mi2 + 2*(ma2-mi2)/4)+"0",String(format: "%.1f", mi2 + (ma2-mi2)/4)+"0",String(format: "%.1f", mi)+"0")
-        default:
-            self.yVals[stockData.0[self.i]] = (String(Int(ma)), String(Int(mi2 + 3*(ma2-mi2)/4)), String(Int(mi2 + 2*(ma2-mi2)/4)),String(Int(mi2 + (ma2-mi2)/4)),String(Int(mi)))
-        }
-        
-        graphView.frame.origin.x = self.screenWidth
-        
-        self.view.addSubview(graphView)
-        
-        self.graphViews[stockData.0[self.i]] = graphView
-        
-        if stockData.0[self.i] == "1d" {
+        for i in 0..<7 {
+            guard let data1 = stockData.1[i],
+                let closeMax = data1.closingPrice.max(),
+                let closeMin = data1.closingPrice.min() else {return}
             
-            self.currentPrice.text = String(format: "%.2f", closeMax)
-        } else if stockData.0[self.i] == "3m" {
+            let graphView = StockGraphView2(stockData: data1, key: stockData.0[i], cubic: true)
+            graphMutablePaths[stockData.0[i]] = AnimatedGraph.createGraphs(dataPoints: reduceDataPoints(original:  data1.closingPrice))
+            let ma = closeMax //from unfiltered highs and lows
+            let mi = closeMin //from unfiltered
             
-            delay(bySeconds: 1.0) {
-                self.checkDoneSquashing()} //bypasses animation
-        }
-        
-        if self.i < 6 {
-            self.i += 1
-            delay(bySeconds: 0.3){
+            guard let ma2 = graphView._outputValues.max(), //from averages for middle of graph
+                let mi2 = graphView._outputValues.min() else {return}// from averages for middle of graph
+            
+            let range = ma - mi
+            
+            switch range {
+            case 0...0.06:
+                self.yVals[stockData.0[i]] = (String(format: "%.2f", ma),"","","",String(format: "%.2f", mi))
+            case 0.061...0.6:
+                self.yVals[stockData.0[i]] = (String(format: "%.2f", ma), String(format: "%.2f", mi2 + 3*(ma2-mi2)/4), String(format: "%.2f", mi2 + 2*(ma2-mi2)/4),String(format: "%.2f", mi2 + (ma2-mi2)/4),String(format: "%.2f", mi))
+            case 0.61...7:
+                self.yVals[stockData.0[i]] = (String(format: "%.1f", ma)+"0", String(format: "%.1f", mi2 + 3*(ma2-mi2)/4)+"0", String(format: "%.1f", mi2 + 2*(ma2-mi2)/4)+"0",String(format: "%.1f", mi2 + (ma2-mi2)/4)+"0",String(format: "%.1f", mi)+"0")
+            default:
+                self.yVals[stockData.0[i]] = (String(Int(ma)), String(Int(mi2 + 3*(ma2-mi2)/4)), String(Int(mi2 + 2*(ma2-mi2)/4)),String(Int(mi2 + (ma2-mi2)/4)),String(Int(mi)))
+            }
+            
+            self.graphViews[stockData.0[i]] = graphView
+            
+            if stockData.0[i] == "1d" {
                 
-                self.implementDrawSubviews(stockData: stockData)
-                
+                self.currentPrice.text = String(format: "%.2f", closeMax)
             }
         }
         
+        doneLoading()
     }
     
-    
-    
-    @objc func checkDoneSquashing() {
-        guard graphMutablePaths.count > 6 else {
-            self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
-            return
-        } //sometimes, for some reason, not all the calayers load, and this can crash the app. probably better to try to reload the layers instead of kicking the user back to the dashboard. but for now... 7th layer is the former 1 day layer
+    private func doneLoading() {
+       
         loading.removeFromSuperview()
         add1YGraph()
         
-        activityView.removeFromSuperview()
-        
-        backArrow.alpha = 0.0
-        view.addSubview(backArrow) //this is because the way the graphs load app can crash if push back button before they load
-        UIView.animate(withDuration: 0.3) {
-            self.backArrow.alpha = 1.0
-        }
-        for (_,_graph) in self.graphViews {
-            guard let graph = _graph else {return}
-            if graph.isDescendant(of: self.view) {
-                graph.removeFromSuperview()
-            }
-        }
     }
+ 
     
     @objc func animateBase() {
         graphViewSeen.base.backgroundColor = CustomColor.yellow

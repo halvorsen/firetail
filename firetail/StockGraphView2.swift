@@ -338,8 +338,6 @@ struct GraphSet2 {
         }
     }
     
-    
-    
 }
 
 struct DataPoint2 {
@@ -352,12 +350,4 @@ struct StockData2 {
     var closingPrice = [Double]()
     var text = String()
 }
-
-
-//sends the data for each graph to the controller that sends to the view to be initiated//
-
-
-
-
-
 
