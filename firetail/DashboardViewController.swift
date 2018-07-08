@@ -96,13 +96,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
 
     override func viewWillAppear(_ animated: Bool) {
        
-        let alertTap = UITapGestureRecognizer(target: self, action: #selector(DashboardViewController.detail(_:)))
-        view.addGestureRecognizer(alertTap)
-        
         Set1.saveUserInfo()
        
-        
-        
     }
     
     override func viewDidLoad() {
@@ -374,19 +369,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
    
     var p = Int()
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("didselectitematidnexpath")
+    }
     
-    @objc private func detail(_ gesture: UIGestureRecognizer) {
-//        for block in blocks {
-//
-//            let frame = view.convert(block.frame, from:alertScroller)
-//            if frame.contains(gesture.location(in: view)) {
-//
-//                stringToPass = block.stockTickerGlobal
-//                goToGraph()
-//            }
-//        }
-//
-
+    func tappedCell(withAlertTicker: String) {
+        stringToPass = withAlertTicker
+        goToGraph()
     }
     
     @objc func reboot() {

@@ -10,6 +10,7 @@ import UIKit
 
 protocol AlertCellDelegate: class {
     func deleteCell(withAlert: String)
+    func tappedCell(withAlertTicker: String)
 }
 
 final class AlertCollectionViewCell: UICollectionViewCell {
@@ -38,6 +39,13 @@ final class AlertCollectionViewCell: UICollectionViewCell {
     
     private var isGreaterThan: Bool = false
     private var isTriggered: Bool = false
+    
+    @objc private func tapped() {
+        print("tapped")
+        if let ticker = ticker.text {
+        alertCellDelegate?.tappedCell(withAlertTicker: ticker)
+        }
+    }
     
     internal func set(alertName: String, tickerText: String, alertListText: String, priceText: String, isTriggered: String, isGreaterThan: Bool, cellIndex: Int, delegate: AlertCellDelegate) {
         ticker.text = tickerText
@@ -73,7 +81,7 @@ final class AlertCollectionViewCell: UICollectionViewCell {
         addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(deletePan(_:))))
         
         xImageView.alpha = xAlphaStart
-        
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped)))
         backgroundColor = CustomColor.white249
         moveableView.backgroundColor = CustomColor.background
         isUserInteractionEnabled = true

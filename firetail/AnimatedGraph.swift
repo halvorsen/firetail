@@ -10,15 +10,11 @@ import UIKit
 
 class AnimatedGraph: UIView {
     
-    static func createGraphs(dataPoints: [[Double]]) -> [CGMutablePath] {
-        var paths = [CGMutablePath]()
-        let test: [Double] = [1,4,6,7,4,2,3,4,5,4,3,4,3,7,8]
-        for doubleArray in dataPoints {
-        let graph = GraphView(graphData: doubleArray)
+    static func createGraphs(dataPoints: [Double]) -> CGMutablePath {
+        guard dataPoints.count > 4 else { return CGMutablePath()}
+        let graph = GraphView(graphData: dataPoints)
         let path = graph.createPath()
-        paths.append(path)
-        }
-        return paths
+        return path
     }
     
     class GraphView: UIView {
@@ -29,8 +25,8 @@ class AnimatedGraph: UIView {
         
         var __set = [CGFloat]()
         var passedColor = UIColor()
-        let rangeMultiplier: CGFloat = 10
-        let scale: CGFloat = 1.5
+        let rangeMultiplier: CGFloat = 1
+        let scale: CGFloat = 1
         var stock = ""
         var percentSet = [String]()
         var percentSetVal = [CGFloat]()
@@ -38,30 +34,7 @@ class AnimatedGraph: UIView {
         
         init(graphData: [Double], frame: CGRect = CGRect(x: 0, y:0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)) {
             super.init(frame: frame)
-            var _graphData = graphData
-          
-            self.backgroundColor = .clear
-           
-            var _set = [CGFloat]()
-            _set.append(CGFloat(_graphData.first!))
-            if _graphData.count < 252 {
-                while _graphData.count < 252 {
-                    _graphData = [_graphData.first!] + _graphData
-                }
-            }
-            for i in 1...11 {
-                _set.append(CGFloat(_graphData[Int(21*i)]))
-            }
-            _set.append(CGFloat(graphData.last!))
-            
-            _set = _set.map { $0 * rangeMultiplier / CGFloat(_graphData.first!) }
-            percentSet = _set.map { String(format: "%.1f", $0 * 10 - 100 ) }
-            percentSetVal = _set.map { $0 * 10 - 100 }
-            
-            __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
-            data = __set
-            setNeedsDisplay()
-            
+            data = graphData.map { CGFloat($0) }
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -71,28 +44,27 @@ class AnimatedGraph: UIView {
         func createPath() -> CGMutablePath {
             
             let path = quadCurvedPath()
-            path.move(to: CGPoint(x: screenWidth, y: screenWidth))
-            path.move(to: CGPoint(x: 0, y: screenWidth))
+            path.addLine(to: CGPoint(x: screenWidth, y: screenWidth))
+            path.addLine(to: CGPoint(x: 0, y: screenWidth))
             path.close()
             let mutablePath = CGMutablePath()
             mutablePath.addPath(path.cgPath)
             return mutablePath
         }
         
-        var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
-        
+        var data: [CGFloat] = [1,1,1,1,1]
+        let yadjust: CGFloat = 1.1
+        let yadjust2: CGFloat = 1.18
         func coordXFor(index: Int) -> CGFloat {
-            return bounds.height - bounds.height * data[index] / (data.max() ?? 0)
+            return bounds.height*yadjust2 - bounds.height * data[index] * yadjust / (data.max() ?? 1)
         }
         
         func quadCurvedPath() -> UIBezierPath {
             let path = UIBezierPath()
-            let step = bounds.width / CGFloat(data.count - 1) / (scale * 1.1)
+            let step = bounds.width / CGFloat(data.count - 1) / (scale)
             
             var p1 = CGPoint(x: 0, y: coordXFor(index: 0))
             path.move(to: p1)
-            
-            //       drawPoint(point: p1, color: .green, radius: 3)
             
             if (data.count == 2) {
                 path.addLine(to: CGPoint(x: step, y: coordXFor(index: 1)))
@@ -103,7 +75,6 @@ class AnimatedGraph: UIView {
             
             for i in 1..<data.count {
                 let p2 = CGPoint(x: step * CGFloat(i), y: coordXFor(index: i))
-                //            drawPoint(point: p2, color: .red, radius: 3)
                 var p3: CGPoint?
                 if i == data.count - 1 {
                     p3 = nil
@@ -185,12 +156,6 @@ class AnimatedGraph: UIView {
             }
             
             return controlPoint
-        }
-        
-        func drawPoint(point: CGPoint, color: UIColor, radius: CGFloat) {
-            let ovalPath = UIBezierPath(ovalIn: CGRect(x: scale*(point.x - radius), y: point.y - radius, width: radius * 2, height: radius * 2))
-            color.setFill()
-            ovalPath.fill()
         }
         
     }

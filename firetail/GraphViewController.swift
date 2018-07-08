@@ -10,6 +10,8 @@ import UIKit
 import Charts
 import ReachabilitySwift
 
+var gingerbreadmanNew: [String:CGMutablePath] = [:]
+
 public struct MyVariables {
     static var gingerBreadMan = CGMutablePath()
 }
@@ -67,10 +69,10 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         "Firstrade": "https://invest.firstrade.com/cgi-bin/login",
         "Chase": "https://jpmorgan.chase.com/"
     ]
-  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
         PodVariable.gingerBreadMan.removeAll()
         Label.changeValues.removeAll()
         Label.percentageValues.removeAll()
@@ -95,6 +97,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         
         let a = StockData2()
         graphViewSeen = StockGraphView2(stockData: a, key: "", cubic: false)
+        gingerbreadmanNew["1y"] = AnimatedGraph.createGraphs(dataPoints: reduceDataPoints(original: a.closingPrice))
         graphViewSeen.xs[2].textColor = CustomColor.yellow
     }
     var activityView = UIActivityIndicatorView()
@@ -109,7 +112,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             self.activityView.alpha = 1.0
         }
         showGraph()
-      
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -128,7 +131,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             
             callCorrectGraph2FromCache(stockName: self.stockName) {(_ stockData: ([String],[StockData2?])) -> Void in
                 DispatchQueue.main.async {
-
+                    
                     if stockData.0.count == 7 {
                         
                         for i in 0..<stockData.0.count {
@@ -144,7 +147,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         
-            reachabilityAddNotification()
+        reachabilityAddNotification()
         
         UIView.animate(withDuration: 0.5) {
             self.graphViewSeen.alpha = 1.0; self.loading.alpha = 1.0}
@@ -170,17 +173,17 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     }
     
     @objc private func pickGraph(_ touch: UITouch) {
-
+        
         let layerAnimation = CABasicAnimation(keyPath: "path")
         layerAnimation.duration = 0.7
         layerAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         layerAnimation.fillMode = kCAFillModeBoth
         layerAnimation.isRemovedOnCompletion = false
-    
+        
         guard let order = orderOfGraphs[currentTextKey],
             PodVariable.gingerBreadMan.count > order else {return}
-        layerAnimation.fromValue = PodVariable.gingerBreadMan[order]
-   
+        //        layerAnimation.fromValue = PodVariable.gingerBreadMan[order]
+        layerAnimation.fromValue = gingerbreadmanNew[currentTextKey]
         let center = touch.location(in: graphViewSeen)
         for xLabel in (graphViewSeen.xs) {
             if xLabel.frame.contains(center) {
@@ -194,8 +197,8 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                 graphViewSeen.xs[currentOrder].textColor = CustomColor.labelGray
                 newTextKey = xText
                 graphViewSeen.xs[newOrder].textColor = CustomColor.yellow
-                layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
-
+                //                layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
+                layerAnimation.toValue = gingerbreadmanNew[newTextKey]
                 currentTextKey = newTextKey
                 layer.add(layerAnimation, forKey: nil)
                 graphViewSeen.change.text = Label.changeValues[newGraphs]
@@ -219,12 +222,12 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                     case 4: graphViewSeen.ys[i].text = newY.0
                     default: break
                     }
-
+                    
                 }
                 return
             }
         }
-
+        
         if (center.y > 100*heightScalar && center.y < 550*widthScalar) {
             var xLabel = graphViewSeen.xs[0]
             
@@ -250,12 +253,12 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                 let newGraphs = orderOfGraphs[newTextKey],
                 graphViewSeen.xs.count > currentOrder,
                 graphViewSeen.xs.count > newOrder else {return}
-        
-            graphViewSeen.xs[currentOrder].textColor = CustomColor.labelGray
-
-            graphViewSeen.xs[newOrder].textColor = CustomColor.yellow
-            layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
             
+            graphViewSeen.xs[currentOrder].textColor = CustomColor.labelGray
+            
+            graphViewSeen.xs[newOrder].textColor = CustomColor.yellow
+            //            layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
+            layerAnimation.toValue = gingerbreadmanNew[newTextKey]
             currentTextKey = newTextKey
             layer.add(layerAnimation, forKey: nil)
             graphViewSeen.change.text = Label.changeValues[newGraphs]
@@ -270,7 +273,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             }
             graphViewSeen.percentChange.text = Label.percentageValues[newGraphs]
             guard let newY = yVals[newTextKey] else {return}
-   
+            
             for i in 0..<graphViewSeen.ys.count {
                 switch i {
                 case 0: graphViewSeen.ys[i].text = newY.4
@@ -284,7 +287,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             }
             
         }
-
+        
     }
     
     private func addLabelsAndButtons() {
@@ -299,60 +302,60 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         guard let data1 = stockData.1[self.i],
             let closeMax = data1.closingPrice.max(),
             let closeMin = data1.closingPrice.min() else {return}
-    
-            let graphView = StockGraphView2(stockData: data1, key: stockData.0[self.i], cubic: true)
-            
-            let ma = closeMax //from unfiltered highs and lows
-            let mi = closeMin //from unfiltered
-            
-            guard let ma2 = graphView._outputValues.max(), //from averages for middle of graph
-                let mi2 = graphView._outputValues.min() else {return}// from averages for middle of graph
-            
-            //basically what this does to the yellow detailed graphs is gives the actual max and min values as the top and bottom y labels. the graph is all averages execpt for the current price, last point on graph, which is the current prices. As you can imagine this makes for a graph that isn't totally lined up with it's legends but gives you a good point at the end and top and bottom, then everything else is approximation curve through averaged prices
-            
-            let range = ma - mi
-            
-            switch range {
-            case 0...0.06:
-                self.yVals[stockData.0[self.i]] = (String(format: "%.2f", ma),"","","",String(format: "%.2f", mi))
-            case 0.061...0.6:
-                self.yVals[stockData.0[self.i]] = (String(format: "%.2f", ma), String(format: "%.2f", mi2 + 3*(ma2-mi2)/4), String(format: "%.2f", mi2 + 2*(ma2-mi2)/4),String(format: "%.2f", mi2 + (ma2-mi2)/4),String(format: "%.2f", mi))
-            case 0.61...7:
-                self.yVals[stockData.0[self.i]] = (String(format: "%.1f", ma)+"0", String(format: "%.1f", mi2 + 3*(ma2-mi2)/4)+"0", String(format: "%.1f", mi2 + 2*(ma2-mi2)/4)+"0",String(format: "%.1f", mi2 + (ma2-mi2)/4)+"0",String(format: "%.1f", mi)+"0")
-            default:
-                self.yVals[stockData.0[self.i]] = (String(Int(ma)), String(Int(mi2 + 3*(ma2-mi2)/4)), String(Int(mi2 + 2*(ma2-mi2)/4)),String(Int(mi2 + (ma2-mi2)/4)),String(Int(mi)))
-            }
         
-            graphView.frame.origin.x = self.screenWidth
+        let graphView = StockGraphView2(stockData: data1, key: stockData.0[self.i], cubic: true)
+        gingerbreadmanNew[stockData.0[self.i]] = AnimatedGraph.createGraphs(dataPoints: reduceDataPoints(original:  data1.closingPrice))
+        let ma = closeMax //from unfiltered highs and lows
+        let mi = closeMin //from unfiltered
+        
+        guard let ma2 = graphView._outputValues.max(), //from averages for middle of graph
+            let mi2 = graphView._outputValues.min() else {return}// from averages for middle of graph
+        
+        //basically what this does to the yellow detailed graphs is gives the actual max and min values as the top and bottom y labels. the graph is all averages execpt for the current price, last point on graph, which is the current prices. As you can imagine this makes for a graph that isn't totally lined up with it's legends but gives you a good point at the end and top and bottom, then everything else is approximation curve through averaged prices
+        
+        let range = ma - mi
+        
+        switch range {
+        case 0...0.06:
+            self.yVals[stockData.0[self.i]] = (String(format: "%.2f", ma),"","","",String(format: "%.2f", mi))
+        case 0.061...0.6:
+            self.yVals[stockData.0[self.i]] = (String(format: "%.2f", ma), String(format: "%.2f", mi2 + 3*(ma2-mi2)/4), String(format: "%.2f", mi2 + 2*(ma2-mi2)/4),String(format: "%.2f", mi2 + (ma2-mi2)/4),String(format: "%.2f", mi))
+        case 0.61...7:
+            self.yVals[stockData.0[self.i]] = (String(format: "%.1f", ma)+"0", String(format: "%.1f", mi2 + 3*(ma2-mi2)/4)+"0", String(format: "%.1f", mi2 + 2*(ma2-mi2)/4)+"0",String(format: "%.1f", mi2 + (ma2-mi2)/4)+"0",String(format: "%.1f", mi)+"0")
+        default:
+            self.yVals[stockData.0[self.i]] = (String(Int(ma)), String(Int(mi2 + 3*(ma2-mi2)/4)), String(Int(mi2 + 2*(ma2-mi2)/4)),String(Int(mi2 + (ma2-mi2)/4)),String(Int(mi)))
+        }
+        
+        graphView.frame.origin.x = self.screenWidth
+        
+        self.view.addSubview(graphView)
+        
+        self.graphViews[stockData.0[self.i]] = graphView
+        
+        if stockData.0[self.i] == "1d" {
             
-            self.view.addSubview(graphView)
+            self.currentPrice.text = String(format: "%.2f", closeMax)
+        } else if stockData.0[self.i] == "3m" {
             
-            self.graphViews[stockData.0[self.i]] = graphView
-            
-            if stockData.0[self.i] == "1d" {
+            delay(bySeconds: 1.0) {
+                self.checkDoneSquashing()} //bypasses animation
+        }
+        
+        if self.i < 6 {
+            self.i += 1
+            delay(bySeconds: 0.3){
                 
-                self.currentPrice.text = String(format: "%.2f", closeMax)
-            } else if stockData.0[self.i] == "3m" {
+                self.implementDrawSubviews(stockData: stockData)
                 
-                delay(bySeconds: 1.0) {
-                    self.checkDoneSquashing()} //bypasses animation
             }
-            
-            if self.i < 6 {
-                self.i += 1
-                delay(bySeconds: 0.3){
-                    
-                    self.implementDrawSubviews(stockData: stockData)
-                    
-                }
-            }
+        }
         
     }
     
-   
+    
     
     @objc func checkDoneSquashing() {
-        guard PodVariable.gingerBreadMan.count == 7 else {
+        guard gingerbreadmanNew.count > 6 else {
             self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
             return
         } //sometimes, for some reason, not all the calayers load, and this can crash the app. probably better to try to reload the layers instead of kicking the user back to the dashboard. but for now... 7th layer is the former 1 day layer
@@ -388,9 +391,9 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         if PodVariable.gingerBreadMan.count > 0 {
             animateBase()
             view.addSubview(graphViewSeen)
-            guard let oneOrder = orderOfGraphs["1y"],
-                PodVariable.gingerBreadMan.count > oneOrder else {return}
-            layer.path = PodVariable.gingerBreadMan[oneOrder]
+            guard let oneOrder = orderOfGraphs["1y"] else {return}
+            layer.path = gingerbreadmanNew["1y"]
+            //            layer.path = PodVariable.gingerBreadMan[oneOrder]
             layer.fillColor = CustomColor.yellow.cgColor
             layer.shadowColor = CustomColor.black.cgColor
             layer.shadowOpacity = 1.0
@@ -463,7 +466,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         let alphaAPI = Alpha()
         alphaAPI.get20YearHistoricalData(ticker: stockName.uppercased(), isOneYear: false) { dataSet in
-          
+            
             guard dataSet != nil else {
                 self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
                 // had this error to "cancelled" once now just sending back to the Dashboard if an error occures. instead of showing an alert.
@@ -571,112 +574,140 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     }
     
     func callCorrectGraph2FromCache(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
-
-            guard let tenYear = Set1.tenYearDictionary[stockName] else {self.performSegue(withIdentifier: "fromGraphToMain", sender: self);return}
-            var __stockData = tenYear
-       
-            if tenYear[tenYear.count - 1] == tenYear[tenYear.count - 2] {
-                __stockData.remove(at: tenYear.count - 1)
-            }
-            let list = ["1y","5y","10y","1d","5d","1m","3m"]
-            let amount = __stockData.count
-            var stockDatas = [StockData2]()
-            //252 days in the trading year
-            for timeSpan in list {
-                var stockData2 = StockData2()
-                switch timeSpan {
-                case "1y":
-                    if amount < 252 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount - 252)..<amount {
-                            
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    }
-                    stockDatas.append(stockData2)
-                case "5y":
-                    if amount < 252*5 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount - 252*5)..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    }
-                    stockDatas.append(stockData2)
-                case "10y":
-                    if amount < 252*10 + 20 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount - 252*10 + 20)..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    }
-                    stockDatas.append(stockData2)
-                case "1d":
-                    for i in (amount - 55)..<amount {
+        
+        guard let tenYear = Set1.tenYearDictionary[stockName] else {self.performSegue(withIdentifier: "fromGraphToMain", sender: self);return}
+        var __stockData = tenYear
+        
+        if tenYear[tenYear.count - 1] == tenYear[tenYear.count - 2] {
+            __stockData.remove(at: tenYear.count - 1)
+        }
+        let list = ["1y","5y","10y","1d","5d","1m","3m"]
+        let amount = __stockData.count
+        var stockDatas = [StockData2]()
+        //252 days in the trading year
+        for timeSpan in list {
+            var stockData2 = StockData2()
+            switch timeSpan {
+            case "1y":
+                if amount < 252 {
+                    for i in 0..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
-                    //                    for i in (amount - 5)..<amount {
-                    //                        stockData2.closingPrice.append(stockData[i])
-                    //                    }
-                    // stockData2.closingPrice.append(stockData[amount - 1])
-                    stockDatas.append(stockData2)
-                case "5d":
-                    if amount < 5 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount - 5)..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
+                } else {
+                    for i in (amount - 252)..<amount {
+                        
+                        stockData2.closingPrice.append(__stockData[i])
                     }
-                    stockDatas.append(stockData2)
-                case "1m":
-                    if amount < 252/12 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount-252/12)..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    }
-                    stockDatas.append(stockData2)
-                case "3m":
-                    if amount < 252/4 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount-252/4)..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    }
-                    stockDatas.append(stockData2)
-                    result((list,stockDatas))
-                default: break
                 }
-                
-                
+                stockDatas.append(stockData2)
+            case "5y":
+                if amount < 252*5 {
+                    for i in 0..<amount {
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
+                } else {
+                    for i in (amount - 252*5)..<amount {
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
+                }
+                stockDatas.append(stockData2)
+            case "10y":
+                if amount < 252*10 + 20 {
+                    for i in 0..<amount {
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
+                } else {
+                    for i in (amount - 252*10 + 20)..<amount {
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
+                }
+                stockDatas.append(stockData2)
+            case "1d":
+                for i in (amount - 55)..<amount {
+                    stockData2.closingPrice.append(__stockData[i])
+                }
+                //                    for i in (amount - 5)..<amount {
+                //                        stockData2.closingPrice.append(stockData[i])
+                //                    }
+                // stockData2.closingPrice.append(stockData[amount - 1])
+                stockDatas.append(stockData2)
+            case "5d":
+                if amount < 5 {
+                    for i in 0..<amount {
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
+                } else {
+                    for i in (amount - 5)..<amount {
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
+                }
+                stockDatas.append(stockData2)
+            case "1m":
+                if amount < 252/12 {
+                    for i in 0..<amount {
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
+                } else {
+                    for i in (amount-252/12)..<amount {
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
+                }
+                stockDatas.append(stockData2)
+            case "3m":
+                if amount < 252/4 {
+                    for i in 0..<amount {
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
+                } else {
+                    for i in (amount-252/4)..<amount {
+                        stockData2.closingPrice.append(__stockData[i])
+                    }
+                }
+                stockDatas.append(stockData2)
+                result((list,stockDatas))
+            default: break
             }
-        
-        
-        
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
     }
     
+    func reduceDataPoints(original: [Double]) -> [Double] {
+        
+        if original.count == 5 {
+            return [original[0],original[0],original[0],
+                    original[1],original[1],original[1],
+                    original[2],original[2],original[2],
+                    original[3],original[3],original[3],
+                    original[4],original[4],original[4]
+            ]
+        }
+        let originalAmount = original.count
+        guard original.count > 0 else {return []}
+        var _original = original
+        
+        let setAmount: Int = originalAmount/15
+        var outputValues = [Double](repeating: 0, count: 15)
+        
+        while _original.count%15 != 0 {
+            _original.remove(at: 0)
+            
+        }
+        for i in 0..<_original.count {
+            
+            let j = Int(i/setAmount)
+            
+            if j != 14 {
+                
+                outputValues[j] += _original[i]
+            }
+        }
+        outputValues[14] = Double(setAmount)*original.last!
+        
+        return outputValues.map { $0 / Double(setAmount) }
+        
+    }
+    
 }
-
-
-
