@@ -57,7 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("FCM token: \(token ?? "")")
         
         Set1.premium = true //: toggle in development
-        
+        print("ti: \(Set1.ti)")
+        print("tiuseralerts; \(Set1.userAlerts)")
         return true
     }
     

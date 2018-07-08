@@ -42,7 +42,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var (alerts, changeEmail, addPhone, changeBroker, legal, support, goPremium) = (UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton())
     var container = UIScrollView()
     var container2 = UIScrollView()
-  
+    
     let mask = UIView()
     var (monthIndicator,stock1,stock2,stock3) = (UILabel(), UILabel(), UILabel(), UILabel())
     var dots = [Dot]()
@@ -60,7 +60,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var newAlertPrice = Double()
     var newAlertBoolTuple = (false, false, false, false)
     var amountOfBlocks = Int()
-  
+    
     let loadsave = LoadSaveCoreData()
     var pan = UIPanGestureRecognizer()
     var canIScroll = true
@@ -70,7 +70,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var l = 1
     var k = 10000
     var movingAlert = 9999
-  
+    
     var alertID: [String] {
         var aaa = [String]()
         for i in 0..<Set1.userAlerts.count {
@@ -87,17 +87,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         return aaa
     }
-
+    
     var alertPan = UIPanGestureRecognizer()
     var labelTop: CGFloat = 24*UIScreen.main.bounds.height/1334
     var labelMiddle: CGFloat = 72*UIScreen.main.bounds.height/1334
     var labelBottom: CGFloat = 120*UIScreen.main.bounds.height/1334
     let alertCollectionCellID = "alertCell"
-
+    
     override func viewWillAppear(_ animated: Bool) {
-       
         Set1.saveUserInfo()
-       
     }
     
     override func viewDidLoad() {
@@ -114,7 +112,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             }
             
         }
-       
+        
         if Set1.token == "none" && Set1.userAlerts.count > 0 {
             InstanceID.instanceID().instanceID { (_result, error) in
                 if let result = _result {
@@ -183,7 +181,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addButton(name: support, x: 82, y: 1135, width: 280, height: 75, title: "SUPPORT", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.supportFunc(_:)), addSubview: true)
         addButton(name: goPremium, x: 82, y: 1215, width: 280, height: 75, title: "GO PREMIUM", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.goPremiumFunc(_:)), addSubview: true)
         if Set1.premium == true {
-           goPremium.setTitle("PREMIUM MEMBER", for: .normal)
+            goPremium.setTitle("PREMIUM MEMBER", for: .normal)
         }
         let indicator = UILabel(frame: CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667))
         indicator.backgroundColor = CustomColor.white77
@@ -191,7 +189,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         container.frame = CGRect(x: 0, y: 86*screenHeight/667, width: screenWidth, height: 259*screenHeight/667)
         slideView.addSubview(container)
         container.delegate = self
-   
+        
         container2.frame = CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667)
         container2.isUserInteractionEnabled = false
         container2.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
@@ -210,7 +208,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         stock1.frame.origin.y = labelTop
         stock2.frame.origin.y = labelMiddle
         stock3.frame.origin.y = labelBottom
-        
+        print("stockArray5: \(AlertSort.shared.stockArray)")
+        print("stockDic5: \(AlertSort.shared.stockDictionary)")
+        print("SEt.useralerts: \(Set1.userAlerts)")
+        print("Set1.ti: \(Set1.ti)")
+        print("set1Alerts: \(Set1.alerts)")
         switch Set1.userAlerts.count {
         case 0:
             break
@@ -244,7 +246,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             line.frame.origin.x = 27*screenWidth/375 + CGFloat(i)*80*screenWidth/375
             slideView.addSubview(line)
         }
-       
+        
         addTextField = UITextField(frame: CGRect(x: 0,y: 200,width: screenWidth ,height: 200*screenHeight/1334))
         addTextField.placeholder = "   Enter Ticker"
         addTextField.setValue(CustomColor.white68, forKeyPath: "_placeholderLabel.textColor")
@@ -295,7 +297,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         collectionLayout.minimumLineSpacing = 0
         let frame = CGRect(x: 0, y: 974*screenHeight/1334, width: screenWidth, height: 360*screenHeight/1334)
         collectionView = AlertCollectionView(frame: frame, collectionViewLayout: collectionLayout, delegate: self, dataSource: self, cellID: alertCollectionCellID)
-    
+        
         slideView.addSubview(collectionView!)
         
         longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressFunc(_:)))
@@ -310,7 +312,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var endingLocationX = CGFloat()
     
     @objc private func finishedFetchingTop3Stocks() {
-    
+        
         DispatchQueue.main.async { [weak self] in
             guard let weakself = self else {return}
             weakself.sv.removeFromSuperview()
@@ -333,19 +335,24 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     
     @objc func act(blockLongName: String) {
-       
+        
         stock1.text = ""
         stock2.text = ""
         stock3.text = ""
+        var tickers = [String]()
+        for alert in alertsForCollectionView {
+            if let alertInfo = Set1.alerts[alert] {
+                tickers.append(alertInfo.ticker)
+            }
+        }
+        Set1.ti = tickers
         
-        Set1.ti = alertsForCollectionView
-       
         amountOfBlocks -= 1
         
         alertAmount.text = String(amountOfBlocks)
- 
+        
         loadsave.resaveUser(alerts: alertsForCollectionView)
-    
+        
         reboot()
         
         Set1.saveUserInfo()
@@ -367,7 +374,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         startedPan = true
     }
-   
+    
     var p = Int()
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("didselectitematidnexpath")
@@ -401,7 +408,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         guard Set1.ti.count > 0,
             let ti0 = Set1.oneYearDictionary[Set1.ti[0]],
             ti0.count > 0 else {return}
-      
+        
         switch Set1.ti.count {
         case 0:
             break
@@ -457,7 +464,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         textField.autocapitalizationType = .none
         textField.spellCheckingType = .no
     }
-   
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if scrollView == container {
@@ -580,7 +587,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(DashboardViewController.updateDot), userInfo: nil, repeats: true)
         
-            reachabilityAddNotification()
+        reachabilityAddNotification()
         
     }
     
@@ -607,7 +614,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         Set1.currentPrice = 0.0
         Set1.yesterday = 0.0
         Set1.token = "none"
-       // Set1.alertCount = 0
+        // Set1.alertCount = 0
         Set1.oneYearDictionary.removeAll() //= ["":[0.0]]
         Set1.ti.removeAll()
         Set1.phone = "none"
@@ -631,7 +638,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     @objc private func legalFunc(_ sender: UIButton) {
         if let url = URL(string: "http://firetailapp.com/legal") {
-        UIApplication.shared.open(url)
+            UIApplication.shared.open(url)
         }
     }
     @objc private func supportFunc(_ sender: UIButton) {
@@ -641,54 +648,54 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     @objc private func goPremiumFunc(_ sender: UIButton) {
         // Create the alert controller
         if Set1.premium == false {
-        let alertController = UIAlertController(title: "Go Premium", message: "Up to 50 Alerts for $2.99", preferredStyle: .alert)
-        
-        // Create the actions
+            let alertController = UIAlertController(title: "Go Premium", message: "Up to 50 Alerts for $2.99", preferredStyle: .alert)
+            
+            // Create the actions
             let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { [weak self] UIAlertAction in
                 guard let weakself = self else {return}
-            weakself.purchase()
-            
-        }
-        let restoreAction = UIAlertAction(title: "Restore Purchase", style: UIAlertActionStyle.default) { [weak self] UIAlertAction in
-            guard let weakself = self else {return}
-            SwiftyStoreKit.restorePurchases(atomically: true) { results in
-                if results.restoreFailedPurchases.count > 0 {
-                    print("Restore Failed: \(results.restoreFailedPurchases)")
-                }
-                else if results.restoredPurchases.count > 0 {
-                    
-                    Set1.premium = true
-                    weakself.premiumMember = true
-                    weakself.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
-                }
-                else {
-                    print("Nothing to Restore")
+                weakself.purchase()
+                
+            }
+            let restoreAction = UIAlertAction(title: "Restore Purchase", style: UIAlertActionStyle.default) { [weak self] UIAlertAction in
+                guard let weakself = self else {return}
+                SwiftyStoreKit.restorePurchases(atomically: true) { results in
+                    if results.restoreFailedPurchases.count > 0 {
+                        print("Restore Failed: \(results.restoreFailedPurchases)")
+                    }
+                    else if results.restoredPurchases.count > 0 {
+                        
+                        Set1.premium = true
+                        weakself.premiumMember = true
+                        weakself.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
+                    }
+                    else {
+                        print("Nothing to Restore")
+                    }
                 }
             }
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) {
-            UIAlertAction in
-            print("Cancel Pressed")
-        }
-        
-        alertController.addAction(okAction)
-        alertController.addAction(restoreAction)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) {
+                UIAlertAction in
+                print("Cancel Pressed")
+            }
+            
+            alertController.addAction(okAction)
+            alertController.addAction(restoreAction)
+            alertController.addAction(cancelAction)
+            present(alertController, animated: true, completion: nil)
         } else {
-           
+            
             let alert = UIAlertController(title: "Premium Member", message: "You are a premium member and can add up to 50 stock price alerts", preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             
             present(alert, animated: true, completion: nil)
-           
+            
         }
     }
     
     @objc func menuFunc() {
-   
+        
         if slideView.frame.origin.x == 0 {
             UIView.animate(withDuration: 0.3) {[weak self] in
                 guard let weakself = self else {return}
@@ -705,7 +712,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         } else if slideView.frame.origin.x == 516*screenWidth/750 {
             UIView.animate(withDuration: 0.3) { [weak self] in
                 guard let weakself = self else {return}
-            weakself.slideView.frame.origin.x -= 516*weakself.screenWidth/750}
+                weakself.slideView.frame.origin.x -= 516*weakself.screenWidth/750}
             slideView.removeGestureRecognizer(returnTap)
             slideView.removeGestureRecognizer(returnSwipe)
             slideView.removeGestureRecognizer(returnPan)
@@ -762,14 +769,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         if segue.identifier == "fromMainToGraph" {
             if let graphView: GraphViewController = segue.destination as? GraphViewController {
-            graphView.passedString = stringToPass
+                graphView.passedString = stringToPass
             }
         } else if segue.identifier == "fromMainToAddStockTicker" {
             if let addView: AddStockTickerViewController = segue.destination as? AddStockTickerViewController {
-            addView.newAlertTicker = "TICKER"
+                addView.newAlertTicker = "TICKER"
             }
         }
     }
@@ -777,10 +784,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var detailedTimer = Timer()
     var tryFor3Secondscount = 0
     @objc private func goToGraph() {
-
+        
         if let prices = Set1.tenYearDictionary[stringToPass],
             prices.count > 1 {
-        performSegue(withIdentifier: "fromMainToGraph", sender: self)
+            performSegue(withIdentifier: "fromMainToGraph", sender: self)
         }
         
     }
@@ -936,14 +943,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             }
         }
     }
- 
+    
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
     }
     
     // ##START V2
     var index: Int = 0
-
+    
     
     
     
@@ -955,12 +962,13 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
         guard let atIndex = alertsForCollectionView.index(of: withAlert) else { return }
         guard let alertDeleting = Set1.alerts[alertsForCollectionView[atIndex]] else {print("error in deleteing"); return}
         myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
+        
         AlertSort.shared.delete(alertDeleting.name)
         alertsForCollectionView.remove(at: atIndex)
         collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
-        act(blockLongName: alertDeleting.name)
+        
         alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
-    
+        act(blockLongName: alertDeleting.name)
     }
     
     
@@ -971,6 +979,9 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
+        print("ALERT!!!!!")
+        print(alertsForCollectionView[indexPath.row])
+        print(Set1.alerts[alertsForCollectionView[indexPath.row]])
         if let alert = Set1.alerts[alertsForCollectionView[indexPath.row]] {
             cell.set(alertName: alert.name, tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)
         } else {
@@ -984,7 +995,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     }
     
     @objc private func longPressFunc(_ sender: UILongPressGestureRecognizer) {
-
+        
         guard let collectionView = collectionView else { return }
         let point = sender.location(in: collectionView)
         switch sender.state {
@@ -1014,7 +1025,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
         
         AlertSort.shared.moveItem(alert: alertsForCollectionView[startIndex], at: startIndex, to: endIndex)
         alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
-     
+        
     }
- 
+    
 }
