@@ -47,12 +47,8 @@ class AnimatedGraph: UIView {
             return mutablePath
             
         }
-        
-        
+    
         func coordXFor(index: Int) -> CGFloat {
-            print("-----")
-            print(GraphView.graphSize.height)
-            print(GraphView.graphSize.height - GraphView.graphSize.height * (data[index] - min) / range)
             return GraphView.graphSize.height - GraphView.graphSize.height * (data[index] - min) / range
         }
         

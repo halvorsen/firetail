@@ -402,7 +402,6 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             layer.transform = CATransform3DMakeScale(1.0, 0.79, 1.0)
             graphViewSeen.layerView.frame = CGRect(x: 0, y: graphViewSeen.bounds.height, width: graphViewSeen.bounds.width, height: 1)
             graphViewSeen.layerView.clipsToBounds = true
-            graphViewSeen.layerView.backgroundColor = .red
             graphViewSeen.layerView.layer.addSublayer(layer)
             
             graphViewSeen.change.text = Label.changeValues[oneOrder]
