@@ -402,7 +402,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             layer.transform = CATransform3DMakeScale(1.0, 0.79, 1.0)
             graphViewSeen.layerView.frame = CGRect(x: 0, y: graphViewSeen.bounds.height, width: graphViewSeen.bounds.width, height: 1)
             graphViewSeen.layerView.clipsToBounds = true
-            
+            graphViewSeen.layerView.backgroundColor = .red
             graphViewSeen.layerView.layer.addSublayer(layer)
             
             graphViewSeen.change.text = Label.changeValues[oneOrder]
@@ -436,7 +436,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                 
             }
             
-            UIView.animate(withDuration: 0.6) {self.graphViewSeen.layerView.frame = CGRect(x: 0, y: self.graphViewSeen.bounds.height/10, width: self.graphViewSeen.bounds.width, height: 5*self.graphViewSeen.bounds.height/6); self.trade.alpha = 1.0; self.stockHeader.alpha = 1.0; self.currentPrice.alpha = 1.0}
+            UIView.animate(withDuration: 0.6) {self.graphViewSeen.layerView.frame = CGRect(x: 0, y: self.graphViewSeen.bounds.width*0.136, width: AnimatedGraph.GraphView.graphSize.width, height: AnimatedGraph.GraphView.graphSize.height); self.trade.alpha = 1.0; self.stockHeader.alpha = 1.0; self.currentPrice.alpha = 1.0}
             
         } else {
             delay(bySeconds: 0.2) {self.add1YGraph()}

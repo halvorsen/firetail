@@ -13,27 +13,22 @@ class AnimatedGraph: UIView {
     static func createGraphs(dataPoints: [Double]) -> CGMutablePath {
         guard dataPoints.count > 4 else { return CGMutablePath()}
         let graph = GraphView(graphData: dataPoints)
-        let path = graph.createPath()
+        guard let path = graph?.createPath() else { return CGMutablePath() }
         return path
     }
     
-    class GraphView: UIView {
+    class GraphView {
+    
+        var data: [CGFloat] = [1,1,1,1,1]
+  
+        static let graphSize: CGSize = CGSize(width: UIScreen.main.bounds.width, height: 0.73*UIScreen.main.bounds.width)
+        var range: CGFloat = 1
+        var min: CGFloat = 1
         
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        let fontSizeMultiplier = UIScreen.main.bounds.width / 375
-        
-        var __set = [CGFloat]()
-        var passedColor = UIColor()
-        let rangeMultiplier: CGFloat = 1
-        let scale: CGFloat = 1
-        var stock = ""
-        var percentSet = [String]()
-        var percentSetVal = [CGFloat]()
-        var mutablePath: CGMutablePath?
-        
-        init(graphData: [Double], frame: CGRect = CGRect(x: 0, y:0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)) {
-            super.init(frame: frame)
+        init?(graphData: [Double]) {
+            guard !graphData.isEmpty else { return nil }
+            range = CGFloat(graphData.max()! - graphData.min()!)
+            min = CGFloat(graphData.min()!)
             data = graphData.map { CGFloat($0) }
         }
         
@@ -44,24 +39,26 @@ class AnimatedGraph: UIView {
         func createPath() -> CGMutablePath {
             
             let path = quadCurvedPath()
-            path.addLine(to: CGPoint(x: screenWidth, y: screenWidth))
-            path.addLine(to: CGPoint(x: 0, y: screenWidth))
+            path.addLine(to: CGPoint(x: GraphView.graphSize.width, y: GraphView.graphSize.width))
+            path.addLine(to: CGPoint(x: 0, y: GraphView.graphSize.width))
             path.close()
             let mutablePath = CGMutablePath()
             mutablePath.addPath(path.cgPath)
             return mutablePath
+            
         }
         
-        var data: [CGFloat] = [1,1,1,1,1]
-        let yadjust: CGFloat = 1.1
-        let yadjust2: CGFloat = 1.18
+        
         func coordXFor(index: Int) -> CGFloat {
-            return bounds.height*yadjust2 - bounds.height * data[index] * yadjust / (data.max() ?? 1)
+            print("-----")
+            print(GraphView.graphSize.height)
+            print(GraphView.graphSize.height - GraphView.graphSize.height * (data[index] - min) / range)
+            return GraphView.graphSize.height - GraphView.graphSize.height * (data[index] - min) / range
         }
         
         func quadCurvedPath() -> UIBezierPath {
             let path = UIBezierPath()
-            let step = bounds.width / CGFloat(data.count - 1) / (scale)
+            let step = GraphView.graphSize.width / CGFloat(data.count - 1)
             
             var p1 = CGPoint(x: 0, y: coordXFor(index: 0))
             path.move(to: p1)

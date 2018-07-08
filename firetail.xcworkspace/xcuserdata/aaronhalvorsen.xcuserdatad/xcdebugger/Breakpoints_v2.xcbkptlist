@@ -132,13 +132,76 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "firetail/AlertCollectionViewCell.swift"
-            timestampString = "552718151.8032629"
+            timestampString = "552765183.645285"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "84"
             endingLineNumber = "84"
             landmarkName = "init(frame:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "firetail/AnimatedGraph.swift"
+            timestampString = "552765183.645417"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "AnimatedGraph"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "firetail.AnimatedGraph.GraphView.__deallocating_deinit"
+                  moduleName = "firetail"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aaronhalvorsen/Desktop/firetail/firetail/AnimatedGraph.swift"
+                  timestampString = "552747882.233062"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "firetail.AnimatedGraph.GraphView.__allocating_init(frame: __C.CGRect) -&gt; firetail.AnimatedGraph.GraphView"
+                  moduleName = "firetail"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aaronhalvorsen/Desktop/firetail/firetail/AnimatedGraph.swift"
+                  timestampString = "552747882.316981"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "firetail.AnimatedGraph.GraphView.init(frame: __C.CGRect) -&gt; firetail.AnimatedGraph.GraphView"
+                  moduleName = "firetail"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aaronhalvorsen/Desktop/firetail/firetail/AnimatedGraph.swift"
+                  timestampString = "552747882.319135"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "20"
+                  endingLineNumber = "20"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
