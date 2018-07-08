@@ -10,13 +10,7 @@ import UIKit
 import Charts
 import ReachabilitySwift
 
-var gingerbreadmanNew: [String:CGMutablePath] = [:]
-
-public struct MyVariables {
-    static var gingerBreadMan = CGMutablePath()
-}
-
-public var gingerBreadMan = CGMutablePath()
+var graphMutablePaths: [String:CGMutablePath] = [:]
 
 class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
@@ -73,7 +67,6 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        PodVariable.gingerBreadMan.removeAll()
         Label.changeValues.removeAll()
         Label.percentageValues.removeAll()
         self.view.backgroundColor = CustomColor.black33
@@ -97,7 +90,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         
         let a = StockData2()
         graphViewSeen = StockGraphView2(stockData: a, key: "", cubic: false)
-        gingerbreadmanNew["1y"] = AnimatedGraph.createGraphs(dataPoints: reduceDataPoints(original: a.closingPrice))
+        graphMutablePaths["1y"] = AnimatedGraph.createGraphs(dataPoints: reduceDataPoints(original: a.closingPrice))
         graphViewSeen.xs[2].textColor = CustomColor.yellow
     }
     var activityView = UIActivityIndicatorView()
@@ -179,11 +172,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         layerAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         layerAnimation.fillMode = kCAFillModeBoth
         layerAnimation.isRemovedOnCompletion = false
-        
-        guard let order = orderOfGraphs[currentTextKey],
-            PodVariable.gingerBreadMan.count > order else {return}
-        //        layerAnimation.fromValue = PodVariable.gingerBreadMan[order]
-        layerAnimation.fromValue = gingerbreadmanNew[currentTextKey]
+        layerAnimation.fromValue = graphMutablePaths[currentTextKey]
         let center = touch.location(in: graphViewSeen)
         for xLabel in (graphViewSeen.xs) {
             if xLabel.frame.contains(center) {
@@ -197,8 +186,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                 graphViewSeen.xs[currentOrder].textColor = CustomColor.labelGray
                 newTextKey = xText
                 graphViewSeen.xs[newOrder].textColor = CustomColor.yellow
-                //                layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
-                layerAnimation.toValue = gingerbreadmanNew[newTextKey]
+                layerAnimation.toValue = graphMutablePaths[newTextKey]
                 currentTextKey = newTextKey
                 layer.add(layerAnimation, forKey: nil)
                 graphViewSeen.change.text = Label.changeValues[newGraphs]
@@ -257,8 +245,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             graphViewSeen.xs[currentOrder].textColor = CustomColor.labelGray
             
             graphViewSeen.xs[newOrder].textColor = CustomColor.yellow
-            //            layerAnimation.toValue = PodVariable.gingerBreadMan[newGraphs]
-            layerAnimation.toValue = gingerbreadmanNew[newTextKey]
+            layerAnimation.toValue = graphMutablePaths[newTextKey]
             currentTextKey = newTextKey
             layer.add(layerAnimation, forKey: nil)
             graphViewSeen.change.text = Label.changeValues[newGraphs]
@@ -304,7 +291,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             let closeMin = data1.closingPrice.min() else {return}
         
         let graphView = StockGraphView2(stockData: data1, key: stockData.0[self.i], cubic: true)
-        gingerbreadmanNew[stockData.0[self.i]] = AnimatedGraph.createGraphs(dataPoints: reduceDataPoints(original:  data1.closingPrice))
+        graphMutablePaths[stockData.0[self.i]] = AnimatedGraph.createGraphs(dataPoints: reduceDataPoints(original:  data1.closingPrice))
         let ma = closeMax //from unfiltered highs and lows
         let mi = closeMin //from unfiltered
         
@@ -355,7 +342,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
     
     @objc func checkDoneSquashing() {
-        guard gingerbreadmanNew.count > 6 else {
+        guard graphMutablePaths.count > 6 else {
             self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
             return
         } //sometimes, for some reason, not all the calayers load, and this can crash the app. probably better to try to reload the layers instead of kicking the user back to the dashboard. but for now... 7th layer is the former 1 day layer
@@ -388,12 +375,11 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
     private func add1YGraph() {
         
-        if PodVariable.gingerBreadMan.count > 0 {
+        if let _ = graphMutablePaths["1y"] {
             animateBase()
             view.addSubview(graphViewSeen)
             guard let oneOrder = orderOfGraphs["1y"] else {return}
-            layer.path = gingerbreadmanNew["1y"]
-            //            layer.path = PodVariable.gingerBreadMan[oneOrder]
+            layer.path = graphMutablePaths["1y"]
             layer.fillColor = CustomColor.yellow.cgColor
             layer.shadowColor = CustomColor.black.cgColor
             layer.shadowOpacity = 1.0
