@@ -94,6 +94,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var labelBottom: CGFloat = 120*UIScreen.main.bounds.height/1334
     let alertCollectionCellID = "alertCell"
     
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         Set1.saveUserInfo()
     }
@@ -979,9 +981,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
-        print("ALERT!!!!!")
-        print(alertsForCollectionView[indexPath.row])
-        print(Set1.alerts[alertsForCollectionView[indexPath.row]])
+       
         if let alert = Set1.alerts[alertsForCollectionView[indexPath.row]] {
             cell.set(alertName: alert.name, tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)
         } else {

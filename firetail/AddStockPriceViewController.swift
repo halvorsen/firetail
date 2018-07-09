@@ -41,10 +41,16 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     }
     let stockSymbol = UILabel()
     var activityView = UIActivityIndicatorView()
-    var lastPrice = Double()
+    var lastPrice = Double() {
+        didSet {
+            setPriceArray()
+        }
+    }
     let setPriceAlert = UILabel()
     let arrow = UIImageView()
     var priceString = String()
+    var collectionView: DialCollectionView?
+    let cellSize: CGSize = CGSize(width: 75*commonScalar, height: 103*commonScalar)
     
     private func loadItAll() {
         
@@ -111,7 +117,6 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.back(_:)), addSubview: true)
         
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
-        
         populateDialView()
         
     }
@@ -163,7 +168,12 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             DispatchQueue.main.async {
                 weakself.graph.transform = t
                 weakself.activityView.removeFromSuperview()
-                
+                weakself.setupDialCollectionView()
+                print("CELL")
+                print(weakself.cellSize.width)
+                print(weakself.lastPrice)
+                print(weakself.denominationDouble)
+                weakself.collectionView?.contentOffset.x = weakself.cellSize.width * CGFloat(weakself.lastPrice) / CGFloat(weakself.denominationDouble)
                 UIView.animate(withDuration: 1.0) {
                     
                     weakself.graph.transform = CGAffineTransform.identity
@@ -189,6 +199,21 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             weakself.alertPrice = lastClose
             weakself.lastPrice = lastClose
         }
+        
+    }
+    
+    let dialCollectionCellID = "dialCell"
+    private func setupDialCollectionView() {
+        let collectionLayout = UICollectionViewFlowLayout()
+        collectionLayout.minimumInteritemSpacing = 0
+        collectionLayout.minimumLineSpacing = 0
+        collectionLayout.scrollDirection = .horizontal
+        let frame = CGRect(x: 0, y: 494*screenHeight/667 - 206*screenWidth/375, width: screenWidth, height: 103*screenWidth/375)
+        collectionView?.contentSize = CGSize(width: cellSize.width * CGFloat(priceArray.count), height: 103*screenWidth/375)
+        collectionView = DialCollectionView(frame: frame, collectionViewLayout: collectionLayout, delegate: self, dataSource: self, cellID: dialCollectionCellID)
+       
+        view.addSubview(collectionView!)
+        
     }
     
     func populateDisplayValues(currentPrice: Double) {
@@ -316,6 +341,51 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     var isFirst = true
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
+        if scrollView == collectionView {
+            
+            let price = Double(offset - cellSize.width) * denominationDouble
+            dialPrice = Double(price)
+            
+            
+            if price < 0.00 {
+                priceLabel.text = "$0.00"
+                priceString = "0.00"
+            } else if price < 5.00 {
+                priceLabel.text = "$" + String(format: "%.2f", price)
+                priceString = String(format: "%.2f", price)
+            } else if price < 1000 {
+                priceLabel.text = "$" + String(format: "%.1f", price) + "0"
+                priceString = String(format: "%.1f", price) + "0"
+            } else if price < 10000 {
+                let newprice = price/1000
+                priceLabel.text = "$" + String(format: "%.1f", newprice) + "k"
+                priceString = String(format: "%.1f", price)
+            } else {
+                priceLabel.text = "$" + String(format: "%.0f", price) + "0"
+                priceString = String(format: "%.0f", price) + "0"
+            }
+//            if price > 999.99 {
+//                if let textString = priceLabel.text?.dropFirst() {
+//                    priceLabel.text = String(textString)
+//                }
+//            }
+            if let priceDoub = Double(priceString) {
+                newAlertPrice = priceDoub
+            }
+            
+            if !isFirst {
+                if lastPrice > dialPrice + 0.1 && arrow.image != #imageLiteral(resourceName: "downArrow") {
+                    arrow.image = #imageLiteral(resourceName: "downArrow")
+                } else if lastPrice < dialPrice - 0.1 && arrow.image != #imageLiteral(resourceName: "upArrow") {
+                    arrow.image = #imageLiteral(resourceName: "upArrow")
+                }
+            } else {
+                isFirst = false
+            }
+            
+        }
+       
+        
         if scrollView == dial {
             
             let offset = Float(scrollView.contentOffset.x)
@@ -349,16 +419,18 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 newAlertPrice = priceDoub
             }
             
-        }
-        if !isFirst {
-            if lastPrice > dialPrice + 0.1 && arrow.image != #imageLiteral(resourceName: "downArrow") {
-                arrow.image = #imageLiteral(resourceName: "downArrow")
-            } else if lastPrice < dialPrice - 0.1 && arrow.image != #imageLiteral(resourceName: "upArrow") {
-                arrow.image = #imageLiteral(resourceName: "upArrow")
+            if !isFirst {
+                if lastPrice > dialPrice + 0.1 && arrow.image != #imageLiteral(resourceName: "downArrow") {
+                    arrow.image = #imageLiteral(resourceName: "downArrow")
+                } else if lastPrice < dialPrice - 0.1 && arrow.image != #imageLiteral(resourceName: "upArrow") {
+                    arrow.image = #imageLiteral(resourceName: "upArrow")
+                }
+            } else {
+                isFirst = false
             }
-        } else {
-            isFirst = false
+            
         }
+        
     }
     
     private func addGradient(mask: UILabel, color1: UIColor, color2: UIColor, start: CGPoint, end: CGPoint){
@@ -374,6 +446,52 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
+    }
+    
+    var priceArray: [Double] = [-1,-1]
+    private enum Denomination {
+        case ones, tens, hundreds
+    }
+    private var denomination: Denomination = .ones
+    private var denominationDouble: Double = 0.0
+    func setPriceArray() {
+        
+        if lastPrice > 10000 {
+            denomination = .hundreds
+            denominationDouble = 100
+        } else if lastPrice > 1000 {
+            denomination = .tens
+            denominationDouble = 10
+        } else {
+            denomination = .ones
+            denominationDouble = 1
+        }
+        var price: Double = 0.0
+        while priceArray.count < 10000 {
+            priceArray.append(price)
+            price += denominationDouble
+        }
+        
+    }
+}
+
+extension AddStockPriceViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+  
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+     
+        return priceArray.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: dialCollectionCellID, for: indexPath) as! DialCell
+  
+        cell.set(price: String(priceArray[indexPath.row]))
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return cellSize
     }
     
 }
