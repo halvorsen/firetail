@@ -20,7 +20,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     let backArrow = UIButton()
     var graph = DailyGraphForAlertView()
     var container = UIScrollView()
-    var dial = UIScrollView()
+    let indicator = UIImageView(image: #imageLiteral(resourceName: "triangleIndicator"))
     var displayValues = [Double]()
     var priceLabel = UILabel()
     var sett = UIButton()
@@ -60,11 +60,14 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         blockInBackground.backgroundColor = CustomColor.black24
         
         
-        arrow.frame = CGRect(x: 212*screenWidth/375, y: 456*screenHeight/667, width: 10*screenWidth/375, height: 11*screenWidth/375)
-        
-        
-        addLabel(name: setPriceAlert, text: "Set Price Alert", textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Light", fontSize: 17, x: 56, y: 885, width: 300, height: 80, lines: 1)
-        
+        setPriceAlert.text = "Set Price Alert"
+        setPriceAlert.textColor = CustomColor.white115
+        setPriceAlert.textAlignment = .left
+        setPriceAlert.font = UIFont(name: "Roboto-Light", size: 17*commonScalar)
+        view.addSubview(setPriceAlert)
+        setPriceAlert.translatesAutoresizingMaskIntoConstraints = false
+        setPriceAlert.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 28*commonScalar).isActive = true
+        setPriceAlert.centerYAnchor.constraint(equalTo: view.topAnchor, constant: 462*commonScalar).isActive = true
         addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif", fontSize: 20, x: 60, y: 606, width: 200, height: 56, lines: 1)
         
         
@@ -79,29 +82,30 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
         
-        priceLabel.frame = CGRect(x: 0, y: 450*screenHeight/667, width: 205*screenWidth/375, height: 25*screenHeight/667)
+        view.addSubview(blockInBackground)
         priceLabel.font = UIFont(name: "Roboto-Bold", size: 17*fontSizeMultiplier)
         priceLabel.textAlignment = .right
         priceLabel.textColor = .white
-        
-        dial.backgroundColor = CustomColor.black42
-        dial.frame = CGRect(x: 0, y: 494*screenHeight/667, width: screenWidth, height: 103*screenWidth/375)
-        dial.contentSize = CGSize(width: 400.182*screenWidth, height: dial.bounds.height)
-        
-        dial.contentOffset.x = screenWidth*4.285
-        dial.showsHorizontalScrollIndicator = false
-        dial.showsVerticalScrollIndicator = false
-        dial.delegate = self
-        let bottomOfDial = dial.frame.maxY*1334/screenHeight //or 1194
-        view.addSubview(blockInBackground)
+        view.addSubview(priceLabel)
+        priceLabel.translatesAutoresizingMaskIntoConstraints = false
+        priceLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        priceLabel.centerYAnchor.constraint(equalTo: setPriceAlert.centerYAnchor).isActive = true
+        var backupConstraint = NSLayoutConstraint()
+        backupConstraint = priceLabel.leftAnchor.constraint(greaterThanOrEqualTo: setPriceAlert.rightAnchor)
+        backupConstraint.priority = .required
+        backupConstraint.isActive = true
         view.addSubview(arrow)
+        arrow.translatesAutoresizingMaskIntoConstraints = false
+        arrow.leftAnchor.constraint(equalTo: priceLabel.rightAnchor, constant: 8).isActive = true
+        arrow.centerYAnchor.constraint(equalTo: priceLabel.centerYAnchor).isActive = true
         view.addSubview(setPriceAlert)
         view.addSubview(newAlertTickerLabel)
         view.addSubview(stockSymbol)
         view.addSubview(container)
-        view.addSubview(priceLabel)
-        dial.contentOffset.x = offset
-        view.addSubview(dial)
+        
+        
+        
+       
         
         let myBezier = UIBezierPath()
         myBezier.move(to: CGPoint(x: 167*screenWidth/375, y: 489*screenHeight/667))
@@ -112,13 +116,13 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         myLayer.path = myBezier.cgPath
         myLayer.fillColor = CustomColor.black24.cgColor
         
-        addButton(name: sett, x: 0, y: bottomOfDial, width: 750, height: 1334 - bottomOfDial, title: "SET", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.setFunc(_:)), addSubview: true)
+        addButton(name: sett, x: 0, y: 1194, width: 750, height: 140, title: "SET", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.setFunc(_:)), addSubview: true)
         sett.contentHorizontalAlignment = .center
         view.layer.addSublayer(myLayer)
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.back(_:)), addSubview: true)
         
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
-        populateDialView()
+     
         setDialConfiguration(unit: unit, price: lastPrice)
     }
     var rectsLabelsTop = [CGFloat]()
@@ -170,10 +174,6 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 weakself.graph.transform = t
                 weakself.activityView.removeFromSuperview()
                 weakself.setupDialCollectionView()
-                print("CELL")
-                print(weakself.cellSize.width)
-                print(weakself.lastPrice)
-                print(weakself.denominationDouble)
                 weakself.collectionView?.contentOffset.x = weakself.cellSize.width * CGFloat(weakself.lastPrice) / CGFloat(weakself.denominationDouble)
                 UIView.animate(withDuration: 1.0) {
                     
@@ -200,6 +200,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             weakself.alertPrice = lastClose
             weakself.lastPrice = lastClose
             // ##TODO: add unit = .dollar
+            
         }
         
     }
@@ -210,11 +211,24 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         collectionLayout.minimumInteritemSpacing = 0
         collectionLayout.minimumLineSpacing = 0
         collectionLayout.scrollDirection = .horizontal
-        let frame = CGRect(x: 0, y: 494*screenHeight/667 - 206*screenWidth/375, width: screenWidth, height: 103*screenWidth/375)
+        let frame = CGRect(x: 0, y: 494*screenHeight/667, width: screenWidth, height: 103*screenWidth/375)
         collectionView?.contentSize = CGSize(width: cellSize.width * CGFloat(priceArray.count), height: 103*screenWidth/375)
         collectionView = DialCollectionView(frame: frame, collectionViewLayout: collectionLayout, delegate: self, dataSource: self, cellID: dialCollectionCellID)
        
         view.addSubview(collectionView!)
+        view.addSubview(indicator)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.topAnchor.constraint(equalTo: collectionView!.topAnchor).isActive = true
+        indicator.centerXAnchor.constraint(equalTo: collectionView!.centerXAnchor).isActive = true
+        
+        let dialMask = UILabel()
+        dialMask.frame = CGRect(x: 0, y: 514*screenHeight/667, width: screenWidth, height: 60*screenWidth/375)
+        dialMask.backgroundColor = CustomColor.black42Alpha0
+        
+        view.addSubview(dialMask)
+        
+        addGradient(mask: dialMask, color1: CustomColor.black42, color2: CustomColor.black42Alpha0, start: CGPoint(x: -0.2, y: 0.0), end: CGPoint(x: 0.45, y: 0.0))
+        addGradient(mask: dialMask, color1: CustomColor.black42Alpha0, color2: CustomColor.black42, start: CGPoint(x: 0.55, y: 0.0), end: CGPoint(x: 1.2, y: 0.0))
         
     }
     
@@ -240,50 +254,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             }
         }
     }
-    
-    func populateDialView() {
-        
-        let backdrop = UIView()
-        backdrop.backgroundColor = CustomColor.black42
-        backdrop.frame.size = dial.contentSize
-        backdrop.frame.origin = CGPoint(x: 0, y: 0)
-        for i in 0...50 {
-            let dialImage = UIImageView()
-            dialImage.frame.origin = CGPoint(x: CGFloat(i)*3000*screenWidth/375, y: 0)
-            dialImage.frame.size = CGSize(width: 3000*screenWidth/375, height: 103*screenWidth/375)
-            dialImage.image = #imageLiteral(resourceName: "Dial")
-            dialImage.contentMode = UIViewContentMode.scaleAspectFit
-            dial.addSubview(dialImage)
-            
-        }
-        
-        let f = 14*fontSizeMultiplier
-        var count = 0
-        for xVal in Set2.priceRectX {
-            
-            let alertOption = UILabel()
-            alertOption.frame = CGRect(x: xVal, y: 19*screenWidth/375, width: 100*screenWidth/375, height: 62*screenWidth/375)
-            
-            alertOption.text = String(count)
-            
-            count += 1
-            alertOption.textAlignment = .center
-            alertOption.textColor = .white
-            alertOption.font = UIFont(name: "Roboto-Bold", size: f)
-            dial.addSubview(alertOption)
-            
-        }
-        
-        let dialMask = UILabel()
-        dialMask.frame = CGRect(x: 0, y: 514*screenHeight/667, width: screenWidth, height: 60*screenWidth/375)
-        dialMask.backgroundColor = CustomColor.black42Alpha0
-        
-        view.addSubview(dialMask)
-        
-        addGradient(mask: dialMask, color1: CustomColor.black42, color2: CustomColor.black42Alpha0, start: CGPoint(x: -0.2, y: 0.0), end: CGPoint(x: 0.45, y: 0.0))
-        addGradient(mask: dialMask, color1: CustomColor.black42Alpha0, color2: CustomColor.black42, start: CGPoint(x: 0.55, y: 0.0), end: CGPoint(x: 1.2, y: 0.0))
-        
-    }
+
     
     @objc private func back(_ sender: UIButton) {
         performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self)
@@ -353,18 +324,18 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             if price < 0.00 {
                 priceLabel.text = "$0.00"
                 priceString = "0.00"
+            } else if price < 1.00 {
+                priceLabel.text = "$" + String(format: "%.6f", price)
+                priceString = String(format: "%.6f", price)
             } else if price < 5.00 {
                 priceLabel.text = "$" + String(format: "%.2f", price)
                 priceString = String(format: "%.2f", price)
-            } else if price < 1000 {
+            } else if price < 10000 {
                 priceLabel.text = "$" + String(format: "%.1f", price) + "0"
                 priceString = String(format: "%.1f", price) + "0"
-            } else if price < 10000 {
-                let newprice = price/1000
-                priceLabel.text = "$" + String(format: "%.1f", newprice) + "k"
-                priceString = String(format: "%.1f", price)
             } else {
-                priceLabel.text = "$" + String(format: "%.0f", price)
+                let newprice = price/1000
+                priceLabel.text = "$" + String(format: "%.0f", newprice) + "k"
                 priceString = String(format: "%.0f", price)
             }
 
@@ -381,55 +352,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             } else {
                 isFirst = false
             }
-            
         }
-       
-        
-//        if scrollView == dial {
-//
-//            let offset = Float(scrollView.contentOffset.x)
-//            // little messy here but should be just a linear calculation, the labeling could be wrong too
-//
-//            let a:Float = -0.72
-//            let c:Float = 1000
-//            let price = (offset*(c-a)/75053.5)*375/Float(screenWidth) + a
-//            dialPrice = Double(price)
-//
-//
-//            if price < 0.00 {
-//                priceLabel.text = "$0.00"
-//                priceString = "0.00"
-//            } else if price < 5.00 {
-//                priceLabel.text = "$" + String(format: "%.2f", price)
-//                priceString = String(format: "%.2f", price)
-//            } else if price > 2000.0 {
-//                priceLabel.text = "$2000"
-//                priceString = "2000"
-//            } else {
-//                priceLabel.text = "$" + String(format: "%.1f", price) + "0"
-//                priceString = String(format: "%.1f", price) + "0"
-//            }
-//            if price > 999.99 {
-//                if let textString = priceLabel.text?.dropFirst() {
-//                    priceLabel.text = String(textString)
-//                }
-//            }
-//            if let priceDoub = Double(priceString) {
-//                newAlertPrice = priceDoub
-//            }
-//
-//            if !isFirst {
-//                if lastPrice > dialPrice + 0.1 && arrow.image != #imageLiteral(resourceName: "downArrow") {
-//                    arrow.image = #imageLiteral(resourceName: "downArrow")
-//                } else if lastPrice < dialPrice - 0.1 && arrow.image != #imageLiteral(resourceName: "upArrow") {
-//                    arrow.image = #imageLiteral(resourceName: "upArrow")
-//                }
-//            } else {
-//                isFirst = false
-//            }
-//
-//        }
-        
     }
     
     private func addGradient(mask: UILabel, color1: UIColor, color2: UIColor, start: CGPoint, end: CGPoint){
@@ -491,7 +414,7 @@ extension AddStockPriceViewController: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: dialCollectionCellID, for: indexPath) as! DialCell
   
-        cell.set(price: String(priceArray[indexPath.row]))
+        cell.set(price: priceArray[indexPath.row])
         return cell
     }
     
