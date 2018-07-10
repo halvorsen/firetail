@@ -9,6 +9,10 @@
 import UIKit
 import ReachabilitySwift
 
+enum DialUnit {
+    case dollar, etcVsEth, euro
+}
+
 class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     var newAlertTicker = String()
     var newAlertTickerLabel = UILabel()
@@ -41,11 +45,8 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     }
     let stockSymbol = UILabel()
     var activityView = UIActivityIndicatorView()
-    var lastPrice = Double() {
-        didSet {
-            setPriceArray()
-        }
-    }
+    let unit: DialUnit = .dollar
+    var lastPrice = Double()
     let setPriceAlert = UILabel()
     let arrow = UIImageView()
     var priceString = String()
@@ -118,7 +119,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         populateDialView()
-        
+        setDialConfiguration(unit: unit, price: lastPrice)
     }
     var rectsLabelsTop = [CGFloat]()
     var rectsLabelsBottom = [CGFloat]()
@@ -198,6 +199,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             }
             weakself.alertPrice = lastClose
             weakself.lastPrice = lastClose
+            // ##TODO: add unit = .dollar
         }
         
     }
@@ -342,9 +344,10 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if scrollView == collectionView {
-            
-            let price = Double(offset - cellSize.width) * denominationDouble
-            dialPrice = Double(price)
+
+            let price = Double(scrollView.contentOffset.x / cellSize.width) * denominationDouble
+          
+//            alertPrice = Double(price)
             
             
             if price < 0.00 {
@@ -361,22 +364,18 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 priceLabel.text = "$" + String(format: "%.1f", newprice) + "k"
                 priceString = String(format: "%.1f", price)
             } else {
-                priceLabel.text = "$" + String(format: "%.0f", price) + "0"
-                priceString = String(format: "%.0f", price) + "0"
+                priceLabel.text = "$" + String(format: "%.0f", price)
+                priceString = String(format: "%.0f", price)
             }
-//            if price > 999.99 {
-//                if let textString = priceLabel.text?.dropFirst() {
-//                    priceLabel.text = String(textString)
-//                }
-//            }
+
             if let priceDoub = Double(priceString) {
                 newAlertPrice = priceDoub
             }
             
             if !isFirst {
-                if lastPrice > dialPrice + 0.1 && arrow.image != #imageLiteral(resourceName: "downArrow") {
+                if lastPrice > newAlertPrice + 0.1 && arrow.image != #imageLiteral(resourceName: "downArrow") {
                     arrow.image = #imageLiteral(resourceName: "downArrow")
-                } else if lastPrice < dialPrice - 0.1 && arrow.image != #imageLiteral(resourceName: "upArrow") {
+                } else if lastPrice < newAlertPrice - 0.1 && arrow.image != #imageLiteral(resourceName: "upArrow") {
                     arrow.image = #imageLiteral(resourceName: "upArrow")
                 }
             } else {
@@ -386,50 +385,50 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         }
        
         
-        if scrollView == dial {
-            
-            let offset = Float(scrollView.contentOffset.x)
-            // little messy here but should be just a linear calculation, the labeling could be wrong too
-            
-            let a:Float = -0.72
-            let c:Float = 1000
-            let price = (offset*(c-a)/75053.5)*375/Float(screenWidth) + a
-            dialPrice = Double(price)
-            
-            
-            if price < 0.00 {
-                priceLabel.text = "$0.00"
-                priceString = "0.00"
-            } else if price < 5.00 {
-                priceLabel.text = "$" + String(format: "%.2f", price)
-                priceString = String(format: "%.2f", price)
-            } else if price > 2000.0 {
-                priceLabel.text = "$2000"
-                priceString = "2000"
-            } else {
-                priceLabel.text = "$" + String(format: "%.1f", price) + "0"
-                priceString = String(format: "%.1f", price) + "0"
-            }
-            if price > 999.99 {
-                if let textString = priceLabel.text?.dropFirst() {
-                    priceLabel.text = String(textString)
-                }
-            }
-            if let priceDoub = Double(priceString) {
-                newAlertPrice = priceDoub
-            }
-            
-            if !isFirst {
-                if lastPrice > dialPrice + 0.1 && arrow.image != #imageLiteral(resourceName: "downArrow") {
-                    arrow.image = #imageLiteral(resourceName: "downArrow")
-                } else if lastPrice < dialPrice - 0.1 && arrow.image != #imageLiteral(resourceName: "upArrow") {
-                    arrow.image = #imageLiteral(resourceName: "upArrow")
-                }
-            } else {
-                isFirst = false
-            }
-            
-        }
+//        if scrollView == dial {
+//
+//            let offset = Float(scrollView.contentOffset.x)
+//            // little messy here but should be just a linear calculation, the labeling could be wrong too
+//
+//            let a:Float = -0.72
+//            let c:Float = 1000
+//            let price = (offset*(c-a)/75053.5)*375/Float(screenWidth) + a
+//            dialPrice = Double(price)
+//
+//
+//            if price < 0.00 {
+//                priceLabel.text = "$0.00"
+//                priceString = "0.00"
+//            } else if price < 5.00 {
+//                priceLabel.text = "$" + String(format: "%.2f", price)
+//                priceString = String(format: "%.2f", price)
+//            } else if price > 2000.0 {
+//                priceLabel.text = "$2000"
+//                priceString = "2000"
+//            } else {
+//                priceLabel.text = "$" + String(format: "%.1f", price) + "0"
+//                priceString = String(format: "%.1f", price) + "0"
+//            }
+//            if price > 999.99 {
+//                if let textString = priceLabel.text?.dropFirst() {
+//                    priceLabel.text = String(textString)
+//                }
+//            }
+//            if let priceDoub = Double(priceString) {
+//                newAlertPrice = priceDoub
+//            }
+//
+//            if !isFirst {
+//                if lastPrice > dialPrice + 0.1 && arrow.image != #imageLiteral(resourceName: "downArrow") {
+//                    arrow.image = #imageLiteral(resourceName: "downArrow")
+//                } else if lastPrice < dialPrice - 0.1 && arrow.image != #imageLiteral(resourceName: "upArrow") {
+//                    arrow.image = #imageLiteral(resourceName: "upArrow")
+//                }
+//            } else {
+//                isFirst = false
+//            }
+//
+//        }
         
     }
     
@@ -448,18 +447,24 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         reachabilityRemoveNotification()
     }
     
+    private func setDialConfiguration(unit: DialUnit, price: Double) {
+        
+        setPriceArray(priceStart: price)
+        
+    }
+    
     var priceArray: [Double] = [-1,-1]
     private enum Denomination {
         case ones, tens, hundreds
     }
     private var denomination: Denomination = .ones
     private var denominationDouble: Double = 0.0
-    func setPriceArray() {
+    func setPriceArray(priceStart: Double) {
         
-        if lastPrice > 10000 {
+        if priceStart > 10000 {
             denomination = .hundreds
             denominationDouble = 100
-        } else if lastPrice > 1000 {
+        } else if priceStart > 1000 {
             denomination = .tens
             denominationDouble = 10
         } else {
