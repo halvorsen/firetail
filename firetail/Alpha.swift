@@ -61,17 +61,15 @@ class Alpha {
                     if let datas = json["Time Series (Daily)"] {
                         
                         for dateString in sortedDates {
-                            
-                            let dateFormatter = DateFormatter()
-                            dateFormatter.dateFormat = "yyyy-mm-dd"
-                            dateFormatter.locale = Locale.init(identifier: "en_GB")
-                            let dateObj = dateFormatter.date(from: dateString)!
-                            
-                            let calendar = Calendar.autoupdatingCurrent
-                            let components = calendar.dateComponents([.year,.month,.day], from: dateObj)
-                            let month = components.month
-                            let day = components.day
-                            _dates.append((monthStrings[month!],day!))
+                
+                            guard dateString.count > 8 else { return }
+                            let _month = dateString[5...6]
+                            let _day = dateString[8...9]
+                             if let month = Int(_month),
+                                let day = Int(_day) {
+                       
+                            _dates.append((monthStrings[month],day))
+                                }
                             if let packet = datas[dateString] as? [String:String] {
                                 
                                 for (key,value) in packet {

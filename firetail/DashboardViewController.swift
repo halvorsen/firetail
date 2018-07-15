@@ -687,7 +687,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             present(alertController, animated: true, completion: nil)
         } else {
             
-            let alert = UIAlertController(title: "Premium Member", message: "You are a premium member and can add up to 50 stock price alerts", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Premium Member", message: "You are a premium member and can add up to 100 stock price alerts", preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             
@@ -740,11 +740,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     @objc private func addFunc(_ sender: UIButton) {
         if hitOnce {
             hitOnce = false
-            if (premiumMember || Set1.userAlerts.count < 3) && Set1.userAlerts.count < 50 {
+            if (premiumMember || Set1.userAlerts.count < 3) && Set1.userAlerts.count < 100 {
                 
                 performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
                 
-            } else if !premiumMember && Set1.userAlerts.count < 50 {
+            } else if !premiumMember && Set1.userAlerts.count < 100 {
                 
                 purchase()
             } else {
