@@ -330,14 +330,15 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             } else if price < 5.00 {
                 priceLabel.text = "$" + String(format: "%.2f", price)
                 priceString = String(format: "%.2f", price)
-            } else if price < 10000 {
+            } else {
                 priceLabel.text = "$" + String(format: "%.1f", price) + "0"
                 priceString = String(format: "%.1f", price) + "0"
-            } else {
-                let newprice = price/1000
-                priceLabel.text = "$" + String(format: "%.0f", newprice) + "k"
-                priceString = String(format: "%.0f", price)
             }
+//            else {
+//                let newprice = price/1000
+//                priceLabel.text = "$" + String(format: "%.0f", newprice) + "k"
+//                priceString = String(format: "%.0f", price)
+//            }
 
             if let priceDoub = Double(priceString) {
                 newAlertPrice = priceDoub
