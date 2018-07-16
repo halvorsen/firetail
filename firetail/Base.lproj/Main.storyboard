@@ -99,7 +99,7 @@
         <!--Add Stock Ticker View Controller-->
         <scene sceneID="CzO-Gj-xMU">
             <objects>
-                <viewController id="VGb-5b-ve2" customClass="AddStockTickerViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddStockTickerViewController" id="VGb-5b-ve2" customClass="AddStockTickerViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TOR-lR-XqF"/>
                         <viewControllerLayoutGuide type="bottom" id="8Jc-IY-J25"/>
@@ -188,7 +188,7 @@
         <!--Dashboard View Controller-->
         <scene sceneID="6zS-Et-ocD">
             <objects>
-                <viewController modalTransitionStyle="crossDissolve" id="9Rf-87-nHj" customClass="DashboardViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DashboardViewController" modalTransitionStyle="crossDissolve" id="9Rf-87-nHj" customClass="DashboardViewController" customModule="firetail" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hhA-t2-69E"/>
                         <viewControllerLayoutGuide type="bottom" id="Kz2-9G-dId"/>
@@ -234,8 +234,8 @@
     <inferredMetricsTieBreakers>
         <segue reference="csx-Lf-EuV"/>
         <segue reference="5ck-wd-Jmd"/>
-        <segue reference="WkD-4d-o4c"/>
+        <segue reference="cxp-Cj-N2o"/>
         <segue reference="883-bY-VR1"/>
-        <segue reference="Nux-za-Mvu"/>
+        <segue reference="df9-T2-a9J"/>
     </inferredMetricsTieBreakers>
 </document>

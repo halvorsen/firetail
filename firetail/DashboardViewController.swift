@@ -741,20 +741,24 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     @objc private func addFunc(_ sender: UIButton) {
         if hitOnce {
             hitOnce = false
-            if Set1.emailOn || Set1.allOn {
+            print("current1")
                 let currentUser = Auth.auth().currentUser
-                
-                if Set1.userAlerts.count > 1 && currentUser == nil {
+                print(Set1.userAlerts.count)
+            print(currentUser == nil)
+                if Set1.userAlerts.count > 0 && currentUser == nil {
+                     print("current2")
+                    
                     present(SignupViewController(), animated: true)
                     return
                 }
                 if let user = currentUser,
                     user.isEmailVerified == false,
                     Set1.userAlerts.count > 1 {
+                    print(Set1.userAlerts.count)
                     present(SignupViewController(), animated: true)
                     return
                 }
-            }
+            
             
             if (premiumMember || Set1.userAlerts.count < 3) && Set1.userAlerts.count < 100 {
                 

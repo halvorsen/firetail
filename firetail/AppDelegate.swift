@@ -38,13 +38,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
         
         if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") {
-            if let viewController = storyboard.instantiateViewController(withIdentifier: "DashboardViewController") as? LoginViewController {
+            if let viewController = storyboard.instantiateViewController(withIdentifier: "DashboardViewController") as? DashboardViewController {
             self.window?.rootViewController = viewController
             self.window?.makeKeyAndVisible()
             }
         } else {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
-            if let viewController = storyboard.instantiateViewController(withIdentifier: "AddStockTickerViewController") as? SignupViewController {
+            if let viewController = storyboard.instantiateViewController(withIdentifier: "AddStockTickerViewController") as? AddStockTickerViewController {
             self.window?.rootViewController = viewController
             self.window?.makeKeyAndVisible()
             }
