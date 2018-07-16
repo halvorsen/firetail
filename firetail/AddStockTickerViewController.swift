@@ -82,7 +82,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         
         var isGoodToGo = false
         
-        if IndexListOfStocks.amex.contains(newAlertTicker) || IndexListOfStocks.nyse.contains(newAlertTicker) || IndexListOfStocks.nasdaq.contains(newAlertTicker) || IndexListOfStocks.otcmkts.contains(newAlertTicker) {
+        if SupportedTicker.crypto.contains(newAlertTicker) || AppSetting.mode == .stock {
             
             isGoodToGo = true
             let charArray = newAlertTicker.map { String($0) }
@@ -110,7 +110,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
             if isGoodToGo {
                 weakself.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: weakself)
             } else {
-                let alert = UIAlertController(title: "", message: "Ticker Not Found", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: "", message: "Coin not supported", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                 weakself.present(alert, animated: true, completion: nil)
             }
@@ -128,7 +128,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
                 weakself.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: weakself)
             } else {
                 
-                let alert = UIAlertController(title: "", message: "Ticker Not Found", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: "", message: "Coin not supported", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                 weakself.present(alert, animated: true, completion: nil)
             }

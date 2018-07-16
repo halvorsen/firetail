@@ -275,35 +275,34 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         }
     }
     
+    private func displayAlert() {
+        let alert = UIAlertController(title: "", message: "Ticker not supported", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { _ in
+            self.performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self)
+        })
+        present(alert, animated: true) {
+            self.activityView.stopAnimating()
+            self.activityView.removeFromSuperview()
+        }
+    }
+    
     // here i'm giving it two chances to fetch the data otherwise it returns to addstockticker controller view with no error displayed to user
     private func prepareGraph(result: @escaping (_ dateArray: [(String,Int)]?,_ closings: [Double]?) -> Void) {
         
-        let alphaAPI = Alpha()
-        alphaAPI.get20YearHistoricalData(ticker: newAlertTicker, isOneYear: false) { (dataSet) in
-            if dataSet == nil {
-                alphaAPI.get20YearHistoricalData(ticker: self.newAlertTicker, isOneYear: false) { [weak self] (dataSet) in
-                    guard let dataSet = dataSet else {self?.performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self); return}
-                    Set1.cachedInThisSession.append(dataSet.ticker)
-                    Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                    Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                    
-                    var dates = [(String,Int)]()
-                    for i in 0..<dataSet.day.count {
-                        dates.append((dataSet.month[i],dataSet.day[i]))
-                    }
-                    result(dates,dataSet.price)
-                }
-            } else {
-                guard let dataSet = dataSet else {return}
-                Set1.cachedInThisSession.append(dataSet.ticker)
-                Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                var dates = [(String,Int)]()
-                for i in 0..<dataSet.day.count {
-                    dates.append((dataSet.month[i],dataSet.day[i]))
-                }
-                result(dates,dataSet.price)
+        Alpha().get20YearHistoricalData(ticker: newAlertTicker, isOneYear: false) { [weak self] (dataSet) in
+            guard let dataSet = dataSet else {
+                self?.displayAlert()
+                return
             }
+            Set1.cachedInThisSession.append(dataSet.ticker)
+            Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+            Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+            var dates = [(String,Int)]()
+            for i in 0..<dataSet.day.count {
+                dates.append((dataSet.month[i],dataSet.day[i]))
+            }
+            result(dates,dataSet.price)
+    
         }
     }
     
@@ -334,11 +333,6 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 priceLabel.text = "$" + String(format: "%.1f", price) + "0"
                 priceString = String(format: "%.1f", price) + "0"
             }
-//            else {
-//                let newprice = price/1000
-//                priceLabel.text = "$" + String(format: "%.0f", newprice) + "k"
-//                priceString = String(format: "%.0f", price)
-//            }
 
             if let priceDoub = Double(priceString) {
                 newAlertPrice = priceDoub
