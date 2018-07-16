@@ -38,14 +38,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
         
         if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") {
-            if let viewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+            if let viewController = storyboard.instantiateViewController(withIdentifier: "DashboardViewController") as? LoginViewController {
             self.window?.rootViewController = viewController
             self.window?.makeKeyAndVisible()
             }
         } else {
-            Set1.logoutFirebase()
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
-            if let viewController = storyboard.instantiateViewController(withIdentifier: "SignupViewController") as? SignupViewController {
+            if let viewController = storyboard.instantiateViewController(withIdentifier: "AddStockTickerViewController") as? SignupViewController {
             self.window?.rootViewController = viewController
             self.window?.makeKeyAndVisible()
             }
@@ -59,6 +58,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Set1.premium = true //: toggle in development
         print("ti: \(Set1.ti)")
         print("tiuseralerts; \(Set1.userAlerts)")
+        
+        Set1.flashOn = UserDefaults.standard.bool(forKey: "flashOn")
+        Set1.allOn = UserDefaults.standard.bool(forKey: "allOn")
+        Set1.pushOn = UserDefaults.standard.bool(forKey: "pushOn")
+        Set1.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
+        Set1.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
+        AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: Set1.username) {_ in}
+        
         return true
     }
     

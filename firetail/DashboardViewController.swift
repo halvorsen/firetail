@@ -13,6 +13,7 @@ import SwiftyStoreKit
 import StoreKit
 import MessageUI
 import Firebase
+import FirebaseAuth
 import UserNotifications
 import QuartzCore
 import ReachabilitySwift
@@ -740,6 +741,21 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     @objc private func addFunc(_ sender: UIButton) {
         if hitOnce {
             hitOnce = false
+            if Set1.emailOn || Set1.allOn {
+                let currentUser = Auth.auth().currentUser
+                
+                if Set1.userAlerts.count > 1 && currentUser == nil {
+                    present(SignupViewController(), animated: true)
+                    return
+                }
+                if let user = currentUser,
+                    user.isEmailVerified == false,
+                    Set1.userAlerts.count > 1 {
+                    present(SignupViewController(), animated: true)
+                    return
+                }
+            }
+            
             if (premiumMember || Set1.userAlerts.count < 3) && Set1.userAlerts.count < 100 {
                 
                 performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)

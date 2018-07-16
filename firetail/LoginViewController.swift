@@ -24,7 +24,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var ti = [String]()
     var alreadyAUser = false
  
-    let coverView = UIView()
     var retry = false
     var authenticated = false
     var noNils = true
@@ -33,7 +32,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     let myLoadSaveCoreData = LoadSaveCoreData()
     var isFirstLoading = true
     var tap = UITapGestureRecognizer()
-    var appLoadingData = AppLoadingData()
     let alphaAPI = Alpha()
   
     override func viewDidAppear(_ animated: Bool) {
@@ -50,76 +48,9 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         }
         alphaAPI.populateSet1Month()
         loadsave.loadUsername()
-        coverView.frame = view.frame
-        coverView.backgroundColor = CustomColor.black33
-        coverView.layer.zPosition = 10
-        view.addSubview(coverView)
         
-
+        self.populateView()
         
-        let launchedBefore = UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore")
-        if launchedBefore  {
-         
-        } else {
-            do {try Auth.auth().signOut()}catch { }
-            UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
-        }
-        var didntMoveForward = true
-        Auth.auth().addStateDidChangeListener() { auth, user in
-            // 2
-            if user != nil {
-                // 3
-                self.alreadyAUser = true
-                self.authenticated = true
-                if Set1.username != "none" {
-                   if self.isFirstLoading {
-                    //load stock list from firebase and start fetch, if loading takes long time move forward anyways after 8 seconds to dashboard
-                    Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false, block: {_ in
-                        if didntMoveForward {
-                    
-                            didntMoveForward = false
-                            if self.isFirstTimeSeguing {
-                                self.isFirstTimeSeguing = false
-                                self.logoutFunc()
-                                self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
-                            }
-                        }
-                    })
-                    self.appLoadingData.loadUserInfoFromFirebase(firebaseUsername: Set1.username) {haveNoAlerts in
-                        self.ti = Set1.ti
-            
-                        if haveNoAlerts {
-                         
-                            didntMoveForward = false
-                            self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
-                        } else {
-                       
-                            didntMoveForward = false
-                            self.cont()
-                        }
-                        
-                    }
-                    
-                        self.isFirstLoading = false
-                    }
-                }    
-            } else {
-                UIView.animate(withDuration: 0.2) {
-             
-                    self.coverView.alpha = 0.0
-                    
-                }
-                if !self.continueB.isDescendant(of: self.view) {
-                    self.populateView()
-                }
-            }
-        }
-        
-        Set1.flashOn = UserDefaults.standard.bool(forKey: "flashOn")
-        Set1.allOn = UserDefaults.standard.bool(forKey: "allOn")
-        Set1.pushOn = UserDefaults.standard.bool(forKey: "pushOn")
-        Set1.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
-        Set1.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
     }
     
     @objc private func dismissKeyboard(_ gesture: UITapGestureRecognizer) {
@@ -236,19 +167,19 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     var isFirstTimeSeguing = true
     private func cont() {
-      
-        if ti == [""] {
-            if isFirstTimeSeguing {
-                isFirstTimeSeguing = false
-                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
-            }
-        } else {
-    
-            if isFirstTimeSeguing {
-                isFirstTimeSeguing = false
-                self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
-            }
-        }
+      dismiss(animated: true)
+//        if ti == [""] {
+//            if isFirstTimeSeguing {
+//                isFirstTimeSeguing = false
+//                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
+//            }
+//        } else {
+//
+//            if isFirstTimeSeguing {
+//                isFirstTimeSeguing = false
+//                self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
+//            }
+//        }
     }
     
     @objc private func createAccountFunc(_ sender: UIButton) {
@@ -274,33 +205,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
-    }
-    
-    private func logoutFunc() {
-        
-        Set1.month = ["","","","","","","","","","","",""]
-        Set1.currentPrice = 0.0
-        Set1.yesterday = 0.0
-        Set1.token = "none"
-        Set1.oneYearDictionary.removeAll()
-        Set1.ti.removeAll()
-        Set1.phone = "none"
-        Set1.email = "none"
-        Set1.brokerName = "none"
-        Set1.username = "none"
-        Set1.fullName = "none"
-        Set1.premium = false
-        Set1.numOfAlerts.removeAll()
-        Set1.brokerURL = "none"
-        Set1.createdAt = "none"
-        Set1.weeklyAlerts = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
-        Set1.userAlerts.removeAll()
-        Set2.smallRectX.removeAll()
-        Set2.bigRectX.removeAll()
-        Set2.priceRectX.removeAll()
-        Set1.alerts.removeAll()
-        Set1.logoutFirebase()
-     
     }
     
 }

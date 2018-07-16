@@ -69,11 +69,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         setPriceAlert.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 28*commonScalar).isActive = true
         setPriceAlert.centerYAnchor.constraint(equalTo: view.topAnchor, constant: 462*commonScalar).isActive = true
         addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif", fontSize: 20, x: 60, y: 606, width: 200, height: 56, lines: 1)
-        
-        
         addLabel(name: stockSymbol, text: "stock symbol", textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 56, y: 657, width: 240, height: 80, lines: 1)
-        
-        
         container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 260*screenHeight/667))
         container.contentSize = CGSize(width: 3.8*screenWidth, height: container.bounds.height)
         container.backgroundColor = CustomColor.black33
@@ -103,10 +99,6 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         view.addSubview(stockSymbol)
         view.addSubview(container)
         
-        
-        
-       
-        
         let myBezier = UIBezierPath()
         myBezier.move(to: CGPoint(x: 167*screenWidth/375, y: 489*screenHeight/667))
         myBezier.addLine(to: CGPoint(x: 207*screenWidth/375, y: 489*screenHeight/667))
@@ -125,6 +117,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
      
         setDialConfiguration(unit: unit, price: lastPrice)
     }
+    
     var rectsLabelsTop = [CGFloat]()
     var rectsLabelsBottom = [CGFloat]()
     var rectsLabelsTopBig = [CGFloat]()
@@ -371,7 +364,6 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
 
 extension AddStockPriceViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
      
         return priceArray.count

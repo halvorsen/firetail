@@ -10,6 +10,7 @@ import UIKit
 import UserNotifications
 import QuartzCore
 import Firebase
+import FirebaseAuth
 import ReachabilitySwift
 
 class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIApplicationDelegate {
@@ -190,6 +191,18 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         if mySwitchSMS.isOn == true && Set1.phone == "none" {
             self.performSegue(withIdentifier: "fromAddStockAlertToPhone", sender: self)
         } else {
+            let currentUser = Auth.auth().currentUser
+            
+            if Set1.userAlerts.count > 1 && currentUser == nil {
+                present(SignupViewController(), animated: true)
+                return
+            }
+            if let user = currentUser,
+                user.isEmailVerified == false,
+                Set1.userAlerts.count > 1 {
+                present(SignupViewController(), animated: true)
+                return
+            }
             self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
         }
         
