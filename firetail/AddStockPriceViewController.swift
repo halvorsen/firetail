@@ -21,7 +21,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     var graph = DailyGraphForAlertView()
     var container = UIScrollView()
     let indicator = UIImageView(image: #imageLiteral(resourceName: "triangleIndicator"))
-    var displayValues = [Double]()
+
     var priceLabel = UILabel()
     var sett = UIButton()
     var alertPrice: Double = 0.00 {
@@ -158,9 +158,8 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 
                 weakself.container.addSubview(weakself.graph)
             }
-            weakself.populateDisplayValues(currentPrice: lastClose)
+ 
             weakself.dialPrice = lastClose
-            
             
             let a:CGFloat = -0.72
             let c:CGFloat = 1000
@@ -180,7 +179,6 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                     weakself.graph.transform = CGAffineTransform.identity
                     weakself.graph.frame.origin.y = 50*weakself.screenHeight/667
                 }
-                
                 
                 weakself.delay(bySeconds: 0.6) {
                     
@@ -231,31 +229,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         addGradient(mask: dialMask, color1: CustomColor.black42Alpha0, color2: CustomColor.black42, start: CGPoint(x: 0.55, y: 0.0), end: CGPoint(x: 1.2, y: 0.0))
         
     }
-    
-    func populateDisplayValues(currentPrice: Double) {
-        if displayValues.count > 0 {
-            displayValues.removeAll()
-        }
-        if currentPrice > 32.0 && currentPrice < 160.0 {
-            for i in -3..<357 {
-                displayValues.append(currentPrice - 32.0 + Double(i)) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
-            }
-        } else if currentPrice >= 160.00 && currentPrice < 320.0 {
-            for i in 0..<360 {
-                displayValues.append(currentPrice - 160.0 + 5*Double(i)) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
-            }
-        } else if currentPrice >= 320.00 {
-            for i in 0..<360 {
-                displayValues.append(currentPrice - 320.0 + 10*Double(i)) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
-            }
-        } else if currentPrice > 0.00 && currentPrice <= 32.0 {
-            for i in -3..<357 {
-                displayValues.append(Double(i)) //10*screenwidth goes 2-65 or 0-67 so 32 would be middle
-            }
-        }
-    }
 
-    
     @objc private func back(_ sender: UIButton) {
         performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self)
     }
@@ -317,9 +291,6 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
 
             let price = Double(scrollView.contentOffset.x / cellSize.width) * denominationDouble
           
-//            alertPrice = Double(price)
-            
-            
             if price < 0.00 {
                 priceLabel.text = "$0.00"
                 priceString = "0.00"
