@@ -25,27 +25,27 @@ class Alpha {
             
             let task = URLSession.shared.dataTask(with: request, completionHandler: {
                 (data, response, error) in
-                
+              
                 if error != nil {
+                    print("fetch returned error")
                     print(error!.localizedDescription)
                     
                     result(nil)
                 }
                 else {
-                    
                     var json = [String: [String:Any]]()
                     do {
-                        
                         if let _json = try JSONSerialization.jsonObject(with: data!) as? [String: [String:Any]] {
                             json = _json
-                            
+                        } else {
+                            result(nil)
                         }
                     }
                     catch {
                         print("error in JSONSerialization")
                         result(nil)
                     }
-                    
+              
                     for (keyRoot,valueRoot) in json {
                         if keyRoot == "Time Series (Daily)" {
                             
@@ -132,15 +132,6 @@ class Alpha {
         }
         
     }
-    
-    //    struct DataSet {
-    //
-    //        var ticker: String
-    //        var price: [Double]
-    //        var month: [String]
-    //        var day: [Int]
-    //
-    //    }
     
     func populateSet1Month() {
         let date = Date()

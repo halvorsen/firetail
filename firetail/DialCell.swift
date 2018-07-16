@@ -25,10 +25,6 @@ final class DialCell: UICollectionViewCell {
         } else {
             self.price.text = String(format: "%.0f", price)
         }
-//        else {
-//            let newprice = price/1000
-//            self.price.text = String(format: "%.0f", newprice) + "k"
-//        }
         
     }
     
