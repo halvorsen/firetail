@@ -631,9 +631,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         Set1.createdAt = "none"
         Set1.weeklyAlerts = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
         Set1.userAlerts.removeAll()
-        Set2.smallRectX.removeAll()
-        Set2.bigRectX.removeAll()
-        Set2.priceRectX.removeAll()
         Set1.alerts.removeAll()
         
         Set1.logoutFirebase()

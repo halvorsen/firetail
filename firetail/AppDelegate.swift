@@ -64,6 +64,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Set1.pushOn = UserDefaults.standard.bool(forKey: "pushOn")
         Set1.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
         Set1.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
+        
+            Set2.priceRectX.removeAll()
+            Alpha().populateSet1Month()
+      
         AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: Set1.username) {_ in}
         
         return true

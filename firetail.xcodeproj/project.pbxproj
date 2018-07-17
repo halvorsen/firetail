@@ -44,6 +44,8 @@
 		06AC61B520F2ED8E002A7776 /* DialCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC61B420F2ED8E002A7776 /* DialCell.swift */; };
 		06AC61B820F2EE12002A7776 /* DialCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC61B720F2EE12002A7776 /* DialCollectionView.swift */; };
 		06AC61BA20FC157C002A7776 /* AppSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC61B920FC157C002A7776 /* AppSetting.swift */; };
+		06AC61BC20FD6CA8002A7776 /* AccountCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC61BB20FD6CA8002A7776 /* AccountCreationViewController.swift */; };
+		06AC61BE20FD6D37002A7776 /* AccountCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC61BD20FD6D37002A7776 /* AccountCreationView.swift */; };
 		06BB409C1F753E330068636E /* AppLoadingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BB409B1F753E330068636E /* AppLoadingData.swift */; };
 		06DBD44820EB14C500EFD6AB /* AlertSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44720EB14C500EFD6AB /* AlertSort.swift */; };
 		06DBD44A20EB152200EFD6AB /* MyFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44920EB152200EFD6AB /* MyFileManager.swift */; };
@@ -98,6 +100,8 @@
 		06AC61B420F2ED8E002A7776 /* DialCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialCell.swift; sourceTree = "<group>"; };
 		06AC61B720F2EE12002A7776 /* DialCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialCollectionView.swift; sourceTree = "<group>"; };
 		06AC61B920FC157C002A7776 /* AppSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetting.swift; sourceTree = "<group>"; };
+		06AC61BB20FD6CA8002A7776 /* AccountCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreationViewController.swift; sourceTree = "<group>"; };
+		06AC61BD20FD6D37002A7776 /* AccountCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreationView.swift; sourceTree = "<group>"; };
 		06BB409B1F753E330068636E /* AppLoadingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingData.swift; sourceTree = "<group>"; };
 		06DBD44720EB14C500EFD6AB /* AlertSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSort.swift; sourceTree = "<group>"; };
 		06DBD44920EB152200EFD6AB /* MyFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFileManager.swift; sourceTree = "<group>"; };
@@ -199,6 +203,7 @@
 				06110EA81EB925BF00C901C5 /* ChangePasswordViewController.swift */,
 				0641936A1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift */,
 				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
+				06AC61BB20FD6CA8002A7776 /* AccountCreationViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -232,6 +237,7 @@
 				06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */,
 				06DBD44B20EF0CB500EFD6AB /* Firebase.swift */,
 				06AC61B920FC157C002A7776 /* AppSetting.swift */,
+				06AC61BD20FD6D37002A7776 /* AccountCreationView.swift */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
@@ -456,6 +462,8 @@
 				06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */,
 				0681F42D1FDC3F8400082DCC /* CompareScroll.swift in Sources */,
 				06478E751EE610BC0016DF88 /* AddStockAlertViewController.swift in Sources */,
+				06AC61BC20FD6CA8002A7776 /* AccountCreationViewController.swift in Sources */,
+				06AC61BE20FD6D37002A7776 /* AccountCreationView.swift in Sources */,
 				062CC7371EDCA66400E2520A /* SupportedTicker.swift in Sources */,
 				06AC61BA20FC157C002A7776 /* AppSetting.swift in Sources */,
 				0641936B1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift in Sources */,
