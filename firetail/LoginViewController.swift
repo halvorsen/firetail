@@ -163,19 +163,18 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     
     var isFirstTimeSeguing = true
     private func cont() {
-      dismiss(animated: true)
-//        if ti == [""] {
-//            if isFirstTimeSeguing {
-//                isFirstTimeSeguing = false
-//                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
-//            }
-//        } else {
-//
-//            if isFirstTimeSeguing {
-//                isFirstTimeSeguing = false
-//                self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
-//            }
-//        }
+        if ti == [""] {
+            if isFirstTimeSeguing {
+                isFirstTimeSeguing = false
+                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
+            }
+        } else {
+
+            if isFirstTimeSeguing {
+                isFirstTimeSeguing = false
+                self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
+            }
+        }
     }
     
     @objc private func createAccountFunc(_ sender: UIButton) {

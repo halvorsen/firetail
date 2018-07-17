@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import Firebase
+import FirebaseAuth
 import UserNotifications
 import FirebaseInstanceID
 import FirebaseMessaging
@@ -36,17 +37,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         self.window = UIWindow(frame: UIScreen.main.bounds)
         
         let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-        
-        if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") {
+        let user = Auth.auth().currentUser
+        if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") && user != nil {
             if let viewController = storyboard.instantiateViewController(withIdentifier: "DashboardViewController") as? DashboardViewController {
             self.window?.rootViewController = viewController
             self.window?.makeKeyAndVisible()
             }
-        } else {
+        } else if user == nil {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
-            if let viewController = storyboard.instantiateViewController(withIdentifier: "AddStockTickerViewController") as? AddStockTickerViewController {
+            if let viewController = storyboard.instantiateViewController(withIdentifier: "SignupViewController") as? SignupViewController {
             self.window?.rootViewController = viewController
             self.window?.makeKeyAndVisible()
+            }
+        } else if Set1.alerts.count == 0 {
+            UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
+            if let viewController = storyboard.instantiateViewController(withIdentifier: "AddStockTickerViewController") as? AddStockTickerViewController {
+                self.window?.rootViewController = viewController
+                self.window?.makeKeyAndVisible()
+            }
+        } else {
+            UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
+            if let viewController = storyboard.instantiateViewController(withIdentifier: "DashboardViewController") as? DashboardViewController {
+                self.window?.rootViewController = viewController
+                self.window?.makeKeyAndVisible()
             }
         }
         
@@ -65,7 +78,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Set1.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
         Set1.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
         
-            Set2.priceRectX.removeAll()
             Alpha().populateSet1Month()
       
         AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: Set1.username) {_ in}

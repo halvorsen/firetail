@@ -184,6 +184,22 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         }
     }
     
+    var isFirstTimeSeguing = true
+    private func cont() {
+        if ti == [""] {
+            if isFirstTimeSeguing {
+                isFirstTimeSeguing = false
+                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
+            }
+        } else {
+            
+            if isFirstTimeSeguing {
+                isFirstTimeSeguing = false
+                self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
+            }
+        }
+    }
+    
     @objc private func dismissKeyboard(_ gesture: UITapGestureRecognizer) {
         textFields[0].resignFirstResponder()
         textFields[1].resignFirstResponder()
