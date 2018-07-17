@@ -91,13 +91,9 @@ class CacheManager {
         
                 let dataEntry = DataSet(ticker: ticker, price: myPrices, month: myMonths, day: myDays)
                 data.append(dataEntry)
-//                print("ticker: \(ticker)")
-               
                 }
-                
             }
         }
         return data
     }
-    
 }
