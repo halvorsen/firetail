@@ -82,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Set1.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
         
         Alpha().populateSet1Month()
-      
+        LoadSaveCoreData().loadUsername()
         AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: Set1.username)
         
         return true
