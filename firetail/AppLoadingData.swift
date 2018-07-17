@@ -15,45 +15,25 @@ let updatedDataKey = "com.rightBrothers.updatedData"
 class AppLoadingData {
     
     var fetchedTickers = [String]()
-    let cacheManager = CacheManager()
     let alphaAPI = Alpha()
     
-    private func loadStocksFromCoreData() -> Bool {
-        let dataSets = cacheManager.loadData()
-        if dataSets.count > 500 {
-            cacheManager.eraseAllStockCashe()
-        }
-        guard Set1.ti.count > 0 else {return false}
-        
+    internal static func loadStocksFromCoreData() {
+        let dataSets = CacheManager().loadData()
+        guard Set1.ti.count > 0 else {return}
+        var count = 0
         for i in 0..<Set1.ti.count {
             loop: for dataSet in dataSets.reversed() {
                 if dataSet.ticker == Set1.ti[i] {
-                    
+                    count += 1
                     Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
                     Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                    if i == (Set1.ti.count - 1) {
-                        
-                        for i in 0..<Set1.ti.count {
-                            if let prices = Set1.oneYearDictionary[Set1.ti[i]] {
-                                if prices.count < 2 {
-                                    
-                                    return false
-                                }
-                            } else {
-                                
-                                return false
-                            }
-                        }
-                        
-                        return true
+                    if count > 10 {
+                        break loop
                     }
-                    break loop
                 }
                 
             }
         }
-        
-        return false
     }
     
     private func fetchAllButFirst3Stocks() {
@@ -249,20 +229,16 @@ class AppLoadingData {
                                 Set1.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent, _timestamp)
                             }
                             totalCount += 1
-                            var haventSegued = true
+                            
                             if Set1.userAlerts.count == totalCount {
                                 if Set1.ti.count != 0 {
                                     
                                     DispatchQueue.global(qos: .background).async {
                                         self.fetch() {}
                                     }
-                                    let _ = self.loadStocksFromCoreData()
-                                    Set1.saveUserInfo()
                                     
-                                    
-                                } else {
-                                    Set1.saveUserInfo()
                                 }
+                                Set1.saveUserInfo()
                             }
                             
                         }) { (error) in

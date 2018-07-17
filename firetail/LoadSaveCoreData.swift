@@ -103,6 +103,7 @@ class LoadSaveCoreData {
         if resultsNameRequest.count > 0 {
             Set1.username = resultsNameRequest.last!.value(forKey: "username") as! String
         }
+        print("done loadusername")
     }
 
 
