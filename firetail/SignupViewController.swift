@@ -163,7 +163,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                 Auth.auth().signIn(withEmail: email, password: password1) //adds authentication
                 Set1.saveUserInfo()
                 self.delay(bySeconds: 1.5) {
-                    self.dismiss(animated: true)
+                    self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                 }
             } else {
                 print("error not nil")
@@ -175,27 +175,11 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                         self.continueOnce = true
                         self.username.text = email
                         Set1.saveUserInfo()
-                       self.dismiss(animated: true)
+                        self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                         
                     }
                 })
                 
-            }
-        }
-    }
-    
-    var isFirstTimeSeguing = true
-    private func cont() {
-        if ti == [""] {
-            if isFirstTimeSeguing {
-                isFirstTimeSeguing = false
-                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
-            }
-        } else {
-            
-            if isFirstTimeSeguing {
-                isFirstTimeSeguing = false
-                self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
             }
         }
     }

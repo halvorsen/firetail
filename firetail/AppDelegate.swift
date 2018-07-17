@@ -38,6 +38,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
         let user = Auth.auth().currentUser
+        print("user")
+        print(user)
+        print(user!.email)
         if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") && user != nil {
             if let viewController = storyboard.instantiateViewController(withIdentifier: "DashboardViewController") as? DashboardViewController {
             self.window?.rootViewController = viewController
@@ -78,9 +81,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Set1.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
         Set1.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
         
-            Alpha().populateSet1Month()
+        Alpha().populateSet1Month()
       
-        AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: Set1.username) {_ in}
+        AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: Set1.username)
         
         return true
     }

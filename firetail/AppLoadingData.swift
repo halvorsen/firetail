@@ -17,14 +17,14 @@ class AppLoadingData {
     var fetchedTickers = [String]()
     let cacheManager = CacheManager()
     let alphaAPI = Alpha()
-
+    
     private func loadStocksFromCoreData() -> Bool {
         let dataSets = cacheManager.loadData()
         if dataSets.count > 500 {
             cacheManager.eraseAllStockCashe()
         }
         guard Set1.ti.count > 0 else {return false}
-     
+        
         for i in 0..<Set1.ti.count {
             loop: for dataSet in dataSets.reversed() {
                 if dataSet.ticker == Set1.ti[i] {
@@ -36,15 +36,15 @@ class AppLoadingData {
                         for i in 0..<Set1.ti.count {
                             if let prices = Set1.oneYearDictionary[Set1.ti[i]] {
                                 if prices.count < 2 {
-                              
+                                    
                                     return false
                                 }
                             } else {
-                            
+                                
                                 return false
                             }
                         }
-                  
+                        
                         return true
                     }
                     break loop
@@ -52,7 +52,7 @@ class AppLoadingData {
                 
             }
         }
-   
+        
         return false
     }
     
@@ -82,15 +82,15 @@ class AppLoadingData {
                             }
                         }
                     } else {
-                    savedCount += 1
-                    if let dataSet = dataSet {
-                        Set1.cachedInThisSession.append(dataSet.ticker)
-                        Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                        Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                    }
-                    if savedCount >= count {
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                    }
+                        savedCount += 1
+                        if let dataSet = dataSet {
+                            Set1.cachedInThisSession.append(dataSet.ticker)
+                            Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                            Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+                        }
+                        if savedCount >= count {
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                        }
                     }
                 }
             } else {
@@ -121,15 +121,15 @@ class AppLoadingData {
                             }
                         }
                     } else {
-                    savedCount += 1
-                    if let dataSet = dataSet {
-                        Set1.cachedInThisSession.append(dataSet.ticker)
-                        Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                        Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                    }
-                    if savedCount >= Set1.ti.count {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                    }
+                        savedCount += 1
+                        if let dataSet = dataSet {
+                            Set1.cachedInThisSession.append(dataSet.ticker)
+                            Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                            Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+                        }
+                        if savedCount >= Set1.ti.count {
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                        }
                     }
                 }
             } else {
@@ -137,7 +137,7 @@ class AppLoadingData {
             }
         }
     }
-
+    
     private func fetch(callback: @escaping () -> Void) {
         var count = 3
         if Set1.ti.count < 3 {
@@ -166,29 +166,29 @@ class AppLoadingData {
                         }
                     }
                 } else {
-                if let dataSet = dataSet {
-                    Set1.cachedInThisSession.append(dataSet.ticker)
-                    Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                    Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                    savedCount += 1
-                    if savedCount == count {
-                        DispatchQueue.global(qos: .background).async {
-                            self.fetchAllButFirst3Stocks()
+                    if let dataSet = dataSet {
+                        Set1.cachedInThisSession.append(dataSet.ticker)
+                        Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                        Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+                        savedCount += 1
+                        if savedCount == count {
+                            DispatchQueue.global(qos: .background).async {
+                                self.fetchAllButFirst3Stocks()
+                            }
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                            
+                            callback()
                         }
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                        
-                        callback()
                     }
-                }
                 }
             }
         }
     }
-
+    
     //loads the firebase stock info for the username - storing in Set1
     //if there are no alerts it segues to add stock ticker
     
-    func loadUserInfoFromFirebase(firebaseUsername: String, result: @escaping (_ haveNoAlerts: Bool) -> Void) {
+    func loadUserInfoFromFirebase(firebaseUsername: String) {
         Set1.ti.removeAll()
         let ref = Database.database().reference()
         
@@ -252,34 +252,16 @@ class AppLoadingData {
                             var haventSegued = true
                             if Set1.userAlerts.count == totalCount {
                                 if Set1.ti.count != 0 {
-                                    //at this point we know what stocks we need to fetch info need to fetch remote data on a backend thread and stored data immediately to segue
-                                    
                                     
                                     DispatchQueue.global(qos: .background).async {
-                                        self.fetch() {
-                                       
-                                            DispatchQueue.main.async {
-                                            if haventSegued {
-                                              
-                                                
-                                            result(false)
-                                            }
-                                            }
-                                        }
+                                        self.fetch() {}
                                     }
-                                    let success = self.loadStocksFromCoreData()
+                                    let _ = self.loadStocksFromCoreData()
                                     Set1.saveUserInfo()
-                                    if success {
-                                        haventSegued = false
-                                     
-                                        result(false)
-                                    }
+                                    
                                     
                                 } else {
                                     Set1.saveUserInfo()
-                                    haventSegued = false
-                               
-                                    result(true)
                                 }
                             }
                             
@@ -289,9 +271,6 @@ class AppLoadingData {
                     }
                 }
                 Set1.saveUserInfo()
-            } else {
-           
-                result(true)
             }
             
         }) { (error) in
@@ -299,7 +278,6 @@ class AppLoadingData {
         }
         
     }
-    
     
 }
 

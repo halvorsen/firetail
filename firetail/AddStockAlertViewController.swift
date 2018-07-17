@@ -191,19 +191,6 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         if mySwitchSMS.isOn == true && Set1.phone == "none" {
             self.performSegue(withIdentifier: "fromAddStockAlertToPhone", sender: self)
         } else {
-//            if Set1.emailOn || Set1.allOn {
-                let currentUser = Auth.auth().currentUser
-                
-                if  currentUser == nil {
-                    present(SignupViewController(), animated: true)
-                    return
-                }
-                if let user = currentUser,
-                    user.isEmailVerified == false {
-                    present(SignupViewController(), animated: true)
-                    return
-                }
-//            }
             self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
         }
         
