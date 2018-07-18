@@ -12,31 +12,46 @@ final class AlertSort {
     static let shared: AlertSort = AlertSort()
     // dictionarys containing alert order
     internal var cryptoArray: [String] = []
-    internal var stockArray: [String] = []
+    internal var stockArray: [String] = [] {
+        didSet {
+            print("StockArray: \(stockArray)")
+        }
+    }
     
     internal var cryptoDictionary: [String: Int] = [:] {
         didSet {
-          _ =  MyFileManager.writeAlertOrderFile(filename: "Crypto", input: cryptoDictionary)
+//          _ =  MyFileManager.writeAlertOrderFile(filename: "Crypto", input: cryptoDictionary)
         }
     }
     internal var stockDictionary: [String: Int] = [:] {
         didSet {
-          _ =  MyFileManager.writeAlertOrderFile(filename: "Stock", input: stockDictionary)
+//          _ =  MyFileManager.writeAlertOrderFile(filename: "Stock", input: stockDictionary)
         }
     }
     
     init() {
+//
+//        if let dictionary = MyFileManager.readAlertOrderFile(named: "Crypto") {
+//            cryptoDictionary = dictionary
+//            cryptoArray = dictionary.map {($0.key, $0.value)}.sorted {$0.1 < $1.1}.map {$0.0}
+//        }
+//
+//        if let dictionary = MyFileManager.readAlertOrderFile(named: "Stock") {
+//            stockDictionary = dictionary
+//            stockArray = dictionary.map {($0.key, $0.value)}.sorted {$0.1 < $1.1}.map {$0.0}
+//        }
         
-        if let dictionary = MyFileManager.readAlertOrderFile(named: "Crypto") {
-            cryptoDictionary = dictionary
-            cryptoArray = dictionary.map {($0.key, $0.value)}.sorted {$0.1 < $1.1}.map {$0.0}
-        }
+       check()
+        //TODO: Add this check for crypto:
+//        if cryptoDictionary.count != UserInfo.alertsCrypto.count {
+//            print("crypto data models have become unsynced, resetting order")
+//            // reorders by timestamp and spits out array of alert name strings in ascending timestamp order
+//            setSortedStockAlerts(array: UserInfo.alertsCrypto.map { ($0.key, $0.value.timestamp) }.sorted {$0.1 < $1.1}.map {$0.0})
+//        }
         
-        if let dictionary = MyFileManager.readAlertOrderFile(named: "Stock") {
-            stockDictionary = dictionary
-            stockArray = dictionary.map {($0.key, $0.value)}.sorted {$0.1 < $1.1}.map {$0.0}
-        }
-        
+    }
+    
+    internal func check() {
         if stockDictionary.count != UserInfo.alerts.count {
             print("stock data models have become unsynced, resetting order")
             // reorders by timestamp and spits out array of alert name strings in ascending timestamp order
@@ -51,13 +66,6 @@ final class AlertSort {
                 break
             }
         }
-        //TODO: Add this check for crypto:
-//        if cryptoDictionary.count != UserInfo.alertsCrypto.count {
-//            print("crypto data models have become unsynced, resetting order")
-//            // reorders by timestamp and spits out array of alert name strings in ascending timestamp order
-//            setSortedStockAlerts(array: UserInfo.alertsCrypto.map { ($0.key, $0.value.timestamp) }.sorted {$0.1 < $1.1}.map {$0.0})
-//        }
-        
     }
     
     internal func getSortedCryptoAlerts() -> [String] {
@@ -74,7 +82,7 @@ final class AlertSort {
         for item in array.enumerated() {
             cryptoDictionary[item.element] = item.offset
         }
-        _ =  MyFileManager.writeAlertOrderFile(filename: "Crypto", input: cryptoDictionary)
+//        _ =  MyFileManager.writeAlertOrderFile(filename: "Crypto", input: cryptoDictionary)
     }
     
     internal func setSortedStockAlerts(array: [String]) {
@@ -83,13 +91,12 @@ final class AlertSort {
         for item in array.enumerated() {
             stockDictionary[item.element] = item.offset
         }
-        _ =  MyFileManager.writeAlertOrderFile(filename: "Stock", input: stockDictionary)
+        Alerts.shared.saveCurrentAlerts()
+//        _ =  MyFileManager.writeAlertOrderFile(filename: "Stock", input: stockDictionary)
     }
     
     internal func addToStack(alert: String) {
         addToIndex(0, alert: alert)
-        print("stockArray: \(stockArray)")
-        print("stockDic: \(stockDictionary)")
     }
     
     internal func addToIndex(_ index: Int, alert: String) {
@@ -99,7 +106,7 @@ final class AlertSort {
             for alert in cryptoArray.enumerated() {
                 cryptoDictionary[alert.element] = alert.offset
             }
-            _ =  MyFileManager.writeAlertOrderFile(filename: "Crypto", input: cryptoDictionary)
+//            _ =  MyFileManager.writeAlertOrderFile(filename: "Crypto", input: cryptoDictionary)
         }
         else {
             stockArray.insert(alert, at: index)
@@ -107,7 +114,8 @@ final class AlertSort {
             for alert in stockArray.enumerated() {
                 stockDictionary[alert.element] = alert.offset
             }
-            _ =  MyFileManager.writeAlertOrderFile(filename: "Stock", input: stockDictionary)
+            Alerts.shared.saveCurrentAlerts()
+//            _ =  MyFileManager.writeAlertOrderFile(filename: "Stock", input: stockDictionary)
         }
     }
     
@@ -119,26 +127,18 @@ final class AlertSort {
             for alert in cryptoArray.enumerated() {
                 cryptoDictionary[alert.element] = alert.offset
             }
-            _ =  MyFileManager.writeAlertOrderFile(filename: "Crypto", input: cryptoDictionary)
+//            _ =  MyFileManager.writeAlertOrderFile(filename: "Crypto", input: cryptoDictionary)
         }
         else {
             guard let index = stockDictionary[alert] else { return }
-            print("stockArray1: \(stockArray)")
-            print("stockDic1: \(stockDictionary)")
+          
             stockArray.remove(at: index)
-            print("stockArray2: \(stockArray)")
-            print("stockDic2: \(stockDictionary)")
             stockDictionary.removeAll()
-            print("stockArray3: \(stockArray)")
-            print("stockDic3: \(stockDictionary)")
             for alert in stockArray.enumerated() {
                 stockDictionary[alert.element] = alert.offset
             }
-            print("stockArray4: \(stockArray)")
-            print("stockDic4: \(stockDictionary)")
-            _ =  MyFileManager.writeAlertOrderFile(filename: "Stock", input: stockDictionary)
-            print("stockArray5: \(stockArray)")
-            print("stockDic5: \(stockDictionary)")
+            Alerts.shared.saveCurrentAlerts()
+//            _ =  MyFileManager.writeAlertOrderFile(filename: "Stock", input: stockDictionary)
         }
     }
     
@@ -149,7 +149,7 @@ final class AlertSort {
             for alert in cryptoArray.enumerated() {
                 cryptoDictionary[alert.element] = alert.offset
             }
-            _ =  MyFileManager.writeAlertOrderFile(filename: "Crypto", input: cryptoDictionary)
+//            _ =  MyFileManager.writeAlertOrderFile(filename: "Crypto", input: cryptoDictionary)
         }
         else {
             stockArray = rearrange(array: stockArray, at: at, to: to)
@@ -157,7 +157,8 @@ final class AlertSort {
             for alert in stockArray.enumerated() {
                 stockDictionary[alert.element] = alert.offset
             }
-            _ =  MyFileManager.writeAlertOrderFile(filename: "Stock", input: stockDictionary)
+            Alerts.shared.saveCurrentAlerts()
+//            _ =  MyFileManager.writeAlertOrderFile(filename: "Stock", input: stockDictionary)
         }
         
     }
