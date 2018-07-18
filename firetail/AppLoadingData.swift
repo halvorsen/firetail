@@ -20,8 +20,6 @@ class AppLoadingData {
     
     internal static func loadStockPricesFromCoreData() {
         let dataSets = CacheManager().loadData()
-        print("dataSets:")
-        print(dataSets)
         guard Set1.tickerArray.count > 0 else {return}
         var count = 0
         for i in 0..<Set1.tickerArray.count {

@@ -100,9 +100,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     func appLoading() {
         LoadSaveCoreData().loadUsername()
-        let cacheManager = CacheManager()
-        let _ = cacheManager.loadData()
-        
         Set1.premium = true //: toggle in development
         premiumMember = true  // ##TODO: turn off premium premiumMember = Set1.premium
         
@@ -115,8 +112,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             self.alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
             self.collectionView?.reloadData()
             self.compareGraphReset()
-                print("set1.tickerarray")
-                print(Set1.tickerArray)
 //            self.container2.setNeedsDisplay()
 //            self.container2.layoutIfNeeded()
             }
@@ -432,13 +427,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     private func populateCompareGraph() {
-        print("popuolatecomparegraph1")
-        print(Set1.tickerArray.count)
-        print(Set1.oneYearDictionary[Set1.tickerArray[0]])
         guard Set1.tickerArray.count > 0,
             let ti0 = Set1.oneYearDictionary[Set1.tickerArray[0]],
             ti0.count > 0 else {return}
-         print("popuolatecomparegraph2")
         switch Set1.tickerArray.count {
         case 0:
             break
@@ -464,7 +455,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             container2.addSubview(svDot1)
             
         default:
-             print("popuolatecomparegraph3")
             sv =  CompareScroll(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
             svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
@@ -486,7 +476,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
             )
         }
-         print("popuolatecomparegraph4")
     }
     
     func textFieldDidBeginEditing(_ textField : UITextField)

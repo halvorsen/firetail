@@ -94,6 +94,24 @@ class CacheManager {
                 }
             }
         }
+        if resultsDataRequest.count > 100 {
+            eraseAllStockCache()
+        }
         return data
+    }
+    
+    func eraseAllStockCache() {
+        
+        let context = persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Entity1")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try context.execute(deleteRequest)  //(deleteRequest, withContext: context)
+        } catch let a as NSError {
+            print(a)// TODO: handle the error
+        }
+        
+        
     }
 }
