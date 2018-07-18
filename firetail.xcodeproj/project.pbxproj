@@ -54,7 +54,7 @@
 		06DDBE261F795A5B00C36CB6 /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DDBE251F795A5B00C36CB6 /* CustomColor.swift */; };
 		06FC95B91E77415500DF7559 /* DailyGraphForAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */; };
 		06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */; };
-		06FDA8E01E71B9960043BC90 /* Sets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8DF1E71B9960043BC90 /* Sets.swift */; };
+		06FDA8E01E71B9960043BC90 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FDA8DF1E71B9960043BC90 /* UserInfo.swift */; };
 		0AD139DF73E251FE0D4D3193 /* Pods_firetail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587D23A742B0C36434F2833B /* Pods_firetail.framework */; };
 /* End PBXBuildFile section */
 
@@ -110,7 +110,7 @@
 		06DDBE251F795A5B00C36CB6 /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
 		06FC95B81E77415500DF7559 /* DailyGraphForAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyGraphForAlertView.swift; sourceTree = "<group>"; };
 		06FDA8D91E6F15700043BC90 /* BaseOfGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseOfGraphView.swift; sourceTree = "<group>"; };
-		06FDA8DF1E71B9960043BC90 /* Sets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sets.swift; sourceTree = "<group>"; };
+		06FDA8DF1E71B9960043BC90 /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		4247F9327201846B6980BFCB /* Pods-firetail.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firetail.release.xcconfig"; path = "Pods/Target Support Files/Pods-firetail/Pods-firetail.release.xcconfig"; sourceTree = "<group>"; };
 		587D23A742B0C36434F2833B /* Pods_firetail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_firetail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D7C2B103539D5E6DBD6614D /* Pods-firetail.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firetail.debug.xcconfig"; path = "Pods/Target Support Files/Pods-firetail/Pods-firetail.debug.xcconfig"; sourceTree = "<group>"; };
@@ -225,7 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				06DDBE251F795A5B00C36CB6 /* CustomColor.swift */,
-				06FDA8DF1E71B9960043BC90 /* Sets.swift */,
+				06FDA8DF1E71B9960043BC90 /* UserInfo.swift */,
 				068D8D241E72F0D700E422DB /* Dot.swift */,
 				0681F42C1FDC3F8400082DCC /* CompareScroll.swift */,
 				06AC27071E7319F700041D1F /* CompareScrollDot.swift */,
@@ -446,7 +446,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06FDA8E01E71B9960043BC90 /* Sets.swift in Sources */,
+				06FDA8E01E71B9960043BC90 /* UserInfo.swift in Sources */,
 				06DBD44E20EF1A1B00EFD6AB /* AnimatedGraph.swift in Sources */,
 				0609E4CF1E649596005965C5 /* LoginViewController.swift in Sources */,
 				0617DFA51E7DBDC7006D73C5 /* LoadSaveCoreData.swift in Sources */,

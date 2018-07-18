@@ -66,19 +66,19 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
             myTextField = UITextField(frame: CGRect(x: 177*screenWidth/375,y: 246*screenHeight/667 + CGFloat(i)*60*screenHeight/667,width: 198*screenWidth/375 ,height: 34*screenHeight/667))
             switch i {
             case 0:
-                myTextField.placeholder = Set1.email
+                myTextField.placeholder = UserInfo.email
                 myTextField.alpha = 0.13
             case 1:
-                if Set1.phone != "none" {
-                    myTextField.placeholder = Set1.phone
+                if UserInfo.phone != "none" {
+                    myTextField.placeholder = UserInfo.phone
                 } else {
                     myTextField.placeholder = "(000) 000-0000"
                 }
             case 2:
-                if Set1.brokerName == "none" {
+                if UserInfo.brokerName == "none" {
                     myTextField.placeholder = "scottade"
                 } else {
-                    myTextField.placeholder = Set1.brokerName
+                    myTextField.placeholder = UserInfo.brokerName
                 }
                 myTextField.alpha = 0.13
             default:
@@ -168,25 +168,25 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     }
     
     @objc private func back(_ sender: UIButton) {
-        Set1.saveUserInfo()
+        UserInfo.saveUserInfo()
        dismiss(animated: true)
     }
     
     @objc private func saveFunc(_ sender: UIButton) {
         if myTextFields[0].text != nil && myTextFields[1].text != nil && myTextFields[2].text != nil {
             if myTextFields[0].text! != "" {
-        Set1.email = myTextFields[0].text!
+        UserInfo.email = myTextFields[0].text!
             }
             if myTextFields[1].text! != "" {
-        Set1.phone = myTextFields[1].text!
+        UserInfo.phone = myTextFields[1].text!
             }
             if myTextFields[2].text! != "" {
-        Set1.brokerName = myTextFields[2].text!
+        UserInfo.brokerName = myTextFields[2].text!
             }
-        Set1.saveUserInfo()
+        UserInfo.saveUserInfo()
         }
         
-        myLoadSave.saveAlertToFirebase(username: alertInfo.0, ticker: alertInfo.1, price: alertInfo.2, isGreaterThan: alertInfo.3, deleted: alertInfo.4, email: alertInfo.5, sms: alertInfo.6, flash: alertInfo.7, urgent: alertInfo.8, triggered: alertInfo.9, push: alertInfo.10, alertLongName: alertInfo.11, priceString: alertInfo.12, data2: Set1.phone)
+        myLoadSave.saveAlertToFirebase(username: alertInfo.0, ticker: alertInfo.1, price: alertInfo.2, isGreaterThan: alertInfo.3, deleted: alertInfo.4, email: alertInfo.5, sms: alertInfo.6, flash: alertInfo.7, urgent: alertInfo.8, triggered: alertInfo.9, push: alertInfo.10, alertLongName: alertInfo.11, priceString: alertInfo.12, data2: UserInfo.phone)
         if let presentingViewController = presentingViewController?.presentingViewController?.presentingViewController {
             presentingViewController.dismiss(animated: true)
         }
@@ -223,19 +223,19 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
             
             switch textField.tag {
             case 0:if myTextFields[0].text! != "" {
-                Set1.email = myTextFields[0].text!
+                UserInfo.email = myTextFields[0].text!
                 }
             //change email with firebase
             case 1:
                 if myTextFields[1].text! != "" {
-                Set1.phone = myTextFields[1].text!
+                UserInfo.phone = myTextFields[1].text!
                 }
-                Set1.saveUserInfo()
+                UserInfo.saveUserInfo()
                 self.performSegue(withIdentifier: "fromPhoneToDashboard", sender: self)
                 
             case 2:
                 if myTextFields[2].text! != "" {
-                Set1.brokerName = myTextFields[2].text!
+                UserInfo.brokerName = myTextFields[2].text!
                 }
             default:
                 // change password with firebase:   myTextFields[2].text!

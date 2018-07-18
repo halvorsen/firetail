@@ -21,8 +21,8 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         InstanceID.instanceID().instanceID { (_result, error) in
             if let result = _result {
-                Set1.token = result.token
-                Set1.saveUserInfo()
+                UserInfo.token = result.token
+                UserInfo.saveUserInfo()
             }
         }
     }
@@ -40,7 +40,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     var newAlertLongID = String()
     var alertID: [String] {
         var aaa = [String]()
-        for i in 0...Set1.userAlerts.count {
+        for i in 0...UserInfo.userAlerts.count {
             switch i {
             case 0...9:
                 aaa.append("alert00" + String(i))
@@ -59,7 +59,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     let (mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
     
     override func viewWillAppear(_ animated: Bool) {
-       // Set1.cachedInThisSession.append(newAlertTicker)
+       // UserInfo.cachedInThisSession.append(newAlertTicker)
         if newAlertPrice < 0.00 {
             newAlertPriceLabel.text = "$0.00"
             
@@ -134,23 +134,23 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             view.addSubview(s)
             
         }
-        if Set1.flashOn {
+        if UserInfo.flashOn {
             mySwitchFlash.setOn(true, animated: false)
             newAlertBoolTuple.3 = true
         }
-        if Set1.smsOn {
+        if UserInfo.smsOn {
             mySwitchSMS.setOn(true, animated: false)
             newAlertBoolTuple.1 = true
         }
-        if Set1.emailOn {
+        if UserInfo.emailOn {
             mySwitchEmail.setOn(true, animated: false)
             newAlertBoolTuple.0 = true
         }
-        if Set1.pushOn {
+        if UserInfo.pushOn {
             mySwitchPush.setOn(true, animated: false)
             newAlertBoolTuple.2 = true
         }
-        if Set1.allOn {
+        if UserInfo.allOn {
             mySwitchAll.setOn(true, animated: false)
             newAlertBoolTuple.4 = true
         }
@@ -161,37 +161,37 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     
     @objc private func add(_ button: UIButton) {
         
-        Set1.tickerArray = [newAlertTicker] + Set1.tickerArray
+        UserInfo.tickerArray = [newAlertTicker] + UserInfo.tickerArray
         let finalAlertPrice = newAlertPrice
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID =  timestamp + newAlertTicker.uppercased()
         AlertSort.shared.addToStack(alert: newAlertLongID)
        
-        Set1.userAlerts[alertID[Set1.userAlerts.count]] = newAlertLongID
+        UserInfo.userAlerts[alertID[UserInfo.userAlerts.count]] = newAlertLongID
    
         var alertTriggerWhenGreaterThan = false
         if finalAlertPrice > lastPrice {
             alertTriggerWhenGreaterThan = true
         }
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
-            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, true, false, false, newAlertTicker, "false", false, false, 1) }
+            UserInfo.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, true, false, false, newAlertTicker, "false", false, false, 1) }
         else {
-            Set1.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, "false", newAlertBoolTuple.2, newAlertBoolTuple.4, 1)
+            UserInfo.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, "false", newAlertBoolTuple.2, newAlertBoolTuple.4, 1)
         }
         
         
         
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
-            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: priceString)
+            myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: priceString)
         } else if newAlertBoolTuple.1 {
-            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString, data2: Set1.phone)
+            myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString, data2: UserInfo.phone)
         } else {
-            myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString)
+            myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString)
         }
-        Set1.saveUserInfo()
-        alertInfo = (Set1.username,newAlertTicker,finalAlertPrice,alertTriggerWhenGreaterThan,false,newAlertBoolTuple.0,newAlertBoolTuple.1,newAlertBoolTuple.3,newAlertBoolTuple.4,"false",newAlertBoolTuple.2,newAlertLongID,priceString)
-        if mySwitchSMS.isOn == true && Set1.phone == "none" {
+        UserInfo.saveUserInfo()
+        alertInfo = (UserInfo.username,newAlertTicker,finalAlertPrice,alertTriggerWhenGreaterThan,false,newAlertBoolTuple.0,newAlertBoolTuple.1,newAlertBoolTuple.3,newAlertBoolTuple.4,"false",newAlertBoolTuple.2,newAlertLongID,priceString)
+        if mySwitchSMS.isOn == true && UserInfo.phone == "none" {
             let viewController = AddPhoneNumberViewController()
             viewController.alertInfo = alertInfo
             self.present(viewController, animated: true)
@@ -223,8 +223,8 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                     
                     InstanceID.instanceID().instanceID { (_result, error) in
                         if let result = _result {
-                            Set1.token = result.token
-                            Set1.saveUserInfo()
+                            UserInfo.token = result.token
+                            UserInfo.saveUserInfo()
                         }
                     }
                     
@@ -252,26 +252,26 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             case 0:
                 newAlertBoolTuple.0 = true
                 UserDefaults.standard.set(true, forKey: "emailOn")
-                Set1.emailOn = true
+                UserInfo.emailOn = true
             case 1:
-              //  if Set1.phone == "none" {
+              //  if UserInfo.phone == "none" {
 //                    phoneTextField.alpha = 1.0
 //                    phoneTextField.becomeFirstResponder()
               //  } else {
                     newAlertBoolTuple.1 = true
               //  }
                 UserDefaults.standard.set(true, forKey: "smsOn")
-                Set1.smsOn = true
+                UserInfo.smsOn = true
             case 2:
                 newAlertBoolTuple.2 = true
                 registerForPushNotifications()
                 UserDefaults.standard.set(true, forKey: "pushOn")
-                Set1.pushOn = true
+                UserInfo.pushOn = true
             case 3:
                 newAlertBoolTuple.3 = true
                 registerForPushNotifications()
                 UserDefaults.standard.set(true, forKey: "flashOn")
-                Set1.flashOn = true
+                UserInfo.flashOn = true
                 userWarning(title: "Flash Alert", message: "Go to Settings > General > Accessibility. Scroll down to LED Flash for Alerts.")
                 
             case 4:
@@ -279,26 +279,26 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 registerForPushNotifications()
                 newAlertBoolTuple.4 = true
                 UserDefaults.standard.set(true, forKey: "allOn")
-                Set1.allOn = true
+                UserInfo.allOn = true
                 
                 newAlertBoolTuple.0 = true
                 UserDefaults.standard.set(true, forKey: "emailOn")
-                Set1.emailOn = true
+                UserInfo.emailOn = true
           
                 newAlertBoolTuple.1 = true
                
                 UserDefaults.standard.set(true, forKey: "smsOn")
-                Set1.smsOn = true
+                UserInfo.smsOn = true
             
                 newAlertBoolTuple.2 = true
                 registerForPushNotifications()
                 UserDefaults.standard.set(true, forKey: "pushOn")
-                Set1.pushOn = true
+                UserInfo.pushOn = true
          
                 newAlertBoolTuple.3 = true
                 registerForPushNotifications()
                 UserDefaults.standard.set(true, forKey: "flashOn")
-                Set1.flashOn = true
+                UserInfo.flashOn = true
                 
                 mySwitchEmail.setOn(true, animated: true)
                 mySwitchSMS.setOn(true, animated: true)
@@ -313,10 +313,10 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             case 0:
                 newAlertBoolTuple.0 = false
                 UserDefaults.standard.set(false, forKey: "emailOn")
-                Set1.emailOn = false
-                if Set1.allOn {
+                UserInfo.emailOn = false
+                if UserInfo.allOn {
                     UserDefaults.standard.set(false, forKey: "allOn")
-                    Set1.allOn = false
+                    UserInfo.allOn = false
                     newAlertBoolTuple.4 = false
                     mySwitchAll.setOn(false, animated: true)
                     
@@ -324,36 +324,36 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             case 1:
                 newAlertBoolTuple.1 = false
                 UserDefaults.standard.set(false, forKey: "smsOn")
-                Set1.smsOn = false
-                if Set1.allOn {
+                UserInfo.smsOn = false
+                if UserInfo.allOn {
                     UserDefaults.standard.set(false, forKey: "allOn")
-                    Set1.allOn = false
+                    UserInfo.allOn = false
                     newAlertBoolTuple.4 = false
                     mySwitchAll.setOn(false, animated: true)
                 }
             case 2:
                 UserDefaults.standard.set(false, forKey: "pushOn")
-                Set1.pushOn = false
+                UserInfo.pushOn = false
                 newAlertBoolTuple.2 = false
-                if Set1.allOn {
+                if UserInfo.allOn {
                     UserDefaults.standard.set(false, forKey: "allOn")
-                    Set1.allOn = false
+                    UserInfo.allOn = false
                     newAlertBoolTuple.4 = false
                     mySwitchAll.setOn(false, animated: true)
                 }
             case 3:
                 UserDefaults.standard.set(false, forKey: "flashOn")
-                Set1.flashOn = false
+                UserInfo.flashOn = false
                 newAlertBoolTuple.3 = false
-                if Set1.allOn {
+                if UserInfo.allOn {
                     UserDefaults.standard.set(false, forKey: "allOn")
-                    Set1.allOn = false
+                    UserInfo.allOn = false
                     newAlertBoolTuple.4 = false
                     mySwitchAll.setOn(false, animated: true)
                 }
             case 4:
                 UserDefaults.standard.set(false, forKey: "allOn")
-                Set1.allOn = false
+                UserInfo.allOn = false
                 newAlertBoolTuple.4 = false
             default:
                 break

@@ -135,8 +135,8 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     }
     
     @objc private func trade(_ sender: UIButton) {
-        if Set1.brokerName != "none" {
-            guard let name = brokersDictionary[Set1.brokerName],
+        if UserInfo.brokerName != "none" {
+            guard let name = brokersDictionary[UserInfo.brokerName],
                 let url = URL(string: name) else { return }
             UIApplication.shared.open(url)
         } else {
@@ -507,7 +507,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
     func callCorrectGraph2FromCache(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         
-        guard let tenYear = Set1.tenYearDictionary[stockName] else {self.performSegue(withIdentifier: "fromGraphToMain", sender: self);return}
+        guard let tenYear = UserInfo.tenYearDictionary[stockName] else {self.performSegue(withIdentifier: "fromGraphToMain", sender: self);return}
         var __stockData = tenYear
         
         if tenYear[tenYear.count - 1] == tenYear[tenYear.count - 2] {

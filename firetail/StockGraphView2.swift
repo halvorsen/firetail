@@ -66,7 +66,7 @@ class StockGraphView2: UIView {
         
         if g == "1d" {
             
-            outputValues[0] = Double(setAmount)*Set1.yesterday
+            outputValues[0] = Double(setAmount)*UserInfo.yesterday
             
         }
         

@@ -10,7 +10,7 @@ import Foundation
 import Firebase
 import FirebaseAuth
 
-public struct Set1 {
+public struct UserInfo {
     
     public static func logoutFirebase() {
         try! Auth.auth().signOut()
@@ -63,8 +63,8 @@ public struct Set1 {
     public static var alerts = [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int)]()
     
     public static func saveUserInfo() {
-        guard Set1.email != "none" else {Set1.email = Set1.username; return}
-        LoadSaveCoreData.saveUserInfoToFirebase(username: Set1.username, fullName: Set1.fullName, email: Set1.email, phone: Set1.phone, premium: Set1.premium, numOfAlerts: Set1.userAlerts.count, brokerName: Set1.brokerName, brokerURL: Set1.brokerURL, weeklyAlerts: Set1.weeklyAlerts, userAlerts: Set1.userAlerts, token: Set1.token)
+        guard UserInfo.email != "none" else {UserInfo.email = UserInfo.username; return}
+        LoadSaveCoreData.saveUserInfoToFirebase(username: UserInfo.username, fullName: UserInfo.fullName, email: UserInfo.email, phone: UserInfo.phone, premium: UserInfo.premium, numOfAlerts: UserInfo.userAlerts.count, brokerName: UserInfo.brokerName, brokerURL: UserInfo.brokerURL, weeklyAlerts: UserInfo.weeklyAlerts, userAlerts: UserInfo.userAlerts, token: UserInfo.token)
     }
 }  
 

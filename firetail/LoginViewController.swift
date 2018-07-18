@@ -42,7 +42,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         super.viewDidLoad()
         tap = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard(_:)))
       
-        alphaAPI.populateSet1Month()
+        alphaAPI.populateUserInfoMonth()
         loadsave.loadUsername()
         
         self.populateView()
@@ -143,7 +143,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         cleanString = cleanString.replacingOccurrences(of: "/", with: "")
         
         loadsave.saveUsername(username: cleanString)
-        Set1.username = cleanString
+        UserInfo.username = cleanString
         
         Auth.auth().signIn(withEmail: myText, password: myText2, completion: { (user, error) in
             if error != nil{

@@ -37,25 +37,25 @@ final class AlertSort {
             stockArray = dictionary.map {($0.key, $0.value)}.sorted {$0.1 < $1.1}.map {$0.0}
         }
         
-        if stockDictionary.count != Set1.alerts.count {
+        if stockDictionary.count != UserInfo.alerts.count {
             print("stock data models have become unsynced, resetting order")
             // reorders by timestamp and spits out array of alert name strings in ascending timestamp order
-            setSortedStockAlerts(array: Set1.alerts.map { ($0.key, $0.value.timestamp) }.sorted {$0.1 < $1.1}.map {$0.0})
+            setSortedStockAlerts(array: UserInfo.alerts.map { ($0.key, $0.value.timestamp) }.sorted {$0.1 < $1.1}.map {$0.0})
         }
         
         for key in cryptoArray + stockArray {
-            if Set1.alerts[key] == nil {
+            if UserInfo.alerts[key] == nil {
                 print("stock data models have become unsynced, resetting order (2)")
                 // reorders by timestamp and spits out array of alert name strings in ascending timestamp order
-                setSortedStockAlerts(array: Set1.alerts.map { ($0.key, $0.value.timestamp) }.sorted {$0.1 < $1.1}.map {$0.0})
+                setSortedStockAlerts(array: UserInfo.alerts.map { ($0.key, $0.value.timestamp) }.sorted {$0.1 < $1.1}.map {$0.0})
                 break
             }
         }
         //TODO: Add this check for crypto:
-//        if cryptoDictionary.count != Set1.alertsCrypto.count {
+//        if cryptoDictionary.count != UserInfo.alertsCrypto.count {
 //            print("crypto data models have become unsynced, resetting order")
 //            // reorders by timestamp and spits out array of alert name strings in ascending timestamp order
-//            setSortedStockAlerts(array: Set1.alertsCrypto.map { ($0.key, $0.value.timestamp) }.sorted {$0.1 < $1.1}.map {$0.0})
+//            setSortedStockAlerts(array: UserInfo.alertsCrypto.map { ($0.key, $0.value.timestamp) }.sorted {$0.1 < $1.1}.map {$0.0})
 //        }
         
     }

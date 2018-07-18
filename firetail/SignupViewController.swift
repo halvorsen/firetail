@@ -124,8 +124,8 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         cleanString = cleanString.replacingOccurrences(of: "/", with: "")
         
         loadsave.saveUsername(username: cleanString)
-        Set1.username = cleanString
-        Set1.email = textFields[0].text ?? ""
+        UserInfo.username = cleanString
+        UserInfo.email = textFields[0].text ?? ""
         let emailField = textFields[0].text
         let passwordField = textFields[1].text
         let passwordField2 = textFields[2].text
@@ -161,7 +161,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                 self.continueOnce = true
                 self.username.text = email
                 Auth.auth().signIn(withEmail: email, password: password1) //adds authentication
-                Set1.saveUserInfo()
+                UserInfo.saveUserInfo()
                 self.delay(bySeconds: 1.5) {
                     self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                 }
@@ -174,7 +174,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                     } else {
                         self.continueOnce = true
                         self.username.text = email
-                        Set1.saveUserInfo()
+                        UserInfo.saveUserInfo()
                         self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                         
                     }

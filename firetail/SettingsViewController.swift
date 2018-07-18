@@ -61,19 +61,19 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             switch i {
             case 0:
                 
-                myTextField.placeholder = Set1.email
+                myTextField.placeholder = UserInfo.email
                 
             case 1:
-                if Set1.phone != "none" {
-                  myTextField.placeholder = Set1.phone
+                if UserInfo.phone != "none" {
+                  myTextField.placeholder = UserInfo.phone
                 } else {
                 myTextField.placeholder = "(000) 000-0000"
                 }
             case 2:
-                if Set1.brokerName == "none" {
+                if UserInfo.brokerName == "none" {
                 myTextField.placeholder = "scottade"
                 } else {
-                   myTextField.placeholder = Set1.brokerName
+                   myTextField.placeholder = UserInfo.brokerName
                 }
             default:
                 myTextField.isSecureTextEntry = true
@@ -160,7 +160,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
     }
     
     @objc private func back(_ sender: UIButton) {
-        Set1.saveUserInfo()
+        UserInfo.saveUserInfo()
         self.performSegue(withIdentifier: "fromSettingsToMain", sender: self)
     }
     
@@ -171,16 +171,16 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             let text2 = myTextFields[2].text else {return}
     
             if text0 != "" {
-        Set1.email = text0
+        UserInfo.email = text0
             }
             if text1 != "" {
-        Set1.phone = text1
+        UserInfo.phone = text1
             }
             if text2 != "" {
-        Set1.brokerName = text2
+        UserInfo.brokerName = text2
             }
         
-            Set1.saveUserInfo()
+            UserInfo.saveUserInfo()
             self.performSegue(withIdentifier: "fromSettingsToMain", sender: self)
 
     }
@@ -191,7 +191,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
         textField.spellCheckingType = .no
         
         if textField.isSecureTextEntry == true {
-            Set1.saveUserInfo()
+            UserInfo.saveUserInfo()
             self.performSegue(withIdentifier: "fromSettingsToChangePassword", sender: self)
         }
     }
@@ -221,15 +221,15 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             switch textField.tag {
             case 0:
                 if text0 != "" {
-                    Set1.email = text0
+                    UserInfo.email = text0
                 }
             case 1:
                 if text1 != "" {
-                    Set1.phone = text1
+                    UserInfo.phone = text1
                 }
             case 2:
                 if text2 != "" {
-                    Set1.brokerName = text2
+                    UserInfo.brokerName = text2
                 }
             default:
                 break

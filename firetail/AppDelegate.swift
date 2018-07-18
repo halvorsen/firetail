@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
        
         InstanceID.instanceID().instanceID { (_result, error) in
             if let result = _result {
-                Set1.token = result.token
+                UserInfo.token = result.token
             }
         }
         
@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             self.window?.rootViewController = viewController
             self.window?.makeKeyAndVisible()
             }
-        } else if Set1.alerts.count == 0 {
+        } else if UserInfo.alerts.count == 0 {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
             if let viewController = storyboard.instantiateViewController(withIdentifier: "AddStockTickerViewController") as? AddStockTickerViewController {
                 self.window?.rootViewController = viewController
@@ -75,7 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         InstanceID.instanceID().instanceID { (_result, error) in
             if let result = _result {
-                Set1.token = result.token
+                UserInfo.token = result.token
             }
         }
     }
@@ -88,10 +88,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidEnterBackground(_ application: UIApplication) {
         InstanceID.instanceID().instanceID { (_result, error) in
             if let result = _result {
-                Set1.token = result.token
+                UserInfo.token = result.token
             }
         }
-        Set1.cachedInThisSession.removeAll()
+        UserInfo.cachedInThisSession.removeAll()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -114,7 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     @objc private func tokenRefreshNotification(_ notification: Notification) {
         InstanceID.instanceID().instanceID { (_result, error) in
             if let result = _result {
-                Set1.token = result.token
+                UserInfo.token = result.token
             }
         }
      

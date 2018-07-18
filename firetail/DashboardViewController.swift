@@ -75,7 +75,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     var alertID: [String] {
         var aaa = [String]()
-        for i in 0..<Set1.userAlerts.count {
+        for i in 0..<UserInfo.userAlerts.count {
             switch i {
             case 0...9:
                 aaa.append("alert00" + String(i))
@@ -100,12 +100,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     func appLoading() {
         LoadSaveCoreData().loadUsername()
-        Set1.premium = true //: toggle in development
-        premiumMember = true  // ##TODO: turn off premium premiumMember = Set1.premium
+        UserInfo.premium = true //: toggle in development
+        premiumMember = true  // ##TODO: turn off premium premiumMember = UserInfo.premium
         
-        Alpha().populateSet1Month()
+        Alpha().populateUserInfoMonth()
         
-        AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: Set1.username) {
+        AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {
             DispatchQueue.main.async {
             self.doneLoadingFromFirebase = true
             let _ = AppLoadingData.loadStockPricesFromCoreData()
@@ -120,11 +120,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         
         
-        Set1.flashOn = UserDefaults.standard.bool(forKey: "flashOn")
-        Set1.allOn = UserDefaults.standard.bool(forKey: "allOn")
-        Set1.pushOn = UserDefaults.standard.bool(forKey: "pushOn")
-        Set1.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
-        Set1.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
+        UserInfo.flashOn = UserDefaults.standard.bool(forKey: "flashOn")
+        UserInfo.allOn = UserDefaults.standard.bool(forKey: "allOn")
+        UserInfo.pushOn = UserDefaults.standard.bool(forKey: "pushOn")
+        UserInfo.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
+        UserInfo.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
         
     }
     
@@ -143,11 +143,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             }
         }
         
-        if Set1.token == "none" && Set1.userAlerts.count > 0 {
+        if UserInfo.token == "none" && UserInfo.userAlerts.count > 0 {
             InstanceID.instanceID().instanceID { (_result, error) in
                 if let result = _result {
-                    Set1.token = result.token
-                    Set1.saveUserInfo()
+                    UserInfo.token = result.token
+                    UserInfo.saveUserInfo()
                 }
             }
             
@@ -162,8 +162,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                         guard let weakself = self else {return}
                         InstanceID.instanceID().instanceID { (_result, error) in
                             if let result = _result {
-                                Set1.token = result.token
-                                Set1.saveUserInfo()
+                                UserInfo.token = result.token
+                                UserInfo.saveUserInfo()
                             }
                         }
                         
@@ -192,7 +192,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addLabel(name: date, text: "\(d.day ?? 0) \(m[d.month ?? 0].capitalized)", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 13, x: 84, y: 124, width: 300, height: 32, lines: 1)
         view.addSubview(date)
         
-        addLabel(name: alertAmount, text: String(Set1.userAlerts.count), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
+        addLabel(name: alertAmount, text: String(UserInfo.userAlerts.count), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
         view.addSubview(alertAmount)
         addLabel(name: alerts1102, text: "Alerts", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 330, width: 260, height: 28, lines: 1)
         alerts1102.alpha = 0.5
@@ -208,7 +208,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addButton(name: legal, x: 82, y: 1055, width: 280, height: 75, title: "LEGAL", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.legalFunc(_:)), addSubview: true)
         addButton(name: support, x: 82, y: 1135, width: 280, height: 75, title: "SUPPORT", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.supportFunc(_:)), addSubview: true)
         addButton(name: goPremium, x: 82, y: 1215, width: 280, height: 75, title: "GO PREMIUM", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.goPremiumFunc(_:)), addSubview: true)
-        if Set1.premium == true {
+        if UserInfo.premium == true {
             goPremium.setTitle("PREMIUM MEMBER", for: .normal)
         }
         let indicator = UILabel(frame: CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667))
@@ -226,7 +226,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         container.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
-        addLabel(name: monthIndicator, text: Set1.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 30, lines: 1)
+        addLabel(name: monthIndicator, text: UserInfo.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 30, lines: 1)
         
         addLabel(name: stock1, text: "", textColor: CustomColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
         addLabel(name: stock2, text: "", textColor: CustomColor.white128, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
@@ -309,7 +309,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         mask.backgroundColor = CustomColor.black33
         slideView.addSubview(mask)
         //amountOfBlocks = loadsave.amount()
-        amountOfBlocks = Set1.userAlerts.count
+        amountOfBlocks = UserInfo.userAlerts.count
         whoseOnFirst(container)
         
         
@@ -365,11 +365,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         stock3.text = ""
         var tickers = [String]()
         for alert in alertsForCollectionView {
-            if let alertInfo = Set1.alerts[alert] {
+            if let alertInfo = UserInfo.alerts[alert] {
                 tickers.append(alertInfo.ticker)
             }
         }
-        Set1.tickerArray = tickers
+        UserInfo.tickerArray = tickers
         
         amountOfBlocks -= 1
         
@@ -379,7 +379,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         reboot()
         
-        Set1.saveUserInfo()
+        UserInfo.saveUserInfo()
         view.addGestureRecognizer(alertPan)
         guard amountOfBlocks > 0 else {return}
         stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
@@ -429,51 +429,51 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     private func populateCompareGraph() {
-        guard Set1.tickerArray.count > 0,
-            let ti0 = Set1.oneYearDictionary[Set1.tickerArray[0]],
+        guard UserInfo.tickerArray.count > 0,
+            let ti0 = UserInfo.oneYearDictionary[UserInfo.tickerArray[0]],
             ti0.count > 0 else {return}
-        switch Set1.tickerArray.count {
+        switch UserInfo.tickerArray.count {
         case 0:
             break
         case 1:
             
-            sv =  CompareScroll(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
             container2.addSubview(svDot)
             
         case 2:
             
-            sv =  CompareScroll(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
             container2.addSubview(svDot)
-            guard Set1.tickerArray.count > 1,
-                let ti1 = Set1.oneYearDictionary[Set1.tickerArray[1]],
+            guard UserInfo.tickerArray.count > 1,
+                let ti1 = UserInfo.oneYearDictionary[UserInfo.tickerArray[1]],
                 ti1.count > 0 else {return}
-            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.tickerArray[1], color: CustomColor.white128)
+            sv1 =  CompareScroll(graphData: ti1, stockName: UserInfo.tickerArray[1], color: CustomColor.white128)
             container.addSubview(sv1)
-            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.tickerArray[1], color: CustomColor.white128)
+            svDot1 =  CompareScrollDot(graphData: ti1, stockName: UserInfo.tickerArray[1], color: CustomColor.white128)
             container2.addSubview(svDot1)
             
         default:
-            sv =  CompareScroll(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
             container2.addSubview(svDot)
-            guard Set1.tickerArray.count > 1,
-                let ti1 = Set1.oneYearDictionary[Set1.tickerArray[1]],
+            guard UserInfo.tickerArray.count > 1,
+                let ti1 = UserInfo.oneYearDictionary[UserInfo.tickerArray[1]],
                 ti1.count > 0 else {return}
-            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.tickerArray[1], color: CustomColor.white128)
+            sv1 =  CompareScroll(graphData: ti1, stockName: UserInfo.tickerArray[1], color: CustomColor.white128)
             container.addSubview(sv1)
-            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.tickerArray[1], color: CustomColor.white128)
+            svDot1 =  CompareScrollDot(graphData: ti1, stockName: UserInfo.tickerArray[1], color: CustomColor.white128)
             container2.addSubview(svDot1)
-            guard Set1.tickerArray.count > 2,
-                let ti2 = Set1.oneYearDictionary[Set1.tickerArray[2]],
+            guard UserInfo.tickerArray.count > 2,
+                let ti2 = UserInfo.oneYearDictionary[UserInfo.tickerArray[2]],
                 ti2.count > 0 else {return}
-            sv2 =  CompareScroll(graphData: ti2, stockName: Set1.tickerArray[2], color: CustomColor.white209)
+            sv2 =  CompareScroll(graphData: ti2, stockName: UserInfo.tickerArray[2], color: CustomColor.white209)
             container.addSubview(sv2)
-            svDot2 =  CompareScrollDot(graphData: ti2, stockName: Set1.tickerArray[2], color: CustomColor.white209)
+            svDot2 =  CompareScrollDot(graphData: ti2, stockName: UserInfo.tickerArray[2], color: CustomColor.white209)
             container2.addSubview(svDot2
                 
             )
@@ -533,9 +533,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     value2 = sv2.percentSetVal[i]
                 }
                 
-                monthIndicator.text = Set1.month[i]
+                monthIndicator.text = UserInfo.month[i]
                 
-                switch Set1.userAlerts.count {
+                switch UserInfo.userAlerts.count {
                 case 0:
                     break
                 case 1:
@@ -630,27 +630,27 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     @objc private func logoutFunc(_ sender: UIButton) {
         
-        Set1.month = ["","","","","","","","","","","",""]
-        Set1.currentPrice = 0.0
-        Set1.yesterday = 0.0
-        Set1.token = "none"
-        // Set1.alertCount = 0
-        Set1.oneYearDictionary.removeAll() //= ["":[0.0]]
-        Set1.tickerArray.removeAll()
-        Set1.phone = "none"
-        Set1.email = "none"
-        Set1.brokerName = "none"
-        Set1.username = "none"
-        Set1.fullName = "none"
-        Set1.premium = false
-        Set1.numOfAlerts.removeAll()
-        Set1.brokerURL = "none"
-        Set1.createdAt = "none"
-        Set1.weeklyAlerts = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
-        Set1.userAlerts.removeAll()
-        Set1.alerts.removeAll()
+        UserInfo.month = ["","","","","","","","","","","",""]
+        UserInfo.currentPrice = 0.0
+        UserInfo.yesterday = 0.0
+        UserInfo.token = "none"
+        // UserInfo.alertCount = 0
+        UserInfo.oneYearDictionary.removeAll() //= ["":[0.0]]
+        UserInfo.tickerArray.removeAll()
+        UserInfo.phone = "none"
+        UserInfo.email = "none"
+        UserInfo.brokerName = "none"
+        UserInfo.username = "none"
+        UserInfo.fullName = "none"
+        UserInfo.premium = false
+        UserInfo.numOfAlerts.removeAll()
+        UserInfo.brokerURL = "none"
+        UserInfo.createdAt = "none"
+        UserInfo.weeklyAlerts = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
+        UserInfo.userAlerts.removeAll()
+        UserInfo.alerts.removeAll()
         
-        Set1.logoutFirebase()
+        UserInfo.logoutFirebase()
         performSegue(withIdentifier: "fromMainToLogin", sender: self)
     }
     @objc private func legalFunc(_ sender: UIButton) {
@@ -664,7 +664,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     @objc private func goPremiumFunc(_ sender: UIButton) {
         // Create the alert controller
-        if Set1.premium == false {
+        if UserInfo.premium == false {
             let alertController = UIAlertController(title: "Go Premium", message: "Up to 50 Alerts for $2.99", preferredStyle: .alert)
             
             // Create the actions
@@ -681,7 +681,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     }
                     else if results.restoredPurchases.count > 0 {
                         
-                        Set1.premium = true
+                        UserInfo.premium = true
                         weakself.premiumMember = true
                         weakself.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
                     }
@@ -756,11 +756,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         if hitOnce {
             hitOnce = false
           
-            if (premiumMember || Set1.userAlerts.count < 3) && Set1.userAlerts.count < 100 {
+            if (premiumMember || UserInfo.userAlerts.count < 3) && UserInfo.userAlerts.count < 100 {
                 
                 performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
                 
-            } else if !premiumMember && Set1.userAlerts.count < 100 {
+            } else if !premiumMember && UserInfo.userAlerts.count < 100 {
                 
                 purchase()
             } else {
@@ -803,7 +803,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var tryFor3Secondscount = 0
     @objc private func goToGraph() {
         
-        if let prices = Set1.tenYearDictionary[stringToPass],
+        if let prices = UserInfo.tenYearDictionary[stringToPass],
             prices.count > 1 {
             performSegue(withIdentifier: "fromMainToGraph", sender: self)
         }
@@ -824,9 +824,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 
             case .success( _):
                 weakself.premiumMember = true
-                Set1.premium = true
+                UserInfo.premium = true
                 weakself.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
-                Set1.saveUserInfo()
+                UserInfo.saveUserInfo()
                 weakself.activityView.removeFromSuperview()
             case .error(let error):
                 
@@ -861,11 +861,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     @objc func populateAlertBars() {
         
-        for (key,_) in Set1.weeklyAlerts {
-            Set1.weeklyAlerts[key] = 0
+        for (key,_) in UserInfo.weeklyAlerts {
+            UserInfo.weeklyAlerts[key] = 0
         }
         
-        for (_,myTuple) in Set1.alerts {
+        for (_,myTuple) in UserInfo.alerts {
             if myTuple.timestamp != 1 {
                 
                 let currentTimestamp = Int(Date().timeIntervalSince1970)
@@ -892,11 +892,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     addAlertToThisDay += 7
                 }
                 switch addAlertToThisDay {
-                case 2: Set1.weeklyAlerts["mon"]! += 1
-                case 3: Set1.weeklyAlerts["tues"]! += 1
-                case 4: Set1.weeklyAlerts["wed"]! += 1
-                case 5: Set1.weeklyAlerts["thur"]! += 1
-                case 6: Set1.weeklyAlerts["fri"]! += 1
+                case 2: UserInfo.weeklyAlerts["mon"]! += 1
+                case 3: UserInfo.weeklyAlerts["tues"]! += 1
+                case 4: UserInfo.weeklyAlerts["wed"]! += 1
+                case 5: UserInfo.weeklyAlerts["thur"]! += 1
+                case 6: UserInfo.weeklyAlerts["fri"]! += 1
                 default: break
                 }
                 
@@ -904,11 +904,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             
         }
         //TEST Set.weeklyAlerts = ["mon":1,"tues":2,"wed":3,"thur":10,"fri":1]
-        let monday = Set1.weeklyAlerts["mon"] ?? 0
-        let tuesday = Set1.weeklyAlerts["tues"] ?? 0
-        let wednesday = Set1.weeklyAlerts["wed"] ?? 0
-        let thursday = Set1.weeklyAlerts["thur"] ?? 0
-        let friday = Set1.weeklyAlerts["fri"] ?? 0
+        let monday = UserInfo.weeklyAlerts["mon"] ?? 0
+        let tuesday = UserInfo.weeklyAlerts["tues"] ?? 0
+        let wednesday = UserInfo.weeklyAlerts["wed"] ?? 0
+        let thursday = UserInfo.weeklyAlerts["thur"] ?? 0
+        let friday = UserInfo.weeklyAlerts["fri"] ?? 0
         let sum = monday + tuesday + wednesday + thursday + friday
         if sum > 0 {
             daysOfTheWeek.alpha = 1.0
@@ -947,7 +947,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         // Won't connect since there is no token
         InstanceID.instanceID().instanceID { (_result, error) in
             if let result = _result {
-                Set1.token = result.token
+                UserInfo.token = result.token
             }
         }
         Messaging.messaging().shouldEstablishDirectChannel = true
@@ -956,8 +956,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         InstanceID.instanceID().instanceID { (_result, error) in
             if let result = _result {
-                Set1.token = result.token
-                Set1.saveUserInfo()
+                UserInfo.token = result.token
+                UserInfo.saveUserInfo()
             }
         }
     }
@@ -978,8 +978,8 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func deleteCell(withAlert: String) {
         guard let atIndex = alertsForCollectionView.index(of: withAlert) else { return }
-        guard let alertDeleting = Set1.alerts[alertsForCollectionView[atIndex]] else {print("error in deleteing"); return}
-        myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
+        guard let alertDeleting = UserInfo.alerts[alertsForCollectionView[atIndex]] else {print("error in deleteing"); return}
+        myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
         
         AlertSort.shared.delete(alertDeleting.name)
         alertsForCollectionView.remove(at: atIndex)
@@ -998,7 +998,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
        
-        if let alert = Set1.alerts[alertsForCollectionView[indexPath.row]] {
+        if let alert = UserInfo.alerts[alertsForCollectionView[indexPath.row]] {
             cell.set(alertName: alert.name, tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)
         } else {
             print("error in collection view")

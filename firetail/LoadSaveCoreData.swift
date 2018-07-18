@@ -16,7 +16,7 @@ class LoadSaveCoreData {
     
     var alertID: [String] {
         var aaa = [String]()
-        for i in 0..<Set1.userAlerts.count {
+        for i in 0..<UserInfo.userAlerts.count {
             switch i {
             case 0...9:
                 aaa.append("alert00" + String(i))
@@ -38,7 +38,7 @@ class LoadSaveCoreData {
            
             _userAlerts[alertID[i]] = alerts[i]
         }
-        Set1.userAlerts = _userAlerts
+        UserInfo.userAlerts = _userAlerts
     }
     
     private var persistentContainer: NSPersistentContainer = {
@@ -102,7 +102,7 @@ class LoadSaveCoreData {
         }
         
         if resultsNameRequest.count > 0 {
-            Set1.username = resultsNameRequest.last!.value(forKey: "username") as! String
+            UserInfo.username = resultsNameRequest.last!.value(forKey: "username") as! String
         }
         print("done loadusername")
     }
@@ -133,7 +133,7 @@ class LoadSaveCoreData {
         let itemsRef = rootRef.child("alerts")
 
         let alertRef = itemsRef.child(alertLongName)
-        let dict = ["id":alertLongName,"isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker.uppercased(),"push":push, "urgent":urgent,"triggered":triggered,"username":Set1.username, "priceString":priceString, "data1":data1, "data2":data2, "data3":data3, "data4":data4, "data5":data5] as [String : Any]
+        let dict = ["id":alertLongName,"isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker.uppercased(),"push":push, "urgent":urgent,"triggered":triggered,"username":UserInfo.username, "priceString":priceString, "data1":data1, "data2":data2, "data3":data3, "data4":data4, "data5":data5] as [String : Any]
         alertRef.setValue(dict)
         
     }

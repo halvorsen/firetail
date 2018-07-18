@@ -133,7 +133,7 @@ class Alpha {
         
     }
     
-    func populateSet1Month() {
+    func populateUserInfoMonth() {
         let date = Date()
         let calendar = Calendar.current
         let year = calendar.component(.year, from: date)
@@ -167,7 +167,7 @@ class Alpha {
             _mo.append(mo[dComponent.month! + i])
         }
         
-        Set1.month = _mo
+        UserInfo.month = _mo
     }
     
     

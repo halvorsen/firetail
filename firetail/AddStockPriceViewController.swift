@@ -266,9 +266,9 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 self?.displayAlert()
                 return
             }
-            Set1.cachedInThisSession.append(dataSet.ticker)
-            Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-            Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+            UserInfo.cachedInThisSession.append(dataSet.ticker)
+            UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+            UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
             var dates = [(String,Int)]()
             for i in 0..<dataSet.day.count {
                 dates.append((dataSet.month[i],dataSet.day[i]))

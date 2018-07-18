@@ -164,7 +164,7 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
         let user = Auth.auth().currentUser
         let newPassword = password1
         
-        let credential = EmailAuthProvider.credential(withEmail: Set1.email, password: oldPassword)
+        let credential = EmailAuthProvider.credential(withEmail: UserInfo.email, password: oldPassword)
         user?.reauthenticateAndRetrieveData(with: credential, completion: { (result, error) in
             if error != nil{
                 let alert = UIAlertController(title: "Error", message: "Error reauthenticating user", preferredStyle: UIAlertControllerStyle.alert)
