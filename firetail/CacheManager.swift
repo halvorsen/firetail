@@ -48,8 +48,32 @@ class CacheManager {
     }
 
     func saveStockData(ticker: String, prices: [Double], days: [Int], months: [String]) {
-        
+        var resultsToCheckAndDelete = [AnyObject]()
         let context = persistentContainer.viewContext
+        
+        let dataRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Entity1")
+        
+        do { resultsToCheckAndDelete = try context.fetch(dataRequest) } catch  {
+            print("Could not cache the response \(error)")
+        }
+        if resultsToCheckAndDelete.count > 1 {
+            resultsToCheckAndDelete.forEach { object in
+                if let tickerSaved = object.value(forKey: "string1") as? String {
+                    if tickerSaved == ticker {
+                        if let obj = object as? NSManagedObject {
+                            context.delete(obj)
+                        }
+                    }
+                }
+            }
+        }
+        do {
+            try context.save()
+        } catch {
+                        let nserror = error as NSError
+                        fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        
         let entity = NSEntityDescription.insertNewObject(forEntityName: "Entity1", into: context)
         entity.setValue(ticker, forKey: "string1")
         entity.setValue(prices, forKey: "prices")
@@ -58,13 +82,6 @@ class CacheManager {
         do {
             try context.save()
         } catch {
-            do {
-                try context.save()
-            } catch {
-                
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
             let nserror = error as NSError
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }

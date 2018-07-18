@@ -112,8 +112,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             self.alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
             self.collectionView?.reloadData()
             self.compareGraphReset()
-//            self.container2.setNeedsDisplay()
-//            self.container2.layoutIfNeeded()
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
+                    self.whoseOnFirst(self.container)
+                })
+            
             }
         }
         
@@ -241,6 +243,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
             stock2.text = "\(sv1.stock): \(sv1.percentSet[1])%"
         default:
+            print("here1")
             stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
             stock2.text = "\(sv1.stock): \(sv1.percentSet[1])%"
             stock3.text = "\(sv2.stock): \(sv2.percentSet[1])%"
@@ -331,12 +334,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var endingLocationX = CGFloat()
     
     @objc private func finishedFetchingTop3Stocks() {
-        print("finished top three")
         compareGraphReset()
     }
     
     private func compareGraphReset() {
-        print("comparegraphreset")
         DispatchQueue.main.async { [weak self] in
             guard let weakself = self else {return}
             weakself.sv.removeFromSuperview()
@@ -347,6 +348,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             weakself.svDot2.removeFromSuperview()
             weakself.populateCompareGraph()
             guard weakself.amountOfBlocks > 0 else {return}
+            print("here2")
             weakself.stock1.text = "\(weakself.sv.stock): \(weakself.sv.percentSet[1])%"
             guard weakself.amountOfBlocks > 1 else {return}
             weakself.stock2.text = "\(weakself.sv1.stock): \(weakself.sv1.percentSet[1])%"
@@ -357,7 +359,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     
     @objc func act(blockLongName: String) {
-        
+        print("here3")
         stock1.text = ""
         stock2.text = ""
         stock3.text = ""
@@ -499,15 +501,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     
     @objc func whoseOnFirst(_ scrollView: UIScrollView) {
-        
         for i in 0...11 {
-            if scrollView.contentSize.width*CGFloat(Double(i+1)-2.3)/13...scrollView.contentSize.width*CGFloat(Double(i+1)-2.05)/13 ~= scrollView.contentOffset.x {
+            let offset = scrollView.contentOffset.x
+            if scrollView.contentSize.width*CGFloat(Double(i+1)-2.3)/13...scrollView.contentSize.width*CGFloat(Double(i+1)-2.05)/13 ~= offset || (i == 1 && offset == 0.0) {
                 var value = CGFloat()
                 var value2 = CGFloat()
                 var value1 = CGFloat()
                 
-                
-                switch Set1.userAlerts.count {
+                switch sv.percentSet.count {
                 case 0:
                     break
                 case 1:
@@ -593,7 +594,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                         
                     }
                 }
-                break
+                return
             }
         }
     }
