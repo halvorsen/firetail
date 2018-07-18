@@ -29,7 +29,7 @@ final class AlertSort {
         }
     }
     
-    init() {
+    private init() {
 //
 //        if let dictionary = MyFileManager.readAlertOrderFile(named: "Crypto") {
 //            cryptoDictionary = dictionary

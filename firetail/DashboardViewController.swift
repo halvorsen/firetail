@@ -99,26 +99,36 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var once = true
     
     func appLoading() {
+        
         LoadSaveCoreData().loadUsername()
         UserInfo.premium = true //: toggle in development
         premiumMember = true  // ##TODO: turn off premium premiumMember = UserInfo.premium
-        
         Alpha().populateUserInfoMonth()
+        
+        DispatchQueue.main.async {
+            
+            AppLoadingData.loadCachedHistoricalDataForTickerArray()  //get cached historical data for ticker array]
+            
+            self.alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
+            
+            self.refreshAlertsAndCompareGraph()
+            
+        }
         
         AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {
             DispatchQueue.main.async {
-            self.doneLoadingFromFirebase = true
-            let _ = AppLoadingData.loadStockPricesFromCoreData()
-            self.alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
-            self.collectionView?.reloadData()
-            self.compareGraphReset()
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
-                    self.whoseOnFirst(self.container)
-                })
-            
+                self.doneLoadingFromFirebase = true
+                AppLoadingData.loadCachedHistoricalDataForTickerArray()
+                self.alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
+                print("userinfoalerts: \(UserInfo.alerts)")
+                print("alertsforcollectionview: \(self.alertsForCollectionView)")
+                print("userinfo1: \(UserInfo.alerts)")
+                
+                UserInfo.tickerArray = UserInfo.alerts.map { $0.value.ticker }
+                print("userinfo2: \(UserInfo.tickerArray)")
+                self.refreshAlertsAndCompareGraph()
             }
         }
-        
         
         UserInfo.flashOn = UserDefaults.standard.bool(forKey: "flashOn")
         UserInfo.allOn = UserDefaults.standard.bool(forKey: "allOn")
@@ -312,8 +322,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         amountOfBlocks = UserInfo.userAlerts.count
         whoseOnFirst(container)
         
-        
-        // START VERSION 2
         let collectionLayout = UICollectionViewFlowLayout()
         collectionLayout.minimumInteritemSpacing = 0
         collectionLayout.minimumLineSpacing = 0
@@ -332,6 +340,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var longPress = UILongPressGestureRecognizer()
     var startingLocationX = CGFloat()
     var endingLocationX = CGFloat()
+    
+    private func refreshAlertsAndCompareGraph() {
+        self.collectionView?.reloadData()
+        self.compareGraphReset()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
+            self.whoseOnFirst(self.container)
+        })
+    }
     
     @objc private func finishedFetchingTop3Stocks() {
         compareGraphReset()
@@ -1041,7 +1057,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
         
         AlertSort.shared.moveItem(alert: alertsForCollectionView[startIndex], at: startIndex, to: endIndex)
         alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
-        
+        refreshAlertsAndCompareGraph()
     }
     
 }

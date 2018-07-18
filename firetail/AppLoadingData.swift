@@ -18,19 +18,16 @@ class AppLoadingData {
     var fetchedTickers = [String]()
     let alphaAPI = Alpha()
     
-    internal static func loadStockPricesFromCoreData() {
+    internal static func loadCachedHistoricalDataForTickerArray() {
         let dataSets = CacheManager().loadData()
         guard UserInfo.tickerArray.count > 0 else {return}
-        var count = 0
+       
         for i in 0..<UserInfo.tickerArray.count {
-            loop: for dataSet in dataSets.reversed() {
+            for dataSet in dataSets {
                 if dataSet.ticker == UserInfo.tickerArray[i] {
-                    count += 1
+                   
                     UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
                     UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                    if count > 10 {
-                        break loop
-                    }
                 }
                 
             }
@@ -208,6 +205,7 @@ class AppLoadingData {
                 }
                 let uA = UserInfo.userAlerts
                 var totalCount = 0
+                var tickerBuffer: [String] = []
                 for i in (0..<UserInfo.userAlerts.count).reversed() {
                     if uA[alertID[i]] != nil {
                         ref.child("alerts").child(uA[alertID[i]]!).observeSingleEvent(of: .value, with: { (snapshot) in
@@ -224,7 +222,7 @@ class AppLoadingData {
                                 let _flash = value?["flash"] as? Bool ?? false
                                 let _sms = value?["sms"] as? Bool ?? false
                                 let _ticker = value?["ticker"] as? String ?? ""
-                                UserInfo.tickerArray.append(_ticker)
+                                tickerBuffer.append(_ticker)
                                 let _push = value?["push"] as? Bool ?? false
                                 let _urgent = value?["urgent"] as? Bool ?? false
                                 let _triggered = value?["triggered"] as? String ?? "false"
@@ -253,6 +251,7 @@ class AppLoadingData {
                     } else {
                        
                     }
+                    UserInfo.tickerArray = tickerBuffer
                 }
             } else {
                 callback()

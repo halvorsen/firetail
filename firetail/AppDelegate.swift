@@ -22,6 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        let stockAlerts = Alerts.shared.stocks // ititialize shared alert class the retrieves alerts from file storage
+        
+        
         Fabric.with([Crashlytics.self])
         
         FirebaseApp.configure()

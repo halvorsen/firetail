@@ -34,7 +34,12 @@ public struct UserInfo {
     
     public static var tenYearDictionary: [String:[Double]] = ["":[0.0]]
     
-    public static var tickerArray = [String]()
+    public static var tickerArray = [String]() {
+        didSet {
+            print("didSet")
+            print("UserInfo.tickerArray: \(UserInfo.tickerArray)")
+        }
+    }
     
     public static var month = ["","","","","","","","","","","",""]
     
@@ -60,6 +65,7 @@ public struct UserInfo {
     
     public static var userAlerts : [String:String] = [:] {
         didSet {
+            print("didSet")
         print("UserInfo.userAlerts: \(UserInfo.userAlerts)")
         }
     }
