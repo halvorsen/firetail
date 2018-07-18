@@ -224,11 +224,16 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     }
 
     @objc private func back(_ sender: UIButton) {
-        performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self)
+        dismiss(animated: true)
     }
     
     @objc private func setFunc(_ sender: UIButton) {
-        performSegue(withIdentifier: "fromAddStockPriceToAddStockAlert", sender: self)
+        let destinationViewController = AddStockAlertViewController()
+        destinationViewController.newAlertTicker = newAlertTicker
+        destinationViewController.newAlertPrice = newAlertPrice
+        destinationViewController.lastPrice = lastPrice
+        destinationViewController.priceString = priceLabel.text ?? ""
+        present(destinationViewController, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -245,7 +250,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     private func displayAlert() {
         let alert = UIAlertController(title: "", message: "Ticker not supported", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { _ in
-            self.performSegue(withIdentifier: "fromAddStockPriceToAddStockTicker", sender: self)
+            self.dismiss(animated: true)
         })
         present(alert, animated: true) {
             self.activityView.stopAnimating()

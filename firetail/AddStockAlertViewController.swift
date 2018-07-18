@@ -10,6 +10,7 @@ import UIKit
 import UserNotifications
 import QuartzCore
 import Firebase
+import FirebaseMessaging
 import FirebaseAuth
 import ReachabilitySwift
 
@@ -160,12 +161,13 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     
     @objc private func add(_ button: UIButton) {
         
-        Set1.ti = [newAlertTicker] + Set1.ti
+        Set1.tickerArray = [newAlertTicker] + Set1.tickerArray
         let finalAlertPrice = newAlertPrice
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID =  timestamp + newAlertTicker.uppercased()
         AlertSort.shared.addToStack(alert: newAlertLongID)
+       
         Set1.userAlerts[alertID[Set1.userAlerts.count]] = newAlertLongID
    
         var alertTriggerWhenGreaterThan = false
@@ -184,32 +186,29 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: priceString)
         } else if newAlertBoolTuple.1 {
             myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString, data2: Set1.phone)
-        }else {
+        } else {
             myLoadSave.saveAlertToFirebase(username: Set1.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString)
         }
+        Set1.saveUserInfo()
         alertInfo = (Set1.username,newAlertTicker,finalAlertPrice,alertTriggerWhenGreaterThan,false,newAlertBoolTuple.0,newAlertBoolTuple.1,newAlertBoolTuple.3,newAlertBoolTuple.4,"false",newAlertBoolTuple.2,newAlertLongID,priceString)
         if mySwitchSMS.isOn == true && Set1.phone == "none" {
-            self.performSegue(withIdentifier: "fromAddStockAlertToPhone", sender: self)
+            let viewController = AddPhoneNumberViewController()
+            viewController.alertInfo = alertInfo
+            self.present(viewController, animated: true)
         } else {
-            self.performSegue(withIdentifier: "fromAddStockAlertToDashboard", sender: self)
+            if let presentingViewController = presentingViewController?.presentingViewController?.presentingViewController {
+                presentingViewController.dismiss(animated: false)
+            }
         }
         
     }
     var alertInfo = (String(),String(),Double(),Bool(),Bool(),Bool(),Bool(),Bool(),Bool(),String(),Bool(),String(),String())
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "fromAddStockAlertToPhone" {
-            if let phoneView: AddPhoneNumberViewController = segue.destination as? AddPhoneNumberViewController {
-            phoneView.alertInfo = alertInfo
-            }
-        } else if segue.identifier == "fromAddStockAlertToAddStockPrice" {
-            if let addStockPriceVC: AddStockPriceViewController = segue.destination as? AddStockPriceViewController {
-            addStockPriceVC.newAlertTicker = newAlertTicker
-            }
-        }
-    }
-    
+
     @objc private func back(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromAddStockAlertToAddStockPrice", sender: self)
+        if let viewController = presentingViewController as? AddStockPriceViewController {
+//            viewController.newAlertTicker = newAlertTicker
+            dismiss(animated: true)
+        }
     }
     
     private func registerForPushNotifications() {

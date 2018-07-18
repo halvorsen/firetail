@@ -75,7 +75,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func back(_ sender: UIButton) {
-        performSegue(withIdentifier: "fromAddStockTickerToMain", sender: self)
+        dismiss(animated: true)
     }
     
     @objc private func quickPickFunc(callback: (_ isGoodToGo: Bool) -> Void) {

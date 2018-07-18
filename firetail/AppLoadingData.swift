@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import FirebaseDatabase
 import FirebaseAuth
 import FirebaseCore
 
@@ -17,13 +18,15 @@ class AppLoadingData {
     var fetchedTickers = [String]()
     let alphaAPI = Alpha()
     
-    internal static func loadStocksFromCoreData() {
+    internal static func loadStockPricesFromCoreData() {
         let dataSets = CacheManager().loadData()
-        guard Set1.ti.count > 0 else {return}
+        print("dataSets:")
+        print(dataSets)
+        guard Set1.tickerArray.count > 0 else {return}
         var count = 0
-        for i in 0..<Set1.ti.count {
+        for i in 0..<Set1.tickerArray.count {
             loop: for dataSet in dataSets.reversed() {
-                if dataSet.ticker == Set1.ti[i] {
+                if dataSet.ticker == Set1.tickerArray[i] {
                     count += 1
                     Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
                     Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
@@ -38,19 +41,19 @@ class AppLoadingData {
     
     private func fetchAllButFirst3Stocks() {
         var count = 0
-        if Set1.ti.count > 3 {
-            count = Set1.ti.count
+        if Set1.tickerArray.count > 3 {
+            count = Set1.tickerArray.count
         }
         guard count > 3 else {return}
         var savedCount = 3
         for i in 3..<count {
-            if !fetchedTickers.contains(Set1.ti[i]) {
+            if !fetchedTickers.contains(Set1.tickerArray[i]) {
                 
-                fetchedTickers.append(Set1.ti[i])
-                alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+                fetchedTickers.append(Set1.tickerArray[i])
+                alphaAPI.get20YearHistoricalData(ticker: Set1.tickerArray[i], isOneYear: false) { dataSet in
                     
                     if dataSet == nil {
-                        self.alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+                        self.alphaAPI.get20YearHistoricalData(ticker: Set1.tickerArray[i], isOneYear: false) { dataSet in
                             savedCount += 1
                             if let dataSet = dataSet {
                                 Set1.cachedInThisSession.append(dataSet.ticker)
@@ -81,22 +84,22 @@ class AppLoadingData {
     
     func fetchAllStocks() {
         var savedCount = 3
-        guard Set1.ti.count > 0 else {return}
-        for i in 0..<Set1.ti.count {
+        guard Set1.tickerArray.count > 0 else {return}
+        for i in 0..<Set1.tickerArray.count {
             
-            if !fetchedTickers.contains(Set1.ti[i]) {
-                fetchedTickers.append(Set1.ti[i])
-                alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+            if !fetchedTickers.contains(Set1.tickerArray[i]) {
+                fetchedTickers.append(Set1.tickerArray[i])
+                alphaAPI.get20YearHistoricalData(ticker: Set1.tickerArray[i], isOneYear: false) { dataSet in
                     
                     if dataSet == nil {
-                        self.alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+                        self.alphaAPI.get20YearHistoricalData(ticker: Set1.tickerArray[i], isOneYear: false) { dataSet in
                             savedCount += 1
                             if let dataSet = dataSet {
                                 Set1.cachedInThisSession.append(dataSet.ticker)
                                 Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
                                 Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
                             }
-                            if savedCount >= Set1.ti.count {
+                            if savedCount >= Set1.tickerArray.count {
                                 NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
                             }
                         }
@@ -107,7 +110,7 @@ class AppLoadingData {
                             Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
                             Set1.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
                         }
-                        if savedCount >= Set1.ti.count {
+                        if savedCount >= Set1.tickerArray.count {
                             NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
                         }
                     }
@@ -120,16 +123,16 @@ class AppLoadingData {
     
     private func fetch(callback: @escaping () -> Void) {
         var count = 3
-        if Set1.ti.count < 3 {
-            guard Set1.ti.count > 0 else {return}
-            count = Set1.ti.count
+        if Set1.tickerArray.count < 3 {
+            guard Set1.tickerArray.count > 0 else {return}
+            count = Set1.tickerArray.count
         }
         var savedCount = 0
         for i in 0..<count {
-            guard i < Set1.ti.count else {return}
-            alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+            guard i < Set1.tickerArray.count else {return}
+            alphaAPI.get20YearHistoricalData(ticker: Set1.tickerArray[i], isOneYear: false) { dataSet in
                 if dataSet == nil {
-                    self.alphaAPI.get20YearHistoricalData(ticker: Set1.ti[i], isOneYear: false) { dataSet in
+                    self.alphaAPI.get20YearHistoricalData(ticker: Set1.tickerArray[i], isOneYear: false) { dataSet in
                         if let dataSet = dataSet {
                             Set1.cachedInThisSession.append(dataSet.ticker)
                             Set1.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
@@ -168,15 +171,17 @@ class AppLoadingData {
     //loads the firebase stock info for the username - storing in Set1
     //if there are no alerts it segues to add stock ticker
     
-    func loadUserInfoFromFirebase(firebaseUsername: String) {
-        Set1.ti.removeAll()
-        let ref = Database.database().reference()
+    func loadUserInfoFromFirebase(firebaseUsername: String, callback: @escaping () -> Void) {
+        Set1.tickerArray.removeAll()
         
+        let ref = Database.database().reference()
+        print(firebaseUsername)
         ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
             
             let value = snapshot.value as? NSDictionary
+            print("value: \(value)")
             Set1.fullName = value?["fullName"] as? String ?? "none"
-            Set1.email = value?["email"] as? String ?? "none"
+            Set1.email = value?["email"] as? String ?? Set1.username
             Set1.phone = value?["phone"] as? String ?? "none"
             Set1.premium = value?["premium"] as? Bool ?? false
             Set1.brokerName = value?["brokerName"] as? String ?? "none"
@@ -221,7 +226,7 @@ class AppLoadingData {
                                 let _flash = value?["flash"] as? Bool ?? false
                                 let _sms = value?["sms"] as? Bool ?? false
                                 let _ticker = value?["ticker"] as? String ?? ""
-                                Set1.ti.append(_ticker)
+                                Set1.tickerArray.append(_ticker)
                                 let _push = value?["push"] as? Bool ?? false
                                 let _urgent = value?["urgent"] as? Bool ?? false
                                 let _triggered = value?["triggered"] as? String ?? "false"
@@ -231,26 +236,33 @@ class AppLoadingData {
                             totalCount += 1
                             
                             if Set1.userAlerts.count == totalCount {
-                                if Set1.ti.count != 0 {
+                                
+                                if Set1.tickerArray.count != 0 {
                                     
                                     DispatchQueue.global(qos: .background).async {
                                         self.fetch() {}
                                     }
                                     
                                 }
-                                Set1.saveUserInfo()
+                                print("done success")
+                                callback()
                             }
                             
                         }) { (error) in
                             print(error.localizedDescription)
+                            callback()
                         }
+                    } else {
+                       
                     }
                 }
-                Set1.saveUserInfo()
+            } else {
+                callback()
             }
             
         }) { (error) in
             print(error.localizedDescription)
+            callback()
         }
         
     }

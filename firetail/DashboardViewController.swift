@@ -14,6 +14,7 @@ import StoreKit
 import MessageUI
 import Firebase
 import FirebaseAuth
+import FirebaseMessaging
 import UserNotifications
 import QuartzCore
 import ReachabilitySwift
@@ -24,7 +25,7 @@ let commonScalar = UIScreen.main.bounds.width/375
 
 class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIGestureRecognizerDelegate {
     var collectionView: AlertCollectionView?
-    var alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
+    var alertsForCollectionView: [String] = []
     var activityView = UIActivityIndicatorView()
     var premiumMember = false
     var addTextField = UITextField()
@@ -94,26 +95,55 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var labelMiddle: CGFloat = 72*UIScreen.main.bounds.height/1334
     var labelBottom: CGFloat = 120*UIScreen.main.bounds.height/1334
     let alertCollectionCellID = "alertCell"
+    var doneLoadingFromFirebase = false
+    var once = true
     
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        Set1.saveUserInfo()
+    func appLoading() {
+        LoadSaveCoreData().loadUsername()
+        let cacheManager = CacheManager()
+        let _ = cacheManager.loadData()
+        
+        Set1.premium = true //: toggle in development
+        premiumMember = true  // ##TODO: turn off premium premiumMember = Set1.premium
+        
+        Alpha().populateSet1Month()
+        
+        AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: Set1.username) {
+            DispatchQueue.main.async {
+            self.doneLoadingFromFirebase = true
+            let _ = AppLoadingData.loadStockPricesFromCoreData()
+            self.alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
+            self.collectionView?.reloadData()
+            self.compareGraphReset()
+                print("set1.tickerarray")
+                print(Set1.tickerArray)
+//            self.container2.setNeedsDisplay()
+//            self.container2.layoutIfNeeded()
+            }
+        }
+        
+        
+        Set1.flashOn = UserDefaults.standard.bool(forKey: "flashOn")
+        Set1.allOn = UserDefaults.standard.bool(forKey: "allOn")
+        Set1.pushOn = UserDefaults.standard.bool(forKey: "pushOn")
+        Set1.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
+        Set1.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if once {
+        appLoading()
+            once = false
+        }
         NotificationCenter.default.addObserver(self, selector: #selector(DashboardViewController.finishedFetchingTop3Stocks), name: NSNotification.Name(rawValue: updatedDataKey), object: nil)
         if UIDevice().userInterfaceIdiom == .phone {
             if UIScreen.main.nativeBounds.height == 2436 {
-                
                 labelTop += 30
                 labelBottom += 30
                 labelMiddle += 30
-                
             }
-            
         }
         
         if Set1.token == "none" && Set1.userAlerts.count > 0 {
@@ -156,10 +186,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             }
             UIApplication.shared.registerForRemoteNotifications()
             
-            
         }
         
-        premiumMember = true  // ##TODO: turn off premium premiumMember = Set1.premium
         view.backgroundColor = CustomColor.black33
         svs = [sv,sv1,sv2]
         let d = Calendar.current.dateComponents([.year, .month, .day], from: Date())
@@ -198,8 +226,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         container2.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
         slideView.addSubview(container2)
         
-        populateCompareGraph()
-        
         container.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
@@ -211,12 +237,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         stock1.frame.origin.y = labelTop
         stock2.frame.origin.y = labelMiddle
         stock3.frame.origin.y = labelBottom
-        print("stockArray5: \(AlertSort.shared.stockArray)")
-        print("stockDic5: \(AlertSort.shared.stockDictionary)")
-        print("SEt.useralerts: \(Set1.userAlerts)")
-        print("Set1.ti: \(Set1.ti)")
-        print("set1Alerts: \(Set1.alerts)")
-        switch Set1.userAlerts.count {
+        switch sv.percentSet.count {
         case 0:
             break
         case 1:
@@ -315,7 +336,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var endingLocationX = CGFloat()
     
     @objc private func finishedFetchingTop3Stocks() {
-        
+        print("finished top three")
+        compareGraphReset()
+    }
+    
+    private func compareGraphReset() {
+        print("comparegraphreset")
         DispatchQueue.main.async { [weak self] in
             guard let weakself = self else {return}
             weakself.sv.removeFromSuperview()
@@ -332,8 +358,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             guard weakself.amountOfBlocks > 2 else {return}
             weakself.stock3.text = "\(weakself.sv2.stock): \(weakself.sv2.percentSet[1])%"
         }
-        
-        
     }
     
     
@@ -348,7 +372,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 tickers.append(alertInfo.ticker)
             }
         }
-        Set1.ti = tickers
+        Set1.tickerArray = tickers
         
         amountOfBlocks -= 1
         
@@ -408,57 +432,61 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     private func populateCompareGraph() {
-        guard Set1.ti.count > 0,
-            let ti0 = Set1.oneYearDictionary[Set1.ti[0]],
+        print("popuolatecomparegraph1")
+        print(Set1.tickerArray.count)
+        print(Set1.oneYearDictionary[Set1.tickerArray[0]])
+        guard Set1.tickerArray.count > 0,
+            let ti0 = Set1.oneYearDictionary[Set1.tickerArray[0]],
             ti0.count > 0 else {return}
-        
-        switch Set1.ti.count {
+         print("popuolatecomparegraph2")
+        switch Set1.tickerArray.count {
         case 0:
             break
         case 1:
             
-            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
             container2.addSubview(svDot)
             
         case 2:
             
-            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
             container2.addSubview(svDot)
-            guard Set1.ti.count > 1,
-                let ti1 = Set1.oneYearDictionary[Set1.ti[1]],
+            guard Set1.tickerArray.count > 1,
+                let ti1 = Set1.oneYearDictionary[Set1.tickerArray[1]],
                 ti1.count > 0 else {return}
-            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.ti[1], color: CustomColor.white128)
+            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.tickerArray[1], color: CustomColor.white128)
             container.addSubview(sv1)
-            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.ti[1], color: CustomColor.white128)
+            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.tickerArray[1], color: CustomColor.white128)
             container2.addSubview(svDot1)
             
         default:
-            
-            sv =  CompareScroll(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
+             print("popuolatecomparegraph3")
+            sv =  CompareScroll(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.ti[0], color: CustomColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: Set1.tickerArray[0], color: CustomColor.white68)
             container2.addSubview(svDot)
-            guard Set1.ti.count > 1,
-                let ti1 = Set1.oneYearDictionary[Set1.ti[1]],
+            guard Set1.tickerArray.count > 1,
+                let ti1 = Set1.oneYearDictionary[Set1.tickerArray[1]],
                 ti1.count > 0 else {return}
-            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.ti[1], color: CustomColor.white128)
+            sv1 =  CompareScroll(graphData: ti1, stockName: Set1.tickerArray[1], color: CustomColor.white128)
             container.addSubview(sv1)
-            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.ti[1], color: CustomColor.white128)
+            svDot1 =  CompareScrollDot(graphData: ti1, stockName: Set1.tickerArray[1], color: CustomColor.white128)
             container2.addSubview(svDot1)
-            guard Set1.ti.count > 2,
-                let ti2 = Set1.oneYearDictionary[Set1.ti[2]],
+            guard Set1.tickerArray.count > 2,
+                let ti2 = Set1.oneYearDictionary[Set1.tickerArray[2]],
                 ti2.count > 0 else {return}
-            sv2 =  CompareScroll(graphData: ti2, stockName: Set1.ti[2], color: CustomColor.white209)
+            sv2 =  CompareScroll(graphData: ti2, stockName: Set1.tickerArray[2], color: CustomColor.white209)
             container.addSubview(sv2)
-            svDot2 =  CompareScrollDot(graphData: ti2, stockName: Set1.ti[2], color: CustomColor.white209)
+            svDot2 =  CompareScrollDot(graphData: ti2, stockName: Set1.tickerArray[2], color: CustomColor.white209)
             container2.addSubview(svDot2
                 
             )
         }
+         print("popuolatecomparegraph4")
     }
     
     func textFieldDidBeginEditing(_ textField : UITextField)
@@ -612,14 +640,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     @objc private func logoutFunc(_ sender: UIButton) {
         
-        
         Set1.month = ["","","","","","","","","","","",""]
         Set1.currentPrice = 0.0
         Set1.yesterday = 0.0
         Set1.token = "none"
         // Set1.alertCount = 0
         Set1.oneYearDictionary.removeAll() //= ["":[0.0]]
-        Set1.ti.removeAll()
+        Set1.tickerArray.removeAll()
         Set1.phone = "none"
         Set1.email = "none"
         Set1.brokerName = "none"

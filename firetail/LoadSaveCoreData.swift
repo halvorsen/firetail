@@ -10,6 +10,7 @@ import CoreData
 import Foundation
 import FirebaseCore
 import Firebase
+import FirebaseDatabase
 
 class LoadSaveCoreData {
     
@@ -109,11 +110,7 @@ class LoadSaveCoreData {
 
     public static func saveUserInfoToFirebase(username:String,fullName:String,email:String,phone:String,premium:Bool,numOfAlerts:Int,brokerName:String,brokerURL:String,weeklyAlerts:[String:Int],userAlerts:[String:String], token: String) {
         
-      //  let ref = FIRDatabase.database().reference(withPath: "users")
-
         let rootRef = Database.database().reference()
-
-      //  let childRef = FIRDatabase.database().reference(withPath: "users")
 
         let itemsRef = rootRef.child("users")
 
@@ -131,11 +128,7 @@ class LoadSaveCoreData {
     
     func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, alertLongName: String, priceString: String, data1: String = "", data2: String = "", data3: String = "", data4: String = "", data5: String = "") {
         
-     //   let ref = FIRDatabase.database().reference(withPath: "alerts")
-        
         let rootRef = Database.database().reference()
-        
-     //   let childRef = FIRDatabase.database().reference(withPath: "alerts")
         
         let itemsRef = rootRef.child("alerts")
 

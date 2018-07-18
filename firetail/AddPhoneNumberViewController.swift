@@ -169,7 +169,7 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     
     @objc private func back(_ sender: UIButton) {
         Set1.saveUserInfo()
-        self.performSegue(withIdentifier: "fromPhoneToDashboard", sender: self)
+       dismiss(animated: true)
     }
     
     @objc private func saveFunc(_ sender: UIButton) {
@@ -187,8 +187,9 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         }
         
         myLoadSave.saveAlertToFirebase(username: alertInfo.0, ticker: alertInfo.1, price: alertInfo.2, isGreaterThan: alertInfo.3, deleted: alertInfo.4, email: alertInfo.5, sms: alertInfo.6, flash: alertInfo.7, urgent: alertInfo.8, triggered: alertInfo.9, push: alertInfo.10, alertLongName: alertInfo.11, priceString: alertInfo.12, data2: Set1.phone)
-        
-        self.performSegue(withIdentifier: "fromPhoneToDashboard", sender: self)
+        if let presentingViewController = presentingViewController?.presentingViewController?.presentingViewController {
+            presentingViewController.dismiss(animated: true)
+        }
         
     }
     

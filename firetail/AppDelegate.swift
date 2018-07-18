@@ -19,12 +19,14 @@ import Crashlytics
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     var window: UIWindow?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-
+        
         Fabric.with([Crashlytics.self])
+        
         FirebaseApp.configure()
-     
+        
+       
         InstanceID.instanceID().instanceID { (_result, error) in
             if let result = _result {
                 Set1.token = result.token
@@ -33,33 +35,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotification(_:)),name: NSNotification.Name.InstanceIDTokenRefresh, object: nil)
         
-        
         self.window = UIWindow(frame: UIScreen.main.bounds)
         
         let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
         let user = Auth.auth().currentUser
-        
-        let cacheManager = CacheManager()
-        let _ = cacheManager.loadData()
-        let token = Messaging.messaging().fcmToken
-        print("FCM token: \(token ?? "")")
-        
-        Set1.premium = true //: toggle in development
-        print("ti: \(Set1.ti)")
-        print("tiuseralerts; \(Set1.userAlerts)")
-        
-        Set1.flashOn = UserDefaults.standard.bool(forKey: "flashOn")
-        Set1.allOn = UserDefaults.standard.bool(forKey: "allOn")
-        Set1.pushOn = UserDefaults.standard.bool(forKey: "pushOn")
-        Set1.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
-        Set1.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
-        
-        Alpha().populateSet1Month()
-        LoadSaveCoreData().loadUsername()
-        
-        AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: Set1.username)
-        let _ = AppLoadingData.loadStocksFromCoreData()
- 
         if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") && user != nil {
             if let viewController = storyboard.instantiateViewController(withIdentifier: "DashboardViewController") as? DashboardViewController {
             self.window?.rootViewController = viewController
