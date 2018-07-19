@@ -75,5 +75,9 @@ final class Alerts {
         }
     }
     
+    internal static func eraseStockAlertFile() {
+        _ = MyFileManager.write(filename: "stockAlerts", input: [:])
+    }
+    
     
 }

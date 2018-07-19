@@ -194,10 +194,18 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         if mySwitchSMS.isOn == true && UserInfo.phone == "none" {
             let viewController = AddPhoneNumberViewController()
             viewController.alertInfo = alertInfo
+            viewController.modalTransitionStyle = .crossDissolve
             self.present(viewController, animated: true)
         } else {
-            if let presentingViewController = presentingViewController?.presentingViewController?.presentingViewController {
-                presentingViewController.dismiss(animated: false)
+            if let first = presentingViewController,
+            let second = first.presentingViewController,
+                let third = second.presentingViewController {
+//                first.dismiss(animated: false) {
+//                    second.dismiss(animated: false) {
+                        third.dismiss(animated: true)
+//                    }
+//                }
+                
             }
         }
         

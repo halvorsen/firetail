@@ -17,6 +17,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     var login = UIButton()
     var continueB = UIButton()
     var createAccount = UIButton()
+    var resetPassword = UIButton()
     var myTextFields = [UITextField]()
     var activityView = UIActivityIndicatorView()
     let loadsave = LoadSaveCoreData()
@@ -41,11 +42,30 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         tap = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard(_:)))
-      
+      resetPassword.setTitle("reset password", for: .normal)
+        resetPassword.addTarget(self, action: #selector(resetPasswordTouchUpInside), for: .touchUpInside)
         alphaAPI.populateUserInfoMonth()
         loadsave.loadUsername()
-        
         self.populateView()
+        
+    }
+    
+    @objc private func resetPasswordTouchUpInside() {
+        
+        let alert = UIAlertController(title: "Reset Password", message: "A reset link will be sent to your email.", preferredStyle: .alert)
+        alert.addTextField { textfield in
+            textfield.placeholder = "myemail@address.com"
+        }
+        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.default, handler: { _ in
+            if let text = alert.textFields?[0].text {
+                Auth.auth().sendPasswordReset(withEmail: text) { (error) in
+                    // nothing
+                }
+            }
+        }))
+        
+        present(alert, animated: true, completion: nil)
+        
         
     }
     
@@ -84,10 +104,15 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             logo.image = #imageLiteral(resourceName: "logo93x119")
             view.addSubview(logo)
             
-            addButton(name: login, x: 0, y: 400, width: 254, height: 76, title: "LOGIN", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.loginFunc(_:)), addSubview: true, alignment: .center)
+//            addButton(name: login, x: 0, y: 400, width: 254, height: 76, title: "LOGIN", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.loginFunc(_:)), addSubview: true, alignment: .center)
             
-            addButton(name: continueB, x: 0, y: 740, width: 750, height: 140, title: "CONTINUE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.continueFunc(_:)), addSubview: true, alignment: .center)
-            
+            addButton(name: continueB, x: 0, y: 740, width: 750, height: 140, title: "CONTINUE", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.continueFunc(_:)), addSubview: true, alignment: .center)
+//            resetPassword.frame = CGRect(x: 0, y: 200*screenHeight/667, width: 375*screenWidth/375, height: 140*screenHeight/667)
+            resetPassword.frame.origin = CGPoint(x: 35*screenWidth/375, y: 200*screenHeight/667)
+            resetPassword.frame.size = resetPassword.intrinsicContentSize
+            resetPassword.setTitleColor(CustomColor.white, for: .normal)
+            resetPassword.titleLabel?.font = UIFont(name: "Roboto-Bold", size: 17)
+            view.addSubview(resetPassword)
             
             addButton(name: createAccount, x: 0, y: 1146, width: 750, height: 188, title: "         CREATE ACCOUNT", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: CustomColor.black30, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.createAccountFunc(_:)), addSubview: true)
             let arrowView = UIImageView(frame: CGRect(x: screenWidth - 70*screenHeight/667, y: 370*screenHeight/667, width: 70*screenHeight/667, height: 70*screenHeight/667))
@@ -107,6 +132,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 case 1:
                     myTextField.isSecureTextEntry = true
                     myTextField.placeholder = "Password"
+                    
                 default:
                     break
                 }
@@ -146,14 +172,19 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         UserInfo.username = cleanString
         
         Auth.auth().signIn(withEmail: myText, password: myText2, completion: { (user, error) in
-            if error != nil{
+            if error != nil {
                 self.activityView.removeFromSuperview()
                 let alert = UIAlertController(title: "Warning", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
                 let action = UIAlertAction(title: "Okay", style: .default, handler: nil)
                 alert.addAction(action)
                 self.present(alert, animated: true, completion: nil)
             } else {
-                
+                self.activityView.removeFromSuperview()
+                CacheManager().eraseAllStockCache()
+                Alerts.eraseStockAlertFile()
+                UserInfo.alerts.removeAll()
+                UserInfo.tickerArray.removeAll()
+                self.present(AddStockTickerViewController(), animated: true)
                 
             }
         })

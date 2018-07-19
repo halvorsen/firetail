@@ -108,7 +108,10 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         quickPickFunc() { [weak self] (isGoodToGo) -> Void in
             guard let weakself = self else {return}
             if isGoodToGo {
-                weakself.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: weakself)
+                let viewController = AddStockPriceViewController()
+                viewController.newAlertTicker = newAlertTicker
+                viewController.modalTransitionStyle = .crossDissolve
+                present(viewController, animated: true)
             } else {
                 let alert = UIAlertController(title: "", message: "Coin not supported", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
@@ -124,8 +127,10 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         quickPickFunc() { [weak self] (isGoodToGo) -> Void in
             guard let weakself = self else {return}
             if isGoodToGo {
-                
-                weakself.performSegue(withIdentifier: "fromAddStockTickerToAddStockPrice", sender: weakself)
+                let viewController = AddStockPriceViewController()
+                viewController.newAlertTicker = newAlertTicker
+                viewController.modalTransitionStyle = .crossDissolve
+                present(viewController, animated: true)
             } else {
                 
                 let alert = UIAlertController(title: "", message: "Coin not supported", preferredStyle: UIAlertControllerStyle.alert)
@@ -149,15 +154,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         }
         return false
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "fromAddStockTickerToAddStockPrice" {
-            if let destinationViewController: AddStockPriceViewController = segue.destination as? AddStockPriceViewController {
-                destinationViewController.newAlertTicker = newAlertTicker
-            }
-        }
-    }
-    
+   
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
     }

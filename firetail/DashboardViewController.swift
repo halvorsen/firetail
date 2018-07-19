@@ -5,7 +5,6 @@
 //  Created by Aaron Halvorsen on 2/26/17.
 //  Copyright © 2017 Aaron Halvorsen. All rights reserved.
 //
-// OR DASHBOARD VIEWCONTROLLER
 
 import UIKit
 
@@ -108,24 +107,19 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         DispatchQueue.main.async {
             
             AppLoadingData.loadCachedHistoricalDataForTickerArray()  //get cached historical data for ticker array]
-            
             self.alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
-            
             self.refreshAlertsAndCompareGraph()
             
         }
         
         AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {
             DispatchQueue.main.async {
+                
                 self.doneLoadingFromFirebase = true
                 AppLoadingData.loadCachedHistoricalDataForTickerArray()
                 self.alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
-                print("userinfoalerts: \(UserInfo.alerts)")
-                print("alertsforcollectionview: \(self.alertsForCollectionView)")
-                print("userinfo1: \(UserInfo.alerts)")
                 
                 UserInfo.tickerArray = UserInfo.alerts.map { $0.value.ticker }
-                print("userinfo2: \(UserInfo.tickerArray)")
                 self.refreshAlertsAndCompareGraph()
             }
         }
@@ -523,16 +517,17 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 var value = CGFloat()
                 var value2 = CGFloat()
                 var value1 = CGFloat()
-                
-                switch sv.percentSet.count {
+                switch UserInfo.alerts.count {
                 case 0:
                     break
                 case 1:
+                    guard sv.percentSet.count > 11 else { return }
                     stock1.text = "\(sv.stock): \(sv.percentSet[i])%"
-                    
                     value = sv.percentSetVal[i]
                     
                 case 2:
+                    guard sv.percentSet.count > 11 else { return }
+                    guard sv1.percentSet.count > 11 else { return }
                     stock1.text = "\(sv.stock): \(sv.percentSet[i])%"
                     stock2.text = "\(sv1.stock): \(sv1.percentSet[i])%"
                     
@@ -540,6 +535,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     value1 = sv1.percentSetVal[i]
                     
                 default:
+                    guard sv.percentSet.count > 11 else { return }
+                    guard sv1.percentSet.count > 11 else { return }
+                    guard sv2.percentSet.count > 11 else { return }
                     stock1.text = "\(sv.stock): \(sv.percentSet[i])%"
                     stock2.text = "\(sv1.stock): \(sv1.percentSet[i])%"
                     stock3.text = "\(sv2.stock): \(sv2.percentSet[i])%"
@@ -715,7 +713,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             alertController.addAction(okAction)
             alertController.addAction(restoreAction)
             alertController.addAction(cancelAction)
-            present(alertController, animated: true, completion: nil)
+            
+            let viewController = AddStockTickerViewController()
+            viewController.modalTransitionStyle = .crossDissolve
+            viewController.newAlertTicker = "TICKER"
+            present(viewController, animated: true)
+            
         } else {
             
             let alert = UIAlertController(title: "Premium Member", message: "You are a premium member and can add up to 100 stock price alerts", preferredStyle: .alert)
@@ -773,8 +776,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             hitOnce = false
           
             if (premiumMember || UserInfo.userAlerts.count < 3) && UserInfo.userAlerts.count < 100 {
-                
-                performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
+                let viewController = AddStockTickerViewController()
+                viewController.modalTransitionStyle = .crossDissolve
+                present(viewController, animated: true)
                 
             } else if !premiumMember && UserInfo.userAlerts.count < 100 {
                 
@@ -795,7 +799,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             if addTextField.text != nil && addTextField.delegate != nil {
                 
                 stringToPass = addTextField.text ?? ""
-                performSegue(withIdentifier: "fromMainToAddStockTicker", sender: self)
+                let viewController = AddStockTickerViewController()
+                viewController.newAlertTicker = "TICKER"
+                present(viewController, animated: true)
             }
         }
         
@@ -807,10 +813,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         if segue.identifier == "fromMainToGraph" {
             if let graphView: GraphViewController = segue.destination as? GraphViewController {
                 graphView.passedString = stringToPass
-            }
-        } else if segue.identifier == "fromMainToAddStockTicker" {
-            if let addView: AddStockTickerViewController = segue.destination as? AddStockTickerViewController {
-                addView.newAlertTicker = "TICKER"
             }
         }
     }

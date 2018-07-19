@@ -40,31 +40,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
         
-        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
         let user = Auth.auth().currentUser
         if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") && user != nil {
-            if let viewController = storyboard.instantiateViewController(withIdentifier: "DashboardViewController") as? DashboardViewController {
-            self.window?.rootViewController = viewController
+            
+            self.window?.rootViewController = DashboardViewController()
             self.window?.makeKeyAndVisible()
-            }
+            
         } else if user == nil {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
-            if let viewController = storyboard.instantiateViewController(withIdentifier: "SignupViewController") as? SignupViewController {
-            self.window?.rootViewController = viewController
+            
+            self.window?.rootViewController = SignupViewController()
             self.window?.makeKeyAndVisible()
-            }
+            
         } else if UserInfo.alerts.count == 0 {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
-            if let viewController = storyboard.instantiateViewController(withIdentifier: "AddStockTickerViewController") as? AddStockTickerViewController {
-                self.window?.rootViewController = viewController
+            
+                self.window?.rootViewController = AddStockTickerViewController()
                 self.window?.makeKeyAndVisible()
-            }
+            
         } else {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
-            if let viewController = storyboard.instantiateViewController(withIdentifier: "DashboardViewController") as? DashboardViewController {
-                self.window?.rootViewController = viewController
+            
+                self.window?.rootViewController = DashboardViewController()
                 self.window?.makeKeyAndVisible()
-            }
+            
         }
         
         return true

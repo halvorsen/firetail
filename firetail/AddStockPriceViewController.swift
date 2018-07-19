@@ -233,18 +233,8 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         destinationViewController.newAlertPrice = newAlertPrice
         destinationViewController.lastPrice = lastPrice
         destinationViewController.priceString = priceLabel.text ?? ""
+        destinationViewController.modalTransitionStyle = .crossDissolve
         present(destinationViewController, animated: true)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "fromAddStockPriceToAddStockAlert" {
-            if let destinationViewController: AddStockAlertViewController = segue.destination as? AddStockAlertViewController {
-                destinationViewController.newAlertTicker = newAlertTicker
-                destinationViewController.newAlertPrice = newAlertPrice
-                destinationViewController.lastPrice = lastPrice
-                destinationViewController.priceString = priceLabel.text ?? ""
-            }
-        }
     }
     
     private func displayAlert() {

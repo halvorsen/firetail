@@ -161,19 +161,26 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                 self.continueOnce = true
                 self.username.text = email
                 Auth.auth().signIn(withEmail: email, password: password1) //adds authentication
+                CacheManager().eraseAllStockCache()
+                Alerts.eraseStockAlertFile()
+                UserInfo.alerts.removeAll()
+                UserInfo.tickerArray.removeAll()
                 UserInfo.saveUserInfo()
                 self.delay(bySeconds: 1.5) {
                     self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                 }
             } else {
-                print("error not nil")
-                
+               
                 Auth.auth().signIn(withEmail: email, password: password1, completion: { (user, error) in
                     if error != nil{
                         self.continueOnce = true
                     } else {
                         self.continueOnce = true
                         self.username.text = email
+                        CacheManager().eraseAllStockCache()
+                        Alerts.eraseStockAlertFile()
+                        UserInfo.alerts.removeAll()
+                        UserInfo.tickerArray.removeAll()
                         UserInfo.saveUserInfo()
                         self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
                         
