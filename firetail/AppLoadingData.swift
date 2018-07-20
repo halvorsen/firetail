@@ -21,11 +21,11 @@ class AppLoadingData {
     internal static func loadCachedHistoricalDataForTickerArray() {
         let dataSets = CacheManager().loadData()
         guard UserInfo.tickerArray.count > 0 else {return}
-       
+        
         for i in 0..<UserInfo.tickerArray.count {
             for dataSet in dataSets {
                 if dataSet.ticker == UserInfo.tickerArray[i] {
-                   
+                    
                     UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
                     UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
                 }
@@ -174,7 +174,6 @@ class AppLoadingData {
         ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
             
             let value = snapshot.value as? NSDictionary
-            print("value: \(value)")
             UserInfo.fullName = value?["fullName"] as? String ?? "none"
             UserInfo.email = value?["email"] as? String ?? UserInfo.username
             UserInfo.phone = value?["phone"] as? String ?? "none"
@@ -205,36 +204,37 @@ class AppLoadingData {
                 }
                 let uA = UserInfo.userAlerts
                 var totalCount = 0
-                var tickerBuffer: [String] = []
-                var alertsTemp = [String: alertTuple]()
+                
+                var alertTemp: [String: alertTuple] = [:]
+                
                 for i in (0..<UserInfo.userAlerts.count).reversed() {
-                    if uA[alertID[i]] != nil {
-                        ref.child("alerts").child(uA[alertID[i]]!).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if let alertLongID = uA[alertID[i]] {
+                        ref.child("alerts").child(alertLongID).observeSingleEvent(of: .value, with: { (snapshot) in
                             
                             let _deleted = value?["deleted"] as? Bool ?? false
                             
                             if !_deleted {
                                 
-                                let _name = uA[alertID[i]]!
+                                let name = uA[alertID[i]]!
                                 let value = snapshot.value as? NSDictionary
-                                let _isGreaterThan = value?["isGreaterThan"] as? Bool ?? false
-                                let _price = value?["priceString"] as? String ?? ""
-                                let _email = value?["email"] as? Bool ?? false
-                                let _flash = value?["flash"] as? Bool ?? false
-                                let _sms = value?["sms"] as? Bool ?? false
-                                let _ticker = value?["ticker"] as? String ?? ""
-                                tickerBuffer.append(_ticker)
-                                let _push = value?["push"] as? Bool ?? false
-                                let _urgent = value?["urgent"] as? Bool ?? false
-                                let _triggered = value?["triggered"] as? String ?? "false"
-                                let _timestamp = value?["data1"] as? Int ?? 1
-                                alertsTemp[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent, _timestamp)
+                                let isGreaterThan = value?["isGreaterThan"] as? Bool ?? false
+                                let price = value?["priceString"] as? String ?? ""
+                                let email = value?["email"] as? Bool ?? false
+                                let flash = value?["flash"] as? Bool ?? false
+                                let sms = value?["sms"] as? Bool ?? false
+                                let ticker = value?["ticker"] as? String ?? ""
+                                let push = value?["push"] as? Bool ?? false
+                                let urgent = value?["urgent"] as? Bool ?? false
+                                let triggered = value?["triggered"] as? String ?? "false"
+                                let timestamp = value?["data1"] as? Int ?? 1
+                                
+                                alertTemp[alertLongID] = (name:name,isGreaterThan:isGreaterThan,price:price,deleted:false,email:email,flash:flash,sms:sms,ticker:ticker,triggered:triggered,push:push,urgent:urgent,timestamp:timestamp)
                                 
                             }
                             totalCount += 1
                             
                             if UserInfo.userAlerts.count == totalCount {
-                                
+                                UserInfo.alerts = alertTemp
                                 if UserInfo.tickerArray.count != 0 {
                                     
                                     DispatchQueue.global(qos: .background).async {
@@ -242,7 +242,6 @@ class AppLoadingData {
                                     }
                                     
                                 }
-                                print("done success")
                                 callback()
                             }
                             
@@ -251,11 +250,11 @@ class AppLoadingData {
                             callback()
                         }
                     } else {
-                       
+                        
                     }
-                    UserInfo.tickerArray = tickerBuffer
+                    
                 }
-                UserInfo.alerts = alertsTemp
+                
             } else {
                 callback()
             }

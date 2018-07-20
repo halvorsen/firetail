@@ -166,8 +166,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID =  timestamp + newAlertTicker.uppercased()
-        AlertSort.shared.addToStack(alert: newAlertLongID)
-       
+        UserInfo.alertsOrder.insert(newAlertLongID, at: 0)
+        
+        
         UserInfo.userAlerts[alertID[UserInfo.userAlerts.count]] = newAlertLongID
    
         var alertTriggerWhenGreaterThan = false
@@ -182,8 +183,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             UserInfo.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, "false", newAlertBoolTuple.2, newAlertBoolTuple.4, 1)
         }
         
-        Alerts.shared.saveCurrentAlerts()
+        
         UserInfo.populateAlertsWithOrder()
+        DashboardViewController.shared.collectionView?.reloadData()
         
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
             myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: priceString)
@@ -215,10 +217,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     var alertInfo = (String(),String(),Double(),Bool(),Bool(),Bool(),Bool(),Bool(),Bool(),String(),Bool(),String(),String())
 
     @objc private func back(_ sender: UIButton) {
-        if let viewController = presentingViewController as? AddStockPriceViewController {
-//            viewController.newAlertTicker = newAlertTicker
+  
             dismiss(animated: true)
-        }
+        
     }
     
     private func registerForPushNotifications() {

@@ -183,11 +183,13 @@ final class AlertCollectionViewCell: UICollectionViewCell {
         
         if gesture.state == .ended || gesture.state == .cancelled || gesture.state == .failed {
             if moveableXConstraint.constant < -60 {
-                UIView.animate(withDuration: 0.3) {
+                UIView.animate(withDuration: 0.3, animations: {
                     self.moveableXConstraint.constant = -375*widthScalar
                     self.layoutIfNeeded()
+                }) { _ in
                     self.alertCellDelegate?.deleteCell(withAlert: self.alertName)
                 }
+                
             } else {
                 UIView.animate(withDuration: 0.3) {
                     self.moveableXConstraint.constant = 0

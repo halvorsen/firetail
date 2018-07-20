@@ -36,9 +36,6 @@ final class Alerts {
                             let timestamp = dictionaryArray["timestamp"] as? Int,
                             let order = dictionaryArray["order"] as? Int {
                             
-                            
-                            
-                            AlertSort.shared.stockDictionary[alertKey] = order
                             alertTemp[alertKey] = (name:name,isGreaterThan:isGreaterThan,price:price,deleted:deleted,email:email,flash:flash,sms:sms,ticker:ticker,triggered:triggered,push:push,urgent:urgent,timestamp:timestamp)
                             
                             alertOrderTemp.append(alertKey)
@@ -49,18 +46,15 @@ final class Alerts {
                 UserInfo.alerts = alertTemp
                 UserInfo.alertsOrder = alertOrderTemp.sorted(by: <)
          
-                AlertSort.shared.stockArray.removeAll()
-                AlertSort.shared.stockArray = AlertSort.shared.stockDictionary.map {($0.key, $0.value)}.sorted {$0.1 < $1.1}.map {$0.0}
-                UserInfo.tickerArray = UserInfo.alerts.map {$0.value.ticker} //fill ticker array with cached value, will be replaced by firebase values
             }
         }
     }
     
     internal func saveCurrentAlerts() {
         DispatchQueue.main.async {
-        var dictionaryStocks = [String:[String: Any]]()
-        for (alertKey, value) in UserInfo.alerts {
-            if let alertOrder = AlertSort.shared.stockDictionary[alertKey] {
+            var dictionaryStocks = [String:[String: Any]]()
+            for (alertKey, value) in UserInfo.alertsWithOrder {
+                
                 dictionaryStocks[alertKey] = [
                     "name": value.name,
                     "isGreaterThan": value.isGreaterThan,
@@ -74,12 +68,11 @@ final class Alerts {
                     "push": value.push,
                     "urgent": value.urgent,
                     "timestamp": value.timestamp,
-                    "order": alertOrder
+                    "order": value.order
                 ]
+                
+                _ = MyFileManager.write(filename: "stockAlerts", input: dictionaryStocks)
             }
-            
-            _ = MyFileManager.write(filename: "stockAlerts", input: dictionaryStocks)
-        }
         }
     }
     

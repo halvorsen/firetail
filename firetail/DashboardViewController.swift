@@ -316,7 +316,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var endingLocationX = CGFloat()
     
     internal func refreshAlertsAndCompareGraph() {
-        self.collectionView?.reloadData()
         self.compareGraphReset()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
             self.whoseOnFirst(self.container)
@@ -950,25 +949,27 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
 extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AlertCellDelegate {
     
     func deleteCell(withAlert: String) {
-        
+       
         guard let atIndex = UserInfo.alertsOrder.index(of: withAlert) else { return }
         guard let alertDeleting = UserInfo.alerts[UserInfo.alertsOrder[atIndex]] else {print("error in deleteing"); return}
-       collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
-        
-        myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
-        
+      
+     
         UserInfo.alertsOrder.remove(at: atIndex)
-        
+     
         UserInfo.alerts.removeValue(forKey: withAlert)
-        Alerts.shared.saveCurrentAlerts()
+  
+//        collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
         UserInfo.populateAlertsWithOrder()
-        
+        collectionView?.reloadData()
         act(blockLongName: alertDeleting.name)
+    
+        myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
+ 
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let amount = UserInfo.alertsOrder.count
+        let amount = UserInfo.alerts.count
         collectionView.contentSize.height = CGFloat(amount) * 60 * commonScalar
         return amount
     }
@@ -1018,8 +1019,9 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
         let endIndex = destinationIndexPath.row
         
         UserInfo.alertsOrder = rearrange(array:UserInfo.alertsOrder, at: startIndex, to: endIndex)
-        Alerts.shared.saveCurrentAlerts()
+        
         UserInfo.populateAlertsWithOrder()
+        DashboardViewController.shared.collectionView?.reloadData()
     }
     
 }

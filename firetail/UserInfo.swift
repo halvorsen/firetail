@@ -66,8 +66,8 @@ public struct UserInfo {
     
     public static var alerts = [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int)]() {
         didSet {
-            Alerts.shared.saveCurrentAlerts()
             UserInfo.populateAlertsWithOrder()
+            DashboardViewController.shared.collectionView?.reloadData()
         }
     }
     
@@ -77,6 +77,7 @@ public struct UserInfo {
         didSet {
             UserInfo.tickerArray = alertsWithOrder.map { ($0.value.ticker, $0.value.order) }.sorted { $0.1 < $1.1 }.map { $0.0 }
             DashboardViewController.shared.refreshAlertsAndCompareGraph()
+            Alerts.shared.saveCurrentAlerts()
         }
     }
     

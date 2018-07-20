@@ -66,13 +66,14 @@ class CacheManager {
                     }
                 }
             }
+//            do {
+//                try context.save()
+//            } catch {
+//                let nserror = error as NSError
+//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+//            }
         }
-        do {
-            try context.save()
-        } catch {
-                        let nserror = error as NSError
-                        fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
+        
         
         let entity = NSEntityDescription.insertNewObject(forEntityName: "Entity1", into: context)
         entity.setValue(ticker, forKey: "string1")
