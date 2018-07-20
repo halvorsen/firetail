@@ -964,7 +964,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
             self.myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
             UserInfo.alerts.removeValue(forKey: withAlert)
             UserInfo.alertsOrder.remove(at: atIndex)
-    
+            
             self.collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
             
             UserInfo.populateAlertsWithOrder()
