@@ -283,8 +283,8 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 priceLabel.text = "$0.00"
                 priceString = "0.00"
             } else if price < 1.00 {
-                priceLabel.text = "$" + String(format: "%.6f", price)
-                priceString = String(format: "%.6f", price)
+                priceLabel.text = "$" + String(format: "%.2f", price)
+                priceString = String(format: "%.2f", price)
             } else if price < 5.00 {
                 priceLabel.text = "$" + String(format: "%.2f", price)
                 priceString = String(format: "%.2f", price)

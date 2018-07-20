@@ -17,11 +17,10 @@ final class DialCell: UICollectionViewCell {
     var layoutContraints = [NSLayoutConstraint]()
     
     internal func set(price: Double) {
-//        var priceString: String = ""
         if price < 0.00 {
-            self.price.text = "0"
+            self.price.text = ""
         } else if price < 1.00 {
-            self.price.text = String(format: "%.6f", price)
+            self.price.text = String(format: "%.0f", price)
         } else {
             self.price.text = String(format: "%.0f", price)
         }

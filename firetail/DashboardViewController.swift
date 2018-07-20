@@ -228,7 +228,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
             stock2.text = "\(sv1.stock): \(sv1.percentSet[1])%"
         default:
-            print("here1")
             stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
             stock2.text = "\(sv1.stock): \(sv1.percentSet[1])%"
             stock3.text = "\(sv2.stock): \(sv2.percentSet[1])%"
@@ -329,23 +328,16 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     private func compareGraphReset() {
         DispatchQueue.main.async {
             [self.sv, self.sv1, self.sv2, self.svDot, self.svDot1, self.svDot2].forEach { $0.removeFromSuperview() }
-         
+            
             self.populateCompareGraph()
-            guard self.sv.percentSet.count > 1 else {return}
-            self.stock1.text = "\(self.sv.stock): \(self.sv.percentSet[1])%"
-            guard self.sv1.percentSet.count > 1 else {return}
-            self.stock2.text = "\(self.sv1.stock): \(self.sv1.percentSet[1])%"
-            guard self.sv2.percentSet.count > 1 else {return}
-            self.stock3.text = "\(self.sv2.stock): \(self.sv2.percentSet[1])%"
+            self.setStockLabels()
         }
     }
     
     
     @objc func act(blockLongName: String) {
      
-        stock1.text = ""
-        stock2.text = ""
-        stock3.text = ""
+        
         
         alertAmount.text = String(UserInfo.alerts.count)
         
@@ -355,13 +347,28 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         UserInfo.saveUserInfo()
         view.addGestureRecognizer(alertPan)
-        guard sv.percentSet.count > 1 else {return}
-        stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
-        guard sv1.percentSet.count > 1 else {return}
-        stock2.text = "\(sv1.stock): \(sv1.percentSet[1])%"
-        guard sv2.percentSet.count > 1 else {return}
-        stock3.text = "\(sv2.stock): \(sv2.percentSet[1])%"
+        setStockLabels()
         
+        
+    }
+    
+    private func setStockLabels() {
+        
+        if sv.percentSet.count > 1 {
+            stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
+        } else {
+            stock1.text = ""
+        }
+        if sv1.percentSet.count > 1 {
+            stock2.text = "\(sv1.stock): \(sv1.percentSet[1])%"
+        } else {
+            stock2.text = ""
+        }
+        if sv2.percentSet.count > 1  {
+            stock3.text = "\(sv2.stock): \(sv2.percentSet[1])%"
+        } else {
+            stock3.text = ""
+        }
         
     }
     
@@ -587,7 +594,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(DashboardViewController.updateDot), userInfo: nil, repeats: true)
         
         reachabilityAddNotification()
-        
+        collectionView?.reloadData()
     }
     
     @objc func updateDot() {
@@ -627,7 +634,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         UserInfo.weeklyAlerts = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
         UserInfo.userAlerts.removeAll()
         UserInfo.alerts.removeAll()
-        
+        DashboardViewController.shared.collectionView?.reloadData()
         UserInfo.logoutFirebase()
          present(LoginViewController(), animated: true)
     }
@@ -742,7 +749,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             if (premiumMember || UserInfo.userAlerts.count < 3) && UserInfo.userAlerts.count < 100 {
                 let viewController = AddStockTickerViewController()
                 viewController.modalTransitionStyle = .crossDissolve
-                present(viewController, animated: true)
+                present(viewController, animated: true) {
+                    self.hitOnce = true
+                }
                 
             } else if !premiumMember && UserInfo.userAlerts.count < 100 {
                 
@@ -830,7 +839,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        print("send email dismiss")
         controller.dismiss(animated: true)
     }
     
@@ -949,22 +957,21 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
 extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AlertCellDelegate {
     
     func deleteCell(withAlert: String) {
-       
+        
         guard let atIndex = UserInfo.alertsOrder.index(of: withAlert) else { return }
         guard let alertDeleting = UserInfo.alerts[UserInfo.alertsOrder[atIndex]] else {print("error in deleteing"); return}
-      
-     
-        UserInfo.alertsOrder.remove(at: atIndex)
-     
-        UserInfo.alerts.removeValue(forKey: withAlert)
-  
-//        collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
-        UserInfo.populateAlertsWithOrder()
-        collectionView?.reloadData()
-        act(blockLongName: alertDeleting.name)
+        DispatchQueue.main.async {
+            self.myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
+            UserInfo.alerts.removeValue(forKey: withAlert)
+            UserInfo.alertsOrder.remove(at: atIndex)
     
-        myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
- 
+            self.collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
+            
+            UserInfo.populateAlertsWithOrder()
+            self.act(blockLongName: alertDeleting.name)
+        }
+        
+        
     }
     
     

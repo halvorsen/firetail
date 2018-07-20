@@ -184,6 +184,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 Alerts.eraseStockAlertFile()
                 UserInfo.alerts.removeAll()
                 UserInfo.tickerArray.removeAll()
+                DashboardViewController.shared.collectionView?.reloadData()
                 self.addStockTicker()
                 
             }

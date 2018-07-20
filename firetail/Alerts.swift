@@ -33,17 +33,17 @@ final class Alerts {
                             let triggered = dictionaryArray["triggered"] as? String,
                             let push = dictionaryArray["push"] as? Bool,
                             let urgent = dictionaryArray["urgent"] as? Bool,
-                            let timestamp = dictionaryArray["timestamp"] as? Int,
-                            let order = dictionaryArray["order"] as? Int {
+                            let timestamp = dictionaryArray["timestamp"] as? Int {
                             
                             alertTemp[alertKey] = (name:name,isGreaterThan:isGreaterThan,price:price,deleted:deleted,email:email,flash:flash,sms:sms,ticker:ticker,triggered:triggered,push:push,urgent:urgent,timestamp:timestamp)
-                            
+                            print("HERE?")
                             alertOrderTemp.append(alertKey)
                         }
                         
                     }
                 }
                 UserInfo.alerts = alertTemp
+                DashboardViewController.shared.collectionView?.reloadData()
                 UserInfo.alertsOrder = alertOrderTemp.sorted(by: <)
          
             }

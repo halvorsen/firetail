@@ -186,8 +186,12 @@ final class AlertCollectionViewCell: UICollectionViewCell {
                 UIView.animate(withDuration: 0.3, animations: {
                     self.moveableXConstraint.constant = -375*widthScalar
                     self.layoutIfNeeded()
-                }) { _ in
                     self.alertCellDelegate?.deleteCell(withAlert: self.alertName)
+                }) { _ in
+              
+                    
+                    self.moveableXConstraint.constant = 0
+
                 }
                 
             } else {

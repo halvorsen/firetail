@@ -235,6 +235,7 @@ class AppLoadingData {
                             
                             if UserInfo.userAlerts.count == totalCount {
                                 UserInfo.alerts = alertTemp
+                                DashboardViewController.shared.collectionView?.reloadData()
                                 if UserInfo.tickerArray.count != 0 {
                                     
                                     DispatchQueue.global(qos: .background).async {

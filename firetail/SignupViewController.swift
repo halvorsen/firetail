@@ -163,6 +163,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                 CacheManager().eraseAllStockCache()
                 Alerts.eraseStockAlertFile()
                 UserInfo.alerts.removeAll()
+                DashboardViewController.shared.collectionView?.reloadData()
                 UserInfo.tickerArray.removeAll()
                 UserInfo.saveUserInfo()
                 self.delay(bySeconds: 1.5) {
@@ -180,6 +181,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                         Alerts.eraseStockAlertFile()
                         UserInfo.alerts.removeAll()
                         UserInfo.tickerArray.removeAll()
+                        DashboardViewController.shared.collectionView?.reloadData()
                         UserInfo.saveUserInfo()
                        self.present(AddStockTickerViewController(), animated: true)
                         
