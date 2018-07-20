@@ -23,8 +23,10 @@ let heightScalar = UIScreen.main.bounds.height/667
 let commonScalar = UIScreen.main.bounds.width/375
 
 class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIGestureRecognizerDelegate {
+    
+    internal static let shared = DashboardViewController()
+    
     var collectionView: AlertCollectionView?
-    var alertsForCollectionView: [String] = []
     var activityView = UIActivityIndicatorView()
     var premiumMember = false
     var addTextField = UITextField()
@@ -60,8 +62,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var newAlertTicker = String()
     var newAlertPrice = Double()
     var newAlertBoolTuple = (false, false, false, false)
-    var amountOfBlocks = Int()
-    
     let loadsave = LoadSaveCoreData()
     var pan = UIPanGestureRecognizer()
     var canIScroll = true
@@ -94,7 +94,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var labelMiddle: CGFloat = 72*UIScreen.main.bounds.height/1334
     var labelBottom: CGFloat = 120*UIScreen.main.bounds.height/1334
     let alertCollectionCellID = "alertCell"
-    var doneLoadingFromFirebase = false
     var once = true
     
     func appLoading() {
@@ -104,25 +103,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         premiumMember = true  // ##TODO: turn off premium premiumMember = UserInfo.premium
         Alpha().populateUserInfoMonth()
         
-        DispatchQueue.main.async {
-            
-            AppLoadingData.loadCachedHistoricalDataForTickerArray()  //get cached historical data for ticker array]
-            self.alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
-            self.refreshAlertsAndCompareGraph()
-            
-        }
-        
-        AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {
-            DispatchQueue.main.async {
-                
-                self.doneLoadingFromFirebase = true
-                AppLoadingData.loadCachedHistoricalDataForTickerArray()
-                self.alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
-                
-                UserInfo.tickerArray = UserInfo.alerts.map { $0.value.ticker }
-                self.refreshAlertsAndCompareGraph()
-            }
-        }
+        AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {}
         
         UserInfo.flashOn = UserDefaults.standard.bool(forKey: "flashOn")
         UserInfo.allOn = UserDefaults.standard.bool(forKey: "allOn")
@@ -312,8 +293,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         mask.frame = container.frame
         mask.backgroundColor = CustomColor.black33
         slideView.addSubview(mask)
-        //amountOfBlocks = loadsave.amount()
-        amountOfBlocks = UserInfo.userAlerts.count
+      
         whoseOnFirst(container)
         
         let collectionLayout = UICollectionViewFlowLayout()
@@ -335,7 +315,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var startingLocationX = CGFloat()
     var endingLocationX = CGFloat()
     
-    private func refreshAlertsAndCompareGraph() {
+    internal func refreshAlertsAndCompareGraph() {
         self.collectionView?.reloadData()
         self.compareGraphReset()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
@@ -348,54 +328,39 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     private func compareGraphReset() {
-        DispatchQueue.main.async { [weak self] in
-            guard let weakself = self else {return}
-            weakself.sv.removeFromSuperview()
-            weakself.sv1.removeFromSuperview()
-            weakself.sv2.removeFromSuperview()
-            weakself.svDot.removeFromSuperview()
-            weakself.svDot1.removeFromSuperview()
-            weakself.svDot2.removeFromSuperview()
-            weakself.populateCompareGraph()
-            guard weakself.amountOfBlocks > 0 else {return}
-            print("here2")
-            weakself.stock1.text = "\(weakself.sv.stock): \(weakself.sv.percentSet[1])%"
-            guard weakself.amountOfBlocks > 1 else {return}
-            weakself.stock2.text = "\(weakself.sv1.stock): \(weakself.sv1.percentSet[1])%"
-            guard weakself.amountOfBlocks > 2 else {return}
-            weakself.stock3.text = "\(weakself.sv2.stock): \(weakself.sv2.percentSet[1])%"
+        DispatchQueue.main.async {
+            [self.sv, self.sv1, self.sv2, self.svDot, self.svDot1, self.svDot2].forEach { $0.removeFromSuperview() }
+         
+            self.populateCompareGraph()
+            guard self.sv.percentSet.count > 1 else {return}
+            self.stock1.text = "\(self.sv.stock): \(self.sv.percentSet[1])%"
+            guard self.sv1.percentSet.count > 1 else {return}
+            self.stock2.text = "\(self.sv1.stock): \(self.sv1.percentSet[1])%"
+            guard self.sv2.percentSet.count > 1 else {return}
+            self.stock3.text = "\(self.sv2.stock): \(self.sv2.percentSet[1])%"
         }
     }
     
     
     @objc func act(blockLongName: String) {
-        print("here3")
+     
         stock1.text = ""
         stock2.text = ""
         stock3.text = ""
-        var tickers = [String]()
-        for alert in alertsForCollectionView {
-            if let alertInfo = UserInfo.alerts[alert] {
-                tickers.append(alertInfo.ticker)
-            }
-        }
-        UserInfo.tickerArray = tickers
         
-        amountOfBlocks -= 1
+        alertAmount.text = String(UserInfo.alerts.count)
         
-        alertAmount.text = String(amountOfBlocks)
-        
-        loadsave.resaveUser(alerts: alertsForCollectionView)
+        loadsave.resaveUser(alerts: UserInfo.alertsOrder)
         
         reboot()
         
         UserInfo.saveUserInfo()
         view.addGestureRecognizer(alertPan)
-        guard amountOfBlocks > 0 else {return}
+        guard sv.percentSet.count > 1 else {return}
         stock1.text = "\(sv.stock): \(sv.percentSet[1])%"
-        guard amountOfBlocks > 1 else {return}
+        guard sv1.percentSet.count > 1 else {return}
         stock2.text = "\(sv1.stock): \(sv1.percentSet[1])%"
-        guard amountOfBlocks > 2 else {return}
+        guard sv2.percentSet.count > 1 else {return}
         stock3.text = "\(sv2.stock): \(sv2.percentSet[1])%"
         
         
@@ -637,10 +602,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         menuFunc()
     }
     @objc private func changeEmailFunc(_ sender: UIButton) {
-        performSegue(withIdentifier: "fromMainToSettings", sender: self)
+        present(SettingsViewController(), animated: true)
     }
     @objc private func addPhoneFunc(_ sender: UIButton) {
-        performSegue(withIdentifier: "fromMainToSettings", sender: self)
+        present(SettingsViewController(), animated: true)
     }
     @objc private func logoutFunc(_ sender: UIButton) {
         
@@ -665,7 +630,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         UserInfo.alerts.removeAll()
         
         UserInfo.logoutFirebase()
-        performSegue(withIdentifier: "fromMainToLogin", sender: self)
+         present(LoginViewController(), animated: true)
     }
     @objc private func legalFunc(_ sender: UIButton) {
         if let url = URL(string: "http://firetailapp.com/legal") {
@@ -808,22 +773,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         return false
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        NotificationCenter.default.removeObserver(self)
-        if segue.identifier == "fromMainToGraph" {
-            if let graphView: GraphViewController = segue.destination as? GraphViewController {
-                graphView.passedString = stringToPass
-            }
-        }
-    }
-    var haventSeguedToDetail = true
     var detailedTimer = Timer()
     var tryFor3Secondscount = 0
     @objc private func goToGraph() {
         
         if let prices = UserInfo.tenYearDictionary[stringToPass],
             prices.count > 1 {
-            performSegue(withIdentifier: "fromMainToGraph", sender: self)
+            let viewController = GraphViewController()
+            viewController.passedString = stringToPass
+             present(viewController, animated: true)
         }
         
     }
@@ -987,36 +945,38 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     // ##START V2
     var index: Int = 0
     
-    
-    
-    
 }
 
 extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AlertCellDelegate {
     
     func deleteCell(withAlert: String) {
-        guard let atIndex = alertsForCollectionView.index(of: withAlert) else { return }
-        guard let alertDeleting = UserInfo.alerts[alertsForCollectionView[atIndex]] else {print("error in deleteing"); return}
+        
+        guard let atIndex = UserInfo.alertsOrder.index(of: withAlert) else { return }
+        guard let alertDeleting = UserInfo.alerts[UserInfo.alertsOrder[atIndex]] else {print("error in deleteing"); return}
+       collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
+        
         myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
         
-        AlertSort.shared.delete(alertDeleting.name)
-        alertsForCollectionView.remove(at: atIndex)
-        collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
+        UserInfo.alertsOrder.remove(at: atIndex)
         
-        alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
+        UserInfo.alerts.removeValue(forKey: withAlert)
+        Alerts.shared.saveCurrentAlerts()
+        UserInfo.populateAlertsWithOrder()
+        
         act(blockLongName: alertDeleting.name)
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        collectionView.contentSize.height = CGFloat(alertsForCollectionView.count) * 60 * commonScalar
-        return alertsForCollectionView.count
+        let amount = UserInfo.alertsOrder.count
+        collectionView.contentSize.height = CGFloat(amount) * 60 * commonScalar
+        return amount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
        
-        if let alert = UserInfo.alerts[alertsForCollectionView[indexPath.row]] {
+        if let alert = UserInfo.alerts[UserInfo.alertsOrder[indexPath.row]] {
             cell.set(alertName: alert.name, tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)
         } else {
             print("error in collection view")
@@ -1057,9 +1017,17 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
         let startIndex = sourceIndexPath.row
         let endIndex = destinationIndexPath.row
         
-        AlertSort.shared.moveItem(alert: alertsForCollectionView[startIndex], at: startIndex, to: endIndex)
-        alertsForCollectionView = AlertSort.shared.getSortedStockAlerts()
-        refreshAlertsAndCompareGraph()
+        UserInfo.alertsOrder = rearrange(array:UserInfo.alertsOrder, at: startIndex, to: endIndex)
+        Alerts.shared.saveCurrentAlerts()
+        UserInfo.populateAlertsWithOrder()
     }
     
+}
+
+internal func rearrange<T>(array: Array<T>, at: Int, to: Int) -> Array<T> {
+    var arr = array
+    let element = arr.remove(at: at)
+    arr.insert(element, at: to)
+    
+    return arr
 }

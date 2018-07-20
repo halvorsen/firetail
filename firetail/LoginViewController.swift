@@ -154,7 +154,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func loginFunc(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
+        present(SignupViewController(), animated: true)
     }
     
     @objc private func continueFunc(_ sender: UIButton) {
@@ -184,7 +184,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 Alerts.eraseStockAlertFile()
                 UserInfo.alerts.removeAll()
                 UserInfo.tickerArray.removeAll()
-                self.present(AddStockTickerViewController(), animated: true)
+                self.addStockTicker()
                 
             }
         })
@@ -195,24 +195,30 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         self.view.addSubview(activityView)
     }
     
+    private func addStockTicker() {
+        let viewController = AddStockTickerViewController()
+        viewController.newAlertTicker = "TICKER"
+        self.present(viewController, animated: true)
+    }
+    
     var isFirstTimeSeguing = true
     private func cont() {
         if ti == [""] {
             if isFirstTimeSeguing {
                 isFirstTimeSeguing = false
-                self.performSegue(withIdentifier: "fromLoginToAddStockTicker", sender: self)
+                addStockTicker()
             }
         } else {
 
             if isFirstTimeSeguing {
                 isFirstTimeSeguing = false
-                self.performSegue(withIdentifier: "fromLoginToMain", sender: self)
+                present(DashboardViewController.shared, animated: true)
             }
         }
     }
     
     @objc private func createAccountFunc(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromLoginToSignup", sender: self)
+        present(SignupViewController(), animated: true)
         
     }
     
@@ -223,15 +229,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
       
         return false
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "fromLoginToAddStockTicker" {
-            
-            let addView: AddStockTickerViewController = segue.destination as! AddStockTickerViewController
-            
-            addView.newAlertTicker = "TICKER"
-        }
-    }
+   
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
     }

@@ -90,7 +90,7 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
     }
     
         @objc private func back(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromChangePasswordToSettings", sender: self)
+        present(SettingsViewController(), animated: true)
     }
     
     @objc private func saveFunc(_ sender: UIButton) {
@@ -177,7 +177,7 @@ class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
                         alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                     }
-                    self.performSegue(withIdentifier: "fromChangePasswordToSettings", sender: self)
+                    self.present(SettingsViewController(), animated: true)
                 }
             }
         })

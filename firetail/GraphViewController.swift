@@ -126,12 +126,8 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
     @objc private func back(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
+        dismiss(animated: true)
     }
     
     @objc private func trade(_ sender: UIButton) {
@@ -398,9 +394,9 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         let alphaAPI = Alpha()
         alphaAPI.get20YearHistoricalData(ticker: stockName.uppercased(), isOneYear: false) { dataSet in
-            
+        
             guard dataSet != nil else {
-                self.performSegue(withIdentifier: "fromGraphToMain", sender: self)
+                self.dismiss(animated: true)
                 // had this error to "cancelled" once now just sending back to the Dashboard if an error occures. instead of showing an alert.
                 return
             }
@@ -507,7 +503,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
     func callCorrectGraph2FromCache(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         
-        guard let tenYear = UserInfo.tenYearDictionary[stockName] else {self.performSegue(withIdentifier: "fromGraphToMain", sender: self);return}
+        guard let tenYear = UserInfo.tenYearDictionary[stockName] else {dismiss(animated: true);return}
         var __stockData = tenYear
         
         if tenYear[tenYear.count - 1] == tenYear[tenYear.count - 2] {

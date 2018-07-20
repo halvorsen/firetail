@@ -161,7 +161,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
     
     @objc private func back(_ sender: UIButton) {
         UserInfo.saveUserInfo()
-        self.performSegue(withIdentifier: "fromSettingsToMain", sender: self)
+        dismiss(animated: true)
     }
     
    
@@ -181,7 +181,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
             }
         
             UserInfo.saveUserInfo()
-            self.performSegue(withIdentifier: "fromSettingsToMain", sender: self)
+        dismiss(animated: true)
 
     }
     
@@ -192,7 +192,7 @@ class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelega
         
         if textField.isSecureTextEntry == true {
             UserInfo.saveUserInfo()
-            self.performSegue(withIdentifier: "fromSettingsToChangePassword", sender: self)
+            present(ChangePasswordViewController(), animated: true)
         }
     }
     

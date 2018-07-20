@@ -34,7 +34,11 @@ public struct UserInfo {
     
     public static var tenYearDictionary: [String:[Double]] = ["":[0.0]]
     
-    public static var tickerArray = [String]()
+    public static var tickerArray = [String]() {
+        didSet {
+            AppLoadingData.loadCachedHistoricalDataForTickerArray()
+        }
+    }
     
     public static var month = ["","","","","","","","","","","",""]
     
@@ -62,13 +66,50 @@ public struct UserInfo {
     
     public static var alerts = [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int)]() {
         didSet {
-            print("UserInfo.alerts: \(UserInfo.alerts)")
+            Alerts.shared.saveCurrentAlerts()
+            UserInfo.populateAlertsWithOrder()
         }
     }
+    
+    public static var alertsOrder = [String]()
+    
+    public static var alertsWithOrder = [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int,order:Int)]() {
+        didSet {
+            UserInfo.tickerArray = alertsWithOrder.map { ($0.value.ticker, $0.value.order) }.sorted { $0.1 < $1.1 }.map { $0.0 }
+            DashboardViewController.shared.refreshAlertsAndCompareGraph()
+        }
+    }
+    
+    public static func populateAlertsWithOrder() {
+        let alerts = UserInfo.alerts
+        let alertsOrder = UserInfo.alertsOrder
+        var newAlertsWithOrder: [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int,order:Int)] = [:]
+        outerloop: for (key, value) in alerts {
+            if alertsOrder.contains(key),
+                let index = alertsOrder.index(of: key) {
+                newAlertsWithOrder[key] =  (name:value.name,isGreaterThan:value.isGreaterThan,price:value.price,deleted:value.deleted,email:value.email,flash:value.flash,sms:value.sms,ticker:value.ticker,triggered:value.triggered,push:value.push,urgent:value.urgent,timestamp:value.timestamp,order:index)
+            } else {
+                var alertsOrder2: [String] = alerts.map { $0.key }
+                alertsOrder2.sort(by: >)
+                newAlertsWithOrder.removeAll()
+                let i = alertsOrder2.index(of: key)!
+                for (key, value) in alerts {
+                    newAlertsWithOrder[key] =  (name:value.name,isGreaterThan:value.isGreaterThan,price:value.price,deleted:value.deleted,email:value.email,flash:value.flash,sms:value.sms,ticker:value.ticker,triggered:value.triggered,push:value.push,urgent:value.urgent,timestamp:value.timestamp,order: i)
+                }
+                 break outerloop
+            }
+        }
+        
+        UserInfo.alertsWithOrder = newAlertsWithOrder
+    }
+       
     
     public static func saveUserInfo() {
         guard UserInfo.email != "none" else {UserInfo.email = UserInfo.username; return}
         LoadSaveCoreData.saveUserInfoToFirebase(username: UserInfo.username, fullName: UserInfo.fullName, email: UserInfo.email, phone: UserInfo.phone, premium: UserInfo.premium, numOfAlerts: UserInfo.userAlerts.count, brokerName: UserInfo.brokerName, brokerURL: UserInfo.brokerURL, weeklyAlerts: UserInfo.weeklyAlerts, userAlerts: UserInfo.userAlerts, token: UserInfo.token)
     }
-}  
+}
+
+typealias alertTuple = (name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int)
+typealias alertTupleAndOrder = (name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int,order:Int)
 

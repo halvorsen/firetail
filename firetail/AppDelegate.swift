@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let user = Auth.auth().currentUser
         if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") && user != nil {
             
-            self.window?.rootViewController = DashboardViewController()
+            self.window?.rootViewController = DashboardViewController.shared
             self.window?.makeKeyAndVisible()
             
         } else if user == nil {
@@ -61,7 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } else {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
             
-                self.window?.rootViewController = DashboardViewController()
+                self.window?.rootViewController = DashboardViewController.shared
                 self.window?.makeKeyAndVisible()
             
         }

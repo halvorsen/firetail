@@ -81,8 +81,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func loginFunc(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "fromSignupToLogin", sender: self)
-        
+        present(LoginViewController(), animated: true)
     }
     
     func textFieldDidBeginEditing(_ textField : UITextField)
@@ -167,7 +166,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                 UserInfo.tickerArray.removeAll()
                 UserInfo.saveUserInfo()
                 self.delay(bySeconds: 1.5) {
-                    self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
+                    self.present(AddStockTickerViewController(), animated: true)
                 }
             } else {
                
@@ -182,7 +181,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                         UserInfo.alerts.removeAll()
                         UserInfo.tickerArray.removeAll()
                         UserInfo.saveUserInfo()
-                        self.performSegue(withIdentifier: "fromSignupToAddStockTicker", sender: self)
+                       self.present(AddStockTickerViewController(), animated: true)
                         
                     }
                 })

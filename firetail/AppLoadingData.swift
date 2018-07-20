@@ -164,7 +164,7 @@ class AppLoadingData {
     }
     
     //loads the firebase stock info for the username - storing in UserInfo
-    //if there are no alerts it segues to add stock ticker
+    //if there are no alerts it presents to add stock ticker
     
     func loadUserInfoFromFirebase(firebaseUsername: String, callback: @escaping () -> Void) {
         UserInfo.tickerArray.removeAll()
@@ -206,6 +206,7 @@ class AppLoadingData {
                 let uA = UserInfo.userAlerts
                 var totalCount = 0
                 var tickerBuffer: [String] = []
+                var alertsTemp = [String: alertTuple]()
                 for i in (0..<UserInfo.userAlerts.count).reversed() {
                     if uA[alertID[i]] != nil {
                         ref.child("alerts").child(uA[alertID[i]]!).observeSingleEvent(of: .value, with: { (snapshot) in
@@ -227,7 +228,8 @@ class AppLoadingData {
                                 let _urgent = value?["urgent"] as? Bool ?? false
                                 let _triggered = value?["triggered"] as? String ?? "false"
                                 let _timestamp = value?["data1"] as? Int ?? 1
-                                UserInfo.alerts[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent, _timestamp)
+                                alertsTemp[uA[alertID[i]]!] = (_name, _isGreaterThan, _price, _deleted, _email, _flash, _sms, _ticker, _triggered, _push, _urgent, _timestamp)
+                                
                             }
                             totalCount += 1
                             
@@ -253,6 +255,7 @@ class AppLoadingData {
                     }
                     UserInfo.tickerArray = tickerBuffer
                 }
+                UserInfo.alerts = alertsTemp
             } else {
                 callback()
             }

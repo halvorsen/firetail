@@ -163,12 +163,6 @@ final class AlertSort {
         
     }
     
-    private func rearrange<T>(array: Array<T>, at: Int, to: Int) -> Array<T>{
-        var arr = array
-        let element = arr.remove(at: at)
-        arr.insert(element, at: to)
-        
-        return arr
-    }
+   
     
 }

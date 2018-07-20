@@ -175,12 +175,15 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             alertTriggerWhenGreaterThan = true
         }
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
-            UserInfo.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, true, false, false, newAlertTicker, "false", false, false, 1) }
+            UserInfo.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, true, false, false, newAlertTicker, "false", false, false, 1)
+           
+        }
         else {
             UserInfo.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, "false", newAlertBoolTuple.2, newAlertBoolTuple.4, 1)
         }
         
-        
+        Alerts.shared.saveCurrentAlerts()
+        UserInfo.populateAlertsWithOrder()
         
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
             myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: priceString)
@@ -198,13 +201,12 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             self.present(viewController, animated: true)
         } else {
             if let first = presentingViewController,
-            let second = first.presentingViewController,
+                let second = first.presentingViewController,
                 let third = second.presentingViewController {
-//                first.dismiss(animated: false) {
-//                    second.dismiss(animated: false) {
-                        third.dismiss(animated: true)
-//                    }
-//                }
+                
+                second.view.isHidden = true
+                first.view.isHidden = true
+                third.dismiss(animated: true)
                 
             }
         }

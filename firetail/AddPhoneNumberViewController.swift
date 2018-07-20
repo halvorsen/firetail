@@ -187,8 +187,15 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         }
         
         myLoadSave.saveAlertToFirebase(username: alertInfo.0, ticker: alertInfo.1, price: alertInfo.2, isGreaterThan: alertInfo.3, deleted: alertInfo.4, email: alertInfo.5, sms: alertInfo.6, flash: alertInfo.7, urgent: alertInfo.8, triggered: alertInfo.9, push: alertInfo.10, alertLongName: alertInfo.11, priceString: alertInfo.12, data2: UserInfo.phone)
-        if let presentingViewController = presentingViewController?.presentingViewController?.presentingViewController?.presentingViewController {
-            presentingViewController.dismiss(animated: true)
+        if let first = presentingViewController,
+            let second = first.presentingViewController,
+            let third = second.presentingViewController,
+            let fourth = third.presentingViewController {
+            third.view.isHidden = true
+            second.view.isHidden = true
+            first.view.isHidden = true
+            fourth.dismiss(animated: true)
+            
         }
         
     }
@@ -231,7 +238,7 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
                 UserInfo.phone = myTextFields[1].text!
                 }
                 UserInfo.saveUserInfo()
-                self.performSegue(withIdentifier: "fromPhoneToDashboard", sender: self)
+                dismiss(animated: true)
                 
             case 2:
                 if myTextFields[2].text! != "" {
