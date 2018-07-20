@@ -24,6 +24,7 @@ xcuserdata/
 *.xcuserstate
 *.DS_Store
 *.xcbkptlist
+*.xcworkspace
 
 ## Obj-C/Swift specific
 *.hmap
