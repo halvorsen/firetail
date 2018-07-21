@@ -32,7 +32,7 @@ final class Alerts {
                             let timestamp = dictionaryArray["timestamp"] as? Int {
                             
                             alertTemp[alertKey] = (name:name,isGreaterThan:isGreaterThan,price:price,deleted:deleted,email:email,flash:flash,sms:sms,ticker:ticker,triggered:triggered,push:push,urgent:urgent,timestamp:timestamp)
-                            print("HERE?")
+                       
                             alertOrderTemp.append(alertKey)
                         }
                         

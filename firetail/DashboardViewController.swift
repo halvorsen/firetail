@@ -637,7 +637,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
     }
     @objc private func supportFunc(_ sender: UIButton) {
-        print("SUPPORT")
         sendEmail()
     }
     @objc private func goPremiumFunc(_ sender: UIButton) {
