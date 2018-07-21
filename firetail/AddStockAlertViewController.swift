@@ -166,7 +166,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID =  timestamp + newAlertTicker.uppercased()
-        UserInfo.alertsOrder.insert(newAlertLongID, at: 0)
+        UserInfo.currentAlertsInOrder.insert(newAlertLongID, at: 0)
         
         
         UserInfo.userAlerts[alertID[UserInfo.userAlerts.count]] = newAlertLongID

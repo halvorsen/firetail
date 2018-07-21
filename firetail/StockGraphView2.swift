@@ -64,12 +64,6 @@ class StockGraphView2: UIView {
         outputValues[14] = Double(setAmount)*_stockData.closingPrice.last! //<--added to get the last value equal to last closing price and not average
         //outputValues.append(Double(setAmount)*Set.currentPrice)
         
-        if g == "1d" {
-            
-            outputValues[0] = Double(setAmount)*UserInfo.yesterday
-            
-        }
-        
         _outputValues = outputValues.map { $0 / Double(setAmount) }
         
         _closingPrice = _outputValues

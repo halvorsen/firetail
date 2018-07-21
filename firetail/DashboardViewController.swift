@@ -337,11 +337,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     @objc func act(blockLongName: String) {
      
+        alertAmount.text = String(UserInfo.currentAlerts.count)
         
-        
-        alertAmount.text = String(UserInfo.alerts.count)
-        
-        loadsave.resaveUser(alerts: UserInfo.alertsOrder)
+        loadsave.resaveUser(alerts: UserInfo.stockAlertsOrder + UserInfo.cryptoAlertsOrder)
         
         reboot()
         
@@ -488,7 +486,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 var value = CGFloat()
                 var value2 = CGFloat()
                 var value1 = CGFloat()
-                switch UserInfo.alerts.count {
+                switch UserInfo.currentAlerts.count {
                 case 0:
                     break
                 case 1:
@@ -616,11 +614,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     @objc private func logoutFunc(_ sender: UIButton) {
         
         UserInfo.month = ["","","","","","","","","","","",""]
-        UserInfo.currentPrice = 0.0
-        UserInfo.yesterday = 0.0
         UserInfo.token = "none"
-        // UserInfo.alertCount = 0
-        UserInfo.oneYearDictionary.removeAll() //= ["":[0.0]]
+        UserInfo.oneYearDictionary.removeAll()
         UserInfo.tickerArray.removeAll()
         UserInfo.phone = "none"
         UserInfo.email = "none"
@@ -628,14 +623,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         UserInfo.username = "none"
         UserInfo.fullName = "none"
         UserInfo.premium = false
-        UserInfo.numOfAlerts.removeAll()
         UserInfo.brokerURL = "none"
-        UserInfo.createdAt = "none"
         UserInfo.weeklyAlerts = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
         UserInfo.userAlerts.removeAll()
         UserInfo.alerts.removeAll()
         DashboardViewController.shared.collectionView?.reloadData()
-        UserInfo.logoutFirebase()
+        try? Auth.auth().signOut()
          present(LoginViewController(), animated: true)
     }
     @objc private func legalFunc(_ sender: UIButton) {
@@ -848,7 +841,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             UserInfo.weeklyAlerts[key] = 0
         }
         
-        for (_,myTuple) in UserInfo.alerts {
+        for (_,myTuple) in UserInfo.currentAlerts {
             if myTuple.timestamp != 1 {
                 
                 let currentTimestamp = Int(Date().timeIntervalSince1970)
@@ -957,13 +950,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
 extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AlertCellDelegate {
     
     func deleteCell(withAlert: String) {
-        
-        guard let atIndex = UserInfo.alertsOrder.index(of: withAlert) else { return }
-        guard let alertDeleting = UserInfo.alerts[UserInfo.alertsOrder[atIndex]] else {print("error in deleteing"); return}
+        guard let atIndex = UserInfo.currentAlertsInOrder.index(of: withAlert) else { return }
+        guard let alertDeleting = UserInfo.currentAlerts[UserInfo.currentAlertsInOrder[atIndex]] else {print("error in deleteing"); return}
         DispatchQueue.main.async {
             self.myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
             UserInfo.alerts.removeValue(forKey: withAlert)
-            UserInfo.alertsOrder.remove(at: atIndex)
+            UserInfo.currentAlertsInOrder.remove(at: atIndex)
             
             self.collectionView?.deleteItems(at: [IndexPath(row: atIndex, section: 0)])
             
@@ -976,7 +968,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let amount = UserInfo.alerts.count
+        let amount = UserInfo.currentAlerts.count
         collectionView.contentSize.height = CGFloat(amount) * 60 * commonScalar
         return amount
     }
@@ -984,7 +976,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
        
-        if let alert = UserInfo.alerts[UserInfo.alertsOrder[indexPath.row]] {
+        if let alert = UserInfo.currentAlerts[UserInfo.currentAlertsInOrder[indexPath.row]] {
             cell.set(alertName: alert.name, tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)
         } else {
             print("error in collection view")
@@ -1022,10 +1014,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
-        let startIndex = sourceIndexPath.row
-        let endIndex = destinationIndexPath.row
-        
-        UserInfo.alertsOrder = rearrange(array:UserInfo.alertsOrder, at: startIndex, to: endIndex)
+        UserInfo.currentAlertsInOrder = rearrange(array:UserInfo.currentAlertsInOrder, at: sourceIndexPath.row, to: destinationIndexPath.row)
         
         UserInfo.populateAlertsWithOrder()
         DashboardViewController.shared.collectionView?.reloadData()

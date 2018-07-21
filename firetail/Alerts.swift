@@ -9,10 +9,6 @@ import Foundation
 final class Alerts {
     internal static var shared: Alerts = Alerts()
     
-    var stocks = [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int,order: Int)]()
-    
-    var crypto = [String:(name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int,order: Int)]()
-    
     private init() {
         var alertTemp: [String: alertTuple] = [:]
         var alertOrderTemp: [String] = []
@@ -44,8 +40,8 @@ final class Alerts {
                 }
                 UserInfo.alerts = alertTemp
                 DashboardViewController.shared.collectionView?.reloadData()
-                UserInfo.alertsOrder = alertOrderTemp.sorted(by: <)
-         
+                UserInfo.stockAlertsOrder = alertOrderTemp.sorted(by: <).filter { $0.isStockAlertKey }
+                UserInfo.cryptoAlertsOrder = alertOrderTemp.sorted(by: <).filter { $0.isCryptoAlertKey }
             }
         }
     }
