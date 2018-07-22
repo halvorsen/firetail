@@ -90,9 +90,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     var alertPan = UIPanGestureRecognizer()
-    var labelTop: CGFloat = 24*UIScreen.main.bounds.height/1334
-    var labelMiddle: CGFloat = 72*UIScreen.main.bounds.height/1334
-    var labelBottom: CGFloat = 120*UIScreen.main.bounds.height/1334
+    var labelTop: CGFloat = 380*UIScreen.main.bounds.height/667
+    var labelMiddle: CGFloat = 400*UIScreen.main.bounds.height/667
+    var labelBottom: CGFloat = 420*UIScreen.main.bounds.height/667
     let alertCollectionCellID = "alertCell"
     var once = true
     
@@ -122,9 +122,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         NotificationCenter.default.addObserver(self, selector: #selector(DashboardViewController.finishedFetchingTop3Stocks), name: NSNotification.Name(rawValue: updatedDataKey), object: nil)
         if UIDevice().userInterfaceIdiom == .phone {
             if UIScreen.main.nativeBounds.height == 2436 {
-                labelTop += 30
-                labelBottom += 30
-                labelMiddle += 30
+//                labelTop += 30
+//                labelBottom += 30
+//                labelMiddle += 30
             }
         }
         
@@ -213,9 +213,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         container.showsVerticalScrollIndicator = false
         addLabel(name: monthIndicator, text: UserInfo.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 30, lines: 1)
         
-        addLabel(name: stock1, text: "", textColor: CustomColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
-        addLabel(name: stock2, text: "", textColor: CustomColor.white128, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
-        addLabel(name: stock3, text: "", textColor: CustomColor.white209, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 200, y: 0, width: 352, height: 48, lines: 0)
+        addLabel(name: stock1, text: "", textColor: CustomColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 300, y: 0, width: 352, height: 48, lines: 0)
+        addLabel(name: stock2, text: "", textColor: CustomColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 300, y: 0, width: 352, height: 48, lines: 0)
+        addLabel(name: stock3, text: "", textColor: CustomColor.white68, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 300, y: 0, width: 352, height: 48, lines: 0)
+        
         stock1.frame.origin.y = labelTop
         stock2.frame.origin.y = labelMiddle
         stock3.frame.origin.y = labelBottom
@@ -305,7 +306,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressFunc(_:)))
         collectionView?.addGestureRecognizer(longPress)
-        
+        print("date")
+        print(date.frame)
+        print(date.center.x)
+        [stock1, stock2, stock3].forEach { $0.center.x = monthIndicator.center.x}
         configureSwitch()
         
     }

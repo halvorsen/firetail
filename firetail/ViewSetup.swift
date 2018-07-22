@@ -96,8 +96,6 @@ class ViewSetup: UIViewController {
         return true
     }
 
-    
-    
     @objc func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor, act:
         Selector, addSubview: Bool, alignment: UIControlContentHorizontalAlignment = .left) {
         name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: width*screenWidth/750, height: height*screenWidth/750)
