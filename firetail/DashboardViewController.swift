@@ -306,7 +306,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressFunc(_:)))
         collectionView?.addGestureRecognizer(longPress)
         
-        
+        configureSwitch()
         
     }
     
@@ -941,10 +941,24 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         reachabilityRemoveNotification()
     }
     
-    // ##START V2
     var index: Int = 0
-    
+//    let a = UISwitch()
+    let toggle = AlertSwitch()
+    private func configureSwitch() {
+        
+        toggle.isStock = true
+
+        view.addSubview(toggle)
+        toggle.translatesAutoresizingMaskIntoConstraints = false
+        toggle.widthAnchor.constraint(equalToConstant: ToggleConstant.width).isActive = true
+        toggle.heightAnchor.constraint(equalToConstant: ToggleConstant.height).isActive = true
+        toggle.centerYAnchor.constraint(equalTo: add.centerYAnchor).isActive = true
+        toggle.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+     
+    }
+
 }
+
 
 extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AlertCellDelegate {
     

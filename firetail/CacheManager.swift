@@ -10,12 +10,10 @@ import CoreData
 import Foundation
 
 struct DataSet {
-    
     var ticker: String
     var price: [Double]
     var month: [String]
     var day: [Int]
-    
 }
 
 class CacheManager {
@@ -66,12 +64,6 @@ class CacheManager {
                     }
                 }
             }
-//            do {
-//                try context.save()
-//            } catch {
-//                let nserror = error as NSError
-//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-//            }
         }
         
         
@@ -112,24 +104,6 @@ class CacheManager {
                 }
             }
         }
-        if resultsDataRequest.count > 100 {
-            eraseAllStockCache()
-        }
         return data
-    }
-    
-    func eraseAllStockCache() {
-        
-        let context = persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Entity1")
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
-        do {
-            try context.execute(deleteRequest)  //(deleteRequest, withContext: context)
-        } catch let a as NSError {
-            print(a)// TODO: handle the error
-        }
-        
-        
     }
 }

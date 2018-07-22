@@ -160,7 +160,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                 self.continueOnce = true
                 self.username.text = email
                 Auth.auth().signIn(withEmail: email, password: password1) //adds authentication
-                CacheManager().eraseAllStockCache()
+          
                 Alerts.eraseStockAlertFile()
                 UserInfo.alerts.removeAll()
                 DashboardViewController.shared.collectionView?.reloadData()
@@ -177,7 +177,6 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
                     } else {
                         self.continueOnce = true
                         self.username.text = email
-                        CacheManager().eraseAllStockCache()
                         Alerts.eraseStockAlertFile()
                         UserInfo.alerts.removeAll()
                         UserInfo.tickerArray.removeAll()

@@ -67,8 +67,10 @@ struct CustomColor {
     //black33
     static let black33 = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
     static let black42Alpha0 = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 0.0)
+    //black63
+    static let black42 = UIColor(red: 63/255, green: 63/255, blue: 63/255, alpha: 1.0)
     //black42
-    static let black42 = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
+    static let black63 = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
     //black30
     static let black30 = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1.0)
     //black24

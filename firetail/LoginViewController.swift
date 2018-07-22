@@ -180,7 +180,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 self.present(alert, animated: true, completion: nil)
             } else {
                 self.activityView.removeFromSuperview()
-                CacheManager().eraseAllStockCache()
                 Alerts.eraseStockAlertFile()
                 UserInfo.alerts.removeAll()
                 UserInfo.tickerArray.removeAll()
