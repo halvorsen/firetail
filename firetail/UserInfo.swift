@@ -57,6 +57,7 @@ public struct UserInfo {
     /// all alerts funnel through here, this property gets updated with cached alerts then overwritten by network alerts. The order is taken locally from a cache into alerts ordered arrays and a alertsWithOrder array gets created from these (this is one directional flow of data, when alerts add or delete the array gets updated and alerts dictionary then populates everything from there automatically.
     internal static var alerts = [String:alertTuple]() { // set this dictionary but don't get from it
         didSet {
+            print("did set alerts")
             UserInfo.populateAlertsWithOrder()
             UserInfo.cryptoAlerts = UserInfo.alerts.filter { $0.key.isCryptoAlertKey }
             UserInfo.stocksAlerts = UserInfo.alerts.filter { $0.key.isStockAlertKey }

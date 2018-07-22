@@ -11,10 +11,11 @@ final class Alerts {
     
     private init() {
         var alertTemp: [String: alertTuple] = [:]
-        var alertOrderTemp: [String] = []
+        var alertOrderTemp: [(String,Int)] = []
         DispatchQueue.main.async {
             let _rawDictionary = MyFileManager.read(named: "stockAlerts")
             if let rawDictionary = _rawDictionary {
+                print("rawdictionary: \(rawDictionary)")
                 for (alertKey, value) in rawDictionary {
                     
                     if let dictionaryArray = value as? [String: Any] {
@@ -29,24 +30,30 @@ final class Alerts {
                             let triggered = dictionaryArray["triggered"] as? String,
                             let push = dictionaryArray["push"] as? Bool,
                             let urgent = dictionaryArray["urgent"] as? Bool,
-                            let timestamp = dictionaryArray["timestamp"] as? Int {
+                            let timestamp = dictionaryArray["timestamp"] as? Int,
+                            let order = dictionaryArray["order"] as? Int {
                             
                             alertTemp[alertKey] = (name:name,isGreaterThan:isGreaterThan,price:price,deleted:deleted,email:email,flash:flash,sms:sms,ticker:ticker,triggered:triggered,push:push,urgent:urgent,timestamp:timestamp)
                        
-                            alertOrderTemp.append(alertKey)
+                            alertOrderTemp.append((alertKey, order))
+                            
                         }
                         
                     }
                 }
+                print("alertOrderTemp \(alertOrderTemp)")
+                print("alertTemp: \(alertTemp)")
                 UserInfo.alerts = alertTemp
                 DashboardViewController.shared.collectionView?.reloadData()
-                UserInfo.stockAlertsOrder = alertOrderTemp.sorted(by: <).filter { $0.isStockAlertKey }
-                UserInfo.cryptoAlertsOrder = alertOrderTemp.sorted(by: <).filter { $0.isCryptoAlertKey }
+                UserInfo.stockAlertsOrder = alertOrderTemp.filter { $0.0.isStockAlertKey }.sorted { $0.1 < $1.1 }.map { $0.0 }
+                UserInfo.cryptoAlertsOrder = alertOrderTemp.filter { $0.0.isCryptoAlertKey }.sorted { $0.1 < $1.1 }.map { $0.0 }
+                
             }
         }
     }
     
     internal func saveCurrentAlerts() {
+        print("SAVE: \(UserInfo.alertsWithOrder)")
         DispatchQueue.main.async {
             var dictionaryStocks = [String:[String: Any]]()
             for (alertKey, value) in UserInfo.alertsWithOrder {

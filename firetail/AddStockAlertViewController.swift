@@ -54,12 +54,12 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         }
         return aaa
     }
-  //  var phoneTextField = UITextField()
+    //  var phoneTextField = UITextField()
     var priceString = String()
     let (mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
     
     override func viewWillAppear(_ animated: Bool) {
-       // UserInfo.cachedInThisSession.append(newAlertTicker)
+        // UserInfo.cachedInThisSession.append(newAlertTicker)
         if newAlertPrice < 0.00 {
             newAlertPriceLabel.text = "$0.00"
             
@@ -73,9 +73,6 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             newAlertPriceLabel.text = "$" + String(format: "%.1f", newAlertPrice) + "0"
             
         }
-        
-        
-        
         
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -157,7 +154,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
     }
     
-
+    
     
     @objc private func add(_ button: UIButton) {
         
@@ -166,11 +163,11 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID =  timestamp + newAlertTicker.uppercased()
-        UserInfo.currentAlertsInOrder.insert(newAlertLongID, at: 0)
-        
-        
+        UserInfo.currentAlertsInOrder = [newAlertLongID] + UserInfo.currentAlertsInOrder
+        print("User: \(UserInfo.stockAlertsOrder)")
+        print(UserInfo.alertsWithOrder)
         UserInfo.userAlerts[alertID[UserInfo.userAlerts.count]] = newAlertLongID
-   
+      
         var alertTriggerWhenGreaterThan = false
         if finalAlertPrice > lastPrice {
             alertTriggerWhenGreaterThan = true
@@ -186,7 +183,8 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
         UserInfo.populateAlertsWithOrder()
         DashboardViewController.shared.collectionView?.reloadData()
-        
+        DashboardViewController.shared.collectionView?.contentOffset.y = 0.0
+        DashboardViewController.shared.container.contentOffset.x = 0.0
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
             myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: priceString)
         } else if newAlertBoolTuple.1 {
@@ -215,10 +213,10 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
     }
     var alertInfo = (String(),String(),Double(),Bool(),Bool(),Bool(),Bool(),Bool(),Bool(),String(),Bool(),String(),String())
-
+    
     @objc private func back(_ sender: UIButton) {
-  
-            dismiss(animated: true)
+        
+        dismiss(animated: true)
         
     }
     
@@ -265,12 +263,8 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 UserDefaults.standard.set(true, forKey: "emailOn")
                 UserInfo.emailOn = true
             case 1:
-              //  if UserInfo.phone == "none" {
-//                    phoneTextField.alpha = 1.0
-//                    phoneTextField.becomeFirstResponder()
-              //  } else {
-                    newAlertBoolTuple.1 = true
-              //  }
+                
+                newAlertBoolTuple.1 = true
                 UserDefaults.standard.set(true, forKey: "smsOn")
                 UserInfo.smsOn = true
             case 2:
@@ -295,17 +289,17 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 newAlertBoolTuple.0 = true
                 UserDefaults.standard.set(true, forKey: "emailOn")
                 UserInfo.emailOn = true
-          
+                
                 newAlertBoolTuple.1 = true
-               
+                
                 UserDefaults.standard.set(true, forKey: "smsOn")
                 UserInfo.smsOn = true
-            
+                
                 newAlertBoolTuple.2 = true
                 registerForPushNotifications()
                 UserDefaults.standard.set(true, forKey: "pushOn")
                 UserInfo.pushOn = true
-         
+                
                 newAlertBoolTuple.3 = true
                 registerForPushNotifications()
                 UserDefaults.standard.set(true, forKey: "flashOn")
@@ -315,7 +309,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 mySwitchSMS.setOn(true, animated: true)
                 mySwitchPush.setOn(true, animated: true)
                 mySwitchFlash.setOn(true, animated: true)
-
+                
             default:
                 break
             }
@@ -410,9 +404,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         textField.text = formattedString as String
         return false
     }
- 
+    
     @objc func connectToFcm() {
-       
+        
         Messaging.messaging().shouldEstablishDirectChannel = true
         
     }
