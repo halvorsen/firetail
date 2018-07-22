@@ -35,6 +35,15 @@ public struct UserInfo {
         }
     }
     
+    public static var cryptoTickerArray: [String] {
+        return tickerArray.filter { SupportedTicker.crypto.contains($0) }
+    }
+    
+    public static var stockTickerArray: [String] {
+        return tickerArray.filter { !SupportedTicker.crypto.contains($0) }
+    }
+    
+    
     public static var month = ["","","","","","","","","","","",""]
     
     public static var phone = "none"

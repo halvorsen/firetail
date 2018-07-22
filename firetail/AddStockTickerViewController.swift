@@ -46,7 +46,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
             myButton.contentHorizontalAlignment = .center
         }
         
-        addLabel(name: stockSymbol, text: "stock symbol", textColor: CustomColor.labelGray, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 808, width: 400, height: 42, lines: 1)
+        addLabel(name: stockSymbol, text: "symbol", textColor: CustomColor.labelGray, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 60, y: 808, width: 400, height: 42, lines: 1)
         view.addSubview(stockSymbol)
         stockSymbolTextField.delegate = self
         stockSymbolTextField = UITextField(frame: CGRect(x: 30*screenWidth/375,y: 368*screenHeight/667,width: 110*screenWidth/375 ,height: 28*screenHeight/667))

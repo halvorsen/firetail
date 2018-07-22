@@ -421,52 +421,56 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             weakself.mask.frame.origin.x += 2.5*11*weakself.screenWidth/5; weakself.monthIndicator.alpha = 1.0; weakself.stock3.alpha = 1.0; weakself.stock2.alpha = 1.0; weakself.stock1.alpha = 1.0}
     }
     
+    var currentTickerArray: [String] {
+        return UserInfo.isCryptoMode ? UserInfo.cryptoTickerArray : UserInfo.stockTickerArray
+    }
+    
     private func populateCompareGraph() {
-        guard UserInfo.tickerArray.count > 0,
-            let ti0 = UserInfo.oneYearDictionary[UserInfo.tickerArray[0]],
+        guard currentTickerArray.count > 0,
+            let ti0 = UserInfo.oneYearDictionary[currentTickerArray[0]],
             ti0.count > 0 else {return}
-        switch UserInfo.tickerArray.count {
+        switch currentTickerArray.count {
         case 0:
             break
         case 1:
             
-            sv =  CompareScroll(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: currentTickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: currentTickerArray[0], color: CustomColor.white68)
             container2.addSubview(svDot)
             
         case 2:
             
-            sv =  CompareScroll(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: currentTickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: currentTickerArray[0], color: CustomColor.white68)
             container2.addSubview(svDot)
-            guard UserInfo.tickerArray.count > 1,
-                let ti1 = UserInfo.oneYearDictionary[UserInfo.tickerArray[1]],
+            guard currentTickerArray.count > 1,
+                let ti1 = UserInfo.oneYearDictionary[currentTickerArray[1]],
                 ti1.count > 0 else {return}
-            sv1 =  CompareScroll(graphData: ti1, stockName: UserInfo.tickerArray[1], color: CustomColor.white128)
+            sv1 =  CompareScroll(graphData: ti1, stockName: currentTickerArray[1], color: CustomColor.white128)
             container.addSubview(sv1)
-            svDot1 =  CompareScrollDot(graphData: ti1, stockName: UserInfo.tickerArray[1], color: CustomColor.white128)
+            svDot1 =  CompareScrollDot(graphData: ti1, stockName: currentTickerArray[1], color: CustomColor.white128)
             container2.addSubview(svDot1)
             
         default:
-            sv =  CompareScroll(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
+            sv =  CompareScroll(graphData: ti0, stockName: currentTickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
-            svDot =  CompareScrollDot(graphData: ti0, stockName: UserInfo.tickerArray[0], color: CustomColor.white68)
+            svDot =  CompareScrollDot(graphData: ti0, stockName: currentTickerArray[0], color: CustomColor.white68)
             container2.addSubview(svDot)
-            guard UserInfo.tickerArray.count > 1,
-                let ti1 = UserInfo.oneYearDictionary[UserInfo.tickerArray[1]],
+            guard currentTickerArray.count > 1,
+                let ti1 = UserInfo.oneYearDictionary[currentTickerArray[1]],
                 ti1.count > 0 else {return}
-            sv1 =  CompareScroll(graphData: ti1, stockName: UserInfo.tickerArray[1], color: CustomColor.white128)
+            sv1 =  CompareScroll(graphData: ti1, stockName: currentTickerArray[1], color: CustomColor.white128)
             container.addSubview(sv1)
-            svDot1 =  CompareScrollDot(graphData: ti1, stockName: UserInfo.tickerArray[1], color: CustomColor.white128)
+            svDot1 =  CompareScrollDot(graphData: ti1, stockName: currentTickerArray[1], color: CustomColor.white128)
             container2.addSubview(svDot1)
-            guard UserInfo.tickerArray.count > 2,
-                let ti2 = UserInfo.oneYearDictionary[UserInfo.tickerArray[2]],
+            guard currentTickerArray.count > 2,
+                let ti2 = UserInfo.oneYearDictionary[currentTickerArray[2]],
                 ti2.count > 0 else {return}
-            sv2 =  CompareScroll(graphData: ti2, stockName: UserInfo.tickerArray[2], color: CustomColor.white209)
+            sv2 =  CompareScroll(graphData: ti2, stockName: currentTickerArray[2], color: CustomColor.white209)
             container.addSubview(sv2)
-            svDot2 =  CompareScrollDot(graphData: ti2, stockName: UserInfo.tickerArray[2], color: CustomColor.white209)
+            svDot2 =  CompareScrollDot(graphData: ti2, stockName: currentTickerArray[2], color: CustomColor.white209)
             container2.addSubview(svDot2
                 
             )
@@ -959,16 +963,13 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
 //    let a = UISwitch()
     let toggle = AlertSwitch()
     private func configureSwitch() {
-        
-        toggle.isStock = true
-
         slideView.addSubview(toggle)
         toggle.translatesAutoresizingMaskIntoConstraints = false
         toggle.widthAnchor.constraint(equalToConstant: ToggleConstant.width).isActive = true
         toggle.heightAnchor.constraint(equalToConstant: ToggleConstant.height).isActive = true
         toggle.centerYAnchor.constraint(equalTo: add.centerYAnchor).isActive = true
         toggle.centerXAnchor.constraint(equalTo: slideView.centerXAnchor).isActive = true
-     
+         
     }
 
 }

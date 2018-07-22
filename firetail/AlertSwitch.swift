@@ -60,7 +60,6 @@ final class AlertSwitch: UIControl {
         isStockConstant = padding
         isCryptoConstant = ToggleConstant.width*0.5 + padding
         leftAnchorConstraint.constant = self.isStock ? isStockConstant : isCryptoConstant
-        print("leftanchorconstraint1: \(leftAnchorConstraint.constant)")
         self.layer.cornerRadius = ToggleConstant.height * 0.5
         thumbView.translatesAutoresizingMaskIntoConstraints = false
         thumbView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5, constant: -2*padding).isActive = true
@@ -72,6 +71,9 @@ final class AlertSwitch: UIControl {
             stocks.textColor = isStock ? CustomColor.white128 : CustomColor.black63
         crypto.textColor = !isStock ? CustomColor.white128 : CustomColor.black63
         layoutIfNeeded()
+        if UserInfo.isCryptoMode {
+            animate()
+        }
     }
     
     override init(frame: CGRect = CGRect.zero) {

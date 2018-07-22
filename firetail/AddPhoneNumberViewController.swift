@@ -56,7 +56,7 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
             
             
             let l = UILabel()
-            let name = ["Email","Phone","Broker","Password"]
+            let name = ["Email","Phone","Exchange","Password"]
             addLabel(name: l, text: name[i], textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 56, y: 500 + CGFloat(i)*120, width: 150, height: 40, lines: 0)
             view.addSubview(l)
             
@@ -121,7 +121,7 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(SettingsViewController.donePicker))
         doneButton.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: toolBarButtonColor], for: .normal)
         
-        let brokerLabel = UIBarButtonItem(title: "Broker", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        let brokerLabel = UIBarButtonItem(title: "Exchange", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
         brokerLabel.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.white], for: .normal)
         let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target:nil, action:nil)
         

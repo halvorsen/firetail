@@ -89,7 +89,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         addLabel(name: newAlertPriceLabel, text: "", textColor: .white, textAlignment: .right, fontName: "DroidSerif", fontSize: 20, x: 490, y: 162, width: 200, height: 56, lines: 1)
         view.addSubview(newAlertPriceLabel)
         
-        addLabel(name: stockSymbol, text: "stock symbol", textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 54, y: 234, width: 240, height: 48, lines: 1)
+        addLabel(name: stockSymbol, text: "symbol", textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 54, y: 234, width: 240, height: 48, lines: 1)
         view.addSubview(stockSymbol)
         
         addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif", fontSize: 20, x: 54, y: 162, width: 200, height: 56, lines: 1)
@@ -189,12 +189,13 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         DashboardViewController.shared.collectionView?.reloadData()
         DashboardViewController.shared.collectionView?.contentOffset.y = 0.0
         DashboardViewController.shared.container.contentOffset.x = 0.0
-        if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
-            myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: priceString)
+        let intelligentFlag = newAlertBoolTuple.intelligent ? "intelligent" : ""
+        if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 && !newAlertBoolTuple.5 {
+            myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: false, flash: false, urgent: false, triggered: "false", push: false, alertLongName: newAlertLongID, priceString: priceString, data3: intelligentFlag)
         } else if newAlertBoolTuple.1 {
-            myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString, data2: UserInfo.phone)
+            myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString, data2: UserInfo.phone, data3: intelligentFlag)
         } else {
-            myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString)
+            myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString, data3: intelligentFlag)
         }
         UserInfo.saveUserInfo()
         alertInfo = (UserInfo.username,newAlertTicker,finalAlertPrice,alertTriggerWhenGreaterThan,false,newAlertBoolTuple.0,newAlertBoolTuple.1,newAlertBoolTuple.3,newAlertBoolTuple.4,"false",newAlertBoolTuple.2,newAlertLongID,priceString)
@@ -314,14 +315,26 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 mySwitchPush.setOn(true, animated: true)
                 mySwitchFlash.setOn(true, animated: true)
                 if UserInfo.dashboardMode == .crypto {
-                    mySwitchIntelligent.setOn(true, animated: true)
+                    if UserInfo.vultureSubscriber {
+                        newAlertBoolTuple.5 = true
+                        UserDefaults.standard.set(true, forKey: "intelligenceOn")
+                        UserInfo.intelligenceOn = true
+                    } else {
+                        present(PremiumInformationViewController(), animated: true)
+                        newAlertBoolTuple.4 = false
+                        UserDefaults.standard.set(false, forKey: "allOn")
+                        UserInfo.allOn = false
+                    }
                 }
                 
             case 5:
-                
+                if UserInfo.vultureSubscriber {
                 newAlertBoolTuple.5 = true
                 UserDefaults.standard.set(true, forKey: "intelligenceOn")
                 UserInfo.intelligenceOn = true
+                } else {
+                    present(PremiumInformationViewController(), animated: true)
+                }
                 
             default:
                 break
