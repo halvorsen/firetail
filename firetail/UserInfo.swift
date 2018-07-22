@@ -17,6 +17,7 @@ public struct UserInfo {
     public static var emailOn: Bool = false
     public static var pushOn: Bool = false
     public static var allOn: Bool = false
+    public static var intelligenceOn: Bool = false
     
     public static var token: String = "none"
     
@@ -107,7 +108,13 @@ public struct UserInfo {
         }
     }
     
-    static var dashboardMode: Mode = .stocks
+    static var dashboardMode: Mode = .crypto
+    static var isCryptoMode: Bool {
+        return dashboardMode == .crypto
+    }
+    static var isStockMode: Bool {
+        return dashboardMode == .stocks
+    }
     
 }
 

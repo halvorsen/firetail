@@ -30,6 +30,7 @@ class PremiumInformationViewController: UIViewController {
         goPremium.setTitle("GO PREMIUM", for: .normal)
         goPremium.titleLabel?.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         goPremium.backgroundColor = CustomColor.black42
+        goPremium.addTarget(self, action: #selector(goPremiumTouchUpInside), for: .touchUpInside)
         premiumAlerts.text = "PREMIUM ALERTS"
         premiumAlerts.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         premiumAlerts.textColor = .white
@@ -64,6 +65,10 @@ Joining premium also gives you access to unlimted monthly Firetail alerts.
     
     @objc private func backButtonTouchUpInside() {
         dismiss(animated: true)
+    }
+    
+    @objc private func goPremiumTouchUpInside() {
+        // Go premium IAP
     }
     
     private func setConstraints() {

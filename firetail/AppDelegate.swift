@@ -24,7 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let stockAlerts = Alerts.shared // ititialize shared alert class the retrieves alerts from file storage
         
-        
         Fabric.with([Crashlytics.self])
         
         FirebaseApp.configure()

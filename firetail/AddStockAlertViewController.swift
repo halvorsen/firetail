@@ -35,7 +35,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
     let stockSymbol = UILabel()
     var addAlert = UIButton()
     let myLoadSave = LoadSaveCoreData()
-    var newAlertBoolTuple = (false, false, false, false, false)
+    var newAlertBoolTuple = (email: false, sms: false, push: false, flash: false, all: false, intelligent: false)
     var lastPrice = Double()
     var newAlertLongID = String()
     var alertID: [String] {
@@ -54,9 +54,9 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         }
         return aaa
     }
-    //  var phoneTextField = UITextField()
+    
     var priceString = String()
-    let (mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
+    let (mySwitchIntelligent,mySwitchEmail,mySwitchSMS,mySwitchPush,mySwitchFlash,mySwitchAll) = (UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch(),UISwitch())
     
     override func viewWillAppear(_ animated: Bool) {
         // UserInfo.cachedInThisSession.append(newAlertTicker)
@@ -100,37 +100,43 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockAlertViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
-        
-        for i in 0...4 {
-            let l = UILabel()
-            let name = ["Email","SMS","Push","Flash","All"]
-            addLabel(name: l, text: name[i].uppercased(), textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 200, y: 460 + CGFloat(i)*122, width: 150, height: 56, lines: 0)
-            view.addSubview(l)
+        let name = UserInfo.isStockMode ? ["Email","SMS","Push","Flash","All"] : ["Intelligent", "Email","SMS","Push","Flash","All"]
+        for i in 0..<name.count {
+            let label = UILabel()
+            
+            addLabel(name: label, text: name[i].uppercased(), textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 200, y: 434 + CGFloat(i)*120, width: 300, height: 56, lines: 0)
+            view.addSubview(label)
         }
         
         let switches:[(UISwitch,CGFloat,Int)] = [
             
-            (mySwitchEmail,227,0),
-            (mySwitchSMS,286,1),
-            (mySwitchPush,347,2),
-            (mySwitchFlash,406,3),
-            (mySwitchAll,466,4),
+            (mySwitchIntelligent,215,5), //59
+            (mySwitchEmail,UserInfo.isCryptoMode ? 275 : 215,0),
+            (mySwitchSMS,UserInfo.isCryptoMode ? 335 : 275,1),
+            (mySwitchPush,UserInfo.isCryptoMode ? 395 : 335,2),
+            (mySwitchFlash,UserInfo.isCryptoMode ? 455 : 395,3),
+            (mySwitchAll,UserInfo.isCryptoMode ? 515 : 455,4)
             
             ]
         
-        for (s, y, tag) in switches {
+        for (mySwitch, yPosition, tag) in UserInfo.isCryptoMode ? switches : Array(switches[1...]) {
             
-            s.frame = CGRect(x: 27*screenWidth/375, y: y*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
-            s.setOn(false, animated: false)
-            s.tintColor = CustomColor.white229
-            s.layer.cornerRadius = 16
-            s.backgroundColor = .white
-            s.onTintColor = CustomColor.yellow
-            s.addTarget(self, action: #selector(AddStockAlertViewController.switchChanged(_:)), for: UIControlEvents.valueChanged)
-            s.tag = tag
-            view.addSubview(s)
+            mySwitch.frame = CGRect(x: 27*screenWidth/375, y: yPosition*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
+            mySwitch.setOn(false, animated: false)
+            mySwitch.tintColor = CustomColor.white229
+            mySwitch.layer.cornerRadius = 16
+            mySwitch.backgroundColor = .white
+            mySwitch.onTintColor = CustomColor.yellow
+            mySwitch.addTarget(self, action: #selector(AddStockAlertViewController.switchChanged(_:)), for: UIControlEvents.valueChanged)
+            mySwitch.tag = tag
+            view.addSubview(mySwitch)
             
         }
+        if UserInfo.intelligenceOn {
+            mySwitchIntelligent.setOn(true, animated: false)
+            newAlertBoolTuple.5 = true
+        }
+        
         if UserInfo.flashOn {
             mySwitchFlash.setOn(true, animated: false)
             newAlertBoolTuple.3 = true
@@ -164,8 +170,6 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
         newAlertLongID =  timestamp + newAlertTicker.uppercased()
         UserInfo.currentAlertsInOrder = [newAlertLongID] + UserInfo.currentAlertsInOrder
-        print("User: \(UserInfo.stockAlertsOrder)")
-        print(UserInfo.alertsWithOrder)
         UserInfo.userAlerts[alertID[UserInfo.userAlerts.count]] = newAlertLongID
       
         var alertTriggerWhenGreaterThan = false
@@ -309,6 +313,15 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 mySwitchSMS.setOn(true, animated: true)
                 mySwitchPush.setOn(true, animated: true)
                 mySwitchFlash.setOn(true, animated: true)
+                if UserInfo.dashboardMode == .crypto {
+                    mySwitchIntelligent.setOn(true, animated: true)
+                }
+                
+            case 5:
+                
+                newAlertBoolTuple.5 = true
+                UserDefaults.standard.set(true, forKey: "intelligenceOn")
+                UserInfo.intelligenceOn = true
                 
             default:
                 break

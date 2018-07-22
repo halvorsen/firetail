@@ -111,6 +111,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         UserInfo.pushOn = UserDefaults.standard.bool(forKey: "pushOn")
         UserInfo.emailOn = UserDefaults.standard.bool(forKey: "emailOn")
         UserInfo.smsOn = UserDefaults.standard.bool(forKey: "smsOn")
+        UserInfo.intelligenceOn = UserDefaults.standard.bool(forKey: "intelligenceOn")
         
     }
     
