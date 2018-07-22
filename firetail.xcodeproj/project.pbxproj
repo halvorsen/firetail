@@ -30,6 +30,7 @@
 		06478E711EE5DA450016DF88 /* AddStockPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */; };
 		06478E751EE610BC0016DF88 /* AddStockAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */; };
 		064C8A072103AD2100FF5D1E /* AlertSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064C8A062103AD2100FF5D1E /* AlertSwitch.swift */; };
+		064C8A092104354000FF5D1E /* PremiumInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064C8A082104354000FF5D1E /* PremiumInformationViewController.swift */; };
 		0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0672601A1E67BD5B00F54500 /* StockGraphView2.swift */; };
 		06813A721F616BEE00A420EF /* Alpha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06813A711F616BEE00A420EF /* Alpha.swift */; };
 		0681F42D1FDC3F8400082DCC /* CompareScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0681F42C1FDC3F8400082DCC /* CompareScroll.swift */; };
@@ -83,6 +84,7 @@
 		06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockPriceViewController.swift; sourceTree = "<group>"; };
 		06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockAlertViewController.swift; sourceTree = "<group>"; };
 		064C8A062103AD2100FF5D1E /* AlertSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSwitch.swift; sourceTree = "<group>"; };
+		064C8A082104354000FF5D1E /* PremiumInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumInformationViewController.swift; sourceTree = "<group>"; };
 		0672601A1E67BD5B00F54500 /* StockGraphView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView2.swift; sourceTree = "<group>"; };
 		06813A711F616BEE00A420EF /* Alpha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alpha.swift; sourceTree = "<group>"; };
 		0681F42C1FDC3F8400082DCC /* CompareScroll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScroll.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				0641936A1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift */,
 				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
 				06AC61BB20FD6CA8002A7776 /* AccountCreationViewController.swift */,
+				064C8A082104354000FF5D1E /* PremiumInformationViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -474,6 +477,7 @@
 				06AC27081E7319F700041D1F /* CompareScrollDot.swift in Sources */,
 				06110EA91EB925BF00C901C5 /* ChangePasswordViewController.swift in Sources */,
 				062BD2DC20E5C7A7002C5E3C /* AlertCollectionViewCell.swift in Sources */,
+				064C8A092104354000FF5D1E /* PremiumInformationViewController.swift in Sources */,
 				06DDBE261F795A5B00C36CB6 /* CustomColor.swift in Sources */,
 				064C8A072103AD2100FF5D1E /* AlertSwitch.swift in Sources */,
 				0609E4A81E632DF4005965C5 /* DashboardViewController.swift in Sources */,
