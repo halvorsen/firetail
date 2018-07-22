@@ -1043,7 +1043,8 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
         UserInfo.currentAlertsInOrder = rearrange(array:UserInfo.currentAlertsInOrder, at: sourceIndexPath.row, to: destinationIndexPath.row)
         
         UserInfo.populateAlertsWithOrder()
-        DashboardViewController.shared.collectionView?.reloadData()
+        collectionView.reloadData()
+        container.contentOffset.x = 0
     }
     
 }
