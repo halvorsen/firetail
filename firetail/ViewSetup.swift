@@ -65,7 +65,11 @@ class ViewSetup: UIViewController {
            
         } else {
             DispatchQueue.main.async {
+                if let _ = self as? DashboardViewController {
+                    //dont show internet cover
+                } else {
                 self.addNoInternetCover()
+                }
             }
         }
     }
