@@ -48,6 +48,8 @@ public struct UserInfo {
     
     public static var premium = false
     
+    public static var vultureSubscriber = true
+    
     public static var brokerURL = "none"
     
     public static var weeklyAlerts: [String:Int] = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]

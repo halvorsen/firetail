@@ -15,7 +15,6 @@ final class Alerts {
         DispatchQueue.main.async {
             let _rawDictionary = MyFileManager.read(named: "stockAlerts")
             if let rawDictionary = _rawDictionary {
-                print("rawdictionary: \(rawDictionary)")
                 for (alertKey, value) in rawDictionary {
                     
                     if let dictionaryArray = value as? [String: Any] {
@@ -41,8 +40,7 @@ final class Alerts {
                         
                     }
                 }
-                print("alertOrderTemp \(alertOrderTemp)")
-                print("alertTemp: \(alertTemp)")
+        
                 UserInfo.alerts = alertTemp
                 DashboardViewController.shared.collectionView?.reloadData()
                 UserInfo.stockAlertsOrder = alertOrderTemp.filter { $0.0.isStockAlertKey }.sorted { $0.1 < $1.1 }.map { $0.0 }
@@ -53,7 +51,6 @@ final class Alerts {
     }
     
     internal func saveCurrentAlerts() {
-        print("SAVE: \(UserInfo.alertsWithOrder)")
         DispatchQueue.main.async {
             var dictionaryStocks = [String:[String: Any]]()
             for (alertKey, value) in UserInfo.alertsWithOrder {
