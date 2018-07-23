@@ -306,9 +306,17 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
       
         whoseOnFirst(container)
         
+        configureAndAddAlertCollection()
+        [stock1, stock2, stock3].forEach { $0.center.x = monthIndicator.center.x}
+        configureSwitch()
+        
+    }
+    
+    func configureAndAddAlertCollection() {
         let collectionLayout = UICollectionViewFlowLayout()
         collectionLayout.minimumInteritemSpacing = 0
         collectionLayout.minimumLineSpacing = 0
+        
         let frame = CGRect(x: 0, y: 974*screenHeight/1334, width: screenWidth, height: 360*screenHeight/1334)
         collectionView = AlertCollectionView(frame: frame, collectionViewLayout: collectionLayout, delegate: self, dataSource: self, cellID: alertCollectionCellID)
         
@@ -316,12 +324,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
         longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressFunc(_:)))
         collectionView?.addGestureRecognizer(longPress)
-        print("date")
-        print(date.frame)
-        print(date.center.x)
-        [stock1, stock2, stock3].forEach { $0.center.x = monthIndicator.center.x}
-        configureSwitch()
-        
     }
     
     var longPress = UILongPressGestureRecognizer()
@@ -621,7 +623,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     @objc private func alertsFunc(_ sender: UIButton) {
+        if UserInfo.vultureSubscriber {
         menuFunc()
+        } else {
+            present(PremiumInformationViewController(), animated: true)
+        }
     }
     @objc private func changeEmailFunc(_ sender: UIButton) {
         present(SettingsViewController(), animated: true)
@@ -960,7 +966,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     var index: Int = 0
-//    let a = UISwitch()
     let toggle = AlertSwitch()
     private func configureSwitch() {
         slideView.addSubview(toggle)

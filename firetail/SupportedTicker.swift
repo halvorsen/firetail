@@ -11,6 +11,10 @@ import Foundation
 public struct SupportedTicker {
     public static var crypto = [
         "ETH", "BTC"
-]
-
+    ]
+    
+    public static func isCryptoTickerSupported(ticker: String) -> Bool {
+        return SupportedTicker.crypto.contains(ticker.uppercased())
+    }
+    
 }

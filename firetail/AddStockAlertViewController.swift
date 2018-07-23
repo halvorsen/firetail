@@ -183,11 +183,10 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         else {
             UserInfo.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, "false", newAlertBoolTuple.2, newAlertBoolTuple.4, 1)
         }
-        DashboardViewController.shared.collectionView?.insertItems(at: [IndexPath(item: 0, section: 0)])
-        
+
         UserInfo.populateAlertsWithOrder()
-        DashboardViewController.shared.collectionView?.reloadData()
-        DashboardViewController.shared.collectionView?.contentOffset.y = 0.0
+
+        DashboardViewController.shared.configureAndAddAlertCollection()
         DashboardViewController.shared.container.contentOffset.x = 0.0
         let intelligentFlag = newAlertBoolTuple.intelligent ? "intelligent" : ""
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 && !newAlertBoolTuple.5 {

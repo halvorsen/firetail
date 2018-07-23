@@ -238,7 +238,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     }
     
     private func displayAlert() {
-        let alert = UIAlertController(title: "", message: "Ticker not supported", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "", message: "Symbol not supported", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { _ in
             self.dismiss(animated: true)
         })

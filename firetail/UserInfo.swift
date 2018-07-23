@@ -117,7 +117,13 @@ public struct UserInfo {
         }
     }
     
-    static var dashboardMode: Mode = .crypto
+    static var dashboardMode: Mode = .crypto {
+        didSet {
+            print("changed dashboard mode")
+            DashboardViewController.shared.refreshAlertsAndCompareGraph()
+       
+        }
+    }
     static var isCryptoMode: Bool {
         return dashboardMode == .crypto
     }

@@ -26,23 +26,23 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         view.addSubview(quickPick)
         let boxButtons:[(CGFloat,CGFloat,String)] = [
             
-            (220,164,"TSLA"),
-            (484,164,"AAPL"),
+            (220,164,"BTC"),
+            (484,164,"TSLA"),
             (40,282,"AMZN"),
             (304,282,"NFLX"),
-            (568,282,"T"),
+            (568,282,"ETH"),
             (-46,400,"FB"),
-            (220,400,"GPRO"),
+            (220,400,"ZRX"),
             (484,400,"NKE"),
             (40,520,"TWTR"),
             (304,520,"SNAP"),
-            (568,520,"VZ")
+            (568,520,"BAT")
           
         ]
         
         for (x,y,ticker) in boxButtons {
             let myButton = UIButton()
-            addButton(name: myButton, x: x, y: y, width: 216, height: 70, title: ticker, font: "Roboto-Bold", fontSize: 18, titleColor: .black, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockTickerViewController._quickPickFunc(_:)), addSubview: true)
+            addButton(name: myButton, x: x, y: y, width: 216, height: 70, title: ticker, font: "Roboto-Bold", fontSize: 18, titleColor: .black, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockTickerViewController.quickPickFunc(_:)), addSubview: true)
             myButton.contentHorizontalAlignment = .center
         }
         
@@ -78,68 +78,29 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         dismiss(animated: true)
     }
     
-    @objc private func quickPickFunc(callback: (_ isGoodToGo: Bool) -> Void) {
-        
-        var isGoodToGo = false
-        
-        if SupportedTicker.crypto.contains(newAlertTicker) || AppSetting.mode == .stock {
-            
-            isGoodToGo = true
-            let charArray = newAlertTicker.map { String($0) }
-            
-            for char in charArray {
-                if char == "^" || char == "~" {
-                    isGoodToGo = false
-                    
-                    callback(isGoodToGo)
-                }
-            }
-            
-            callback(isGoodToGo)
-        } else {
-            
-            callback(isGoodToGo)
+    private func transitionAndFetch() {
+        print("newalertticker: \(newAlertTicker)")
+        if SupportedTicker.isCryptoTickerSupported(ticker: newAlertTicker) {
+            print("THIS IS CRYPTO")
+            return
         }
+        UserInfo.dashboardMode = .stocks
+        let viewController = AddStockPriceViewController()
+        viewController.newAlertTicker = newAlertTicker
+        viewController.modalTransitionStyle = .crossDissolve
+        present(viewController, animated: true)
         
     }
     
-    private func __quickPickFunc() {
+    @objc private func quickPickFunc(_ sender: UIButton) {
         
-        quickPickFunc() { [weak self] (isGoodToGo) -> Void in
-            guard let weakself = self else {return}
-            if isGoodToGo {
-                let viewController = AddStockPriceViewController()
-                viewController.newAlertTicker = newAlertTicker
-                viewController.modalTransitionStyle = .crossDissolve
-                present(viewController, animated: true)
-            } else {
-                let alert = UIAlertController(title: "", message: "Coin not supported", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-                weakself.present(alert, animated: true, completion: nil)
-            }
-        }
-    }
-    
-    @objc private func _quickPickFunc(_ sender: UIButton) {
-        guard let title = sender.titleLabel,
-            let newAlertTicker = title.text else {return}
+        guard let title = sender.titleLabel, let newAlertTicker = title.text else {return}
         self.newAlertTicker = newAlertTicker
-        quickPickFunc() { [weak self] (isGoodToGo) -> Void in
-            guard let weakself = self else {return}
-            if isGoodToGo {
-                let viewController = AddStockPriceViewController()
-                viewController.newAlertTicker = newAlertTicker
-                viewController.modalTransitionStyle = .crossDissolve
-                present(viewController, animated: true)
-            } else {
-                
-                let alert = UIAlertController(title: "", message: "Coin not supported", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-                weakself.present(alert, animated: true, completion: nil)
-            }
-        }
+        transitionAndFetch()
+        
     }
     
+
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.text = ""
         textField.autocorrectionType = .no
@@ -150,7 +111,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if stockSymbolTextField.text != nil && stockSymbolTextField.delegate != nil {
             newAlertTicker = stockSymbolTextField.text!.uppercased()
-            __quickPickFunc()
+            transitionAndFetch()
         }
         return false
     }
