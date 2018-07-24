@@ -194,7 +194,11 @@ class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerView
             third.view.isHidden = true
             second.view.isHidden = true
             first.view.isHidden = true
-            fourth.dismiss(animated: true)
+            if let _ = fourth as? DashboardViewController {
+                fourth.dismiss(animated: true)
+            } else {
+                present(DashboardViewController(), animated: true)
+            }
             
         }
         

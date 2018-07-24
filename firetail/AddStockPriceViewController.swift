@@ -56,9 +56,9 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     private func loadItAll() {
         
         let blockInBackground = UIView()
-        blockInBackground.frame = CGRect(x: 0, y: 424*screenHeight/667, width: screenWidth, height: 70*screenHeight/667)
+        blockInBackground.frame = CGRect(x: 0, y: screenHeight < 668 ? 424*screenHeight/667 : 435*screenHeight/667, width: screenWidth, height: 70*screenHeight/667)
         blockInBackground.backgroundColor = CustomColor.black24
-        
+        view.addSubview(blockInBackground)
         
         setPriceAlert.text = "Set Price Alert"
         setPriceAlert.textColor = CustomColor.white115
@@ -67,7 +67,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         view.addSubview(setPriceAlert)
         setPriceAlert.translatesAutoresizingMaskIntoConstraints = false
         setPriceAlert.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 28*commonScalar).isActive = true
-        setPriceAlert.centerYAnchor.constraint(equalTo: view.topAnchor, constant: 462*commonScalar).isActive = true
+        setPriceAlert.centerYAnchor.constraint(equalTo: blockInBackground.centerYAnchor).isActive = true
         addLabel(name: newAlertTickerLabel, text: newAlertTicker, textColor: .white, textAlignment: .left, fontName: "DroidSerif", fontSize: 20, x: 60, y: 606, width: 200, height: 56, lines: 1)
         addLabel(name: stockSymbol, text: "symbol", textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 56, y: 657, width: 240, height: 80, lines: 1)
         container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 260*screenHeight/667))
@@ -78,7 +78,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
         
-        view.addSubview(blockInBackground)
+        
         priceLabel.font = UIFont(name: "Roboto-Bold", size: 17*fontSizeMultiplier)
         priceLabel.textAlignment = .right
         priceLabel.textColor = .white
@@ -144,25 +144,22 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
             
             DispatchQueue.main.async {
                 weakself.loadItAll()
-            }
-            
-            DispatchQueue.main.async {
+                
                 weakself.graph = DailyGraphForAlertView(graphData: closings, dateArray: dateArray)
                 
                 weakself.container.addSubview(weakself.graph)
-            }
- 
-            weakself.dialPrice = lastClose
-            
-            let a:CGFloat = -0.72
-            let c:CGFloat = 1000
-            weakself.offset = (CGFloat(lastClose) - a)*weakself.screenWidth*75053.5/(375*(c-a))
-            
-            var t = CGAffineTransform.identity
-            t = t.translatedBy(x: 0, y: -100)
-            t = t.scaledBy(x: 1.0, y: 0.01)
-            
-            DispatchQueue.main.async {
+                
+                
+                weakself.dialPrice = lastClose
+                
+                let a:CGFloat = -0.72
+                let c:CGFloat = 1000
+                weakself.offset = (CGFloat(lastClose) - a)*weakself.screenWidth*75053.5/(375*(c-a))
+                
+                var t = CGAffineTransform.identity
+                t = t.translatedBy(x: 0, y: -100)
+                t = t.scaledBy(x: 1.0, y: 0.01)
+                
                 weakself.graph.transform = t
                 weakself.activityView.removeFromSuperview()
                 weakself.setupDialCollectionView()
@@ -202,7 +199,7 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         collectionLayout.minimumInteritemSpacing = 0
         collectionLayout.minimumLineSpacing = 0
         collectionLayout.scrollDirection = .horizontal
-        let frame = CGRect(x: 0, y: 494*screenHeight/667, width: screenWidth, height: 103*screenWidth/375)
+        let frame = CGRect(x: 0, y: screenHeight < 668 ? 494*screenHeight/667 : screenHeight - 200, width: screenWidth, height: 103*screenWidth/375)
         collectionView?.contentSize = CGSize(width: cellSize.width * CGFloat(priceArray.count), height: 103*screenWidth/375)
         collectionView = DialCollectionView(frame: frame, collectionViewLayout: collectionLayout, delegate: self, dataSource: self, cellID: dialCollectionCellID)
        

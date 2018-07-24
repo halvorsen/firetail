@@ -105,6 +105,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             let label = UILabel()
             
             addLabel(name: label, text: name[i].uppercased(), textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 200, y: 434 + CGFloat(i)*120, width: 300, height: 56, lines: 0)
+            label.frame.origin.y = (217 + CGFloat(i)*60)*screenWidth/375
             view.addSubview(label)
         }
         
@@ -121,7 +122,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         
         for (mySwitch, yPosition, tag) in UserInfo.isCryptoMode ? switches : Array(switches[1...]) {
             
-            mySwitch.frame = CGRect(x: 27*screenWidth/375, y: yPosition*screenHeight/667, width: 51*screenWidth/375, height: 31*screenHeight/667)
+            mySwitch.frame = CGRect(x: 27*screenWidth/375, y: yPosition*screenWidth/375, width: 51*screenWidth/375, height: 31*screenHeight/667)
             mySwitch.setOn(false, animated: false)
             mySwitch.tintColor = CustomColor.white229
             mySwitch.layer.cornerRadius = 16
@@ -210,7 +211,11 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 
                 second.view.isHidden = true
                 first.view.isHidden = true
+                if let _ = third as? DashboardViewController {
                 third.dismiss(animated: true)
+                } else {
+                    present(DashboardViewController(), animated: true)
+                }
                 
             }
         }
@@ -313,7 +318,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
                 mySwitchSMS.setOn(true, animated: true)
                 mySwitchPush.setOn(true, animated: true)
                 mySwitchFlash.setOn(true, animated: true)
-                if UserInfo.dashboardMode == .crypto {
+                if UserInfo.isCryptoMode {
                     if UserInfo.vultureSubscriber {
                         newAlertBoolTuple.5 = true
                         UserDefaults.standard.set(true, forKey: "intelligenceOn")

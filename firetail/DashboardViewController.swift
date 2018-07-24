@@ -103,7 +103,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         UserInfo.premium = true //: toggle in development
         premiumMember = true  // ##TODO: turn off premium premiumMember = UserInfo.premium
         Alpha().populateUserInfoMonth()
-        
+        print("load user info from firebase")
         AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {}
         
         UserInfo.flashOn = UserDefaults.standard.bool(forKey: "flashOn")
@@ -117,6 +117,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("userinfo.dashboardmodeVIEWDIDLOAD: \(UserInfo.dashboardMode)")
         if once {
         appLoading()
             once = false
@@ -331,6 +332,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var endingLocationX = CGFloat()
     
     internal func refreshAlertsAndCompareGraph() {
+        print("refreshalertsandcomparegraph")
         self.compareGraphReset()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
             self.whoseOnFirst(self.container)
@@ -500,6 +502,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     
     @objc func whoseOnFirst(_ scrollView: UIScrollView) {
+        
         for i in 0...11 {
             let offset = scrollView.contentOffset.x
             if scrollView.contentSize.width*CGFloat(Double(i+1)-2.3)/13...scrollView.contentSize.width*CGFloat(Double(i+1)-2.05)/13 ~= offset || (i == 1 && offset == 0.0) {
@@ -961,6 +964,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        toggle.layoutSubviews()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
     }
@@ -972,11 +979,21 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         toggle.translatesAutoresizingMaskIntoConstraints = false
         toggle.widthAnchor.constraint(equalToConstant: ToggleConstant.width).isActive = true
         toggle.heightAnchor.constraint(equalToConstant: ToggleConstant.height).isActive = true
-        toggle.centerYAnchor.constraint(equalTo: add.centerYAnchor).isActive = true
+        toggle.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: varyForDevice(normal: 12, iphoneX: 6)).isActive = true
         toggle.centerXAnchor.constraint(equalTo: slideView.centerXAnchor).isActive = true
-         
+        toggle.addTarget(self, action: #selector(toggleSelected), for: .valueChanged)
     }
 
+    @objc private func toggleSelected() {
+        [sv,sv2,sv1].forEach {
+            $0.percentSet.removeAll()
+            $0.percentSetVal.removeAll()
+        }
+        [stock1,stock2,stock3].forEach { $0.text = "" }
+        UserInfo.dashboardMode = UserInfo.isStockMode ? .crypto : .stocks
+        configureAndAddAlertCollection()
+        refreshAlertsAndCompareGraph()
+    }
 }
 
 
@@ -1001,6 +1018,9 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print("collectionviewnumberofitems")
+        print("userinfo: \(UserInfo.dashboardMode)")
+        print("current: \(UserInfo.currentAlerts)")
         let amount = UserInfo.currentAlerts.count
         collectionView.contentSize.height = CGFloat(amount) * 60 * commonScalar
         return amount
@@ -1008,11 +1028,16 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
-       
-        if let alert = UserInfo.currentAlerts[UserInfo.currentAlertsInOrder[indexPath.row]] {
-            cell.set(alertName: alert.name, tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)
+        if UserInfo.currentAlertsInOrder.count > indexPath.row {
+            if let alert = UserInfo.currentAlerts[UserInfo.currentAlertsInOrder[indexPath.row]] {
+                cell.set(alertName: alert.name, tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)
+            } else {
+                print("error in collection view")
+            }
         } else {
-            print("error in collection view")
+            print("ERROR: UserInfo.currentAlertsInOrder.count > indexPath.row")
+            print(indexPath.row)
+            print(UserInfo.currentAlertsInOrder)
         }
         return cell
     }
@@ -1062,4 +1087,8 @@ internal func rearrange<T>(array: Array<T>, at: Int, to: Int) -> Array<T> {
     arr.insert(element, at: to)
     
     return arr
+}
+
+internal func varyForDevice<T>(normal: T, iphoneX: T) -> T {
+    return UIScreen.main.bounds.height == 812 ? iphoneX : normal
 }

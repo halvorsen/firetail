@@ -79,12 +79,12 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     }
     
     private func transitionAndFetch() {
-        print("newalertticker: \(newAlertTicker)")
         if SupportedTicker.isCryptoTickerSupported(ticker: newAlertTicker) {
             print("THIS IS CRYPTO")
             return
         }
         UserInfo.dashboardMode = .stocks
+        DashboardViewController.shared.refreshAlertsAndCompareGraph()
         let viewController = AddStockPriceViewController()
         viewController.newAlertTicker = newAlertTicker
         viewController.modalTransitionStyle = .crossDissolve

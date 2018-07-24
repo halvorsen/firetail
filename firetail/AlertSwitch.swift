@@ -15,7 +15,9 @@ final class AlertSwitch: UIControl {
     public var offTintColor = UIColor.black
     public var onTintColor = UIColor.black
     public var thumbTintColor = CustomColor.black63
-    public var isStock = true
+    public var isStock: Bool {
+        return UserInfo.isStockMode
+    }
     public var animationDuration: Double = 0.5
     
     public var thumbSize = CGSize.zero
@@ -43,7 +45,6 @@ final class AlertSwitch: UIControl {
         self.addSubview(self.thumbView)
         backgroundColor = .black
         onTintColor = .black
-        
         stocks.text = "STOCKS"
         crypto.text = "CRYPTO"
         stocks.font = UIFont(name: "HelveticaNeue-Bold", size: 14)
@@ -71,9 +72,7 @@ final class AlertSwitch: UIControl {
             stocks.textColor = isStock ? CustomColor.white128 : CustomColor.black63
         crypto.textColor = !isStock ? CustomColor.white128 : CustomColor.black63
         layoutIfNeeded()
-        if UserInfo.isCryptoMode {
-            animate()
-        }
+        
     }
     
     override init(frame: CGRect = CGRect.zero) {
@@ -83,18 +82,28 @@ final class AlertSwitch: UIControl {
     }
     private var leftAnchorConstraint = NSLayoutConstraint()
     private func animate() {
-        self.isStock = !self.isStock
         self.isAnimating = true
         UIView.animate(withDuration: self.animationDuration, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1.0, options: [], animations: {
-            self.leftAnchorConstraint.constant = self.isStock ? self.isStockConstant : self.isCryptoConstant
-            self.stocks.textColor = self.isStock ? CustomColor.white128 : CustomColor.black63
-            self.crypto.textColor = !self.isStock ? CustomColor.white128 : CustomColor.black63
+            print("isStock: \(self.isStock)")
+            self.leftAnchorConstraint.constant = self.isStock ? self.isCryptoConstant : self.isStockConstant
+            self.stocks.textColor = !self.isStock ? CustomColor.white128 : CustomColor.black63
+            self.crypto.textColor = self.isStock ? CustomColor.white128 : CustomColor.black63
             self.layoutIfNeeded()
         }, completion: { _ in
-            
+            self.isAnimating = false
             self.sendActions(for: UIControlEvents.valueChanged)
         })
         
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if !isAnimating {
+            self.leftAnchorConstraint.constant = self.isStock ? self.isStockConstant : self.isCryptoConstant
+            self.stocks.textColor = self.isStock ? CustomColor.white128 : CustomColor.black63
+            self.crypto.textColor = !self.isStock ? CustomColor.white128 : CustomColor.black63
+           
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -102,9 +111,11 @@ final class AlertSwitch: UIControl {
     }
     
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+    print("beginTracking")
         super.beginTracking(touch, with: event)
         self.animate()
         return true
+        
     }
 }
 

@@ -184,7 +184,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
                 UserInfo.alerts.removeAll()
                 UserInfo.tickerArray.removeAll()
                 DashboardViewController.shared.collectionView?.reloadData()
-                self.addStockTicker()
+                self.present(DashboardViewController.shared, animated: true)
                 
             }
         })
@@ -193,28 +193,6 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
         activityView.center = self.view.center
         activityView.startAnimating()
         self.view.addSubview(activityView)
-    }
-    
-    private func addStockTicker() {
-        let viewController = AddStockTickerViewController()
-        viewController.newAlertTicker = "TICKER"
-        self.present(viewController, animated: true)
-    }
-    
-    var isFirstTimeSeguing = true
-    private func cont() {
-        if ti == [""] {
-            if isFirstTimeSeguing {
-                isFirstTimeSeguing = false
-                addStockTicker()
-            }
-        } else {
-
-            if isFirstTimeSeguing {
-                isFirstTimeSeguing = false
-                present(DashboardViewController.shared, animated: true)
-            }
-        }
     }
     
     @objc private func createAccountFunc(_ sender: UIButton) {

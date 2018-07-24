@@ -22,13 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        let stockAlerts = Alerts.shared // ititialize shared alert class the retrieves alerts from file storage
+        let _ = Alerts.shared // ititialize shared alert class the retrieves alerts from file storage
         
         Fabric.with([Crashlytics.self])
         
         FirebaseApp.configure()
         
-       
         InstanceID.instanceID().instanceID { (_result, error) in
             if let result = _result {
                 UserInfo.token = result.token
