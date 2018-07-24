@@ -331,8 +331,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var startingLocationX = CGFloat()
     var endingLocationX = CGFloat()
     
-    internal func refreshAlertsAndCompareGraph() {
-        print("refreshalertsandcomparegraph")
+    internal func refreshCompareGraph() {
+        removeStockText()
         self.compareGraphReset()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
             self.whoseOnFirst(self.container)
@@ -610,21 +610,17 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             guard let weakself = self else {return}
             weakself.mask.frame.origin.x += 2.5*11*weakself.screenWidth/5; weakself.monthIndicator.alpha = 1.0; weakself.stock3.alpha = 1.0; weakself.stock2.alpha = 1.0; weakself.stock1.alpha = 1.0}
         
-        runSearch()
-        
         myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(DashboardViewController.updateDot), userInfo: nil, repeats: true)
         
         reachabilityAddNotification()
         collectionView?.reloadData()
+        refreshCompareGraph()
     }
     
     @objc func updateDot() {
         container2.setContentOffset(container.contentOffset, animated: false)
     }
-    @objc func runSearch() {
-        
-    }
-    
+
     @objc private func alertsFunc(_ sender: UIButton) {
         if UserInfo.vultureSubscriber {
         menuFunc()
@@ -654,7 +650,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         UserInfo.weeklyAlerts = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
         UserInfo.userAlerts.removeAll()
         UserInfo.alerts.removeAll()
-        DashboardViewController.shared.collectionView?.reloadData()
+        collectionView?.reloadData()
         try? Auth.auth().signOut()
          present(LoginViewController(), animated: true)
     }
@@ -983,16 +979,20 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         toggle.centerXAnchor.constraint(equalTo: slideView.centerXAnchor).isActive = true
         toggle.addTarget(self, action: #selector(toggleSelected), for: .valueChanged)
     }
-
-    @objc private func toggleSelected() {
+    
+    private func removeStockText() {
         [sv,sv2,sv1].forEach {
             $0.percentSet.removeAll()
             $0.percentSetVal.removeAll()
         }
         [stock1,stock2,stock3].forEach { $0.text = "" }
+    }
+
+    @objc private func toggleSelected() {
+        
         UserInfo.dashboardMode = UserInfo.isStockMode ? .crypto : .stocks
         configureAndAddAlertCollection()
-        refreshAlertsAndCompareGraph()
+        refreshCompareGraph()
     }
 }
 
@@ -1018,16 +1018,22 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("collectionviewnumberofitems")
-        print("userinfo: \(UserInfo.dashboardMode)")
-        print("current: \(UserInfo.currentAlerts)")
         let amount = UserInfo.currentAlerts.count
         collectionView.contentSize.height = CGFloat(amount) * 60 * commonScalar
         return amount
     }
     
+    private func fillAlertArraysFromNoCache() {
+        UserInfo.stockAlertsOrder = UserInfo.alerts.filter { $0.key.isStockAlertKey }.sorted { $0.value.timestamp > $1.value.timestamp }.map { $0.key }
+        UserInfo.cryptoAlertsOrder = UserInfo.alerts.filter { $0.key.isCryptoAlertKey }.sorted { $0.value.timestamp > $1.value.timestamp }.map { $0.key }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: alertCollectionCellID, for: indexPath) as! AlertCollectionViewCell
+        if UserInfo.currentAlerts.count != UserInfo.currentAlertsInOrder.count {
+            fillAlertArraysFromNoCache()
+            reboot()
+        }
         if UserInfo.currentAlertsInOrder.count > indexPath.row {
             if let alert = UserInfo.currentAlerts[UserInfo.currentAlertsInOrder[indexPath.row]] {
                 cell.set(alertName: alert.name, tickerText: alert.ticker, alertListText: AlertCollectionView.AlertStringList(urgent: alert.urgent, email: alert.email, sms: alert.sms, push: alert.push, flash: alert.flash), priceText: alert.price, isTriggered: alert.triggered, isGreaterThan: alert.isGreaterThan, cellIndex: indexPath.row, delegate: self)

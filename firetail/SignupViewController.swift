@@ -41,7 +41,7 @@ class SignupViewController: ViewSetup, UITextFieldDelegate {
         username.alpha = 0.1
         view.addSubview(username)
         addButton(name: continueB, x: 0, y: 1194, width: 750, height: 140, title: "CONTINUE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: CustomColor.black24, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SignupViewController.continueFunc(_:)), addSubview: true, alignment: .center)
-        let arrowView = UIImageView(frame: CGRect(x: screenWidth - 70*screenHeight/667, y: 597*screenHeight/667, width: 70*screenHeight/667, height: 70*screenHeight/667))
+        let arrowView = UIImageView(frame: CGRect(x: screenWidth - 70*screenHeight/667, y: varyForDevice(normal: 597*screenHeight/667, iphoneX: 590*screenHeight/667), width: 70*screenHeight/667, height: 70*screenHeight/667))
         arrowView.image = #imageLiteral(resourceName: "forwardarrow")
         view.addSubview(arrowView)
         addLabel(name: createAccount, text: "CREATE ACCOUNT", textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 80, y: 624, width: 360, height: 30, lines: 1)

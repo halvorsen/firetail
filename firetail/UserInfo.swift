@@ -110,15 +110,15 @@ public struct UserInfo {
     internal static var alertsWithOrder = [String:alertTupleAndOrder]() {
         didSet {
             UserInfo.tickerArray = alertsWithOrder.map { ($0.value.ticker, $0.value.order) }.sorted { $0.1 < $1.1 }.map { $0.0 }
-            DashboardViewController.shared.refreshAlertsAndCompareGraph()
+            DashboardViewController.shared.refreshCompareGraph()
             Alerts.shared.saveCurrentAlerts()
             
         }
     }
     
-    static var dashboardMode: Mode = .crypto {
+    static var dashboardMode: Mode = .stocks {
         didSet {
-            print("dashboardmodedidset: \(dashboardMode)")
+            UserDefaults.standard.set(isCryptoMode ? true : false, forKey: "isCryptoDashboard")
         }
     }
     

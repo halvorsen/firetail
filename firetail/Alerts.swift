@@ -42,10 +42,10 @@ final class Alerts {
                 }
         
                 UserInfo.alerts = alertTemp
-                DashboardViewController.shared.collectionView?.reloadData()
+                
                 UserInfo.stockAlertsOrder = alertOrderTemp.filter { $0.0.isStockAlertKey }.sorted { $0.1 < $1.1 }.map { $0.0 }
                 UserInfo.cryptoAlertsOrder = alertOrderTemp.filter { $0.0.isCryptoAlertKey }.sorted { $0.1 < $1.1 }.map { $0.0 }
-                
+                DashboardViewController.shared.collectionView?.reloadData()
             }
         }
     }

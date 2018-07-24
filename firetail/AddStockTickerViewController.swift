@@ -84,7 +84,7 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
             return
         }
         UserInfo.dashboardMode = .stocks
-        DashboardViewController.shared.refreshAlertsAndCompareGraph()
+        DashboardViewController.shared.refreshCompareGraph()
         let viewController = AddStockPriceViewController()
         viewController.newAlertTicker = newAlertTicker
         viewController.modalTransitionStyle = .crossDissolve

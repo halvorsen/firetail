@@ -104,10 +104,8 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             logo.image = #imageLiteral(resourceName: "logo93x119")
             view.addSubview(logo)
             
-//            addButton(name: login, x: 0, y: 400, width: 254, height: 76, title: "LOGIN", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.loginFunc(_:)), addSubview: true, alignment: .center)
-            
             addButton(name: continueB, x: 0, y: 740, width: 750, height: 140, title: "CONTINUE", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.continueFunc(_:)), addSubview: true, alignment: .center)
-//            resetPassword.frame = CGRect(x: 0, y: 200*screenHeight/667, width: 375*screenWidth/375, height: 140*screenHeight/667)
+
             resetPassword.frame.origin = CGPoint(x: 35*screenWidth/375, y: 200*screenHeight/667)
             resetPassword.frame.size = resetPassword.intrinsicContentSize
             resetPassword.setTitleColor(CustomColor.white, for: .normal)
@@ -115,7 +113,7 @@ class LoginViewController: ViewSetup, UITextFieldDelegate {
             view.addSubview(resetPassword)
             
             addButton(name: createAccount, x: 0, y: 1146, width: 750, height: 188, title: "         CREATE ACCOUNT", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: CustomColor.black30, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.createAccountFunc(_:)), addSubview: true)
-            let arrowView = UIImageView(frame: CGRect(x: screenWidth - 70*screenHeight/667, y: 370*screenHeight/667, width: 70*screenHeight/667, height: 70*screenHeight/667))
+            let arrowView = UIImageView(frame: CGRect(x: screenWidth - 70*screenHeight/667, y: varyForDevice(normal: 370*screenHeight/667, iphoneX: 363*screenHeight/667), width: 70*screenHeight/667, height: 70*screenHeight/667))
             arrowView.image = #imageLiteral(resourceName: "forwardarrow")
             view.addSubview(arrowView)
             for i in 0...1 {
