@@ -31,6 +31,7 @@
 		06478E751EE610BC0016DF88 /* AddStockAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */; };
 		064C8A072103AD2100FF5D1E /* AlertSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064C8A062103AD2100FF5D1E /* AlertSwitch.swift */; };
 		064C8A092104354000FF5D1E /* PremiumInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064C8A082104354000FF5D1E /* PremiumInformationViewController.swift */; };
+		064C8A0B21075EBC00FF5D1E /* Binance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064C8A0A21075EBC00FF5D1E /* Binance.swift */; };
 		0672601B1E67BD5B00F54500 /* StockGraphView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0672601A1E67BD5B00F54500 /* StockGraphView2.swift */; };
 		06813A721F616BEE00A420EF /* Alpha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06813A711F616BEE00A420EF /* Alpha.swift */; };
 		0681F42D1FDC3F8400082DCC /* CompareScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0681F42C1FDC3F8400082DCC /* CompareScroll.swift */; };
@@ -85,6 +86,7 @@
 		06478E741EE610BC0016DF88 /* AddStockAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockAlertViewController.swift; sourceTree = "<group>"; };
 		064C8A062103AD2100FF5D1E /* AlertSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSwitch.swift; sourceTree = "<group>"; };
 		064C8A082104354000FF5D1E /* PremiumInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumInformationViewController.swift; sourceTree = "<group>"; };
+		064C8A0A21075EBC00FF5D1E /* Binance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binance.swift; sourceTree = "<group>"; };
 		0672601A1E67BD5B00F54500 /* StockGraphView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockGraphView2.swift; sourceTree = "<group>"; };
 		06813A711F616BEE00A420EF /* Alpha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alpha.swift; sourceTree = "<group>"; };
 		0681F42C1FDC3F8400082DCC /* CompareScroll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareScroll.swift; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 			children = (
 				06813A711F616BEE00A420EF /* Alpha.swift */,
 				063A02581F7326D700E530D5 /* CacheManager.swift */,
+				064C8A0A21075EBC00FF5D1E /* Binance.swift */,
 			);
 			name = FetchClasses;
 			sourceTree = "<group>";
@@ -478,6 +481,7 @@
 				06110EA91EB925BF00C901C5 /* ChangePasswordViewController.swift in Sources */,
 				062BD2DC20E5C7A7002C5E3C /* AlertCollectionViewCell.swift in Sources */,
 				064C8A092104354000FF5D1E /* PremiumInformationViewController.swift in Sources */,
+				064C8A0B21075EBC00FF5D1E /* Binance.swift in Sources */,
 				06DDBE261F795A5B00C36CB6 /* CustomColor.swift in Sources */,
 				064C8A072103AD2100FF5D1E /* AlertSwitch.swift in Sources */,
 				0609E4A81E632DF4005965C5 /* DashboardViewController.swift in Sources */,
