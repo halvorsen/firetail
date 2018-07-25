@@ -21,7 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
+        Binance.getOneYearHistoricalData(symbol: "ETHUSDT") { (_) in
+            
+        }
         let _ = Alerts.shared // ititialize shared alert class the retrieves alerts from file storage
         UserInfo.dashboardMode = UserDefaults.standard.bool(forKey: "isCryptoDashboard") ? .crypto : .stocks
         Fabric.with([Crashlytics.self])

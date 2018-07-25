@@ -19,13 +19,6 @@ final class Binance {
     static func getOneYearHistoricalData(symbol: String, result: @escaping (_ stockData: DataSet?) -> Void) {
         let interval = "1d"
         let limit = "365"
-        
-        var _prices = [Double]()
-        var _dates = [(String,Int)]()
-        var rawDates = [String]()
-        let monthStrings =
-            ["zero","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-        
         var componentURL = URLComponents(string: "https://api.binance.com/api/v1/klines")!
         
         /*
@@ -43,24 +36,60 @@ final class Binance {
         ]
         
         let request = URLRequest(url: componentURL.url!)
-        
+        /*
+ [
+ [
+ 1499040000000,      // Open time
+ "0.01634790",       // Open
+ "0.80000000",       // High
+ "0.01575800",       // Low
+ "0.01577100",       // Close
+ "148976.11427815",  // Volume
+ 1499644799999,      // Close time
+ "2434.19055334",    // Quote asset volume
+ 308,                // Number of trades
+ "1756.87402397",    // Taker buy base asset volume
+ "28.46694368",      // Taker buy quote asset volume
+ "17928899.62484339" // Ignore.
+ ]
+ ]
+ */
         let task = URLSession.shared.dataTask(with: request, completionHandler: {
             (data, response, error) in
-            
+           
             if error != nil {
-                print("fetch returned error")
-                print(error!.localizedDescription)
-                
+               
                 result(nil)
             }
             else {
-                var json = [String: [String:Any]]()
+          
                 do {
-                    if let _json = try JSONSerialization.jsonObject(with: data!) as? [String: [String:Any]] {
-                        json = _json
-                    } else {
-                        result(nil)
+                    if let json = try JSONSerialization.jsonObject(with: data!) as? [[Any]] {
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateStyle = DateFormatter.Style.medium
+                        let dateFormatter2 = DateFormatter()
+                        dateFormatter2.dateStyle = DateFormatter.Style.short
+                        let oneYearPriceArray = json.map { Double($0[4] as! String)! }
+                        
+                        let month: [String] = json.map { entry in
+                           let timestampMS = entry[6] as! Double
+                        let date = Date(timeIntervalSince1970: timestampMS/1000)
+                            let localDate = dateFormatter.string(from: date)
+                            let mon = localDate[0...2]
+                            return mon
+                        }
+                        
+                        let calendar = Calendar.current
+                        
+                        let day: [Int] = json.map { entry in
+                            let timestampMS = entry[6] as! Double
+                            let date = Date(timeIntervalSince1970: timestampMS/1000)
+                           let day = calendar.component(.day, from: date)
+                            return day
+                        }
+                       result( DataSet(ticker: symbol, price: oneYearPriceArray, month: month, day: day) )
                     }
+                   
                 }
                 catch {
                     print("error in JSONSerialization")
