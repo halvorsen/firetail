@@ -11,7 +11,7 @@ import Firebase
 import FirebaseAuth
 import ReachabilitySwift
 
-class SignupViewController: ViewSetup, UITextFieldDelegate {
+final class SignupViewController: ViewSetup, UITextFieldDelegate {
 
     var login = UIButton()
     var username = UILabel()

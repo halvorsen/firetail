@@ -13,7 +13,7 @@ import FirebaseAuth
 import FirebaseCore
 
 let updatedDataKey = "com.rightBrothers.updatedData"
-class AppLoadingData {
+final class AppLoadingData {
     
     var fetchedTickers = [String]()
     let alphaAPI = Alpha()
@@ -25,146 +25,52 @@ class AppLoadingData {
         for i in 0..<UserInfo.tickerArray.count {
             for dataSet in dataSets {
                 if dataSet.ticker == UserInfo.tickerArray[i] {
-                    
+                    if Binance.isCryptoTickerSupported(ticker: dataSet.ticker) {
+                        UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(1000))
+                        UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(365))
+                    }
                     UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
                     UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
                 }
-                
-            }
-        }
-    }
-    
-    private func fetchAllButFirst3Stocks() {
-        var count = 0
-        if UserInfo.tickerArray.count > 3 {
-            count = UserInfo.tickerArray.count
-        }
-        guard count > 3 else {return}
-        var savedCount = 3
-        for i in 3..<count {
-            if !fetchedTickers.contains(UserInfo.tickerArray[i]) {
-                
-                fetchedTickers.append(UserInfo.tickerArray[i])
-                alphaAPI.get20YearHistoricalData(ticker: UserInfo.tickerArray[i], isOneYear: false) { dataSet in
-                    
-                    if dataSet == nil {
-                        self.alphaAPI.get20YearHistoricalData(ticker: UserInfo.tickerArray[i], isOneYear: false) { dataSet in
-                            savedCount += 1
-                            if let dataSet = dataSet {
-                                UserInfo.cachedInThisSession.append(dataSet.ticker)
-                                UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                                UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                            }
-                            if savedCount >= count {
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                            }
-                        }
-                    } else {
-                        savedCount += 1
-                        if let dataSet = dataSet {
-                            UserInfo.cachedInThisSession.append(dataSet.ticker)
-                            UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                            UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                        }
-                        if savedCount >= count {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                        }
-                    }
-                }
-            } else {
-                savedCount += 1
             }
         }
     }
     
     func fetchAllStocks() {
-        var savedCount = 3
+        var savedCount = 0
         guard UserInfo.tickerArray.count > 0 else {return}
+        Binance.dataSetBTC = nil
         for i in 0..<UserInfo.tickerArray.count {
-            
-            if !fetchedTickers.contains(UserInfo.tickerArray[i]) {
-                fetchedTickers.append(UserInfo.tickerArray[i])
-                alphaAPI.get20YearHistoricalData(ticker: UserInfo.tickerArray[i], isOneYear: false) { dataSet in
-                    
-                    if dataSet == nil {
-                        self.alphaAPI.get20YearHistoricalData(ticker: UserInfo.tickerArray[i], isOneYear: false) { dataSet in
-                            savedCount += 1
-                            if let dataSet = dataSet {
-                                UserInfo.cachedInThisSession.append(dataSet.ticker)
-                                UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                                UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                            }
-                            if savedCount >= UserInfo.tickerArray.count {
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                            }
-                        }
-                    } else {
-                        savedCount += 1
-                        if let dataSet = dataSet {
-                            UserInfo.cachedInThisSession.append(dataSet.ticker)
-                            UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                            UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                        }
-                        if savedCount >= UserInfo.tickerArray.count {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                        }
+            let symbol = UserInfo.tickerArray[i]
+            if Binance.isCryptoTickerSupported(ticker: symbol) {
+                Binance.fetchBinanceDollarPrice(forTicker: symbol) { (dataSet) in
+                    if let dataSet = dataSet {
+                        UserInfo.cachedInThisSession.append(symbol)
+                        UserInfo.tenYearDictionary[symbol] = Array(dataSet.price.suffix(1000))
+                        UserInfo.oneYearDictionary[symbol] = Array(dataSet.price.suffix(365))
+                    }
+                    savedCount += 1
+                    if savedCount >= UserInfo.tickerArray.count {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
+                        
                     }
                 }
             } else {
-                savedCount += 1
-            }
-        }
-    }
-    
-    private func fetch(callback: @escaping () -> Void) {
-        var count = 3
-        if UserInfo.tickerArray.count < 3 {
-            guard UserInfo.tickerArray.count > 0 else {return}
-            count = UserInfo.tickerArray.count
-        }
-        var savedCount = 0
-        for i in 0..<count {
-            guard i < UserInfo.tickerArray.count else {return}
-            alphaAPI.get20YearHistoricalData(ticker: UserInfo.tickerArray[i], isOneYear: false) { dataSet in
-                if dataSet == nil {
-                    self.alphaAPI.get20YearHistoricalData(ticker: UserInfo.tickerArray[i], isOneYear: false) { dataSet in
-                        if let dataSet = dataSet {
-                            UserInfo.cachedInThisSession.append(dataSet.ticker)
-                            UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                            UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                            savedCount += 1
-                            if savedCount == count {
-                                DispatchQueue.global(qos: .background).async {
-                                    self.fetchAllButFirst3Stocks()
-                                }
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                                
-                                callback()
-                            }
-                        }
-                    }
-                } else {
+                
+                alphaAPI.get20YearHistoricalData(ticker: symbol, isOneYear: false) { dataSet in
                     if let dataSet = dataSet {
-                        UserInfo.cachedInThisSession.append(dataSet.ticker)
-                        UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                        UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                        savedCount += 1
-                        if savedCount == count {
-                            DispatchQueue.global(qos: .background).async {
-                                self.fetchAllButFirst3Stocks()
-                            }
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                            
-                            callback()
-                        }
+                        UserInfo.cachedInThisSession.append(symbol)
+                        UserInfo.tenYearDictionary[symbol] = Array(dataSet.price.suffix(2520))
+                        UserInfo.oneYearDictionary[symbol] = Array(dataSet.price.suffix(252))
+                    }
+                    savedCount += 1
+                    if savedCount >= UserInfo.tickerArray.count {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
                     }
                 }
             }
         }
     }
-    
-    //loads the firebase stock info for the username - storing in UserInfo
-    //if there are no alerts it presents to add stock ticker
     
     func loadUserInfoFromFirebase(firebaseUsername: String, callback: @escaping () -> Void) {
         UserInfo.tickerArray.removeAll()
@@ -239,7 +145,7 @@ class AppLoadingData {
                                 if UserInfo.tickerArray.count != 0 {
                                     
                                     DispatchQueue.global(qos: .background).async {
-                                        self.fetch() {}
+                                        self.fetchAllStocks()
                                     }
                                     
                                 }

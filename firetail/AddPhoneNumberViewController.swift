@@ -10,7 +10,7 @@ import UIKit
 import MessageUI
 import ReachabilitySwift
 
-class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MFMailComposeViewControllerDelegate {
+final class AddPhoneNumberViewController: ViewSetup, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MFMailComposeViewControllerDelegate {
  
     var continueB = UIButton()
     var getSupport = UIButton()

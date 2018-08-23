@@ -12,7 +12,7 @@
 
 import UIKit
 
-class DailyGraphForAlertView: UIView {
+final class DailyGraphForAlertView: UIView {
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height

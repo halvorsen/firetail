@@ -16,8 +16,8 @@ struct DataSet {
     var day: [Int]
 }
 
-class CacheManager {
-    
+final class CacheManager {
+    internal static let shared = CacheManager()
     private var persistentContainer: NSPersistentContainer = {
        
         let container = NSPersistentContainer(name: "firetail")
@@ -45,7 +45,7 @@ class CacheManager {
         }
     }
 
-    func saveStockData(ticker: String, prices: [Double], days: [Int], months: [String]) {
+    func cacheData(ticker: String, prices: [Double], days: [Int], months: [String]) {
         var resultsToCheckAndDelete = [AnyObject]()
         let context = persistentContainer.viewContext
         

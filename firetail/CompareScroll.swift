@@ -12,7 +12,7 @@
 
 import UIKit
 
-class CompareScroll: UIView {
+final class CompareScroll: UIView {
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -36,15 +36,28 @@ class CompareScroll: UIView {
         self.backgroundColor = .clear
         passedColor = color
         var _set = [CGFloat]()
-                _set.append(CGFloat(_graphData.first!))
-                if _graphData.count < 252 {
-                        while _graphData.count < 252 {
-                                _graphData = [_graphData.first!] + _graphData
-                            }
-                    }
-                for i in 1...11 {
-                        _set.append(CGFloat(_graphData[Int(21*i)]))
+        _set.append(CGFloat(_graphData.first!))
+        
+        if UserInfo.dashboardMode == .stocks {
+            if _graphData.count < 252 {
+                while _graphData.count < 252 {
+                    _graphData = [_graphData.first!] + _graphData
+                }
+            }
+            for i in 1...11 {
+                _set.append(CGFloat(_graphData[Int(21*i)]))
+            }
+        } else {
+            if _graphData.count < 365 {
+                while _graphData.count < 365 {
+                    _graphData = [_graphData.first!] + _graphData
+                }
+            }
+            for i in 1...11 {
+                _set.append(CGFloat(_graphData[Int(30*i)]))
+            }
         }
+        
         _set.append(CGFloat(graphData.last!))
 
         _set = _set.map { $0 * rangeMultiplier / CGFloat(_graphData.first!) }

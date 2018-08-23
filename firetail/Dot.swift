@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Dot: UIView {
+final class Dot: UIView {
 
     
     // Only override draw() if you perform custom drawing.

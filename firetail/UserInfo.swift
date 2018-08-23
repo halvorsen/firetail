@@ -36,11 +36,11 @@ public struct UserInfo {
     }
     
     public static var cryptoTickerArray: [String] {
-        return tickerArray.filter { SupportedTicker.crypto.contains($0) }
+        return tickerArray.filter { Binance.isCryptoTickerSupported(ticker: $0) }
     }
     
     public static var stockTickerArray: [String] {
-        return tickerArray.filter { !SupportedTicker.crypto.contains($0) }
+        return tickerArray.filter { !Binance.isCryptoTickerSupported(ticker: $0) }
     }
     
     

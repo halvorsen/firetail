@@ -11,7 +11,7 @@ import ReachabilitySwift
 
 var graphMutablePaths: [String:CGMutablePath] = [:]
 
-class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
+final class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
     var enter = UIButton()
     var graphViewSeen = StockGraphView2()
@@ -94,7 +94,7 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         pickGraph(touches.first!)
     }
     
-    @objc func showGraph() {
+    func showGraph() {
         
         graphViews = ["1y":nil,"5y":nil,"10y":nil,"1d":nil,"5d":nil,"1m":nil,"3m":nil]
         
@@ -290,10 +290,9 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
             
             self.graphViews[stockData.0[i]] = graphView
             
-            if stockData.0[i] == "1d" {
                 
-                self.currentPrice.text = String(format: "%.2f", closeMax)
-            }
+                self.currentPrice.text = String(format: "%.2f", data1.closingPrice.last!)
+            
         }
         
         doneLoading()
@@ -391,161 +390,51 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
     var j = 0
     var keys = [String]()
-    func callCorrectGraph2(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
-        let alphaAPI = Alpha()
-        alphaAPI.get20YearHistoricalData(ticker: stockName.uppercased(), isOneYear: false) { dataSet in
-        
-            guard dataSet != nil else {
-                self.dismiss(animated: true)
-                // had this error to "cancelled" once now just sending back to the Dashboard if an error occures. instead of showing an alert.
-                return
-            }
-            guard let dataSet = dataSet else {return}
-            //not seeing if dataSet has content in it, v1 had a guard to check that
-            var __stockData = dataSet.price
-            if dataSet.price[dataSet.price.count - 1] == dataSet.price[dataSet.price.count - 2] {
-                __stockData.remove(at: dataSet.price.count - 1)
-            }
-            let list = ["1y","5y","10y","1d","5d","1m","3m"]
-            let amount = __stockData.count
-            var stockDatas = [StockData2]()
-            //252 days in the trading year
-            for timeSpan in list {
-                var stockData2 = StockData2()
-                switch timeSpan {
-                case "1y":
-                    if amount < 252 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount - 252)..<amount {
-                            
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    }
-                    stockDatas.append(stockData2)
-                case "5y":
-                    if amount < 252*5 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount - 252*5)..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    }
-                    stockDatas.append(stockData2)
-                case "10y":
-                    if amount < 252*10 + 20 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount - 252*10 + 20)..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    }
-                    stockDatas.append(stockData2)
-                case "1d":
-                    for i in (amount - 55)..<amount {
-                        stockData2.closingPrice.append(__stockData[i])
-                    }
-                    //                    for i in (amount - 5)..<amount {
-                    //                        stockData2.closingPrice.append(stockData[i])
-                    //                    }
-                    // stockData2.closingPrice.append(stockData[amount - 1])
-                    stockDatas.append(stockData2)
-                case "5d":
-                    if amount < 5 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount - 5)..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    }
-                    stockDatas.append(stockData2)
-                case "1m":
-                    if amount < 252/12 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount-252/12)..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    }
-                    stockDatas.append(stockData2)
-                case "3m":
-                    if amount < 252/4 {
-                        for i in 0..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    } else {
-                        for i in (amount-252/4)..<amount {
-                            stockData2.closingPrice.append(__stockData[i])
-                        }
-                    }
-                    stockDatas.append(stockData2)
-                    result((list,stockDatas))
-                default: break
-                }
-                
-                
-            }
-            
-            
-        }
-        
-    }
-    
+    var stockDaysInYear: Int {
+        return Binance.isCryptoTickerSupported(ticker: passedString) ? 365 : 252
+    } 
     func callCorrectGraph2FromCache(stockName: String, result: @escaping (_ stockData: ([String],[StockData2?])) -> Void) {
         
         guard let tenYear = UserInfo.tenYearDictionary[stockName] else {dismiss(animated: true);return}
         var __stockData = tenYear
-        
-        if tenYear[tenYear.count - 1] == tenYear[tenYear.count - 2] {
-            __stockData.remove(at: tenYear.count - 1)
-        }
+       
         let list = ["1y","5y","10y","1d","5d","1m","3m"]
         let amount = __stockData.count
         var stockDatas = [StockData2]()
-        //252 days in the trading year
+        //stockDaysInYear days in the trading year
         for timeSpan in list {
             var stockData2 = StockData2()
             switch timeSpan {
             case "1y":
-                if amount < 252 {
+                if amount < stockDaysInYear {
                     for i in 0..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
                 } else {
-                    for i in (amount - 252)..<amount {
+                    for i in (amount - stockDaysInYear)..<amount {
                         
                         stockData2.closingPrice.append(__stockData[i])
                     }
                 }
                 stockDatas.append(stockData2)
             case "5y":
-                if amount < 252*5 {
+                if amount < stockDaysInYear*5 {
                     for i in 0..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
                 } else {
-                    for i in (amount - 252*5)..<amount {
+                    for i in (amount - stockDaysInYear*5)..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
                 }
                 stockDatas.append(stockData2)
             case "10y":
-                if amount < 252*10 + 20 {
+                if amount < stockDaysInYear*10 + 20 {
                     for i in 0..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
                 } else {
-                    for i in (amount - 252*10 + 20)..<amount {
+                    for i in (amount - stockDaysInYear*10 + 20)..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
                 }
@@ -571,23 +460,23 @@ class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
                 }
                 stockDatas.append(stockData2)
             case "1m":
-                if amount < 252/12 {
+                if amount < stockDaysInYear/12 {
                     for i in 0..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
                 } else {
-                    for i in (amount-252/12)..<amount {
+                    for i in (amount-stockDaysInYear/12)..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
                 }
                 stockDatas.append(stockData2)
             case "3m":
-                if amount < 252/4 {
+                if amount < stockDaysInYear/4 {
                     for i in 0..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
                 } else {
-                    for i in (amount-252/4)..<amount {
+                    for i in (amount-stockDaysInYear/4)..<amount {
                         stockData2.closingPrice.append(__stockData[i])
                     }
                 }

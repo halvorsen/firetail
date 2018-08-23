@@ -122,7 +122,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         appLoading()
             once = false
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(DashboardViewController.finishedFetchingTop3Stocks), name: NSNotification.Name(rawValue: updatedDataKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(DashboardViewController.finishedFetching), name: NSNotification.Name(rawValue: updatedDataKey), object: nil)
         if UIDevice().userInterfaceIdiom == .phone {
             if UIScreen.main.nativeBounds.height == 2436 {
 //                labelTop += 30
@@ -339,7 +339,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         })
     }
     
-    @objc private func finishedFetchingTop3Stocks() {
+    @objc private func finishedFetching() {
         compareGraphReset()
     }
     
@@ -430,6 +430,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     private func populateCompareGraph() {
+        guard currentTickerArray.count > 0 else {return}
+        print("ricker: \(currentTickerArray[0])")
+        print("userinfo[o]: \(UserInfo.oneYearDictionary[currentTickerArray[0]])")
         guard currentTickerArray.count > 0,
             let ti0 = UserInfo.oneYearDictionary[currentTickerArray[0]],
             ti0.count > 0 else {return}
@@ -437,7 +440,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         case 0:
             break
         case 1:
-            
+            print("one year dictionary: \(ti0)")
             sv =  CompareScroll(graphData: ti0, stockName: currentTickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
             svDot =  CompareScrollDot(graphData: ti0, stockName: currentTickerArray[0], color: CustomColor.white68)
@@ -1012,10 +1015,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
             UserInfo.populateAlertsWithOrder()
             self.act(blockLongName: alertDeleting.name)
         }
-        
-        
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let amount = UserInfo.currentAlerts.count
@@ -1024,8 +1024,10 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     }
     
     private func fillAlertArraysFromNoCache() {
-        UserInfo.stockAlertsOrder = UserInfo.alerts.filter { $0.key.isStockAlertKey }.sorted { $0.value.timestamp > $1.value.timestamp }.map { $0.key }
-        UserInfo.cryptoAlertsOrder = UserInfo.alerts.filter { $0.key.isCryptoAlertKey }.sorted { $0.value.timestamp > $1.value.timestamp }.map { $0.key }
+        let a = UserInfo.alerts.filter { $0.key.isStockAlertKey }
+        UserInfo.stockAlertsOrder = a.sorted { $0.value.timestamp > $1.value.timestamp }.map { $0.key }
+        let b = UserInfo.alerts.filter { $0.key.isCryptoAlertKey }
+        UserInfo.cryptoAlertsOrder = b.sorted { $0.value.timestamp > $1.value.timestamp }.map { $0.key }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

@@ -12,7 +12,7 @@ import FirebaseAuth
 import FirebaseCore
 
 
-class LoginViewController: ViewSetup, UITextFieldDelegate {
+final class LoginViewController: ViewSetup, UITextFieldDelegate {
 
     var login = UIButton()
     var continueB = UIButton()

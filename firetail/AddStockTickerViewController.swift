@@ -9,7 +9,7 @@
 import UIKit
 import ReachabilitySwift
 
-class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
+final class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     
     let backArrow = UIButton()
     let quickPick = UILabel()
@@ -79,11 +79,11 @@ class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     }
     
     private func transitionAndFetch() {
-        if SupportedTicker.isCryptoTickerSupported(ticker: newAlertTicker) {
-            print("THIS IS CRYPTO")
-            return
-        }
+        if Binance.isCryptoTickerSupported(ticker: newAlertTicker) {
+            UserInfo.dashboardMode = .crypto
+        } else {
         UserInfo.dashboardMode = .stocks
+        }
         DashboardViewController.shared.refreshCompareGraph()
         let viewController = AddStockPriceViewController()
         viewController.newAlertTicker = newAlertTicker

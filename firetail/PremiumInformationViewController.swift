@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PremiumInformationViewController: UIViewController {
+final class PremiumInformationViewController: UIViewController {
     
     let star = UIImageView(image: #imageLiteral(resourceName: "yellowStar"))
     let stack = UIStackView()

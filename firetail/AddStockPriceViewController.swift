@@ -13,7 +13,7 @@ enum DialUnit {
     case dollar, etcVsEth, euro
 }
 
-class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
+final class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     var newAlertTicker = String()
     var newAlertTickerLabel = UILabel()
     var newAlertPrice = Double()
@@ -245,23 +245,53 @@ class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         }
     }
     
+    private func displayAlertCrypto() {
+        let alert = UIAlertController(title: "", message: "Price fetch failed", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { _ in
+            self.dismiss(animated: true)
+        })
+        present(alert, animated: true) {
+            self.activityView.stopAnimating()
+            self.activityView.removeFromSuperview()
+        }
+    }
+    
     // here i'm giving it two chances to fetch the data otherwise it returns to addstockticker controller view with no error displayed to user
     private func prepareGraph(result: @escaping (_ dateArray: [(String,Int)]?,_ closings: [Double]?) -> Void) {
-        
-        Alpha().get20YearHistoricalData(ticker: newAlertTicker, isOneYear: false) { [weak self] (dataSet) in
-            guard let dataSet = dataSet else {
-                self?.displayAlert()
-                return
+        if UserInfo.dashboardMode == .crypto {
+            Binance.dataSetBTC = nil
+            Binance.fetchBinanceDollarPrice(forTicker: newAlertTicker) { (dataSet) in
+                guard let dataSet = dataSet else {
+                    self.displayAlertCrypto()
+                    return
+                }
+                UserInfo.cachedInThisSession.append(self.newAlertTicker)
+       
+                UserInfo.tenYearDictionary[self.newAlertTicker] = Array(dataSet.price.suffix(1000))
+                UserInfo.oneYearDictionary[self.newAlertTicker] = Array(dataSet.price.suffix(365))
+     
+                var dates = [(String,Int)]()
+                for i in 0..<dataSet.day.count {
+                    dates.append((dataSet.month[i],dataSet.day[i]))
+                }
+                result(dates,dataSet.price)
             }
-            UserInfo.cachedInThisSession.append(dataSet.ticker)
-            UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-            UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-            var dates = [(String,Int)]()
-            for i in 0..<dataSet.day.count {
-                dates.append((dataSet.month[i],dataSet.day[i]))
+        } else {
+            Alpha().get20YearHistoricalData(ticker: newAlertTicker, isOneYear: false) { [weak self] (dataSet) in
+                guard let dataSet = dataSet else {
+                    self?.displayAlert()
+                    return
+                }
+                UserInfo.cachedInThisSession.append(dataSet.ticker)
+                UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
+                UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
+                var dates = [(String,Int)]()
+                for i in 0..<dataSet.day.count {
+                    dates.append((dataSet.month[i],dataSet.day[i]))
+                }
+                result(dates,dataSet.price)
+                
             }
-            result(dates,dataSet.price)
-    
         }
     }
     

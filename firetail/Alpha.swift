@@ -10,8 +10,8 @@
 
 import Foundation
 
-class Alpha {
-    let cacheManager = CacheManager()
+final class Alpha {
+   
     func get20YearHistoricalData(ticker: String, isOneYear: Bool = true, result: @escaping (_ stockData: DataSet?) -> Void) {
         var _prices = [Double]()
         var _dates = [(String,Int)]()
@@ -98,7 +98,7 @@ class Alpha {
                             cachedays.append(cachedates[i].1)
                             cachemonths.append(cachedates[i].0)
                         }
-                        self.cacheManager.saveStockData(ticker: ticker, prices: cacheprices, days: cachedays, months: cachemonths)
+                        CacheManager.shared.cacheData(ticker: ticker, prices: cacheprices, days: cachedays, months: cachemonths)
                        //end caching
 
                         if isOneYear {

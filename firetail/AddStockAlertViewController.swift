@@ -14,7 +14,7 @@ import FirebaseMessaging
 import FirebaseAuth
 import ReachabilitySwift
 
-class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIApplicationDelegate {
+final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, UIApplicationDelegate {
     /// This method will be called whenever FCM receives a new, default FCM token for your
     /// Firebase project's Sender ID.
     /// You can send this token to your application server to send notifications to this device.
@@ -65,9 +65,6 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
             
         } else if newAlertPrice < 5.00 {
             newAlertPriceLabel.text = "$" + String(format: "%.2f", newAlertPrice)
-            
-        } else if newAlertPrice > 2000.0 {
-            newAlertPriceLabel.text = "$2000"
             
         } else {
             newAlertPriceLabel.text = "$" + String(format: "%.1f", newAlertPrice) + "0"
@@ -169,7 +166,7 @@ class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserNotific
         let finalAlertPrice = newAlertPrice
         
         let timestamp = String(Int(Date().timeIntervalSince1970 * 10000))
-        newAlertLongID =  timestamp + newAlertTicker.uppercased()
+        newAlertLongID = UserInfo.dashboardMode == .stocks ? timestamp + newAlertTicker.uppercased() : "crypto" + timestamp + newAlertTicker.uppercased()
         UserInfo.currentAlertsInOrder = [newAlertLongID] + UserInfo.currentAlertsInOrder
         UserInfo.userAlerts[alertID[UserInfo.userAlerts.count]] = newAlertLongID
       

@@ -12,7 +12,7 @@ import FirebaseCore
 import Firebase
 import FirebaseDatabase
 
-class LoadSaveCoreData {
+final class LoadSaveCoreData {
     
     var alertID: [String] {
         var aaa = [String]()

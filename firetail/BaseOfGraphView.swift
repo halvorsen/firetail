@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BaseOfGraphView: UIView {
+final class BaseOfGraphView: UIView {
    
     let bez = UIBezierPath()
     var path = UIBezierPath()

@@ -11,7 +11,7 @@ import Firebase
 import FirebaseAuth
 import ReachabilitySwift
 
-class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
+final class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
 
     var continueB = UIButton()
     var getSupport = UIButton()

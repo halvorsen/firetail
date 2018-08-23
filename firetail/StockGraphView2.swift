@@ -14,7 +14,7 @@ public struct Label {
     public static var percentageValuesIsPositive = [Bool]()
 }
 
-class StockGraphView2: UIView {
+final class StockGraphView2: UIView {
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
