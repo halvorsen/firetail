@@ -287,7 +287,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         slideView.addSubview(add)
         menu.setImage(#imageLiteral(resourceName: "menu"), for: .normal)
         add.setImage(#imageLiteral(resourceName: "plus"), for: .normal)
-        addLabel(name: stockAlerts, text: "Stock Alerts", textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 60, y: 914, width: 300, height: 40, lines: 1)
+        addLabel(name: stockAlerts, text: "Alerts", textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 15, x: 60, y: 914, width: 300, height: 40, lines: 1)
         slideView.addSubview(stockAlerts)
         let line = UILabel()
         addLabel(name: line, text: "", textColor: .clear, textAlignment: .center, fontName: "", fontSize: 1, x: 0, y: 968, width: 750, height: 2, lines: 0)
