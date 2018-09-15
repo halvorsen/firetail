@@ -50,7 +50,7 @@ final class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         view.addSubview(stockSymbol)
         stockSymbolTextField.delegate = self
         stockSymbolTextField = UITextField(frame: CGRect(x: 30*screenWidth/375,y: 368*screenHeight/667,width: 110*screenWidth/375 ,height: 28*screenHeight/667))
-        stockSymbolTextField.placeholder = "Search"
+        stockSymbolTextField.placeholder = "SEARCH"
         stockSymbolTextField.textAlignment = .left
         stockSymbolTextField.clearsOnBeginEditing = true
         stockSymbolTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
