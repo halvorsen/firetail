@@ -103,7 +103,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         UserInfo.premium = true //: toggle in development
         premiumMember = true  // ##TODO: turn off premium premiumMember = UserInfo.premium
         Alpha().populateUserInfoMonth()
-        print("load user info from firebase")
         AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {}
         
         UserInfo.flashOn = UserDefaults.standard.bool(forKey: "flashOn")
@@ -117,20 +116,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("userinfo.dashboardmodeVIEWDIDLOAD: \(UserInfo.dashboardMode)")
         if once {
         appLoading()
             once = false
         }
         NotificationCenter.default.addObserver(self, selector: #selector(DashboardViewController.finishedFetching), name: NSNotification.Name(rawValue: updatedDataKey), object: nil)
-        if UIDevice().userInterfaceIdiom == .phone {
-            if UIScreen.main.nativeBounds.height == 2436 {
-//                labelTop += 30
-//                labelBottom += 30
-//                labelMiddle += 30
-            }
-        }
-        
+       
         if UserInfo.token == "none" && UserInfo.userAlerts.count > 0 {
             InstanceID.instanceID().instanceID { (_result, error) in
                 if let result = _result {
@@ -210,16 +201,16 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         let indicator = UILabel(frame: CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667))
         indicator.backgroundColor = CustomColor.white77
         slideView.addSubview(indicator)
-        container.frame = CGRect(x: 0, y: 86*screenHeight/667, width: screenWidth, height: 259*screenHeight/667)
+        container.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         slideView.addSubview(container)
         container.delegate = self
         
-        container2.frame = CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667)
+        container2.frame = CGRect(x: 267*screenWidth/375, y: 0, width: (indicatorDotWidth - 30)*screenWidth/375, height: screenHeight)
         container2.isUserInteractionEnabled = false
-        container2.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
+        container2.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: screenHeight)
         slideView.addSubview(container2)
         
-        container.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: 259*screenHeight/667)
+        container.contentSize = CGSize(width: 2.5*11*screenWidth/5, height: screenHeight)
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
         addLabel(name: monthIndicator, text: UserInfo.month[1], textColor: .white, textAlignment: .center, fontName: "Roboto-Medium", fontSize: 12, x: 400, y: 726, width: 276, height: 30, lines: 1)
@@ -253,6 +244,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         //slideview stuff//
         slideView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         view.addSubview(slideView)
+        slideView.clipsToBounds = false
+        container.clipsToBounds = false
+        
         slideView.backgroundColor = CustomColor.black33
         
         for i in 0...4 {

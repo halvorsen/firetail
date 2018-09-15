@@ -29,7 +29,7 @@ final class CompareScroll: UIView {
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
-    init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: 259*UIScreen.main.bounds.height/667)) {
+    init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: UIScreen.main.bounds.height)) {
         super.init(frame: frame)
         var _graphData = graphData
         stock = stockName
@@ -66,6 +66,7 @@ final class CompareScroll: UIView {
        
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
         data = __set
+        clipsToBounds = false
         setNeedsDisplay()
         
     }
@@ -82,7 +83,7 @@ final class CompareScroll: UIView {
         let n = __set.min()!
         let f = __set.first!
         let diff2 = (m-f)/(m-n)
-        ctx!.translateBy(x: 0, y: self.bounds.height/2 - diff2*diff)
+        ctx!.translateBy(x: 0, y: self.bounds.height*0.323 - diff2*diff)
         ctx!.scaleBy(x: scale, y: scale)
         
         

@@ -23,6 +23,7 @@ final class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockTickerViewController.back(_:)), addSubview: true)
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         addLabel(name: quickPick, text: "QUICK PICK", textColor: CustomColor.labelGray, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 11, x: 36, y: 180, width: 200, height: 44, lines: 1)
+        quickPick.frame.origin.y = 180 * UIScreen.main.bounds.width/750
         view.addSubview(quickPick)
         let boxButtons:[(CGFloat,CGFloat,String)] = [
             
@@ -43,6 +44,7 @@ final class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         for (x,y,ticker) in boxButtons {
             let myButton = UIButton()
             addButton(name: myButton, x: x, y: y, width: 216, height: 70, title: ticker, font: "Roboto-Bold", fontSize: 18, titleColor: .black, bgColor: .white, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockTickerViewController.quickPickFunc(_:)), addSubview: true)
+            myButton.frame.origin.y = y * UIScreen.main.bounds.width/750
             myButton.contentHorizontalAlignment = .center
         }
         

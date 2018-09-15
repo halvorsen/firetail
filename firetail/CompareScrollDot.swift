@@ -26,7 +26,7 @@ final class CompareScrollDot: UIView {
     
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
-    @objc init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13 - 267*UIScreen.main.bounds.width/375, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: 259*UIScreen.main.bounds.height/667)) {
+    @objc init(graphData: [Double], stockName: String, color: UIColor, frame: CGRect = CGRect(x: -2.5*UIScreen.main.bounds.width/13 - 267*UIScreen.main.bounds.width/375, y:0, width: 13*2.5*UIScreen.main.bounds.width/5, height: UIScreen.main.bounds.height)) {
         super.init(frame: frame)
         var _graphData = graphData
         self.backgroundColor = .clear
@@ -59,7 +59,7 @@ final class CompareScrollDot: UIView {
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
 
         data = __set
-
+        clipsToBounds = false
         setNeedsDisplay()
         
     }
@@ -76,15 +76,12 @@ final class CompareScrollDot: UIView {
         let n = __set.min()!
         let f = __set.first!
         let diff2 = (m-f)/(m-n)
-        ctx!.translateBy(x: 0, y: self.bounds.height/2 - diff2*diff)
+        ctx!.translateBy(x: 0, y: self.bounds.height*0.323 - diff2*diff)
         ctx!.scaleBy(x: scale, y: scale)
                
         UIColor.white.setStroke()
         path.lineWidth = 6/scale
         path.stroke()
-     
-        
-        
     }
     
     var data: [CGFloat] = [0, 0, 0, 0, 0, 0] //{
