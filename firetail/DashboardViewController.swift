@@ -431,8 +431,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     private func populateCompareGraph() {
         guard currentTickerArray.count > 0 else {return}
-        print("ricker: \(currentTickerArray[0])")
-        print("userinfo[o]: \(UserInfo.oneYearDictionary[currentTickerArray[0]])")
         guard currentTickerArray.count > 0,
             let ti0 = UserInfo.oneYearDictionary[currentTickerArray[0]],
             ti0.count > 0 else {return}
