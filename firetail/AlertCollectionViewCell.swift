@@ -118,7 +118,7 @@ final class AlertCollectionViewCell: UICollectionViewCell {
 
         lighteningBolt.translatesAutoresizingMaskIntoConstraints = false
         layoutContraints.append(lighteningBolt.centerXAnchor.constraint(equalTo: moveableView.leftAnchor, constant: 98*commonScalar))
-        layoutContraints.append(lighteningBolt.centerYAnchor.constraint(equalTo: moveableView.topAnchor, constant: 39*commonScalar))
+        layoutContraints.append(lighteningBolt.bottomAnchor.constraint(equalTo: ticker.bottomAnchor))
     
         line.translatesAutoresizingMaskIntoConstraints = false
         layoutContraints.append(line.bottomAnchor.constraint(equalTo: bottomAnchor))
