@@ -72,7 +72,7 @@ final class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         addLabel(name: stockSymbol, text: "symbol", textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Italic", fontSize: 15, x: 56, y: 657, width: 240, height: 80, lines: 1)
         container = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 260*screenHeight/667))
         container.contentSize = CGSize(width: 3.8*screenWidth, height: container.bounds.height)
-        container.backgroundColor = CustomColor.black33
+        container.backgroundColor = CustomColor.black47
         container.contentOffset =  CGPoint(x: 2.7*screenWidth, y: 0)
         container.clipsToBounds = false
         container.showsHorizontalScrollIndicator = false
@@ -99,18 +99,8 @@ final class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         view.addSubview(stockSymbol)
         view.addSubview(container)
         
-        let myBezier = UIBezierPath()
-        myBezier.move(to: CGPoint(x: 167*screenWidth/375, y: 489*screenHeight/667))
-        myBezier.addLine(to: CGPoint(x: 207*screenWidth/375, y: 489*screenHeight/667))
-        myBezier.addLine(to: CGPoint(x: 187*screenWidth/375, y: 509*screenHeight/667))
-        myBezier.close()
-        let myLayer = CAShapeLayer()
-        myLayer.path = myBezier.cgPath
-        myLayer.fillColor = CustomColor.black24.cgColor
-        
         addButton(name: sett, x: 0, y: 1194, width: 750, height: 140, title: "SET", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.setFunc(_:)), addSubview: true)
         sett.contentHorizontalAlignment = .center
-        view.layer.addSublayer(myLayer)
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockPriceViewController.back(_:)), addSubview: true)
         
         backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
@@ -155,35 +145,13 @@ final class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 let a:CGFloat = -0.72
                 let c:CGFloat = 1000
                 weakself.offset = (CGFloat(lastClose) - a)*weakself.screenWidth*75053.5/(375*(c-a))
-                
-                var t = CGAffineTransform.identity
-                t = t.translatedBy(x: 0, y: -100)
-                t = t.scaledBy(x: 1.0, y: 0.01)
-                
-                weakself.graph.transform = t
                 weakself.activityView.removeFromSuperview()
                 weakself.setupDialCollectionView()
                 weakself.collectionView?.contentOffset.x = weakself.cellSize.width * CGFloat(weakself.lastPrice) / CGFloat(weakself.denominationDouble)
-                UIView.animate(withDuration: 1.0) {
-                    
-                    weakself.graph.transform = CGAffineTransform.identity
-                    weakself.graph.frame.origin.y = 50*weakself.screenHeight/667
-                }
+                weakself.delay(bySeconds: 0.1, closure: {
+                    weakself.graph.grids.forEach { $0.alpha = 1.0 }
+                })
                 
-                weakself.delay(bySeconds: 0.6) {
-                    
-                    for i in 0..<weakself.graph.labels.count {
-                        weakself.delay(bySeconds: 0.15) {
-                            UIView.animate(withDuration: 0.15*Double(i)) {
-                                
-                                weakself.graph.grids[weakself.graph.labels.count - i - 1].alpha = 1.0
-                                weakself.graph.labels[weakself.graph.labels.count - i - 1].alpha = 1.0
-                                weakself.graph.dayLabels[weakself.graph.labels.count - i - 1].alpha = 1.0
-                                
-                            }
-                        }
-                    }
-                }
             }
             weakself.alertPrice = lastClose
             weakself.lastPrice = lastClose

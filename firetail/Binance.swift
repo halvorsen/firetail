@@ -56,7 +56,6 @@ final class Binance {
          */
         let task = URLSession.shared.dataTask(with: request, completionHandler: {
             (data, response, error) in
-            print(data); print(response); print(error)
             if error != nil {
                 
                 result(nil)

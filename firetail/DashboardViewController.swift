@@ -438,7 +438,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         case 0:
             break
         case 1:
-            print("one year dictionary: \(ti0)")
             sv =  CompareScroll(graphData: ti0, stockName: currentTickerArray[0], color: CustomColor.white68)
             container.addSubview(sv)
             svDot =  CompareScrollDot(graphData: ti0, stockName: currentTickerArray[0], color: CustomColor.white68)
