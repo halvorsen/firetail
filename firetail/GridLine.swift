@@ -10,10 +10,9 @@ import UIKit
 
 final class GridLine: UIView {
    
-    override init(frame: CGRect = CGRect(x: 0, y:0, width: UIScreen.main.bounds.width/750, height: 260*UIScreen.main.bounds.height/667)) {
+    override init(frame: CGRect = CGRect(x: 0, y:0, width: 0.5, height: 260*UIScreen.main.bounds.height/667)) {
         super.init(frame: frame)
         self.backgroundColor = CustomColor.whiteAlpha
-        self.alpha = 0.0
         
     }
     

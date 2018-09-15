@@ -148,9 +148,6 @@ final class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 weakself.activityView.removeFromSuperview()
                 weakself.setupDialCollectionView()
                 weakself.collectionView?.contentOffset.x = weakself.cellSize.width * CGFloat(weakself.lastPrice) / CGFloat(weakself.denominationDouble)
-                weakself.delay(bySeconds: 0.1, closure: {
-                    weakself.graph.grids.forEach { $0.alpha = 1.0 }
-                })
                 
             }
             weakself.alertPrice = lastClose

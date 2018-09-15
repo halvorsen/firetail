@@ -35,7 +35,7 @@ final class DailyGraphForAlertView: UIView {
     init() {super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))}
     
     init(graphData: [Double], dateArray: [(String,Int)], frame: CGRect = CGRect(x: 0, y:50*UIScreen.main.bounds.height/667, width: 4*UIScreen.main.bounds.width, height: 160*UIScreen.main.bounds.height/667)) {
-
+        
         super.init(frame: frame)
         self.backgroundColor = CustomColor.black47
         var _graphData = [Double]()
@@ -61,7 +61,7 @@ final class DailyGraphForAlertView: UIView {
 
         data = _graphData.map {CGFloat(($0-min)/range)}
         allStockValues = _graphData.map {String(format:"%.2f", $0)}
-
+        
         setNeedsDisplay()
 
 
@@ -172,7 +172,7 @@ final class DailyGraphForAlertView: UIView {
             
             let monthString = month[i]
             let dayString = String(day[i])
-            l.text = allStockValues[i]//String(format:"%.2f", allStockValues[i])
+            l.text = allStockValues[i]
             l.frame = CGRect(x: scale*(points[i].x)-25*screenWidth/375, y: 0.9*scale*(points[i].y + 5) - 60*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
             l.font = UIFont(name: "Roboto-Medium", size: 12*fontSizeMultiplier)
             l.textColor = .white
@@ -184,7 +184,7 @@ final class DailyGraphForAlertView: UIView {
             
             let k = UILabel()
             k.text = dayString + " " + monthString.lowercased()
-            k.frame = CGRect(x: scale*(points[i].x)-18*screenWidth/375, y: 155*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
+            k.frame = CGRect(x: scale*(points[i].x)-18*screenWidth/375, y: 170*screenHeight/667, width: 50*screenWidth/375, height: 40*screenHeight/667)
             k.font = UIFont(name: "Roboto-Regular", size: 13*fontSizeMultiplier)
             k.textColor = CustomColor.whiteAlpha30
             k.textAlignment = .center
@@ -195,7 +195,7 @@ final class DailyGraphForAlertView: UIView {
             
             
             let grid = GridLine()
-            grid.frame = CGRect(x: 4*points[i].x, y: -100*screenWidth/667, width: screenWidth/375, height: 245*screenHeight/667)
+            grid.frame = CGRect(x: 4*points[i].x, y: -100*screenWidth/667, width: 0.5, height: 265*screenHeight/667)
             grid.backgroundColor = CustomColor.whiteAlpha
             
             self.addSubview(grid)
