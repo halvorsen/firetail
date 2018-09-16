@@ -969,7 +969,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         toggle.translatesAutoresizingMaskIntoConstraints = false
         toggle.widthAnchor.constraint(equalToConstant: ToggleConstant.width).isActive = true
         toggle.heightAnchor.constraint(equalToConstant: ToggleConstant.height).isActive = true
-        toggle.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: varyForDevice(normal: 12, iphoneX: 6)).isActive = true
+        toggle.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: varyForDevice(normal: 12, longPhone: 6)).isActive = true
         toggle.centerXAnchor.constraint(equalTo: slideView.centerXAnchor).isActive = true
         toggle.addTarget(self, action: #selector(toggleSelected), for: .valueChanged)
     }
@@ -1088,6 +1088,6 @@ internal func rearrange<T>(array: Array<T>, at: Int, to: Int) -> Array<T> {
     return arr
 }
 
-internal func varyForDevice<T>(normal: T, iphoneX: T) -> T {
-    return UIScreen.main.bounds.height == 812 ? iphoneX : normal
+internal func varyForDevice<T>(normal: T, longPhone: T) -> T {
+    return isLongPhone ? longPhone : normal
 }

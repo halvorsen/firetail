@@ -93,6 +93,11 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
         view.addSubview(newAlertTickerLabel)
         
         addButton(name: addAlert, x: 0, y: 1194, width: 750, height: 140, title: "ADD ALERT", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: .black, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockAlertViewController.add(_:)), addSubview: true)
+        addAlert.translatesAutoresizingMaskIntoConstraints = false
+        addAlert.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        addAlert.heightAnchor.constraint(equalToConstant: 70*heightScalar).isActive = true
+        addAlert.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        addAlert.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         addAlert.contentHorizontalAlignment = .center
         
         addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(AddStockAlertViewController.back(_:)), addSubview: true)

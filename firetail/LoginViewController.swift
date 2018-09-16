@@ -113,7 +113,7 @@ final class LoginViewController: ViewSetup, UITextFieldDelegate {
             view.addSubview(resetPassword)
             
             addButton(name: createAccount, x: 0, y: 1146, width: 750, height: 188, title: "         CREATE ACCOUNT", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: CustomColor.black30, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.createAccountFunc(_:)), addSubview: true)
-            let arrowView = UIImageView(frame: CGRect(x: screenWidth - 70*screenHeight/667, y: varyForDevice(normal: 370*screenHeight/667, iphoneX: 363*screenHeight/667), width: 70*screenHeight/667, height: 70*screenHeight/667))
+            let arrowView = UIImageView(frame: CGRect(x: screenWidth - 70*screenHeight/667, y: varyForDevice(normal: 370*screenHeight/667, longPhone: 363*screenHeight/667), width: 70*screenHeight/667, height: 70*screenHeight/667))
             arrowView.image = #imageLiteral(resourceName: "forwardarrow")
             view.addSubview(arrowView)
             for i in 0...1 {

@@ -74,11 +74,6 @@ final class StockGraphView2: UIView {
     @objc func animateIt() {
         self.baseOfGraphView.alpha = 1.0
         self.baseOfGraphView.frame = CGRect(x: 0, y: 565*self.bounds.height/636, width: self.bounds.width, height: 70*self.bounds.height/636)
-        
-        //        baseOfGraphView.baseLayer.path = baseOfGraphView.bez.cgPath
-        //        baseOfGraphView.baseLayer.fillColor = CustomColor.yellow.cgColor
-        //        baseOfGraphView.layer.addSublayer(baseOfGraphView.baseLayer)
-        
     }
     
     override func draw(_ rect: CGRect) {
@@ -119,10 +114,10 @@ final class StockGraphView2: UIView {
         }
     }
     
-    init() {super.init(frame: CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenHeight/1334))}
+    init() {super.init(frame: CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenWidth/750))}
     init(stockData: StockData2, key: String, cubic: Bool) {
         _stockData = stockData
-        super.init(frame: CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenHeight/1334))
+        super.init(frame: CGRect(x: 0, y: 388*screenHeight/1334, width: screenWidth, height: 646*screenWidth/750))
         ys = [y1,y2,y3,y4,y5]
         xs = [x1,x2,x3,x4,x5,x6,x7]
         graphAppearsInView = !cubic
@@ -213,10 +208,10 @@ final class StockGraphView2: UIView {
             // }
         }
         
-        if (UIDevice().userInterfaceIdiom == .phone) && UIScreen.main.nativeBounds.height == 2436 {
+        if isLongPhone {
             
             for i in 0...5 {
-                addLabel(name: xs[i], text: xLabels[i], textColor: CustomColor.labelGray, textAlignment: .center, fontName: "Roboto-Regular", fontSize: 12, x: (screenWidth/4)*(CGFloat(i)+1) + 20, y: 540*heightScalar, width: 60, height: 75, lines: 1)
+                addLabel(name: xs[i], text: xLabels[i], textColor: CustomColor.labelGray, textAlignment: .center, fontName: "Roboto-Regular", fontSize: 12, x: (screenWidth/4)*(CGFloat(i)+1) + 20, y: 540*widthScalar, width: 60, height: 75, lines: 1)
                 if xs[i].text == key {
                     xs[i].textColor = CustomColor.yellow
                 }
