@@ -41,7 +41,7 @@ Firetail has partnered with Vulture Intelligence to bring you real time social b
 
 By becoming a Premium Member you will receive intelligent Crypto alerts via an artificial engine monitoring society and Crypto chatter in real time.
 
-TL;DR: Know when to move your Crypto before the next guy.
+Know when to move your Crypto before the next guy.
 
 Joining premium also gives you access to unlimted monthly Firetail alerts.
 """

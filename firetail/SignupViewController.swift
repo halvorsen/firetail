@@ -50,12 +50,12 @@ final class SignupViewController: ViewSetup, UITextFieldDelegate {
         arrowView.image = #imageLiteral(resourceName: "forwardarrow")
         view.addSubview(arrowView)
         addLabel(name: createAccount, text: "CREATE ACCOUNT", textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 80, y: 624, width: 360, height: 30, lines: 1)
-        view.addSubview(createAccount)
-        createAccount.translatesAutoresizingMaskIntoConstraints = false
-        createAccount.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        createAccount.heightAnchor.constraint(equalToConstant: 70*heightScalar).isActive = true
-        createAccount.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        createAccount.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+//        view.addSubview(createAccount)
+//        createAccount.translatesAutoresizingMaskIntoConstraints = false
+//        createAccount.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+//        createAccount.heightAnchor.constraint(equalToConstant: 70*heightScalar).isActive = true
+//        createAccount.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+//        createAccount.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         for i in 0...2 {
             let line = UILabel(frame: CGRect(x: 38*screenWidth/375, y: 408*screenHeight/667 + CGFloat(i)*60*screenHeight/667, width: 300*screenWidth/375, height: 2*screenHeight/667))
             line.backgroundColor = CustomColor.fieldLines
@@ -180,23 +180,10 @@ final class SignupViewController: ViewSetup, UITextFieldDelegate {
                     self.present(AddStockTickerViewController(), animated: true)
                 }
             } else {
-               
-                Auth.auth().signIn(withEmail: email, password: password1, completion: { (user, error) in
-                    if error != nil{
-                        self.continueOnce = true
-                    } else {
-                        self.continueOnce = true
-                        self.username.text = email
-                        Alerts.eraseStockAlertFile()
-                        UserInfo.alerts.removeAll()
-                        UserInfo.tickerArray.removeAll()
-                        DashboardViewController.shared.collectionView?.reloadData()
-                        UserInfo.saveUserInfo()
-                       self.present(AddStockTickerViewController(), animated: true)
-                        
-                    }
-                })
-                
+                self.continueOnce = true
+                let alert = UIAlertController(title: "Account Creation Error", message: error?.localizedDescription ?? "Please Try Another Email", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }

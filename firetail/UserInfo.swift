@@ -60,7 +60,7 @@ public struct UserInfo {
     
     public static var premium = false
     
-    public static var vultureSubscriber = true
+    public static var vultureSubscriber = false
     
     public static var brokerURL = "none"
     

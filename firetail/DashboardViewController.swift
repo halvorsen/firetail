@@ -100,8 +100,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     func appLoading() {
         
         LoadSaveCoreData().loadUsername()
-        UserInfo.premium = true //: toggle in development
-        premiumMember = true  // ##TODO: turn off premium premiumMember = UserInfo.premium
+//        UserInfo.premium = true //: toggle in development
+//        premiumMember = true  // ##TODO: turn off premium premiumMember = UserInfo.premium
         Alpha().populateUserInfoMonth()
         AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {}
         
@@ -180,8 +180,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         daysOfTheWeek.alpha = 0.0
         populateAlertBars()
         addButton(name: alerts, x: 82, y: 655, width: 280, height: 75, title: UserInfo.vultureSubscriber ? "ALERTS" : "INTELLIGENT ALERTS", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.alertsFunc(_:)), addSubview: true)
-        addButton(name: changeEmail, x: 82, y: 735, width: 280, height: 75, title: "SETTINGS", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.changeEmailFunc(_:)), addSubview: true)
-        addButton(name: addPhone, x: 82, y: 815, width: 280, height: 75, title: "BROKER/EXCHANGE", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.addPhoneFunc(_:)), addSubview: true)
+        addButton(name: changeEmail, x: 82, y: 815, width: 280, height: 75, title: "SETTINGS", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.changeEmailFunc(_:)), addSubview: true)
+        addButton(name: addPhone, x: 82, y: 735, width: 280, height: 75, title: "BROKER/EXCHANGE", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.addPhoneFunc(_:)), addSubview: true)
         addButton(name: changeBroker, x: 82, y: 895, width: 280, height: 75, title: "LOGOUT", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.logoutFunc(_:)), addSubview: true)
         addButton(name: legal, x: 82, y: 1055, width: 280, height: 75, title: "LEGAL", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.legalFunc(_:)), addSubview: true)
         addButton(name: support, x: 82, y: 1135, width: 280, height: 75, title: "SUPPORT", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.supportFunc(_:)), addSubview: true)
@@ -657,50 +657,49 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     @objc private func goPremiumFunc(_ sender: UIButton) {
         // Create the alert controller
-        if UserInfo.premium == false {
-            let alertController = UIAlertController(title: "Go Premium", message: "Up to 50 Alerts for $2.99", preferredStyle: .alert)
+        if UserInfo.vultureSubscriber == false {
+//            let alertController = UIAlertController(title: "Go Premium", message: "Up to 100 Alerts for $2.99", preferredStyle: .alert)
+//
+//            // Create the actions
+//            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { [weak self] UIAlertAction in
+//                guard let weakself = self else {return}
+//                weakself.purchase()
+//
+//            }
+//            let restoreAction = UIAlertAction(title: "Restore Purchase", style: UIAlertActionStyle.default) { [weak self] UIAlertAction in
+//                guard let weakself = self else {return}
+//                SwiftyStoreKit.restorePurchases(atomically: true) { results in
+//                    if results.restoreFailedPurchases.count > 0 {
+//                        print("Restore Failed: \(results.restoreFailedPurchases)")
+//                    }
+//                    else if results.restoredPurchases.count > 0 {
+//
+//                        UserInfo.premium = true
+//                        weakself.premiumMember = true
+//                        weakself.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
+//                    }
+//                    else {
+//                        print("Nothing to Restore")
+//                    }
+//                }
+//            }
+//
+//            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) {
+//                UIAlertAction in
+//                print("Cancel Pressed")
+//            }
+//
+//            alertController.addAction(okAction)
+//            alertController.addAction(restoreAction)
+//            alertController.addAction(cancelAction)
             
-            // Create the actions
-            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { [weak self] UIAlertAction in
-                guard let weakself = self else {return}
-                weakself.purchase()
-                
-            }
-            let restoreAction = UIAlertAction(title: "Restore Purchase", style: UIAlertActionStyle.default) { [weak self] UIAlertAction in
-                guard let weakself = self else {return}
-                SwiftyStoreKit.restorePurchases(atomically: true) { results in
-                    if results.restoreFailedPurchases.count > 0 {
-                        print("Restore Failed: \(results.restoreFailedPurchases)")
-                    }
-                    else if results.restoredPurchases.count > 0 {
-                        
-                        UserInfo.premium = true
-                        weakself.premiumMember = true
-                        weakself.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
-                    }
-                    else {
-                        print("Nothing to Restore")
-                    }
-                }
-            }
-            
-            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) {
-                UIAlertAction in
-                print("Cancel Pressed")
-            }
-            
-            alertController.addAction(okAction)
-            alertController.addAction(restoreAction)
-            alertController.addAction(cancelAction)
-            
-            let viewController = AddStockTickerViewController()
+            let viewController = PremiumInformationViewController()
             viewController.modalTransitionStyle = .crossDissolve
-            viewController.newAlertTicker = "TICKER"
             present(viewController, animated: true)
             
         } else {
             
-            let alert = UIAlertController(title: "Premium Member", message: "You are a premium member and can add up to 100 stock price alerts", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Premium Member", message: "You are a premium member", preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             
@@ -754,19 +753,15 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         if hitOnce {
             hitOnce = false
           
-            if (premiumMember || UserInfo.userAlerts.count < 3) && UserInfo.userAlerts.count < 100 {
+            if UserInfo.userAlerts.count < 100 {
                 let viewController = AddStockTickerViewController()
                 viewController.modalTransitionStyle = .crossDissolve
                 present(viewController, animated: true) {
                     self.hitOnce = true
                 }
                 
-            } else if !premiumMember && UserInfo.userAlerts.count < 100 {
-                
-                purchase()
             } else {
-                
-                let alert = UIAlertController(title: "", message: " 50 maximum alerts reached", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: "", message: "100 maximum alerts reached", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                 present(alert, animated: true, completion: nil)
             }
