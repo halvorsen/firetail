@@ -170,8 +170,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         let m = ["","JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"]
         addLabel(name: date, text: "\(d.day ?? 0) \(m[d.month ?? 0].capitalized)", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 13, x: 84, y: 124, width: 300, height: 32, lines: 1)
         view.addSubview(date)
-        
-        addLabel(name: alertAmount, text: String(UserInfo.userAlerts.count), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
+        addLabel(name: alertAmount, text: String(UserInfo.currentAlerts.count), textColor: .white, textAlignment: .left, fontName: "Roboto-Regular", fontSize: 52, x: 84, y: 226, width: 150, height: 90, lines: 1)
         view.addSubview(alertAmount)
         addLabel(name: alerts1102, text: "Alerts", textColor: .white, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 14, x: 84, y: 330, width: 260, height: 28, lines: 1)
         alerts1102.alpha = 0.5
@@ -302,7 +301,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         configureAndAddAlertCollection()
         [stock1, stock2, stock3].forEach { $0.center.x = monthIndicator.center.x}
         configureSwitch()
-        
     }
     
     func configureAndAddAlertCollection() {
@@ -347,8 +345,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     @objc func act(blockLongName: String) {
      
-        alertAmount.text = String(UserInfo.currentAlerts.count)
-        
         loadsave.resaveUser(alerts: UserInfo.stockAlertsOrder + UserInfo.cryptoAlertsOrder)
         
         reboot()
@@ -595,6 +591,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 return
             }
         }
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -621,9 +618,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
     }
     @objc private func changeEmailFunc(_ sender: UIButton) {
+        menuFunc()
         present(SettingsViewController(), animated: true)
     }
     @objc private func addPhoneFunc(_ sender: UIButton) {
+        menuFunc()
         present(SettingsViewController(), animated: true)
     }
     @objc private func logoutFunc(_ sender: UIButton) {
@@ -645,6 +644,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         UserInfo.alerts.removeAll()
         collectionView?.reloadData()
         try? Auth.auth().signOut()
+        menuFunc()
          present(LoginViewController(), animated: true)
     }
     @objc private func legalFunc(_ sender: UIButton) {
@@ -1009,6 +1009,8 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let amount = UserInfo.currentAlerts.count
+        alertAmount.text = String(UserInfo.currentAlerts.count)
+        print("UserInfo.currentAlerts.count3: \(UserInfo.currentAlerts.count)")
         collectionView.contentSize.height = CGFloat(amount) * 60 * commonScalar
         return amount
     }
@@ -1032,10 +1034,6 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
             } else {
                 print("error in collection view")
             }
-        } else {
-            print("ERROR: UserInfo.currentAlertsInOrder.count > indexPath.row")
-            print(indexPath.row)
-            print(UserInfo.currentAlertsInOrder)
         }
         return cell
     }

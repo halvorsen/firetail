@@ -36,7 +36,7 @@ final class Alpha {
                     var json = [String: [String:Any]]()
                     do {
                         let jsonObject = try JSONSerialization.jsonObject(with: data!)
-                        print("jsonObject: \(jsonObject)")
+                      //  print("jsonObject: \(jsonObject)")
                         if let _json = jsonObject as? [String: [String:Any]] {
                             json = _json
                         } else {
