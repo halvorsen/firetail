@@ -59,7 +59,6 @@ final class CompareScrollDot: UIView {
         __set = [rangeMultiplier] + _set + [_set.last!] //adds extra datapoint to make quadratic curves look good on ends
 
         data = __set
-        clipsToBounds = false
         setNeedsDisplay()
         
     }

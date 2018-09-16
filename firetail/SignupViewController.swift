@@ -41,11 +41,21 @@ final class SignupViewController: ViewSetup, UITextFieldDelegate {
         username.alpha = 0.1
         view.addSubview(username)
         addButton(name: continueB, x: 0, y: 1194, width: 750, height: 140, title: "CONTINUE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: CustomColor.black24, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SignupViewController.continueFunc(_:)), addSubview: true, alignment: .center)
+        continueB.translatesAutoresizingMaskIntoConstraints = false
+        continueB.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        continueB.heightAnchor.constraint(equalToConstant: 70*heightScalar).isActive = true
+        continueB.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        continueB.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         let arrowView = UIImageView(frame: CGRect(x: screenWidth - 70*screenHeight/667, y: varyForDevice(normal: 597*screenHeight/667, longPhone: 590*screenHeight/667), width: 70*screenHeight/667, height: 70*screenHeight/667))
         arrowView.image = #imageLiteral(resourceName: "forwardarrow")
         view.addSubview(arrowView)
         addLabel(name: createAccount, text: "CREATE ACCOUNT", textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 80, y: 624, width: 360, height: 30, lines: 1)
         view.addSubview(createAccount)
+        createAccount.translatesAutoresizingMaskIntoConstraints = false
+        createAccount.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        createAccount.heightAnchor.constraint(equalToConstant: 70*heightScalar).isActive = true
+        createAccount.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        createAccount.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         for i in 0...2 {
             let line = UILabel(frame: CGRect(x: 38*screenWidth/375, y: 408*screenHeight/667 + CGFloat(i)*60*screenHeight/667, width: 300*screenWidth/375, height: 2*screenHeight/667))
             line.backgroundColor = CustomColor.fieldLines

@@ -74,7 +74,7 @@ final class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         container.contentSize = CGSize(width: 3.8*screenWidth, height: container.bounds.height)
         container.backgroundColor = CustomColor.black47
         container.contentOffset =  CGPoint(x: 2.7*screenWidth, y: 0)
-        container.clipsToBounds = false
+       
         container.showsHorizontalScrollIndicator = false
         container.showsVerticalScrollIndicator = false
         

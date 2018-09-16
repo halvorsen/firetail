@@ -244,8 +244,6 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         //slideview stuff//
         slideView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         view.addSubview(slideView)
-        slideView.clipsToBounds = false
-        container.clipsToBounds = false
         
         slideView.backgroundColor = CustomColor.black33
         

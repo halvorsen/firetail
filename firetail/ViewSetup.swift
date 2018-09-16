@@ -31,11 +31,12 @@ class ViewSetup: UIViewController {
         
         coverInternet.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         coverInternet.backgroundColor = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
-        
-        let imageView2 = UIImageView()
-        imageView2.frame = CGRect(x: 127*screenWidth/375, y:64*screenHeight/667, width: 122*screenWidth/375, height: 157*screenHeight/667)
-        imageView2.image = #imageLiteral(resourceName: "flames")
+        //imageView2.frame = CGRect(x: 127*screenWidth/375, y:64*screenHeight/667, width: 122*screenWidth/375, height: 157*screenHeight/667)
+        let imageView2 = UIImageView(image: #imageLiteral(resourceName: "flames"))
         coverInternet.addSubview(imageView2)
+        imageView2.translatesAutoresizingMaskIntoConstraints = false
+        imageView2.centerXAnchor.constraint(equalTo: coverInternet.centerXAnchor).isActive = true
+        NSLayoutConstraint(item: imageView2, attribute: .centerY, relatedBy: .equal, toItem: coverInternet, attribute: .centerY, multiplier: 0.425, constant: 0).isActive = true
         let label = UILabel()
         label.frame = CGRect(x: 0, y:290*screenHeight/667, width: screenWidth, height: 30*screenHeight/667)
         label.text = "NO INTERNET"

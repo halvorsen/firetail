@@ -19,6 +19,7 @@ final class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
     var myTextFields = [UITextField]()
     var doneLoading = false
     var backArrow = UIButton()
+    var headerLabels = [UILabel]()
     
     override func viewDidAppear(_ animated: Bool) {
         reachabilityAddNotification()
@@ -30,25 +31,25 @@ final class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
         view.backgroundColor = CustomColor.black33
         
         addButton(name: continueB, x: 0, y: 1194, width: 750, height: 140, title: "SAVE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: CustomColor.black42, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(ChangePasswordViewController.saveFunc(_:)), addSubview: true, alignment: .center)
+        continueB.translatesAutoresizingMaskIntoConstraints = false
+        continueB.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        continueB.heightAnchor.constraint(equalToConstant: 70*heightScalar).isActive = true
+        continueB.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        continueB.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
 
-        
-        addLabel(name: accountSettings, text: "CHANGE PASSWORD", textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 80, y: 334, width: 360, height: 30, lines: 1)
-        view.addSubview(accountSettings)
         for i in 0...2 {
-            let line = UILabel(frame: CGRect(x: 180*screenWidth/375, y: 271*screenHeight/667 + CGFloat(i)*60*screenHeight/667, width: 195*screenWidth/375, height: 2*screenHeight/667))
+            let line = UILabel(frame: CGRect(x: 180*widthScalar, y: 271*heightScalar + CGFloat(i)*60*heightScalar, width: 195*widthScalar, height: 2*widthScalar))
             line.backgroundColor = CustomColor.fieldLines
             view.addSubview(line)
-            
             
             let l = UILabel()
             let name = ["Old Password","New Password","Confirm Password"]
             addLabel(name: l, text: name[i], textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 56, y: 500 + CGFloat(i)*120, width: 300, height: 40, lines: 0)
             view.addSubview(l)
-            
-            
+            headerLabels.append(l)
             
             var myTextField = UITextField()
-            myTextField = UITextField(frame: CGRect(x: 177*screenWidth/375,y: 246*screenHeight/667 + CGFloat(i)*60*screenHeight/667,width: 198*screenWidth/375 ,height: 34*screenHeight/667))
+            myTextField = UITextField(frame: CGRect(x: 177*widthScalar,y: 246*heightScalar + CGFloat(i)*60*heightScalar,width: 198*widthScalar ,height: 34*widthScalar))
             switch i {
             case 0:
                 myTextField.placeholder = "********"
@@ -81,6 +82,13 @@ final class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
             addButton(name: backArrow, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(ChangePasswordViewController.back(_:)), addSubview: true)
             backArrow.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
         }
+        
+        addLabel(name: accountSettings, text: "CHANGE PASSWORD", textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 80, y: 334, width: 360, height: 30, lines: 1)
+        view.addSubview(accountSettings)
+        
+        accountSettings.translatesAutoresizingMaskIntoConstraints = false
+        accountSettings.leftAnchor.constraint(equalTo: headerLabels[0].leftAnchor).isActive = true
+        accountSettings.topAnchor.constraint(equalTo: view.topAnchor, constant: 164*heightScalar).isActive = true
 
     }
 
@@ -90,7 +98,7 @@ final class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
     }
     
         @objc private func back(_ sender: UIButton) {
-        present(SettingsViewController(), animated: true)
+        dismiss(animated: true)
     }
     
     @objc private func saveFunc(_ sender: UIButton) {
@@ -177,7 +185,7 @@ final class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
                         alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                     }
-                    self.present(SettingsViewController(), animated: true)
+                    self.dismiss(animated: true)
                 }
             }
         })
