@@ -19,11 +19,54 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     var doneLoading = false
     var backArrow = UIButton()
     var myPicker = UIPickerView()
+    var myPickerCrypto = UIPickerView()
     let toolBar = UIToolbar()
     let myPickerBackground = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
     let toolBarButtonColor = UIColor(red: 140/255, green: 140/255, blue: 140/255, alpha: 1.0)
     let toolBarColor = UIColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 1.0)
     let pickerData = ["TD Ameritrade", "Chase", "Etrade", "Fidelity", "Scottrade", "Schwab", "Merrill Edge", "Trademonster", "Capital One Investing", "eOption", "Interactive Brokers", "TradeStation", "Ally", "Kapitall", "Lightspeed", "optionsXpress", "Zacks", "Trade King", "Sogo Trade", "Trading Block", "USAA", "Bank of America", "Vangaurd", "Wells Fargo", "Firstrade", "Robinhood"]
+    
+    let pickerDataCrypto = SettingsViewController.cryptoExchanges.map { $0.0 }
+    
+    static let cryptoExchanges: [(String, String)] = [
+        ("binance", "https://www.binance.com"),
+        ("coinbase", "https://www.coinbase.com"),
+        ("coinbull", "https://www.coinbull.io"),
+        ("luno", "https://www.luno.com"),
+        ("paxforex", "https://paxforex.com"),
+        ("localbitcoins", "https://localbitcoins.com"),
+        ("cex", "https://cex.io"),
+        ("changelly", "https://changelly.com"),
+        ("coinmama", "https://www.coinmama.com"),
+        ("xtrade", "https://www.xtrade.com"),
+        ("paxful", "https://paxful.com"),
+        ("kraken", "https://www.kraken.com"),
+        ("poloniex", "https://poloniex.com"),
+        ("gemini", "https://gemini.com"),
+        ("bithumb", "https://www.bithumb.com"),
+        ("xcoins", "https://xcoins.io"),
+        ("cobinhood", "https://cobinhood.com"),
+        ("coincheck", "https://coincheck.com"),
+        ("coinexchange", "https://www.coinexchange.io"),
+        ("shapeshift", "https://shapeshift.io"),
+        ("bitso", "https://bitso.com"),
+        ("indacoin", "https://indacoin.com"),
+        ("cityindex", "https://www.cityindex.co"),
+        ("bitbay", "https://auth.bitbay.net"),
+        ("bitstamp", "https://www.bitstamp.net"),
+        ("cryptopia", "https://www.cryptopia.co.nz"),
+        ("coinbasepro", "https://pro.coinbase.com"),
+        ("kucoin", "https://www.kucoin.com"),
+        ("bitpanda", "https://www.bitpanda.com"),
+        ("hitbtc", "https://hitbtc.com"),
+        ("coinswitch", "https://coinswitch.co"),
+        ("huobi", "https://www.huobi.com/en-us/"),
+        ("yobit", "https://yobit.net/"),
+        ("mercatox", "https://mercatox.com"),
+        ("altcoin", "https://altcoin.io"),
+        ("bigone", "https://big.one"),
+        ("robinhood", "https://robinhood.com")
+    ]
     
     override func viewDidAppear(_ animated: Bool) {
         reachabilityAddNotification()
@@ -39,19 +82,19 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         view.addSubview(logo)
         
         addButton(name: continueB, x: 0, y: 1194, width: 750, height: 140, title: "SAVE", font: "Roboto-Bold", fontSize: 17, titleColor: .white, bgColor: CustomColor.black42, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SettingsViewController.saveFunc(_:)), addSubview: true, alignment: .center)
-                addButton(name: getSupport, x: 0, y: 982, width: 750, height: 212, title: "Get Support.", font: "Roboto-Regular", fontSize: 15, titleColor: CustomColor.white115, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SettingsViewController.supportFunc(_:)), addSubview: true, alignment: .center)
+                addButton(name: getSupport, x: 0, y: 1030, width: 750, height: 212, title: "Get Support.", font: "Roboto-Regular", fontSize: 15, titleColor: CustomColor.white115, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SettingsViewController.supportFunc(_:)), addSubview: true, alignment: .center)
 
         addLabel(name: accountSettings, text: "ACCOUNT SETTINGS", textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 58, y: 334, width: 360, height: 30, lines: 1)
         view.addSubview(accountSettings)
-        for i in 0...3 {
+        for i in 0...4 {
             let line = UILabel(frame: CGRect(x: 180*screenWidth/375, y: 271*screenHeight/667 + CGFloat(i)*60*screenHeight/667, width: 195*screenWidth/375, height: 2*screenHeight/667))
             line.backgroundColor = CustomColor.fieldLines
             view.addSubview(line)
             
            
                 let l = UILabel()
-                let name = ["Email","Phone","Exchange","Password"]
-                addLabel(name: l, text: name[i], textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 56, y: 500 + CGFloat(i)*120, width: 150, height: 40, lines: 0)
+                let name = ["Email","Phone","Broker","Exchange","Password"]
+                addLabel(name: l, text: name[i], textColor: CustomColor.white115, textAlignment: .left, fontName: "Roboto-Medium", fontSize: 16, x: 56, y: 510 + CGFloat(i)*120, width: 150, height: 40, lines: 0)
                 view.addSubview(l)
             
             
@@ -61,7 +104,7 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
             switch i {
             case 0:
                 
-                myTextField.placeholder = UserInfo.email
+                myTextField.placeholder = UserInfo.email.replacingOccurrences(of: ",", with: ".", options: .literal, range: nil)
                 
             case 1:
                 if UserInfo.phone != "none" {
@@ -74,6 +117,12 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
                 myTextField.placeholder = "scottade"
                 } else {
                    myTextField.placeholder = UserInfo.brokerName
+                }
+            case 3:
+                if UserInfo.cryptoBrokerName == "none" {
+                    myTextField.placeholder = "binance"
+                } else {
+                    myTextField.placeholder = UserInfo.cryptoBrokerName
                 }
             default:
                 myTextField.isSecureTextEntry = true
@@ -104,6 +153,11 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         myPicker.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 177*screenHeight/667)
         myPicker.showsSelectionIndicator = true
         
+        myPickerCrypto.dataSource = self
+        myPickerCrypto.delegate = self
+        myPickerCrypto.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 177*screenHeight/667)
+        myPickerCrypto.showsSelectionIndicator = true
+        
         toolBar.barStyle = UIBarStyle.black
         toolBar.isTranslucent = true
         toolBar.tintColor = UIColor(red: 21/255, green: 127/255, blue: 249/255, alpha: 1)
@@ -124,39 +178,60 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         toolBar.barTintColor = toolBarColor
         
         myTextFields[2].inputView = myPicker
+        myTextFields[3].inputView = myPickerCrypto
         myTextFields[2].inputAccessoryView = toolBar
+        myTextFields[3].inputAccessoryView = toolBar
     }
     
     @objc func donePicker() {
         
         view.frame.origin.y = 0
         myPicker.removeFromSuperview()
+        myPickerCrypto.removeFromSuperview()
         toolBar.removeFromSuperview()
         
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         pickerView.backgroundColor = myPickerBackground
-       
         return 1
     }
     
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if pickerView == myPicker {
             return pickerData.count
+        }
+        else {
+            return pickerDataCrypto.count
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        
+            if pickerView == myPicker {
             return pickerData[row]
+        }
+            else {
+                return pickerDataCrypto[row]
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        if pickerView == myPicker {
         return NSAttributedString(string: pickerData[row], attributes: [NSAttributedStringKey.foregroundColor:UIColor.white])
+        }
+        else {
+            return NSAttributedString(string: pickerDataCrypto[row], attributes: [NSAttributedStringKey.foregroundColor:UIColor.white])
+        }
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if pickerView == myPicker {
         myTextFields[2].text = pickerData[row]
+        }
+        else {
+           myTextFields[3].text = pickerDataCrypto[row]
+        }
     }
     
     @objc private func back(_ sender: UIButton) {
@@ -164,23 +239,27 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         dismiss(animated: true)
     }
     
-   
+    
     @objc private func saveFunc(_ sender: UIButton) {
         guard let text0 = myTextFields[0].text,
             let text1 = myTextFields[1].text,
-            let text2 = myTextFields[2].text else {return}
-    
-            if text0 != "" {
-        UserInfo.email = text0
-            }
-            if text1 != "" {
-        UserInfo.phone = text1
-            }
-            if text2 != "" {
-        UserInfo.brokerName = text2
-            }
+            let text2 = myTextFields[2].text,
+            let text3 = myTextFields[3].text else {return}
         
-            UserInfo.saveUserInfo()
+        if text0 != "" {
+            UserInfo.email = text0
+        }
+        if text1 != "" {
+            UserInfo.phone = text1
+        }
+        if text2 != "" {
+            UserInfo.brokerName = text2
+        }
+        if text3 != "" {
+            UserInfo.cryptoBrokerName = text3
+        }
+        
+        UserInfo.saveUserInfo()
         dismiss(animated: true)
 
     }
@@ -197,7 +276,7 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     }
     
     @objc private func supportFunc(_ sender: UIButton) {
-      sendEmail()
+        sendEmail()
     }
     
     private func sendEmail() {
@@ -216,24 +295,29 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         self.view.endEditing(true)
         guard let text0 = myTextFields[0].text,
             let text1 = myTextFields[1].text,
-            let text2 = myTextFields[2].text else {return false}
-            
-            switch textField.tag {
-            case 0:
-                if text0 != "" {
-                    UserInfo.email = text0
-                }
-            case 1:
-                if text1 != "" {
-                    UserInfo.phone = text1
-                }
-            case 2:
-                if text2 != "" {
-                    UserInfo.brokerName = text2
-                }
-            default:
-                break
+            let text2 = myTextFields[2].text,
+            let text3 = myTextFields[3].text else {return false}
+        
+        switch textField.tag {
+        case 0:
+            if text0 != "" {
+                UserInfo.email = text0
             }
+        case 1:
+            if text1 != "" {
+                UserInfo.phone = text1
+            }
+        case 2:
+            if text2 != "" {
+                UserInfo.brokerName = text2
+            }
+        case 3:
+            if text3 != "" {
+                UserInfo.cryptoBrokerName = text3
+            }
+        default:
+            break
+        }
         return false
     }
     

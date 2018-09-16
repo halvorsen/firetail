@@ -85,6 +85,7 @@ final class AppLoadingData {
             UserInfo.phone = value?["phone"] as? String ?? "none"
             UserInfo.premium = value?["premium"] as? Bool ?? false
             UserInfo.brokerName = value?["brokerName"] as? String ?? "none"
+            UserInfo.cryptoBrokerName = value?["cryptoBrokerName"] as? String ?? "none"
             UserInfo.brokerURL = value?["brokerURL"] as? String ?? "none"
             UserInfo.weeklyAlerts = value?["weeklyAlerts"] as? [String:Int] ?? ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
             UserInfo.userAlerts = value?["userAlerts"] as? [String:String] ?? [:]

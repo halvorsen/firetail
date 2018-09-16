@@ -33,6 +33,18 @@ final class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     var orderOfGraphs = ["1y":0,"5y":1,"10y":2,"1d":3,"5d":4,"1m":5,"3m":6]
     let orderOfLabels = ["10y":0,"5y":1,"1y":2,"3m":3,"1m":4,"5d":5,"1d":6]
     var loading = UILabel()
+    var cryptoBrokersDictionary: [String:String] = [:]
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        SettingsViewController.cryptoExchanges.forEach { exchange, urlString in
+            cryptoBrokersDictionary[exchange] = urlString
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     let brokersDictionary: [String:String] = [
         "Ameritrade":"https://invest.ameritrade.com/grid/p/site",
         "Etrade":"https://us.etrade.com/e/t/user/login",
@@ -128,13 +140,22 @@ final class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     }
     
     @objc private func trade(_ sender: UIButton) {
-        if UserInfo.brokerName != "none" {
-            guard let name = brokersDictionary[UserInfo.brokerName],
-                let url = URL(string: name) else { return }
-            UIApplication.shared.open(url)
+        if UserInfo.isStockMode {
+            if UserInfo.brokerName != "none" {
+                guard let name = brokersDictionary[UserInfo.brokerName],
+                    let url = URL(string: name) else { return }
+                UIApplication.shared.open(url)
+            } else {
+                self.userWarning(title: "", message: "Add Broker in Firetail Settings")
+            }
         } else {
-            self.userWarning(title: "", message: "Add Broker in Firetail Settings")
-            
+            if UserInfo.cryptoBrokerName != "none" {
+                guard let name = brokersDictionary[UserInfo.cryptoBrokerName],
+                    let url = URL(string: name) else { return }
+                UIApplication.shared.open(url)
+            } else {
+                self.userWarning(title: "", message: "Add Exchange in Firetail Settings")
+            }
         }
     }
     

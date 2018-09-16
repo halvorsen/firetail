@@ -104,11 +104,10 @@ final class LoadSaveCoreData {
         if resultsNameRequest.count > 0 {
             UserInfo.username = resultsNameRequest.last!.value(forKey: "username") as! String
         }
-        print("done loadusername")
+ 
     }
 
-
-    public static func saveUserInfoToFirebase(username:String,fullName:String,email:String,phone:String,premium:Bool,numOfAlerts:Int,brokerName:String,brokerURL:String,weeklyAlerts:[String:Int],userAlerts:[String:String], token: String) {
+    public static func saveUserInfoToFirebase(username:String,fullName:String,email:String,phone:String,premium:Bool,numOfAlerts:Int,brokerName:String,cryptoBrokerName:String,brokerURL:String,weeklyAlerts:[String:Int],userAlerts:[String:String], token: String) {
         
         let rootRef = Database.database().reference()
 
@@ -117,7 +116,7 @@ final class LoadSaveCoreData {
         let userRef = itemsRef.child(username)
         let weeklyAlertsRef = userRef.child("weeklyAlerts")
         let userAlertsRef = userRef.child("userAlerts")
-        let dict1=["username":username,"fullName":fullName,"email":email,"phone":phone,"premium":premium,"numOfAlerts":numOfAlerts,"brokerName":brokerName,"brokerURL":brokerURL, "token":token] as [String : Any]
+        let dict1=["username":username,"fullName":fullName,"email":email,"phone":phone,"premium":premium,"numOfAlerts":numOfAlerts,"brokerName":brokerName,"cryptoBrokerName":cryptoBrokerName,"brokerURL":brokerURL, "token":token] as [String : Any]
         let dict2 = weeklyAlerts as [String : Any]
         let dict3 = userAlerts as [String : Any]
         
@@ -171,6 +170,7 @@ final class LoadSaveCoreData {
 //        “premium”: true,
 //        “alertCount”: “24”,
 //        “brokerName”: “USAA”,
+//        "cryptoBrokerName": "binance"
 //        “brokerURL”: “http://www.usaa.com”,
 //        “createdAt”:“02092017”,
 //        “lastLogins”:{

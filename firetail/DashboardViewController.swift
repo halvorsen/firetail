@@ -635,6 +635,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         UserInfo.phone = "none"
         UserInfo.email = "none"
         UserInfo.brokerName = "none"
+        UserInfo.cryptoBrokerName = "none"
         UserInfo.username = "none"
         UserInfo.fullName = "none"
         UserInfo.premium = false

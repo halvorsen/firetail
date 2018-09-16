@@ -23,7 +23,6 @@
 		062BD2DE20E6EC81002C5E3C /* AlertCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062BD2DD20E6EC81002C5E3C /* AlertCollectionView.swift */; };
 		063A02591F7326D700E530D5 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063A02581F7326D700E530D5 /* CacheManager.swift */; };
 		064193691F08483600B7B3FE /* DroidSerif-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 064193681F0847C500B7B3FE /* DroidSerif-Regular.ttf */; };
-		0641936B1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0641936A1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift */; };
 		06478E6D1EE38E390016DF88 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */; };
 		06478E6F1EE5CC100016DF88 /* AddStockTickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */; };
 		06478E711EE5DA450016DF88 /* AddStockPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */; };
@@ -77,7 +76,6 @@
 		063A02581F7326D700E530D5 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		063A025A1F741E0A00E530D5 /* firetail v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "firetail v2.xcdatamodel"; sourceTree = "<group>"; };
 		064193681F0847C500B7B3FE /* DroidSerif-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DroidSerif-Regular.ttf"; sourceTree = "<group>"; };
-		0641936A1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPhoneNumberViewController.swift; sourceTree = "<group>"; };
 		06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockTickerViewController.swift; sourceTree = "<group>"; };
 		06478E701EE5DA450016DF88 /* AddStockPriceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockPriceViewController.swift; sourceTree = "<group>"; };
@@ -200,7 +198,6 @@
 				0617DFA21E7C7E7F006D73C5 /* SettingsViewController.swift */,
 				069FD1231E5382D4003BDFE2 /* GraphViewController.swift */,
 				06110EA81EB925BF00C901C5 /* ChangePasswordViewController.swift */,
-				0641936A1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift */,
 				069FD1361E538926003BDFE2 /* ViewSetup.swift */,
 				06AC61BB20FD6CA8002A7776 /* AccountCreationViewController.swift */,
 				064C8A082104354000FF5D1E /* PremiumInformationViewController.swift */,
@@ -466,7 +463,6 @@
 				06AC61BC20FD6CA8002A7776 /* AccountCreationViewController.swift in Sources */,
 				06AC61BE20FD6D37002A7776 /* AccountCreationView.swift in Sources */,
 				06AC61BA20FC157C002A7776 /* AppSetting.swift in Sources */,
-				0641936B1F086EDB00B7B3FE /* AddPhoneNumberViewController.swift in Sources */,
 				0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */,
 				06DBD44C20EF0CB500EFD6AB /* Firebase.swift in Sources */,
 				06DBD44A20EB152200EFD6AB /* MyFileManager.swift in Sources */,
