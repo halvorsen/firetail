@@ -289,7 +289,9 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
             // show failure alert
         }
     }
-    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        dismiss(animated: true)
+    }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         self.view.endEditing(true)

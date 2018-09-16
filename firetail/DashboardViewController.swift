@@ -1010,7 +1010,6 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let amount = UserInfo.currentAlerts.count
         alertAmount.text = String(UserInfo.currentAlerts.count)
-        print("UserInfo.currentAlerts.count3: \(UserInfo.currentAlerts.count)")
         collectionView.contentSize.height = CGFloat(amount) * 60 * commonScalar
         return amount
     }
