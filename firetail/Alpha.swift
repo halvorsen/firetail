@@ -35,7 +35,9 @@ final class Alpha {
                 else {
                     var json = [String: [String:Any]]()
                     do {
-                        if let _json = try JSONSerialization.jsonObject(with: data!) as? [String: [String:Any]] {
+                        let jsonObject = try JSONSerialization.jsonObject(with: data!)
+                        print("jsonObject: \(jsonObject)")
+                        if let _json = jsonObject as? [String: [String:Any]] {
                             json = _json
                         } else {
                             result(nil)
@@ -45,7 +47,7 @@ final class Alpha {
                         print("error in JSONSerialization")
                         result(nil)
                     }
-              
+                    
                     for (keyRoot,valueRoot) in json {
                         if keyRoot == "Time Series (Daily)" {
                             

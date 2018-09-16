@@ -64,7 +64,7 @@ final class Binance {
                 
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data!) as? [[Any]] {
-                        print("json \(json)")
+                       
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateStyle = DateFormatter.Style.medium
                         let dateFormatter2 = DateFormatter()

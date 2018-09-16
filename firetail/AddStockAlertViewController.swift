@@ -106,8 +106,8 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
         for i in 0..<name.count {
             let label = UILabel()
             
-            addLabel(name: label, text: name[i].uppercased(), textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 200, y: 434 + CGFloat(i)*120, width: 300, height: 56, lines: 0)
-            label.frame.origin.y = (217 + CGFloat(i)*60)*screenWidth/375
+            addLabel(name: label, text: name[i].uppercased(), textColor: .white, textAlignment: .left, fontName: "Roboto-Bold", fontSize: 15, x: 200, y: 0, width: 300, height: 56, lines: 0)
+            label.frame.origin.y = (217 + CGFloat(i)*60 + varyForDevice(normal: 0, longPhone: 68))*screenWidth/375
             view.addSubview(label)
         }
         
@@ -124,7 +124,7 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
         
         for (mySwitch, yPosition, tag) in UserInfo.isCryptoMode ? switches : Array(switches[1...]) {
             
-            mySwitch.frame = CGRect(x: 27*screenWidth/375, y: yPosition*screenWidth/375, width: 51*screenWidth/375, height: 31*screenHeight/667)
+            mySwitch.frame = CGRect(x: 27*screenWidth/375, y: yPosition*screenWidth/375 + varyForDevice(normal: 0, longPhone: 68*screenWidth/375), width: 51*screenWidth/375, height: 31*screenHeight/667)
             mySwitch.setOn(false, animated: false)
             mySwitch.tintColor = CustomColor.white229
             mySwitch.layer.cornerRadius = 16
@@ -162,8 +162,6 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
         }
         
     }
-    
-    
     
     @objc private func add(_ button: UIButton) {
         

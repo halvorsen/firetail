@@ -195,7 +195,7 @@ final class DailyGraphForAlertView: UIView {
             
             
             let grid = GridLine()
-            grid.frame = CGRect(x: 4*points[i].x, y: -100*screenWidth/667, width: 0.5, height: 265*screenHeight/667)
+            grid.frame = CGRect(x: 4*points[i].x, y: -100*screenWidth/667, width: 0.5, height: varyForDevice(normal: 265*screenWidth/375, longPhone: 310*screenWidth/375))
             grid.backgroundColor = CustomColor.whiteAlpha
             
             self.addSubview(grid)

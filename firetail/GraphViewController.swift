@@ -10,8 +10,8 @@ import UIKit
 import ReachabilitySwift
 
 var graphMutablePaths: [String:CGMutablePath] = [:]
-let longYPhoneMultiplier = UIScreen.main.nativeBounds.height/2436
-let isLongPhone = UIScreen.main.nativeBounds.height >= 2436
+let longYPhoneMultiplier = UIScreen.main.bounds.height/812
+let isLongPhone = UIScreen.main.bounds.height >= 812
 final class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
     
     var enter = UIButton()
