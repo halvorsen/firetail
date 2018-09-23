@@ -164,7 +164,6 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
     }
     
     @objc private func add(_ button: UIButton) {
-        
         UserInfo.tickerArray = [newAlertTicker] + UserInfo.tickerArray
         let finalAlertPrice = newAlertPrice
         
@@ -177,7 +176,18 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
         if finalAlertPrice > lastPrice {
             alertTriggerWhenGreaterThan = true
         }
-        if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 {
+        if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 && !newAlertBoolTuple.5 {
+            
+            guard let verified = Auth.auth().currentUser?.isEmailVerified,
+                !verified,
+                mySwitchEmail.isOn else {
+                    Auth.auth().currentUser?.sendEmailVerification(completion: nil)
+                    let alert = UIAlertController(title: "Verify", message: "If no alert type is selected, Firetail defaults to an email alert. An email verification was sent to your inbox, please verify to receive email alerts", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    return
+            }
+            
             UserInfo.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, true, false, false, newAlertTicker, "false", false, false, 1)
             
         }
@@ -199,8 +209,17 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
         }
         UserInfo.saveUserInfo()
         alertInfo = (UserInfo.username,newAlertTicker,finalAlertPrice,alertTriggerWhenGreaterThan,false,newAlertBoolTuple.0,newAlertBoolTuple.1,newAlertBoolTuple.3,newAlertBoolTuple.4,"false",newAlertBoolTuple.2,newAlertLongID,priceString)
+        if let verified = Auth.auth().currentUser?.isEmailVerified,
+            !verified,
+            mySwitchEmail.isOn {
+            Auth.auth().currentUser?.sendEmailVerification(completion: nil)
+            let alert = UIAlertController(title: "Verify", message: "An email verification was sent to your inbox, please verify to receive email alerts", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
         if mySwitchSMS.isOn == true && UserInfo.phone == "none" {
-            //add phone number through popup
+            addPhoneNumber()
         } else {
             if let first = presentingViewController,
                 let second = first.presentingViewController,
@@ -439,6 +458,25 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
     }
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
+    }
+    
+    private func addPhoneNumber() {
+        
+        let alert = UIAlertController(title: "Phone Number", message: "Add Phone Number to receive SMS alerts.", preferredStyle: .alert)
+        alert.addTextField { textfield in
+            textfield.placeholder = "(000) 000-0000"
+        }
+        alert.addAction(UIAlertAction(title: "Cencel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Save", style: UIAlertActionStyle.default, handler: { _ in
+            if let text = alert.textFields?[0].text {
+                 UserInfo.phone = text
+                 UserInfo.saveUserInfo()
+            }
+        }))
+        
+        present(alert, animated: true, completion: nil)
+        
+        
     }
     
 }
