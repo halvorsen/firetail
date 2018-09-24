@@ -31,7 +31,7 @@ class ViewSetup: UIViewController {
         
         coverInternet.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         coverInternet.backgroundColor = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
-        //imageView2.frame = CGRect(x: 127*screenWidth/375, y:64*screenHeight/667, width: 122*screenWidth/375, height: 157*screenHeight/667)
+    
         let imageView2 = UIImageView(image: #imageLiteral(resourceName: "flames"))
         coverInternet.addSubview(imageView2)
         imageView2.translatesAutoresizingMaskIntoConstraints = false
@@ -57,9 +57,9 @@ class ViewSetup: UIViewController {
     
     
     @objc func reachabilityChanged(note: NSNotification) {
-        
+        print("reachabilityChanged")
         let reachability = note.object as! Reachability
-        
+        print("is reachable: \(reachability.isReachable)")
         if reachability.isReachable {
             
             removeNoInternetCover()
@@ -86,6 +86,17 @@ class ViewSetup: UIViewController {
     
     @objc func addNoInternetCover() {
         view.addSubview(coverInternet)
+        continuouslyCheckForConnectivity()
+    }
+    
+    var checkTimer = Timer()
+    private func continuouslyCheckForConnectivity() {
+        checkTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { _ in
+            if MyDevice.isConnectedToNetwork() {
+                self.checkTimer.invalidate()
+                self.removeNoInternetCover()
+            }
+        })
     }
 
     var screenWidth: CGFloat {get{return UIScreen.main.bounds.width}}

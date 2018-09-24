@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0602EE3121586B940022F8C8 /* MyDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0602EE3021586B940022F8C8 /* MyDevice.swift */; };
 		0609E4A61E6284DD005965C5 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */; };
 		0609E4A81E632DF4005965C5 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4A71E632DF4005965C5 /* DashboardViewController.swift */; };
 		0609E4CD1E649578005965C5 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0609E4CC1E649578005965C5 /* SignupViewController.swift */; };
@@ -59,6 +60,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0602EE3021586B940022F8C8 /* MyDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDevice.swift; sourceTree = "<group>"; };
 		0609E4A51E6284DD005965C5 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		0609E4A71E632DF4005965C5 /* DashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		0609E4CC1E649578005965C5 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 				06AC61BF20FEE959002A7776 /* Alerts.swift */,
 				06DBD44920EB152200EFD6AB /* MyFileManager.swift */,
 				064C8A062103AD2100FF5D1E /* AlertSwitch.swift */,
+				0602EE3021586B940022F8C8 /* MyDevice.swift */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
@@ -484,6 +487,7 @@
 				069FD1371E538926003BDFE2 /* ViewSetup.swift in Sources */,
 				0617DFA31E7C7E7F006D73C5 /* SettingsViewController.swift in Sources */,
 				062BD2DE20E6EC81002C5E3C /* AlertCollectionView.swift in Sources */,
+				0602EE3121586B940022F8C8 /* MyDevice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
