@@ -604,6 +604,26 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         reachabilityAddNotification()
         collectionView?.reloadData()
         refreshCompareGraph()
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+            self.checkForUpdate()
+        }
+    }
+    
+    private func checkForUpdate() {
+        if !AppStore.shared.askedToUpdateRecently() && !AppStore.shared.isVersionCurrent {
+            let alert = UIAlertController(title: "New Version", message: "App Update Available", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: { _ in
+                if let firetailURL = URL(string: "itms-apps//itunes.apple.com/app/id1210030205") {
+                    UIApplication.shared.canOpenURL(firetailURL) {
+                        UIApplication.shared.open(firetailURL)
+                    }
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        
+            present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc func updateDot() {
