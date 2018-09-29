@@ -7,11 +7,24 @@
 //
 
 import StoreKit
+import ReachabilitySwift
+import Firebase
 
 final class AppStore {
     static let shared: AppStore = AppStore()
     init() {
+        if Reachability()!.isReachable {
         isUpdateAvailable()
+        getCurrentTimestampIntervalSince1970()
+        } else {
+            _ = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { (timer) in
+                if Reachability()!.isReachable {
+                    self.isUpdateAvailable()
+                    self.getCurrentTimestampIntervalSince1970()
+                    timer.invalidate()
+                }
+            }
+        }
     }
     func askedToUpdateRecently() -> Bool {
         if let date = UserDefaults.standard.object(forKey: "rootUpdateAsk") as? Date {
@@ -27,6 +40,7 @@ final class AppStore {
         return false
     }
     
+    var currentTimeStamp: TimeInterval?
     var isVersionCurrent = true
     private func isUpdateAvailable() {
         guard let info = Bundle.main.infoDictionary,
@@ -74,7 +88,9 @@ final class AppStore {
                             latestExpireTimestamp = newExpireTimestamp
                         }
                     }
-                    let currentTimestamp: TimeInterval = Date().timeIntervalSince1970
+                    guard let currentTimestamp: TimeInterval = self.currentTimeStamp else {
+                        return
+                    }
                     let expirationDate = Date.init(timeIntervalSince1970: latestExpireTimestamp)
                     let secondsInADay: TimeInterval = 86400
                     if currentTimestamp < latestExpireTimestamp + secondsInADay {
@@ -87,6 +103,26 @@ final class AppStore {
                 }
             }
         }
+    }
+    
+    private func getCurrentTimestampIntervalSince1970() {
+
+        let ref = Database.database().reference().child("timestamp")
+        
+        // Tell the server to set the current timestamp at this location.
+        ref.setValue(ServerValue.timestamp())
+        
+        // Read the value at the given location. It will now have the time.
+        ref.observe(.value, with: {
+            snap in
+            if let t = snap.value as? TimeInterval {
+                // Cast the value to an TimeInterval
+                // and divide by 1000 to get seconds.
+                print(t/1000)
+                self.currentTimeStamp = t/1000
+            }
+        })
+        
     }
 
     private func receiptGet(callback: @escaping (_ dictionary: [String: Any]) -> Void) {

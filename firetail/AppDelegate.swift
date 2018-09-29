@@ -32,6 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if let result = _result {
                 UserInfo.token = result.token
             }
+            let _ = AppStore.shared
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotification(_:)),name: NSNotification.Name.InstanceIDTokenRefresh, object: nil)
@@ -63,7 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 self.window?.makeKeyAndVisible()
             
         }
-        let _ = AppStore.shared
+        
         return true
     }
     
