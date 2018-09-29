@@ -9,8 +9,6 @@ import ReachabilitySwift
 final class MyDevice {
     
     static func isConnectedToNetwork() -> Bool {
-   
         return Reachability()!.isReachable
-        
     }
 }

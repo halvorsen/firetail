@@ -111,11 +111,20 @@ final class LoginViewController: ViewSetup, UITextFieldDelegate {
             resetPassword.setTitleColor(CustomColor.white, for: .normal)
             resetPassword.titleLabel?.font = UIFont(name: "Roboto-Bold", size: 17)
             view.addSubview(resetPassword)
-            
-            addButton(name: createAccount, x: 0, y: 1146, width: 750, height: 188, title: "         CREATE ACCOUNT", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: CustomColor.black30, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.createAccountFunc(_:)), addSubview: true)
+            addButton(name: createAccount, x: 0, y: 1194, width: 750, height: 140, title: "CREATE ACCOUNT", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: CustomColor.black30, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(LoginViewController.createAccountFunc(_:)), addSubview: true, alignment: .center)
+            createAccount.translatesAutoresizingMaskIntoConstraints = false
+            createAccount.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+            createAccount.heightAnchor.constraint(equalToConstant: 70*heightScalar).isActive = true
+            createAccount.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+            createAccount.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
             let arrowView = UIImageView(frame: CGRect(x: screenWidth - 70*screenHeight/667, y: varyForDevice(normal: 370*screenHeight/667, longPhone: 363*screenHeight/667), width: 70*screenHeight/667, height: 70*screenHeight/667))
-            arrowView.image = #imageLiteral(resourceName: "forwardarrow")
             view.addSubview(arrowView)
+            arrowView.translatesAutoresizingMaskIntoConstraints = false
+            arrowView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+            arrowView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+            arrowView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+            arrowView.centerYAnchor.constraint(equalTo: createAccount.centerYAnchor).isActive = true
+            arrowView.image = #imageLiteral(resourceName: "forwardarrow")
             for i in 0...1 {
                 let line = UILabel(frame: CGRect(x: 38*screenWidth/375, y: 306*screenHeight/667 + CGFloat(i)*60*screenHeight/667, width: 300*screenWidth/375, height: 2*screenHeight/667))
                 line.backgroundColor = CustomColor.fieldLines
