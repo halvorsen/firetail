@@ -63,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 self.window?.makeKeyAndVisible()
             
         }
-        
+        let _ = AppStore.shared
         return true
     }
     
