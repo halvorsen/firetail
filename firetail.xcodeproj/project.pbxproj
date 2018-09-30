@@ -50,6 +50,7 @@
 		06AC61BE20FD6D37002A7776 /* AccountCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC61BD20FD6D37002A7776 /* AccountCreationView.swift */; };
 		06AC61C020FEE959002A7776 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AC61BF20FEE959002A7776 /* Alerts.swift */; };
 		06BB409C1F753E330068636E /* AppLoadingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BB409B1F753E330068636E /* AppLoadingData.swift */; };
+		06D7B56E21607010002D8F97 /* IEXAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D7B56D21607010002D8F97 /* IEXAPI.swift */; };
 		06DBD44A20EB152200EFD6AB /* MyFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44920EB152200EFD6AB /* MyFileManager.swift */; };
 		06DBD44C20EF0CB500EFD6AB /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44B20EF0CB500EFD6AB /* Firebase.swift */; };
 		06DBD44E20EF1A1B00EFD6AB /* AnimatedGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DBD44D20EF1A1B00EFD6AB /* AnimatedGraph.swift */; };
@@ -108,6 +109,7 @@
 		06AC61BD20FD6D37002A7776 /* AccountCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreationView.swift; sourceTree = "<group>"; };
 		06AC61BF20FEE959002A7776 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		06BB409B1F753E330068636E /* AppLoadingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingData.swift; sourceTree = "<group>"; };
+		06D7B56D21607010002D8F97 /* IEXAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IEXAPI.swift; sourceTree = "<group>"; };
 		06DBD44920EB152200EFD6AB /* MyFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFileManager.swift; sourceTree = "<group>"; };
 		06DBD44B20EF0CB500EFD6AB /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		06DBD44D20EF1A1B00EFD6AB /* AnimatedGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGraph.swift; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 				06813A711F616BEE00A420EF /* Alpha.swift */,
 				063A02581F7326D700E530D5 /* CacheManager.swift */,
 				064C8A0A21075EBC00FF5D1E /* Binance.swift */,
+				06D7B56D21607010002D8F97 /* IEXAPI.swift */,
 			);
 			name = FetchClasses;
 			sourceTree = "<group>";
@@ -480,6 +483,7 @@
 				06110EA91EB925BF00C901C5 /* ChangePasswordViewController.swift in Sources */,
 				062BD2DC20E5C7A7002C5E3C /* AlertCollectionViewCell.swift in Sources */,
 				064C8A092104354000FF5D1E /* PremiumInformationViewController.swift in Sources */,
+				06D7B56E21607010002D8F97 /* IEXAPI.swift in Sources */,
 				064C8A0B21075EBC00FF5D1E /* Binance.swift in Sources */,
 				06DDBE261F795A5B00C36CB6 /* CustomColor.swift in Sources */,
 				064C8A072103AD2100FF5D1E /* AlertSwitch.swift in Sources */,

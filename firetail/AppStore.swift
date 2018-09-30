@@ -32,12 +32,12 @@ final class AppStore {
             let deltaTime = now - date.timeIntervalSince1970
             if deltaTime > 259200 { //3days
                 UserDefaults.standard.set(Date(), forKey: "rootUpdateAsk")
-                return true
+                return false
             }
         } else {
             UserDefaults.standard.set(Date(), forKey: "rootUpdateAsk")
         }
-        return false
+        return true
     }
     
     var currentTimeStamp: TimeInterval?

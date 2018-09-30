@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Fabric.with([Crashlytics.self])
         
         FirebaseApp.configure()
-        
+       
         InstanceID.instanceID().instanceID { (_result, error) in
             if let result = _result {
                 UserInfo.token = result.token

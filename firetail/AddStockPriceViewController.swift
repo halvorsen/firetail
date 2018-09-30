@@ -242,7 +242,7 @@ final class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
                 result(dates,dataSet.price)
             }
         } else {
-            Alpha().get20YearHistoricalData(ticker: newAlertTicker, isOneYear: false) { [weak self] (dataSet) in
+            IEXAPI.get20YearHistoricalData(ticker: newAlertTicker, isOneYear: false) { [weak self] (dataSet) in
                 guard let dataSet = dataSet else {
                     self?.displayAlert()
                     return

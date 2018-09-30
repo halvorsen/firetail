@@ -179,8 +179,7 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 && !newAlertBoolTuple.5 {
             
             guard let verified = Auth.auth().currentUser?.isEmailVerified,
-                !verified,
-                mySwitchEmail.isOn else {
+                verified else {
                     Auth.auth().currentUser?.sendEmailVerification(completion: nil)
                     let alert = UIAlertController(title: "Verify", message: "If no alert type is selected, Firetail defaults to an email alert. An email verification was sent to your inbox, please verify to receive email alerts", preferredStyle: UIAlertController.Style.alert)
                     alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))

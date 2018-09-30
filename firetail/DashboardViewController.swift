@@ -102,7 +102,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         LoadSaveCoreData().loadUsername()
 //        UserInfo.premium = true //: toggle in development
 //        premiumMember = true  // ##TODO: turn off premium premiumMember = UserInfo.premium
-        Alpha().populateUserInfoMonth()
+        IEXAPI.populateUserInfoMonth()
         AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {}
         
         UserInfo.flashOn = UserDefaults.standard.bool(forKey: "flashOn")

@@ -16,8 +16,7 @@ let updatedDataKey = "com.rightBrothers.updatedData"
 final class AppLoadingData {
     
     var fetchedTickers = [String]()
-    let alphaAPI = Alpha()
-    
+
     internal static func loadCachedHistoricalDataForTickerArray() {
         let dataSets = CacheManager().loadData()
         guard UserInfo.tickerArray.count > 0 else {return}
@@ -57,7 +56,7 @@ final class AppLoadingData {
                 }
             } else {
                 
-                alphaAPI.get20YearHistoricalData(ticker: symbol, isOneYear: false) { dataSet in
+                IEXAPI.get20YearHistoricalData(ticker: symbol, isOneYear: false) { dataSet in
                     if let dataSet = dataSet {
                         UserInfo.cachedInThisSession.append(symbol)
                         UserInfo.tenYearDictionary[symbol] = Array(dataSet.price.suffix(2520))

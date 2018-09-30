@@ -33,8 +33,7 @@ final class LoginViewController: ViewSetup, UITextFieldDelegate {
     let myLoadSaveCoreData = LoadSaveCoreData()
     var isFirstLoading = true
     var tap = UITapGestureRecognizer()
-    let alphaAPI = Alpha()
-  
+
     override func viewDidAppear(_ animated: Bool) {
         reachabilityAddNotification()
     }
@@ -44,7 +43,7 @@ final class LoginViewController: ViewSetup, UITextFieldDelegate {
         tap = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard(_:)))
       resetPassword.setTitle("reset password", for: .normal)
         resetPassword.addTarget(self, action: #selector(resetPasswordTouchUpInside), for: .touchUpInside)
-        alphaAPI.populateUserInfoMonth()
+        IEXAPI.populateUserInfoMonth()
         loadsave.loadUsername()
         self.populateView()
         
