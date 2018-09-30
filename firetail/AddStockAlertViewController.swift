@@ -130,7 +130,7 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
             mySwitch.layer.cornerRadius = 16
             mySwitch.backgroundColor = .white
             mySwitch.onTintColor = CustomColor.yellow
-            mySwitch.addTarget(self, action: #selector(AddStockAlertViewController.switchChanged(_:)), for: UIControlEvents.valueChanged)
+            mySwitch.addTarget(self, action: #selector(AddStockAlertViewController.switchChanged(_:)), for: UIControl.Event.valueChanged)
             mySwitch.tag = tag
             view.addSubview(mySwitch)
             
@@ -182,8 +182,8 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
                 !verified,
                 mySwitchEmail.isOn else {
                     Auth.auth().currentUser?.sendEmailVerification(completion: nil)
-                    let alert = UIAlertController(title: "Verify", message: "If no alert type is selected, Firetail defaults to an email alert. An email verification was sent to your inbox, please verify to receive email alerts", preferredStyle: UIAlertControllerStyle.alert)
-                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                    let alert = UIAlertController(title: "Verify", message: "If no alert type is selected, Firetail defaults to an email alert. An email verification was sent to your inbox, please verify to receive email alerts", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                     return
             }
@@ -213,8 +213,8 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
             !verified,
             mySwitchEmail.isOn {
             Auth.auth().currentUser?.sendEmailVerification(completion: nil)
-            let alert = UIAlertController(title: "Verify", message: "An email verification was sent to your inbox, please verify to receive email alerts", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            let alert = UIAlertController(title: "Verify", message: "An email verification was sent to your inbox, please verify to receive email alerts", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return
         }
@@ -467,7 +467,7 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
             textfield.placeholder = "(000) 000-0000"
         }
         alert.addAction(UIAlertAction(title: "Cencel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Save", style: UIAlertActionStyle.default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Save", style: UIAlertAction.Style.default, handler: { _ in
             if let text = alert.textFields?[0].text {
                  UserInfo.phone = text
                  UserInfo.saveUserInfo()

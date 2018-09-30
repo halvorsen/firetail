@@ -163,8 +163,8 @@ final class GraphViewController: ViewSetup, UIGestureRecognizerDelegate {
         
         let layerAnimation = CABasicAnimation(keyPath: "path")
         layerAnimation.duration = 0.7
-        layerAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        layerAnimation.fillMode = kCAFillModeBoth
+        layerAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        layerAnimation.fillMode = CAMediaTimingFillMode.both
         layerAnimation.isRemovedOnCompletion = false
         layerAnimation.fromValue = graphMutablePaths[currentTextKey]
         let center = touch.location(in: graphViewSeen)

@@ -264,7 +264,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addTextField.keyboardType = UIKeyboardType.default
         addTextField.returnKeyType = UIReturnKeyType.done
         
-        addTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        addTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
         addTextField.delegate = self
         addTextField.backgroundColor = CustomColor.background
         addTextField.textColor = CustomColor.white68
@@ -612,14 +612,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     private func checkForUpdate() {
         if !AppStore.shared.askedToUpdateRecently() && !AppStore.shared.isVersionCurrent {
-            let alert = UIAlertController(title: "New Version", message: "App Update Available", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: { _ in
+            let alert = UIAlertController(title: "New Version", message: "App Update Available", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { _ in
                 if let firetailURL = URL(string: "itms-apps//itunes.apple.com/app/id1210030205"),
                     UIApplication.shared.canOpenURL(firetailURL) {
                     UIApplication.shared.open(firetailURL)
                 }
             }))
-                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
                 present(alert, animated: true, completion: nil)
         }
     }
@@ -719,7 +719,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             
             let alert = UIAlertController(title: "Premium Member", message: "You are a premium member", preferredStyle: .alert)
             
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
             
             present(alert, animated: true, completion: nil)
             
@@ -779,8 +779,8 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 }
                 
             } else {
-                let alert = UIAlertController(title: "", message: "100 maximum alerts reached", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                let alert = UIAlertController(title: "", message: "100 maximum alerts reached", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                 present(alert, animated: true, completion: nil)
             }
         }
@@ -817,7 +817,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     
     @objc func purchase(productId: String = "firetail.iap.premium") {
         
-        activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityView = UIActivityIndicatorView(style: .whiteLarge)
         activityView.center = view.center
         activityView.startAnimating()
         activityView.alpha = 1.0

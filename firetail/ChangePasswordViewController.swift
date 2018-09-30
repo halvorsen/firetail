@@ -69,7 +69,7 @@ final class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
             myTextField.keyboardType = UIKeyboardType.default
             myTextField.returnKeyType = UIReturnKeyType.done
            
-            myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+            myTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
             myTextField.delegate = self
             myTextField.backgroundColor = .clear
             myTextField.textColor = .white
@@ -156,15 +156,15 @@ final class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
         guard let oldPassword = _oldPassword else {return}
         
         guard password1 == password2 else {
-            let alert = UIAlertController(title: "Warning", message: "Passwords Do Not Match", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            let alert = UIAlertController(title: "Warning", message: "Passwords Do Not Match", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return
         }
         
         guard password1.isValidPassword == true else {
-            let alert = UIAlertController(title: "Invalid Password", message: "6-20 Characters", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            let alert = UIAlertController(title: "Invalid Password", message: "6-20 Characters", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return
         }
@@ -175,14 +175,14 @@ final class ChangePasswordViewController: ViewSetup, UITextFieldDelegate {
         let credential = EmailAuthProvider.credential(withEmail: UserInfo.email, password: oldPassword)
         user?.reauthenticateAndRetrieveData(with: credential, completion: { (result, error) in
             if error != nil{
-                let alert = UIAlertController(title: "Error", message: "Error reauthenticating user", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                let alert = UIAlertController(title: "Error", message: "Error reauthenticating user", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }else{
                 user?.updatePassword(to: newPassword) { (error) in
                     if error != nil {
-                        let alert = UIAlertController(title: "Error", message: "Error changing user password", preferredStyle: UIAlertControllerStyle.alert)
-                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                        let alert = UIAlertController(title: "Error", message: "Error changing user password", preferredStyle: UIAlertController.Style.alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                     }
                     self.dismiss(animated: true)

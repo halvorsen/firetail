@@ -60,7 +60,7 @@ final class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         stockSymbolTextField.autocorrectionType = UITextAutocorrectionType.no
         stockSymbolTextField.keyboardType = UIKeyboardType.default
         stockSymbolTextField.returnKeyType = UIReturnKeyType.done
-        stockSymbolTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        stockSymbolTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
         stockSymbolTextField.delegate = self
         stockSymbolTextField.backgroundColor = .clear
         stockSymbolTextField.textColor = .white

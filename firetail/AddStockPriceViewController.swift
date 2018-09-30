@@ -119,7 +119,7 @@ final class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = CustomColor.black33
-        activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityView = UIActivityIndicatorView(style: .whiteLarge)
         activityView.center.y = view.center.y
         activityView.center.x = view.center.x
         activityView.startAnimating()
@@ -200,8 +200,8 @@ final class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     }
     
     private func displayAlert() {
-        let alert = UIAlertController(title: "", message: "Symbol not supported", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { _ in
+        let alert = UIAlertController(title: "", message: "Symbol not supported", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) { _ in
             self.dismiss(animated: true)
         })
         present(alert, animated: true) {
@@ -211,8 +211,8 @@ final class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
     }
     
     private func displayAlertCrypto() {
-        let alert = UIAlertController(title: "", message: "Price fetch failed", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { _ in
+        let alert = UIAlertController(title: "", message: "Price fetch failed", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) { _ in
             self.dismiss(animated: true)
         })
         present(alert, animated: true) {

@@ -56,7 +56,7 @@ final class LoginViewController: ViewSetup, UITextFieldDelegate {
         alert.addTextField { textfield in
             textfield.placeholder = "myemail@address.com"
         }
-        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertAction.Style.default, handler: { _ in
             if let text = alert.textFields?[0].text {
                 Auth.auth().sendPasswordReset(withEmail: text) { (error) in
                     // nothing
@@ -148,7 +148,7 @@ final class LoginViewController: ViewSetup, UITextFieldDelegate {
                 myTextField.keyboardType = UIKeyboardType.default
                 myTextField.returnKeyType = UIReturnKeyType.done
                 
-                myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+                myTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
                 myTextField.delegate = self
                 myTextField.backgroundColor = .clear
                 myTextField.textColor = .white
@@ -181,7 +181,7 @@ final class LoginViewController: ViewSetup, UITextFieldDelegate {
         Auth.auth().signIn(withEmail: myText, password: myText2, completion: { (user, error) in
             if error != nil {
                 self.activityView.removeFromSuperview()
-                let alert = UIAlertController(title: "Warning", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: "Warning", message: error!.localizedDescription, preferredStyle: UIAlertController.Style.alert)
                 let action = UIAlertAction(title: "Okay", style: .default, handler: nil)
                 alert.addAction(action)
                 self.present(alert, animated: true, completion: nil)
@@ -196,7 +196,7 @@ final class LoginViewController: ViewSetup, UITextFieldDelegate {
             }
         })
       
-        activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityView = UIActivityIndicatorView(style: .whiteLarge)
         activityView.center = self.view.center
         activityView.startAnimating()
         self.view.addSubview(activityView)

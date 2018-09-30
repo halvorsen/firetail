@@ -91,7 +91,7 @@ final class AlertSwitch: UIControl {
             self.layoutIfNeeded()
         }, completion: { _ in
             self.isAnimating = false
-            self.sendActions(for: UIControlEvents.valueChanged)
+            self.sendActions(for: UIControl.Event.valueChanged)
         })
         
     }

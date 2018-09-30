@@ -77,7 +77,7 @@ final class SignupViewController: ViewSetup, UITextFieldDelegate {
             myTextField.autocorrectionType = UITextAutocorrectionType.no
             myTextField.keyboardType = UIKeyboardType.default
             myTextField.returnKeyType = UIReturnKeyType.done
-            myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+            myTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
             myTextField.delegate = self
             myTextField.backgroundColor = .clear
             myTextField.textColor = .white
@@ -143,22 +143,22 @@ final class SignupViewController: ViewSetup, UITextFieldDelegate {
         guard let password2 = passwordField2 else {continueOnce = true; return}
         guard password1 == password2 else {
             continueOnce = true
-            let alert = UIAlertController(title: "Warning", message: "Passwords Do Not Match", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            let alert = UIAlertController(title: "Warning", message: "Passwords Do Not Match", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return
         }
         guard email.isEmail == true else {
             continueOnce = true
-            let alert = UIAlertController(title: "Warning", message: "Enter Valid Email Address", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            let alert = UIAlertController(title: "Warning", message: "Enter Valid Email Address", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return
         }
         guard password1.isValidPassword == true else {
             continueOnce = true
-            let alert = UIAlertController(title: "Invalid Password", message: "6-20 Characters", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            let alert = UIAlertController(title: "Invalid Password", message: "6-20 Characters", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return
         }
@@ -180,8 +180,8 @@ final class SignupViewController: ViewSetup, UITextFieldDelegate {
                 }
             } else {
                 self.continueOnce = true
-                let alert = UIAlertController(title: "Account Creation Error", message: error?.localizedDescription ?? "Please Try Another Email", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                let alert = UIAlertController(title: "Account Creation Error", message: error?.localizedDescription ?? "Please Try Another Email", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
         }

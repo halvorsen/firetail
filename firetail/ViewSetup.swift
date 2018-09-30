@@ -109,9 +109,9 @@ class ViewSetup: UIViewController {
     }
 
     @objc func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor, act:
-        Selector, addSubview: Bool, alignment: UIControlContentHorizontalAlignment = .left) {
+        Selector, addSubview: Bool, alignment: UIControl.ContentHorizontalAlignment = .left) {
         name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: width*screenWidth/750, height: height*screenWidth/750)
-        name.setTitle(title, for: UIControlState.normal)
+        name.setTitle(title, for: UIControl.State.normal)
         name.titleLabel!.font = UIFont(name: font, size: fontSizeMultiplier*fontSize)
         name.setTitleColor(titleColor, for: .normal)
         name.backgroundColor = bgColor
@@ -163,7 +163,7 @@ class ViewSetup: UIViewController {
             }
         }
         
-        let activityIndictor: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        let activityIndictor: UIActivityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
         let label: UILabel = UILabel()
         let blurEffect = UIBlurEffect(style: .light)
         let vibrancyView: UIVisualEffectView
@@ -231,7 +231,7 @@ class ViewSetup: UIViewController {
     }
     
     @objc func userWarning(title: String, message: String, answer: String = "Okay") {
-        let refreshAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let refreshAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         
         refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
     

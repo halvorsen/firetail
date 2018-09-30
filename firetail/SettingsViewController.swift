@@ -133,7 +133,7 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
             myTextField.keyboardType = UIKeyboardType.default
             myTextField.returnKeyType = UIReturnKeyType.done
             
-            myTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+            myTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
             myTextField.delegate = self
             myTextField.backgroundColor = .clear
             myTextField.textColor = .white
@@ -163,15 +163,15 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         toolBar.tintColor = UIColor(red: 21/255, green: 127/255, blue: 249/255, alpha: 1)
         toolBar.sizeToFit()
         
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(SettingsViewController.donePicker))
-        doneButton.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: toolBarButtonColor], for: .normal)
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItem.Style.plain, target: self, action: #selector(SettingsViewController.donePicker))
+        doneButton.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: toolBarButtonColor], for: .normal)
         
-        let brokerLabel = UIBarButtonItem(title: "Exchange", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-        brokerLabel.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.white], for: .normal)
+        let brokerLabel = UIBarButtonItem(title: "Exchange", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
+        brokerLabel.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
         let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target:nil, action:nil)
     
-        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(SettingsViewController.donePicker))
-        cancelButton.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: toolBarButtonColor], for: .normal)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItem.Style.plain, target: self, action: #selector(SettingsViewController.donePicker))
+        cancelButton.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: toolBarButtonColor], for: .normal)
         
         toolBar.setItems([cancelButton, flexible, brokerLabel, flexible, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
@@ -218,10 +218,10 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         if pickerView == myPicker {
-        return NSAttributedString(string: pickerData[row], attributes: [NSAttributedStringKey.foregroundColor:UIColor.white])
+        return NSAttributedString(string: pickerData[row], attributes: [NSAttributedString.Key.foregroundColor:UIColor.white])
         }
         else {
-            return NSAttributedString(string: pickerDataCrypto[row], attributes: [NSAttributedStringKey.foregroundColor:UIColor.white])
+            return NSAttributedString(string: pickerDataCrypto[row], attributes: [NSAttributedString.Key.foregroundColor:UIColor.white])
         }
     }
 

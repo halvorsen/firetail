@@ -47,7 +47,7 @@ Joining premium also gives you access to unlimted monthly Firetail alerts.
 """
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 10
-        let attributes = [NSAttributedStringKey.paragraphStyle : style]
+        let attributes = [NSAttributedString.Key.paragraphStyle : style]
         textView.attributedText = NSAttributedString(string: text, attributes: attributes)
         textView.textColor = CustomColor.white115
         textView.font = UIFont(name: "HelveticaNeue", size: 15)
