@@ -15,6 +15,7 @@ import FirebaseInstanceID
 import FirebaseMessaging
 import Fabric
 import Crashlytics
+import SwiftyStoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -64,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 self.window?.makeKeyAndVisible()
             
         }
-        
+        SwiftyStoreKit.completeTransactions(completion: {_ in})
         return true
     }
     
@@ -105,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         connectToFcm()
-    
+        AppStore.shared.checkIfSubscribedToProduct(completion: {_, _ in})
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

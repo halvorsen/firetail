@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyStoreKit
 
 final class PremiumInformationViewController: UIViewController {
     
@@ -67,8 +68,81 @@ Joining premium also gives you access to unlimted monthly Firetail alerts.
         dismiss(animated: true)
     }
     
+    var activityView = UIActivityIndicatorView()
+    @objc func purchase(productId: String = "vulture2103532") {
+        
+        activityView = UIActivityIndicatorView(style: .whiteLarge)
+        activityView.center = view.center
+        activityView.startAnimating()
+        activityView.alpha = 1.0
+        view.addSubview(activityView)
+        SwiftyStoreKit.purchaseProduct(productId) { [weak self] result in
+            guard let weakself = self else {return}
+       
+            switch result {
+                
+            case .success( _):
+                UserInfo.vultureSubscriber = true
+                if let presenter = self?.presentingViewController as? DashboardViewController {
+                presenter.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
+                }
+                Firebase.persistSubscriber(true)
+                weakself.activityView.removeFromSuperview()
+            case .error(let error):
+                
+                print("error: \(error)")
+                print("Purchase Failed: \(error)")
+                weakself.activityView.removeFromSuperview()
+            }
+        }
+    }
+    
     @objc private func goPremiumTouchUpInside() {
-        // Go premium IAP
+        // Create the alert controller
+        if UserInfo.vultureSubscriber == false {
+            let alertController = UIAlertController(title: "Premium Alerts", message: "Sign up now", preferredStyle: .alert)
+            
+            // Create the actions
+            let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { [weak self] UIAlertAction in
+                guard let weakself = self else {return}
+                weakself.purchase()
+                
+            }
+            let restoreAction = UIAlertAction(title: "Restore Purchase", style: UIAlertAction.Style.default) { [weak self] UIAlertAction in
+                SwiftyStoreKit.restorePurchases(atomically: true) { results in
+                    print("restore purchase: \(results)")
+//                    if AppStore.shared. {
+//
+//                        UserInfo.vultureSubscriber = true
+//                        if let presenter = self?.presentingViewController as? DashboardViewController {
+//                            presenter.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
+//                        }
+//                    }
+//                    else {
+//                        print("Nothing to Restore")
+//                    }
+                }
+            }
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) {
+                UIAlertAction in
+                self.presentingViewController?.dismiss(animated: false, completion: nil)
+            }
+            
+            alertController.addAction(okAction)
+            alertController.addAction(restoreAction)
+            alertController.addAction(cancelAction)
+            present(alertController, animated: false)
+        } else {
+            
+            let alert = UIAlertController(title: "Premium Member", message: "You are a premium member", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            
+            present(alert, animated: true, completion: nil)
+            
+        }
+        
     }
     
     private func setConstraints() {

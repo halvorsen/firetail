@@ -42,6 +42,7 @@ final class AppStore {
     
     var currentTimeStamp: TimeInterval?
     var isVersionCurrent = true
+
     private func isUpdateAvailable() {
         guard let info = Bundle.main.infoDictionary,
             let currentVersion = info["CFBundleShortVersionString"] as? String,
@@ -66,10 +67,11 @@ final class AppStore {
         var latestExpireTimestamp: TimeInterval = 0
         _ = receiptGet { dictionary in
             if dictionary.isEmpty { completion(nil, nil) }
-            //            print("--------------- Dictionary: ---------------") // ##DEBUG.
-            //            print(dictionary) // ##DEBUG.
-            //            print("--------------- End of dictionary: ---------------") // ##DEBUG.
+                        print("--------------- Dictionary: ---------------") // ##DEBUG.
+                        print(dictionary) // ##DEBUG.
+                        print("--------------- End of dictionary: ---------------") // ##DEBUG.
             dictionary.forEach { (key, value) in
+                // check receipts and set is subscriber values and set the values on Firebase and User Info, check these on opening app each time.
                 if key == "latest_receipt_info" {
                     guard let array = value as? [Any] else { completion(nil, nil); return }
                     var newExpireTimestamp: TimeInterval = 0
@@ -127,7 +129,7 @@ final class AppStore {
 
     private func receiptGet(callback: @escaping (_ dictionary: [String: Any]) -> Void) {
         func errorCallback() { callback([:]) }  // callback with empty dictionary
-        let appSpecificSharedSecret = "todo" // MARK: Can regenerate this secret in itunes connect / features / IAP / App Specific Shared Secret
+        let appSpecificSharedSecret = "ee0ba17d135c462da505e3002831ee82"
         if let receiptPath = Bundle.main.appStoreReceiptURL?.path,
             FileManager.default.fileExists(atPath: receiptPath) {
             var receiptData: NSData?

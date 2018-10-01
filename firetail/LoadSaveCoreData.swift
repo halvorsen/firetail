@@ -107,7 +107,7 @@ final class LoadSaveCoreData {
  
     }
 
-    public static func saveUserInfoToFirebase(username:String,fullName:String,email:String,phone:String,premium:Bool,numOfAlerts:Int,brokerName:String,cryptoBrokerName:String,brokerURL:String,weeklyAlerts:[String:Int],userAlerts:[String:String], token: String) {
+    public static func saveUserInfoToFirebase(username:String,fullName:String,email:String,phone:String,premium:Bool, vultureSubscriber:Bool,numOfAlerts:Int,brokerName:String,cryptoBrokerName:String,brokerURL:String,weeklyAlerts:[String:Int],userAlerts:[String:String], token: String) {
         
         let rootRef = Database.database().reference()
 
@@ -116,7 +116,7 @@ final class LoadSaveCoreData {
         let userRef = itemsRef.child(username)
         let weeklyAlertsRef = userRef.child("weeklyAlerts")
         let userAlertsRef = userRef.child("userAlerts")
-        let dict1=["username":username,"fullName":fullName,"email":email,"phone":phone,"premium":premium,"numOfAlerts":numOfAlerts,"brokerName":brokerName,"cryptoBrokerName":cryptoBrokerName,"brokerURL":brokerURL, "token":token] as [String : Any]
+        let dict1=["username":username,"fullName":fullName,"email":email,"phone":phone,"premium":premium, "vultureSubscriber":vultureSubscriber,"numOfAlerts":numOfAlerts,"brokerName":brokerName,"cryptoBrokerName":cryptoBrokerName,"brokerURL":brokerURL, "token":token] as [String : Any]
         let dict2 = weeklyAlerts as [String : Any]
         let dict3 = userAlerts as [String : Any]
         

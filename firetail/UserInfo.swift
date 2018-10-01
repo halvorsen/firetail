@@ -178,7 +178,7 @@ extension UserInfo {
     
     public static func saveUserInfo() {
         guard UserInfo.email != "none" else {UserInfo.email = UserInfo.username; return}
-        LoadSaveCoreData.saveUserInfoToFirebase(username: UserInfo.username, fullName: UserInfo.fullName, email: UserInfo.email, phone: UserInfo.phone, premium: UserInfo.premium, numOfAlerts: UserInfo.userAlerts.count, brokerName: UserInfo.brokerName, cryptoBrokerName: UserInfo.cryptoBrokerName, brokerURL: UserInfo.brokerURL, weeklyAlerts: UserInfo.weeklyAlerts, userAlerts: UserInfo.userAlerts, token: UserInfo.token)
+        LoadSaveCoreData.saveUserInfoToFirebase(username: UserInfo.username, fullName: UserInfo.fullName, email: UserInfo.email, phone: UserInfo.phone, premium: UserInfo.premium, vultureSubscriber: UserInfo.vultureSubscriber, numOfAlerts: UserInfo.userAlerts.count, brokerName: UserInfo.brokerName, cryptoBrokerName: UserInfo.cryptoBrokerName, brokerURL: UserInfo.brokerURL, weeklyAlerts: UserInfo.weeklyAlerts, userAlerts: UserInfo.userAlerts, token: UserInfo.token)
     }
 }
 

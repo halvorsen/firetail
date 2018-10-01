@@ -75,10 +75,11 @@ final class AppLoadingData {
         UserInfo.tickerArray.removeAll()
         
         let ref = Database.database().reference()
-        print(firebaseUsername)
+    
         ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
             
             let value = snapshot.value as? NSDictionary
+            UserInfo.vultureSubscriber = value?["vultureSubscriber"] as? Bool ?? false
             UserInfo.fullName = value?["fullName"] as? String ?? "none"
             UserInfo.email = value?["email"] as? String ?? UserInfo.username
             UserInfo.phone = value?["phone"] as? String ?? "none"

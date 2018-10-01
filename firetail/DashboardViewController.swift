@@ -632,7 +632,11 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         if UserInfo.vultureSubscriber {
         menuFunc()
         } else {
-            present(PremiumInformationViewController(), animated: true)
+            let viewController = PremiumInformationViewController()
+            viewController.modalTransitionStyle = .crossDissolve
+            present(viewController, animated: true) {
+                self.menuFunc()
+            }
         }
     }
     @objc private func changeEmailFunc(_ sender: UIButton) {
@@ -713,7 +717,9 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             
             let viewController = PremiumInformationViewController()
             viewController.modalTransitionStyle = .crossDissolve
-            present(viewController, animated: true)
+            present(viewController, animated: true) {
+                self.menuFunc()
+            }
             
         } else {
             
@@ -727,11 +733,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     }
     
     @objc func menuFunc() {
-        
         if slideView.frame.origin.x == 0 {
             UIView.animate(withDuration: 0.3) {[weak self] in
                 guard let weakself = self else {return}
-                weakself.slideView.frame.origin.x += 516*weakself.screenWidth/750
+                weakself.slideView.frame.origin.x = 516*weakself.screenWidth/750
                 
             }
             
@@ -741,10 +746,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             container.isUserInteractionEnabled = false
             
             
-        } else if slideView.frame.origin.x == 516*screenWidth/750 {
+        } else {
             UIView.animate(withDuration: 0.3) { [weak self] in
                 guard let weakself = self else {return}
-                weakself.slideView.frame.origin.x -= 516*weakself.screenWidth/750}
+                weakself.slideView.frame.origin.x = 0}
             slideView.removeGestureRecognizer(returnTap)
             slideView.removeGestureRecognizer(returnSwipe)
             slideView.removeGestureRecognizer(returnPan)
