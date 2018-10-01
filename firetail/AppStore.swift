@@ -70,12 +70,33 @@ final class AppStore {
                         print("--------------- Dictionary: ---------------") // ##DEBUG.
                         print(dictionary) // ##DEBUG.
                         print("--------------- End of dictionary: ---------------") // ##DEBUG.
+
             dictionary.forEach { (key, value) in
                 // check receipts and set is subscriber values and set the values on Firebase and User Info, check these on opening app each time.
                 if key == "latest_receipt_info" {
                     guard let array = value as? [Any] else { completion(nil, nil); return }
                     var newExpireTimestamp: TimeInterval = 0
-                    for entry in array {
+                    let deprecatedReceiptsArray = array.filter { entry in
+                        if let dictionary = entry as? [String: Any],
+                            let product = dictionary["product_id"] as? String {
+                           return product == "firetail.iap.premium"
+                        }
+                        return false
+                    }
+                    if deprecatedReceiptsArray.count > 0 {
+                        Firebase.persistDeprecatedSubscriber(true)
+                        UserInfo.premium = true
+                    }
+                    
+                    
+                    let vultureRecepitsArray = array.filter { entry in
+                        if let dictionary = entry as? [String: Any],
+                            let product = dictionary["product_id"] as? String {
+                            return product == "vulture2103532"
+                        }
+                        return false
+                    }
+                    for entry in vultureRecepitsArray {
                         guard let dictionary = entry as? [String: Any] else { completion(nil, nil); return }
                         
                         for (key, value) in dictionary {
@@ -97,9 +118,13 @@ final class AppStore {
                     let secondsInADay: TimeInterval = 86400
                     if currentTimestamp < latestExpireTimestamp + secondsInADay {
                        // Send notification to allow premium access
+                        Firebase.persistSubscriber(true)
+                        UserInfo.vultureSubscriber = true
                         completion(true, expirationDate)
                     }
                     else {
+                        UserInfo.vultureSubscriber = false
+                        Firebase.persistSubscriber(false)
                         completion(false, expirationDate)
                     }
                 }

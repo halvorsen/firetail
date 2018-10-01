@@ -72,7 +72,8 @@ Joining premium also gives you access to unlimted monthly Firetail alerts.
     @objc func purchase(productId: String = "vulture2103532") {
         
         activityView = UIActivityIndicatorView(style: .whiteLarge)
-        activityView.center = view.center
+        activityView.center.x = view.center.x
+        activityView.center.y = view.center.y - 100
         activityView.startAnimating()
         activityView.alpha = 1.0
         view.addSubview(activityView)
@@ -88,8 +89,8 @@ Joining premium also gives you access to unlimted monthly Firetail alerts.
                 }
                 Firebase.persistSubscriber(true)
                 weakself.activityView.removeFromSuperview()
+                self?.dismiss(animated: false, completion: nil)
             case .error(let error):
-                
                 print("error: \(error)")
                 print("Purchase Failed: \(error)")
                 weakself.activityView.removeFromSuperview()
@@ -108,19 +109,35 @@ Joining premium also gives you access to unlimted monthly Firetail alerts.
                 weakself.purchase()
                 
             }
-            let restoreAction = UIAlertAction(title: "Restore Purchase", style: UIAlertAction.Style.default) { [weak self] UIAlertAction in
+            let okActionDismiss = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { [weak self] UIAlertAction in
+                self?.dismiss(animated: false, completion: nil)
+            }
+            let okActionNoDismiss = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { UIAlertAction in
+                //do nothing
+            }
+            let restoreAction = UIAlertAction(title: "Restore Purchase", style: UIAlertAction.Style.default) { UIAlertAction in
                 SwiftyStoreKit.restorePurchases(atomically: true) { results in
-                    print("restore purchase: \(results)")
-//                    if AppStore.shared. {
-//
-//                        UserInfo.vultureSubscriber = true
-//                        if let presenter = self?.presentingViewController as? DashboardViewController {
-//                            presenter.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
-//                        }
-//                    }
-//                    else {
-//                        print("Nothing to Restore")
-//                    }
+                    AppStore.shared.checkIfSubscribedToProduct() { (isVultureSubscriber, expirationDate) in
+                        if let subscriber = isVultureSubscriber, let expiration = expirationDate {
+                            if subscriber {
+                                let alert = UIAlertController(title: "Premium Member", message: "Premium Membership Restored", preferredStyle: UIAlertController.Style.alert)
+                                
+                                alert.addAction(okActionDismiss)
+                                self.present(alert, animated: true, completion: nil)
+                            } else {
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateStyle = .medium
+                                dateFormatter.timeStyle = .none
+                                let alert = UIAlertController(title: "Premium Member", message: "Premium Membership Expired \(dateFormatter.string(from: expiration))", preferredStyle: UIAlertController.Style.alert)
+                                alert.addAction(okActionNoDismiss)
+                                self.present(alert, animated: true, completion: nil)
+                            }
+                        } else {
+                            let alert = UIAlertController(title: "Premium Member", message: "Not a subscriber", preferredStyle: UIAlertController.Style.alert)
+                            alert.addAction(okActionNoDismiss)
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                    }
                 }
             }
             
