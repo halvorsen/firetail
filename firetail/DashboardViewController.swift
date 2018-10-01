@@ -185,18 +185,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addButton(name: changeBroker, x: 82, y: 895, width: 280, height: 75, title: "LOGOUT", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.logoutFunc(_:)), addSubview: true)
         addButton(name: legal, x: 82, y: 1055, width: 280, height: 75, title: "LEGAL", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.legalFunc(_:)), addSubview: true)
         addButton(name: support, x: 82, y: 1135, width: 280, height: 75, title: "SUPPORT", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.supportFunc(_:)), addSubview: true)
-        addButton(name: goPremium, x: 82, y: 1215, width: 280, height: 75, title: "GO PREMIUM", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.goPremiumFunc(_:)), addSubview: true)
+        self.addButton(name: self.goPremium, x: 82, y: 1215, width: 280, height: 75, title: UserInfo.vultureSubscriber ? "PREMIUM" : "GO PREMIUM", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.goPremiumFunc(_:)), addSubview: true)
         view.addSubview(premiumStar)
         premiumStar.translatesAutoresizingMaskIntoConstraints = false
         premiumStar.centerYAnchor.constraint(equalTo: goPremium.centerYAnchor, constant: -1).isActive = true
         premiumStar.rightAnchor.constraint(equalTo: goPremium.leftAnchor, constant: -10).isActive = true
         
-        if UserInfo.premium == true {
-            goPremium.setTitle("PREMIUM", for: .normal)
-            premiumStar.isHidden = false
-        } else {
-            premiumStar.isHidden = true
-        }
         let indicator = UILabel(frame: CGRect(x: 267*screenWidth/375, y: 86*screenHeight/667, width: (indicatorDotWidth - 30)*screenWidth/375, height: 258*screenHeight/667))
         indicator.backgroundColor = CustomColor.white77
         slideView.addSubview(indicator)
@@ -301,6 +295,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         configureAndAddAlertCollection()
         [stock1, stock2, stock3].forEach { $0.center.x = monthIndicator.center.x}
         configureSwitch()
+        AppStore.shared.checkIfSubscribedToProduct { (isSubscriber, _) in
+            if isSubscriber ?? false {
+                self.goPremium.setTitle("PREMIUM", for: .normal)
+                self.premiumStar.isHidden = false
+            } else {
+                self.premiumStar.isHidden = true
+            }
+        }
     }
     
     func configureAndAddAlertCollection() {
@@ -835,7 +837,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             case .success( _):
                 weakself.premiumMember = true
                 UserInfo.premium = true
-                weakself.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
+                if UserInfo.premium == true {
+                    weakself.goPremium.setTitle("PREMIUM", for: .normal)
+                    weakself.premiumStar.isHidden = false
+                } else {
+                    weakself.premiumStar.isHidden = true
+                }
                 UserInfo.saveUserInfo()
                 weakself.activityView.removeFromSuperview()
             case .error(let error):
