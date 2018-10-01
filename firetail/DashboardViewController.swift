@@ -296,11 +296,14 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         [stock1, stock2, stock3].forEach { $0.center.x = monthIndicator.center.x}
         configureSwitch()
         AppStore.shared.checkIfSubscribedToProduct { (isSubscriber, _) in
-            if isSubscriber ?? false {
-                self.goPremium.setTitle("PREMIUM", for: .normal)
-                self.premiumStar.isHidden = false
-            } else {
-                self.premiumStar.isHidden = true
+            DispatchQueue.main.async {
+                if isSubscriber ?? false {
+                    
+                    self.goPremium.setTitle("PREMIUM", for: .normal)
+                    self.premiumStar.isHidden = false
+                } else {
+                    self.premiumStar.isHidden = true
+                }
             }
         }
     }
