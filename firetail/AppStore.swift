@@ -115,8 +115,8 @@ final class AppStore {
                         return
                     }
                     let expirationDate = Date.init(timeIntervalSince1970: latestExpireTimestamp)
-                    let secondsInADay: TimeInterval = 86400
-                    if currentTimestamp < latestExpireTimestamp + secondsInADay {
+                   // let secondsInADay: TimeInterval = 86400
+                    if currentTimestamp < latestExpireTimestamp /*+ secondsInADay*/ {
                        // Send notification to allow premium access
                         Firebase.persistSubscriber(true)
                         UserInfo.vultureSubscriber = true

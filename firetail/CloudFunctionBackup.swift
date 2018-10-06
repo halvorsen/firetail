@@ -1552,3 +1552,4 @@ exports.alertTrigger = functions.database.ref('/alerts/{alertID}/triggered/').on
  });
  
 
+*/
