@@ -67,9 +67,9 @@ final class AppStore {
         var latestExpireTimestamp: TimeInterval = 0
         _ = receiptGet { dictionary in
             if dictionary.isEmpty { completion(nil, nil) }
-                        print("--------------- Dictionary: ---------------") // ##DEBUG.
-                        print(dictionary) // ##DEBUG.
-                        print("--------------- End of dictionary: ---------------") // ##DEBUG.
+//                        print("--------------- Dictionary: ---------------") // ##DEBUG.
+//                        print(dictionary) // ##DEBUG.
+//                        print("--------------- End of dictionary: ---------------") // ##DEBUG.
 
             dictionary.forEach { (key, value) in
                 // check receipts and set is subscriber values and set the values on Firebase and User Info, check these on opening app each time.
