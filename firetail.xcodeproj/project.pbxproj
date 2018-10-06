@@ -24,6 +24,7 @@
 		062BD2DC20E5C7A7002C5E3C /* AlertCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062BD2DB20E5C7A7002C5E3C /* AlertCollectionViewCell.swift */; };
 		062BD2DE20E6EC81002C5E3C /* AlertCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062BD2DD20E6EC81002C5E3C /* AlertCollectionView.swift */; };
 		063A02591F7326D700E530D5 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063A02581F7326D700E530D5 /* CacheManager.swift */; };
+		063EB5AD21684D2700460C75 /* CloudFunctionBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063EB5AC21684D2700460C75 /* CloudFunctionBackup.swift */; };
 		064193691F08483600B7B3FE /* DroidSerif-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 064193681F0847C500B7B3FE /* DroidSerif-Regular.ttf */; };
 		06478E6D1EE38E390016DF88 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */; };
 		06478E6F1EE5CC100016DF88 /* AddStockTickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */; };
@@ -80,6 +81,7 @@
 		062BD2DD20E6EC81002C5E3C /* AlertCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertCollectionView.swift; sourceTree = "<group>"; };
 		063A02581F7326D700E530D5 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		063A025A1F741E0A00E530D5 /* firetail v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "firetail v2.xcdatamodel"; sourceTree = "<group>"; };
+		063EB5AC21684D2700460C75 /* CloudFunctionBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFunctionBackup.swift; sourceTree = "<group>"; };
 		064193681F0847C500B7B3FE /* DroidSerif-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DroidSerif-Regular.ttf"; sourceTree = "<group>"; };
 		06478E6C1EE38E390016DF88 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06478E6E1EE5CC100016DF88 /* AddStockTickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStockTickerViewController.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				064C8A062103AD2100FF5D1E /* AlertSwitch.swift */,
 				0602EE3021586B940022F8C8 /* MyDevice.swift */,
 				06259CA02160026400371A56 /* AppStore.swift */,
+				063EB5AC21684D2700460C75 /* CloudFunctionBackup.swift */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
@@ -470,6 +473,7 @@
 				06FDA8DA1E6F15700043BC90 /* BaseOfGraphView.swift in Sources */,
 				0681F42D1FDC3F8400082DCC /* CompareScroll.swift in Sources */,
 				06478E751EE610BC0016DF88 /* AddStockAlertViewController.swift in Sources */,
+				063EB5AD21684D2700460C75 /* CloudFunctionBackup.swift in Sources */,
 				06AC61BC20FD6CA8002A7776 /* AccountCreationViewController.swift in Sources */,
 				06AC61BE20FD6D37002A7776 /* AccountCreationView.swift in Sources */,
 				06AC61BA20FC157C002A7776 /* AppSetting.swift in Sources */,
