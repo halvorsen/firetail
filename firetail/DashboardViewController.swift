@@ -295,17 +295,23 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         configureAndAddAlertCollection()
         [stock1, stock2, stock3].forEach { $0.center.x = monthIndicator.center.x}
         configureSwitch()
-        AppStore.shared.checkIfSubscribedToProduct { (isSubscriber, _) in
+        togglePremiumButtonUI()
+        AppStore.shared.checkIfSubscribedToProduct { (_, _) in
+           self.togglePremiumButtonUI()
+        }
+        NotificationCenter.default.addObserver(self, selector: #selector(togglePremiumButtonUI), name: NSNotification.Name.init("isVultureSubscriber"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(togglePremiumButtonUI), name: NSNotification.Name.init("isNotVultureSubscriber"), object: nil)
+    }
+    
+    @objc private func togglePremiumButtonUI() {
             DispatchQueue.main.async {
-                if isSubscriber ?? false {
-                    
+                if UserInfo.vultureSubscriber {
                     self.goPremium.setTitle("PREMIUM", for: .normal)
                     self.premiumStar.isHidden = false
                 } else {
                     self.premiumStar.isHidden = true
                 }
             }
-        }
     }
     
     func configureAndAddAlertCollection() {

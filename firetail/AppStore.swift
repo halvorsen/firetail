@@ -88,7 +88,7 @@ final class AppStore {
                         UserInfo.premium = true
                     }
                     
-                    
+                    var original_transaction_id = Int()
                     let vultureRecepitsArray = array.filter { entry in
                         if let dictionary = entry as? [String: Any],
                             let product = dictionary["product_id"] as? String {
@@ -98,7 +98,9 @@ final class AppStore {
                     }
                     for entry in vultureRecepitsArray {
                         guard let dictionary = entry as? [String: Any] else { completion(nil, nil); return }
-                        
+                        if let id = dictionary["original_transaction_id"] as? Int {
+                            original_transaction_id = id
+                        }
                         for (key, value) in dictionary {
                             if key == "expires_date_ms" {
                                 if let timestampString = value as? NSString {
@@ -116,15 +118,21 @@ final class AppStore {
                     }
                     let expirationDate = Date.init(timeIntervalSince1970: latestExpireTimestamp)
                    // let secondsInADay: TimeInterval = 86400
+                    print("expire: \(latestExpireTimestamp)")
+                    print("current: \(currentTimestamp)")
                     if currentTimestamp < latestExpireTimestamp /*+ secondsInADay*/ {
                        // Send notification to allow premium access
-                        Firebase.persistSubscriber(true)
+                        print("is vulture subscriber")
+                        Firebase.persistSubscriber(true, expirationTimestamp: latestExpireTimestamp, originalTransactionID: original_transaction_id)
                         UserInfo.vultureSubscriber = true
+                        NotificationCenter.default.post(name: NSNotification.Name.init("isVultureSubscriber"), object: nil)
                         completion(true, expirationDate)
                     }
                     else {
+                        print("is not vulture subscriber")
                         UserInfo.vultureSubscriber = false
-                        Firebase.persistSubscriber(false)
+                        Firebase.persistSubscriber(false, expirationTimestamp: latestExpireTimestamp, originalTransactionID: original_transaction_id)
+                        NotificationCenter.default.post(name: NSNotification.Name.init("isNotVultureSubscriber"), object: nil)
                         completion(false, expirationDate)
                     }
                 }
@@ -143,10 +151,7 @@ final class AppStore {
         ref.observe(.value, with: {
             snap in
             if let t = snap.value as? TimeInterval {
-                // Cast the value to an TimeInterval
-                // and divide by 1000 to get seconds.
-                print(t/1000)
-                self.currentTimeStamp = t/1000
+                self.currentTimeStamp = t
             }
         })
         

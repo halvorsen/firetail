@@ -73,9 +73,13 @@ Joining premium also gives you access to unlimted monthly Firetail alerts.
         
         activityView = UIActivityIndicatorView(style: .whiteLarge)
         activityView.center.x = view.center.x
-        activityView.center.y = view.center.y - 100
+        activityView.center.y = view.center.y - 50
         activityView.startAnimating()
         activityView.alpha = 1.0
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+            self.activityView.stopAnimating()
+            self.activityView.alpha = 0.0
+        }
         view.addSubview(activityView)
         SwiftyStoreKit.purchaseProduct(productId) { [weak self] result in
             guard let weakself = self else {return}
@@ -85,10 +89,11 @@ Joining premium also gives you access to unlimted monthly Firetail alerts.
             case .success( _):
                 UserInfo.vultureSubscriber = true
                 if let presenter = self?.presentingViewController as? DashboardViewController {
-                presenter.goPremium.setTitle("PREMIUM MEMBER", for: .normal)
+                presenter.goPremium.setTitle("PREMIUM", for: .normal)
+                presenter.premiumStar.isHidden = false
                 }
-                Firebase.persistSubscriber(true)
                 weakself.activityView.removeFromSuperview()
+                AppStore.shared.checkIfSubscribedToProduct() {_,_ in } // this will initiate a save of receipt id to firebase
                 self?.dismiss(animated: false, completion: nil)
             case .error(let error):
                 print("error: \(error)")
