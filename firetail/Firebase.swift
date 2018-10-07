@@ -9,7 +9,7 @@
 import Firebase
 
 final class Firebase {
-    static func persistSubscriber(_ isSubscriber: Bool, expirationTimestamp: TimeInterval, originalTransactionID: Int) {
+    static func persistSubscriber(_ isSubscriber: Bool, expirationTimestamp: TimeInterval, originalTransactionID: String) {
         guard let user = Auth.auth().currentUser, var email = user.email else { return }
         email = email.replacingOccurrences(of: ".", with: ",")
         Database.database().reference().child("users").child(email).child("vultureSubscriber").setValue(isSubscriber)

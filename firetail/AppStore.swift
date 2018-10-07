@@ -88,7 +88,7 @@ final class AppStore {
                         UserInfo.premium = true
                     }
                     
-                    var original_transaction_id = Int()
+                    var original_transaction_id = String()
                     let vultureRecepitsArray = array.filter { entry in
                         if let dictionary = entry as? [String: Any],
                             let product = dictionary["product_id"] as? String {
@@ -98,9 +98,7 @@ final class AppStore {
                     }
                     for entry in vultureRecepitsArray {
                         guard let dictionary = entry as? [String: Any] else { completion(nil, nil); return }
-                        if let id = dictionary["original_transaction_id"] as? Int {
-                            original_transaction_id = id
-                        }
+                        
                         for (key, value) in dictionary {
                             if key == "expires_date_ms" {
                                 if let timestampString = value as? NSString {
@@ -110,6 +108,9 @@ final class AppStore {
                             }
                         }
                         if newExpireTimestamp > latestExpireTimestamp {
+                            if let id = dictionary["original_transaction_id"] as? String {
+                                original_transaction_id = id
+                            }
                             latestExpireTimestamp = newExpireTimestamp
                         }
                     }
