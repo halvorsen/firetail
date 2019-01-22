@@ -100,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let appLoadingData = AppLoadingData()
   
          DispatchQueue.global(qos: .background).async {
-        appLoadingData.fetchAllStocks()
+        AppLoadingData.fetchAllStocks()
         }
     }
 

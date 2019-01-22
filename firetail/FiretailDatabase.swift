@@ -1,81 +1,69 @@
 //
-//  AppLoadingData.swift
+//  Database.swift
 //  firetail
 //
-//  Created by Aaron Halvorsen on 9/22/17.
-//  Copyright © 2017 Aaron Halvorsen. All rights reserved.
+//  Created by Aaron Halvorsen on 1/21/19.
+//  Copyright © 2019 Aaron Halvorsen. All rights reserved.
 //
 
 import Foundation
 import Firebase
-import FirebaseDatabase
-import FirebaseAuth
-import FirebaseCore
 
-let updatedDataKey = "com.rightBrothers.updatedData"
-final class AppLoadingData {
+final class FiretailDatabase {
     
-    var fetchedTickers = [String]()
-
-    internal static func loadCachedHistoricalDataForTickerArray() {
-        let dataSets = CacheManager().loadData()
-        guard UserInfo.tickerArray.count > 0 else {return}
+    static var shared: FiretailDatabase = FiretailDatabase()
+    
+    func migrateFromV1toV2() {
         
-        for i in 0..<UserInfo.tickerArray.count {
-            for dataSet in dataSets {
-                if dataSet.ticker == UserInfo.tickerArray[i] {
-                    if Binance.isCryptoTickerSupported(ticker: dataSet.ticker) {
-                        UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(1000))
-                        UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(365))
-                    }
-                    UserInfo.tenYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(2520))
-                    UserInfo.oneYearDictionary[dataSet.ticker] = Array(dataSet.price.suffix(252))
-                }
-            }
-        }
     }
     
-    static func fetchAllStocks() {
-        var savedCount = 0
-        guard UserInfo.tickerArray.count > 0 else {return}
-        Binance.dataSetBTC = nil
-        for i in 0..<UserInfo.tickerArray.count {
-            let symbol = UserInfo.tickerArray[i]
-            if Binance.isCryptoTickerSupported(ticker: symbol) {
-                Binance.fetchBinanceDollarPrice(forTicker: symbol) { (dataSet) in
-                    if let dataSet = dataSet {
-                        UserInfo.cachedInThisSession.append(symbol)
-                        UserInfo.tenYearDictionary[symbol] = Array(dataSet.price.suffix(1000))
-                        UserInfo.oneYearDictionary[symbol] = Array(dataSet.price.suffix(365))
-                    }
-                    savedCount += 1
-                    if savedCount >= UserInfo.tickerArray.count {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                        
-                    }
-                }
-            } else {
-                
-                IEXAPI.get20YearHistoricalData(ticker: symbol, isOneYear: false) { dataSet in
-                    if let dataSet = dataSet {
-                        UserInfo.cachedInThisSession.append(symbol)
-                        UserInfo.tenYearDictionary[symbol] = Array(dataSet.price.suffix(2520))
-                        UserInfo.oneYearDictionary[symbol] = Array(dataSet.price.suffix(252))
-                    }
-                    savedCount += 1
-                    if savedCount >= UserInfo.tickerArray.count {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: updatedDataKey), object: self)
-                    }
-                }
-            }
-        }
+    func persistSubscriber(_ isSubscriber: Bool, expirationTimestamp: TimeInterval, originalTransactionID: String) {
+        guard let user = Auth.auth().currentUser, var email = user.email else { return }
+        email = email.replacingOccurrences(of: ".", with: ",")
+        Database.database().reference().child("users").child(email).child("vultureSubscriber").setValue(isSubscriber)
+        Database.database().reference().child("users").child(email).child("vultureExpiration").setValue(expirationTimestamp)
+        Database.database().reference().child("users").child(email).child("originalTransactionID").setValue(originalTransactionID)
+    }
+    func persistDeprecatedSubscriber(_ isOldSubscriber: Bool) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        Database.database().reference().child("users").child(uid).child("premium").setValue(isOldSubscriber)
+    }
+    
+    func saveUserInfoToFirebase(username:String,fullName:String,email:String,phone:String,premium:Bool, vultureSubscriber:Bool,numOfAlerts:Int,brokerName:String,cryptoBrokerName:String,brokerURL:String,weeklyAlerts:[String:Int],userAlerts:[String:String], token: String) {
+        
+        let rootRef = Database.database().reference()
+        
+        let itemsRef = rootRef.child("users")
+        
+        let userRef = itemsRef.child(username)
+        let weeklyAlertsRef = userRef.child("weeklyAlerts")
+        let userAlertsRef = userRef.child("userAlerts")
+        let dict1=["username":username,"fullName":fullName,"email":email,"phone":phone,"premium":premium, "vultureSubscriber":vultureSubscriber,"numOfAlerts":numOfAlerts,"brokerName":brokerName,"cryptoBrokerName":cryptoBrokerName,"brokerURL":brokerURL, "token":token] as [String : Any]
+        let dict2 = weeklyAlerts as [String : Any]
+        let dict3 = userAlerts as [String : Any]
+        
+        userRef.setValue(dict1)
+        weeklyAlertsRef.setValue(dict2)
+        userAlertsRef.setValue(dict3)
+    }
+    
+    func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, alertLongName: String, priceString: String, data1: String = "", data2: String = "", data3: String = "", data4: String = "", data5: String = "") {
+        
+        let rootRef = Database.database().reference()
+        
+        let itemsRef = rootRef.child("alerts")
+        
+        let alertRef = itemsRef.child(alertLongName)
+        let dict = ["id":alertLongName,"isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker.uppercased(),"push":push, "urgent":urgent,"triggered":triggered,"username":UserInfo.username, "priceString":priceString, "data1":data1, "data2":data2, "data3":data3, "data4":data4, "data5":data5] as [String : Any]
+        alertRef.setValue(dict)
+        
     }
     
     func loadUserInfoFromFirebase(firebaseUsername: String, callback: @escaping () -> Void) {
         UserInfo.tickerArray.removeAll()
         
         let ref = Database.database().reference()
-    
+        
         ref.child("users").child(firebaseUsername).observeSingleEvent(of: .value, with: { (snapshot) in
             
             let value = snapshot.value as? NSDictionary
@@ -174,6 +162,57 @@ final class AppLoadingData {
         
     }
     
+    
 }
 
-
+/* **remove weeklyAlerts and Token from database
+V2 of Database:
+timestamp: Int,
+firebaseuserdb: {
+    uid: {
+        email: String,
+        firstName: String,
+        lastName: String,
+        email: String,
+        phone: String,
+        memberType: String,
+        stockBroker: String,
+        cryptoExchange: String,
+        creationDate: String,
+        alertData: {
+            crypto2352092BTC:true,
+            2352352234TSLA:false,
+            .
+            .
+            .
+        }
+    },
+    .
+    .
+    .
+    nthUser: ...
+},
+firebasealertdb: {
+    crypto23532453ETH: {
+        data1 (timestamp?): Int,
+        deleted: bool,
+        notificationType: {
+            flash: true,
+            push: true,
+            sms: true,
+            email: true,
+            urgent: false,
+            intelligent: false
+        }
+        isGreaterThan: bool,
+        price: Double,
+        ticker: String,
+        triggered: Bool
+        owner: StringUID
+    }
+    .
+    .
+    .
+    nthAlert: ...
+}
+*/
