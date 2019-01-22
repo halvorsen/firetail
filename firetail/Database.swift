@@ -38,6 +38,10 @@ firebaseuser: {
             .
         }
     },
+    .
+    .
+    .
+    nthUser: ...
 },
 firebasealert: {
     crypto23532453ETH: {
@@ -57,5 +61,9 @@ firebasealert: {
         triggered: Bool
         owner: StringUID
     }
+    .
+    .
+    .
+    nthAlert: ...
 }
 */
