@@ -161,8 +161,6 @@ final class FiretailDatabase {
         }
         
     }
-    
-    
 }
 
 /* **remove weeklyAlerts and Token from database

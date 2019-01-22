@@ -11,7 +11,5 @@ target 'firetail' do
   pod 'Firebase/Messaging'
   pod 'SwiftyStoreKit'
   pod 'ReachabilitySwift', '~> 3'
-  pod 'Fabric'
-  pod 'Crashlytics'
 
 end

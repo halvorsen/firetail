@@ -13,8 +13,6 @@ import FirebaseAuth
 import UserNotifications
 import FirebaseInstanceID
 import FirebaseMessaging
-import Fabric
-import Crashlytics
 import SwiftyStoreKit
 
 @UIApplicationMain
@@ -25,8 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let _ = Alerts.shared // ititialize shared alert class the retrieves alerts from file storage
         UserInfo.dashboardMode = UserDefaults.standard.bool(forKey: "isCryptoDashboard") ? .crypto : .stocks
-        Fabric.with([Crashlytics.self])
-        
+
         FirebaseApp.configure()
        
         InstanceID.instanceID().instanceID { (_result, error) in
@@ -97,8 +94,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        let appLoadingData = AppLoadingData()
-  
          DispatchQueue.global(qos: .background).async {
         AppLoadingData.fetchAllStocks()
         }
