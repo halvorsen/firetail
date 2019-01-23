@@ -182,7 +182,7 @@ extension UserInfo {
     }
 }
 
-public typealias alertTuple = (name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int)
+public typealias alertTuple = (name:String,isGreaterThan:Bool,price:String,deleted:Bool,intelligent:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int)
 
 public typealias alertTupleAndOrder = (name:String,isGreaterThan:Bool,price:String,deleted:Bool,email:Bool,flash:Bool,sms:Bool,ticker:String,triggered:String,push:Bool,urgent:Bool,timestamp:Int,order:Int)
 
