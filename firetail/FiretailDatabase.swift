@@ -167,8 +167,7 @@ final class FiretailDatabase {
         
     }
 }
-
-/* **remove weeklyAlerts and Token from database
+/*
 V2 of Database:
 timestamp: Int,
 userdb: {
