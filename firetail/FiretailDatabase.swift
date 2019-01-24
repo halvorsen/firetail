@@ -22,8 +22,23 @@ final class FiretailDatabase {
           return Auth.auth().currentUser
     }
     
-    func migrateFromV1toV2() {
-        
+    func hasV1UserInfo(result: @escaping (_ hasV1: Bool) -> Void) {
+        rootNode.child("users").child(UserInfo.email.replacingOccurrences(of: ",", with: ".", options: .literal, range: nil)).observeSingleEvent(of: .value) { snapshot in
+            result( snapshot.value != nil )
+        }
+    }
+    
+    func deleteV1UserInfo() {
+        rootNode.child("users").child(UserInfo.email.replacingOccurrences(of: ",", with: ".", options: .literal, range: nil)).removeValue()
+    }
+    
+    func migrateUserInfoFromV1toV2() { // to be done after AppLoadingData().loadUserInfoFromFirebase
+        saveUserInfoToFirebase(key: "email", value: UserInfo.email)
+        saveUserInfoToFirebase(key: "fullName", value: UserInfo.fullName)
+        saveMembershipInfoToFirebase(key: "premiumOld", value: UserInfo.premium)
+        saveUserInfoToFirebase(key: "stockBroker", value: UserInfo.brokerName)
+        saveUserInfoToFirebase(key: "alertData", value: UserInfo.userAlerts)
+        deleteV1UserInfo()
     }
     
     func persistSubscriber(_ isSubscriber: Bool, expirationTimestamp: TimeInterval, originalTransactionID: String) {
@@ -39,6 +54,10 @@ final class FiretailDatabase {
     }
     
     func saveUserInfoToFirebase(key: String, value: Any) {
+        userNode.child(key).setValue(value)
+    }
+    
+    func saveMembershipInfoToFirebase(key: String, value: Any) {
         memberInfoNode.child(key).setValue(value)
     }
     

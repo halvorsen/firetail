@@ -135,7 +135,7 @@ final class AppLoadingData {
                                 let triggered = value?["triggered"] as? String ?? "false"
                                 let timestamp = value?["data1"] as? Int ?? 1
                                 
-                                alertTemp[alertLongID] = (name:name,isGreaterThan:isGreaterThan,price:price,deleted:false,email:email,flash:flash,sms:sms,ticker:ticker,triggered:triggered,push:push,urgent:urgent,timestamp:timestamp)
+                                alertTemp[alertLongID] = (name:name,isGreaterThan:isGreaterThan,price:price,deleted:false,intelligent:false,email:email,flash:flash,sms:sms,ticker:ticker,triggered:triggered,push:push,urgent:urgent,timestamp:timestamp)
                                 
                             }
                             totalCount += 1
