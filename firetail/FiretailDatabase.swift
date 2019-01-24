@@ -32,7 +32,7 @@ final class FiretailDatabase {
         rootNode.child("users").child(UserInfo.email.replacingOccurrences(of: ",", with: ".", options: .literal, range: nil)).removeValue()
     }
     
-    func migrateUserInfoFromV1toV2() { // to be done after AppLoadingData().loadUserInfoFromFirebase
+    func migrateUserInfoFromV1toV2() { 
         saveUserInfoToFirebase(key: "email", value: UserInfo.email)
         saveUserInfoToFirebase(key: "fullName", value: UserInfo.fullName)
         saveMembershipInfoToFirebase(key: "premiumOld", value: UserInfo.premium)
