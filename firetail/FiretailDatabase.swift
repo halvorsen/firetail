@@ -22,6 +22,12 @@ final class FiretailDatabase {
           return Auth.auth().currentUser
     }
     
+    func hasV2UserInfo(result: @escaping (_ hasV1: Bool) -> Void) {
+        userNode.observeSingleEvent(of: .value) { snapshot in
+            result( snapshot.value != nil )
+        }
+    }
+    
     func hasV1UserInfo(result: @escaping (_ hasV1: Bool) -> Void) {
         rootNode.child("users").child(UserInfo.email.replacingOccurrences(of: ",", with: ".", options: .literal, range: nil)).observeSingleEvent(of: .value) { snapshot in
             result( snapshot.value != nil )
@@ -32,7 +38,7 @@ final class FiretailDatabase {
         rootNode.child("users").child(UserInfo.email.replacingOccurrences(of: ",", with: ".", options: .literal, range: nil)).removeValue()
     }
     
-    func migrateUserInfoFromV1toV2() { 
+    func migrateUserInfoFromV1toV2() {
         saveUserInfoToFirebase(key: "email", value: UserInfo.email)
         saveUserInfoToFirebase(key: "fullName", value: UserInfo.fullName)
         saveMembershipInfoToFirebase(key: "premiumOld", value: UserInfo.premium)
@@ -91,7 +97,7 @@ final class FiretailDatabase {
         return weeklyAlerts
     }
     
-    func loadUserInfoFromFirebase(firebaseUsername: String, callback: @escaping () -> Void) {
+    func loadUserInfoFromFirebase(callback: @escaping () -> Void) {
         UserInfo.tickerArray.removeAll()
         userNode.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let userInfo = snapshot.value as? [String: Any] else { return }

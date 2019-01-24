@@ -103,11 +103,18 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
 //        UserInfo.premium = true //: toggle in development
 //        premiumMember = true  // ##TODO: turn off premium premiumMember = UserInfo.premium
         IEXAPI.populateUserInfoMonth()
-        FiretailDatabase.shared.hasV1UserInfo { hasV1Info in
-            if hasV1Info {
-                AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {
-                    FiretailDatabase.shared.migrateUserInfoFromV1toV2()
-                    FiretailDatabase.shared.deleteV1UserInfo()
+        FiretailDatabase.shared.hasV2UserInfo { hasV2Info in
+            if hasV2Info {
+                FiretailDatabase.shared.loadUserInfoFromFirebase() {}
+            }
+            else {
+                FiretailDatabase.shared.hasV1UserInfo { hasV1Info in
+                    if hasV1Info {
+                        AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {
+                            FiretailDatabase.shared.migrateUserInfoFromV1toV2()
+                            FiretailDatabase.shared.deleteV1UserInfo()
+                        }
+                    }
                 }
             }
         }
