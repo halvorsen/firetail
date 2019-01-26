@@ -38,6 +38,39 @@ final class FiretailDatabase {
         rootNode.child("users").child(UserInfo.email.replacingOccurrences(of: ",", with: ".", options: .literal, range: nil)).removeValue()
     }
     
+    var oldUserInfo: [String: Any] = [:]
+    func saveCurrentUserInfoToProperty() {
+        userNode.observeSingleEvent(of: .value) { snapshot in
+            if let value = snapshot.value as? [String: Any] {
+                self.oldUserInfo = value
+            }
+        }
+    }
+    
+    func addAllUserInfo(from userInfo: [String: Any], to uidTarget: String) {
+        rootNode.child(uidTarget).observeSingleEvent(of: .value) { snapshot in
+            if var newUserInfo = snapshot.value as? [String: Any] { // uid target info exist
+                if let newAlerts = newUserInfo["userAlerts"] as? [String: String],
+                    let oldAlerts = self.oldUserInfo["userAlerts"] as? [String: String] {
+                    var combinedAlerts = newAlerts
+                    for (key, value) in oldAlerts {
+                        combinedAlerts[key] = value
+                    }
+                    newUserInfo["userAlerts"] = combinedAlerts
+                }
+                for key in ["email", "fullName", "phone", "token", "memberInfo", "brokerName", "cryptoBrokerName", "creationDate", "userAlerts"] { // ##TODO: check if token can be passed, don't think so
+                    if newUserInfo[key] == nil {
+                        newUserInfo[key] = self.oldUserInfo[key]
+                    }
+                }
+                self.userNode.setValue(newUserInfo)
+            }
+            else { // uid target info is empty
+                self.userNode.setValue(self.oldUserInfo)
+            }
+        }
+    }
+    
     func migrateUserInfoFromV1toV2() {
         saveUserInfoToFirebase(key: "email", value: UserInfo.email)
         saveUserInfoToFirebase(key: "fullName", value: UserInfo.fullName)
