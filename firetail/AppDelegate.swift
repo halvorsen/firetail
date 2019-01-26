@@ -33,18 +33,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         self.window = UIWindow(frame: UIScreen.main.bounds)
         
         let user = Auth.auth().currentUser
-        if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") && user != nil {
+        if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") && user != nil && UserInfo.alerts.count != 0 {
             
             self.window?.rootViewController = DashboardViewController.shared
             self.window?.makeKeyAndVisible()
             
-        } else if user == nil {
+        }/* else if user == nil {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
-            
             self.window?.rootViewController = SignupViewController()
             self.window?.makeKeyAndVisible()
             
-        } else if UserInfo.alerts.count == 0 {
+        }*/ else if UserInfo.alerts.count == 0 {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
             
                 self.window?.rootViewController = AddStockTickerViewController()

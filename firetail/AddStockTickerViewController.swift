@@ -73,7 +73,11 @@ final class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         stockSymbolTextField.becomeFirstResponder()
         
         reachabilityAddNotification()
-        
+        if Reachability()!.isReachable {
+            if UserInfo.currentUserUID == nil {
+                UserInfo.signInAnonymously()
+            }
+        }
     }
     
     @objc private func back(_ sender: UIButton) {

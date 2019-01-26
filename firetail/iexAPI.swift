@@ -151,9 +151,6 @@ final class IEXAPI {
         for i in 0..<13 {
             _mo.append(mo[dComponent.month! + i])
         }
-        
         UserInfo.month = _mo
     }
-    
-    
 }

@@ -193,7 +193,6 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
 
         DashboardViewController.shared.configureAndAddAlertCollection()
         DashboardViewController.shared.container.contentOffset.x = 0.0
-        let intelligentFlag = newAlertBoolTuple.intelligent ? "intelligent" : ""
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 && !newAlertBoolTuple.5 {
             FiretailDatabase.shared.saveAlertToFirebase(ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: true, sms: true, flash: true, urgent: true, triggered: "false", push: false, intelligent: newAlertBoolTuple.intelligent, alertLongName: newAlertLongID, priceString: priceString)
         } else if newAlertBoolTuple.1 {
@@ -439,7 +438,6 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
     }
     
     @objc func connectToFcm() {
-        
         Messaging.messaging().shouldEstablishDirectChannel = true
         
     }
@@ -460,10 +458,6 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
                  FiretailDatabase.shared.saveUserInfoToFirebase(key: "phone", value: UserInfo.phone)
             }
         }))
-        
         present(alert, animated: true, completion: nil)
-        
-        
     }
-    
 }

@@ -42,7 +42,18 @@ public struct UserInfo {
     public static var stockTickerArray: [String] {
         return tickerArray.filter { !Binance.isCryptoTickerSupported(ticker: $0) }
     }
+    public static var currentUserUID: String? {
+        return Auth.auth().currentUser?.uid
+    }
     
+    public static func signInAnonymously() {
+        Auth.auth().signInAnonymously { (data, error) in
+            if let uid = data?.user.uid {
+                print("sign in anonymously")
+                print(uid)
+            }
+        }
+    }
     
     public static var month = ["","","","","","","","","","","",""]
     
