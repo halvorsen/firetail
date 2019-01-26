@@ -42,8 +42,8 @@ final class FiretailDatabase {
         saveUserInfoToFirebase(key: "email", value: UserInfo.email)
         saveUserInfoToFirebase(key: "fullName", value: UserInfo.fullName)
         saveMembershipInfoToFirebase(key: "premiumOld", value: UserInfo.premium)
-        saveUserInfoToFirebase(key: "stockBroker", value: UserInfo.brokerName)
-        saveUserInfoToFirebase(key: "alertData", value: UserInfo.userAlerts)
+        saveUserInfoToFirebase(key: "brokerName", value: UserInfo.brokerName)
+        saveUserInfoToFirebase(key: "userAlerts", value: UserInfo.userAlerts)
         deleteV1UserInfo()
     }
     
@@ -61,6 +61,10 @@ final class FiretailDatabase {
     
     func saveUserInfoToFirebase(key: String, value: Any) {
         userNode.child(key).setValue(value)
+    }
+    
+    func saveUserMemberInfoToFirebase(key: String, value: Any) {
+        userNode.child("memberInfo").child(key).setValue(value)
     }
     
     func saveMembershipInfoToFirebase(key: String, value: Any) {
@@ -101,6 +105,7 @@ final class FiretailDatabase {
         userNode.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let userInfo = snapshot.value as? [String: Any] else { return }
             let memberInfo = userInfo["memberInfo"] as? [String: Any]
+            UserInfo.token = userInfo["token"] as? String ?? "none"
             UserInfo.vultureSubscriber = memberInfo?["vultureSubscriber"] as? Bool ?? false
             UserInfo.fullName = userInfo["fullName"] as? String ?? "none"
             UserInfo.email = userInfo["email"] as? String ?? UserInfo.username
@@ -131,7 +136,6 @@ final class FiretailDatabase {
                 }
                 let uA = UserInfo.userAlerts
                 var totalCount = 0
-                
                 var alertTemp: [String: alertTuple] = [:]
                 for i in (0..<UserInfo.userAlerts.count).reversed() {
                     if let alertLongID = uA[alertID[i]] {
@@ -165,11 +169,9 @@ final class FiretailDatabase {
                                     DispatchQueue.global(qos: .background).async {
                                         AppLoadingData.fetchAllStocks()
                                     }
-                                    
                                 }
                                 callback()
                             }
-                            
                         }) { (error) in
                             print(error.localizedDescription)
                             callback()
@@ -177,18 +179,14 @@ final class FiretailDatabase {
                     } else {
                         
                     }
-                    
                 }
-                
             } else {
                 callback()
             }
-            
         }) { (error) in
             print(error.localizedDescription)
             callback()
         }
-        
     }
 }
 /*
@@ -200,18 +198,19 @@ userdb: { ---> *** structure of user json is same as before, starting at the roo
         fullName: String,
         email: String,
         phone: String,
+        token: String,
         memberInfo: {
             premiumOld: Bool
             vultureSubscriber: Bool
             vultureExpiration: TimeInterval
             originalTransactionID: String
         },
-        stockBroker: String,
-        cryptoExchange: String,
+        brokerName: String,
+        cryptoBrokerName: String,
         creationDate: String,
-        alertData: {
-            crypto2352092BTC:true,
-            2352352234TSLA:false,
+        userAlerts: {
+            alert000: crypto2352092BTC,
+            alert001: 2352352234TSLA,
             .
             .
             .

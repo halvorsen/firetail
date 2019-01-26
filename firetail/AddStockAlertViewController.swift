@@ -19,12 +19,7 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
     /// Firebase project's Sender ID.
     /// You can send this token to your application server to send notifications to this device.
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        InstanceID.instanceID().instanceID { (_result, error) in
-            if let result = _result {
-                UserInfo.token = result.token
-                UserInfo.saveUserInfo()
-            }
-        }
+        UserInfo.saveNotificationToken()
     }
     let backArrow = UIButton()
     var newAlertTicker = String()
@@ -206,7 +201,7 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
         } else {
             myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: newAlertTicker, price: finalAlertPrice, isGreaterThan: alertTriggerWhenGreaterThan, deleted: false, email: newAlertBoolTuple.0, sms: newAlertBoolTuple.1, flash: newAlertBoolTuple.3, urgent: newAlertBoolTuple.4, triggered: "false", push: newAlertBoolTuple.2, alertLongName: newAlertLongID, priceString: priceString, data3: intelligentFlag)
         }
-        UserInfo.saveUserInfo()
+        FiretailDatabase.shared.saveUserInfoToFirebase(key: "userAlerts", value: UserInfo.userAlerts)
         alertInfo = (UserInfo.username,newAlertTicker,finalAlertPrice,alertTriggerWhenGreaterThan,false,newAlertBoolTuple.0,newAlertBoolTuple.1,newAlertBoolTuple.3,newAlertBoolTuple.4,"false",newAlertBoolTuple.2,newAlertLongID,priceString)
         if let verified = Auth.auth().currentUser?.isEmailVerified,
             !verified,
@@ -253,14 +248,7 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
             UNUserNotificationCenter.current().requestAuthorization(
                 options: authOptions,
                 completionHandler: {_, _ in
-                    
-                    InstanceID.instanceID().instanceID { (_result, error) in
-                        if let result = _result {
-                            UserInfo.token = result.token
-                            UserInfo.saveUserInfo()
-                        }
-                    }
-                    
+                    UserInfo.saveNotificationToken()
                     // Connect to FCM since connection may have failed when attempted before having a token.
                     self.connectToFcm()
                     
@@ -469,7 +457,7 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
         alert.addAction(UIAlertAction(title: "Save", style: UIAlertAction.Style.default, handler: { _ in
             if let text = alert.textFields?[0].text {
                  UserInfo.phone = text
-                 UserInfo.saveUserInfo()
+                 FiretailDatabase.shared.saveUserInfoToFirebase(key: "phone", value: UserInfo.phone)
             }
         }))
         

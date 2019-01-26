@@ -235,10 +235,16 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
     }
     
     @objc private func back(_ sender: UIButton) {
-        UserInfo.saveUserInfo()
+        saveSettings()
         dismiss(animated: true)
     }
     
+    private func saveSettings() {
+         FiretailDatabase.shared.saveUserInfoToFirebase(key: "email", value: UserInfo.email)
+         FiretailDatabase.shared.saveUserInfoToFirebase(key: "phone", value: UserInfo.phone)
+         FiretailDatabase.shared.saveUserInfoToFirebase(key: "brokerName", value: UserInfo.brokerName)
+         FiretailDatabase.shared.saveUserInfoToFirebase(key: "cryptoBrokerName", value: UserInfo.cryptoBrokerName)
+    }
     
     @objc private func saveFunc(_ sender: UIButton) {
         guard let text0 = myTextFields[0].text,
@@ -259,7 +265,7 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
             UserInfo.cryptoBrokerName = text3
         }
         
-        UserInfo.saveUserInfo()
+        saveSettings()
         dismiss(animated: true)
 
     }
@@ -270,7 +276,7 @@ final class SettingsViewController: ViewSetup, UITextFieldDelegate, UIPickerView
         textField.spellCheckingType = .no
         
         if textField.isSecureTextEntry == true {
-            UserInfo.saveUserInfo()
+            saveSettings()
             present(ChangePasswordViewController(), animated: true)
         }
     }

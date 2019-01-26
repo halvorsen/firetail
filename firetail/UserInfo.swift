@@ -176,9 +176,13 @@ extension UserInfo {
         UserInfo.alertsWithOrder = newAlertsWithOrder
     }
     
-    public static func saveUserInfo() {
-        guard UserInfo.email != "none" else {UserInfo.email = UserInfo.username; return}
-        LoadSaveCoreData.saveUserInfoToFirebase(username: UserInfo.username, fullName: UserInfo.fullName, email: UserInfo.email, phone: UserInfo.phone, premium: UserInfo.premium, vultureSubscriber: UserInfo.vultureSubscriber, numOfAlerts: UserInfo.userAlerts.count, brokerName: UserInfo.brokerName, cryptoBrokerName: UserInfo.cryptoBrokerName, brokerURL: UserInfo.brokerURL, weeklyAlerts: UserInfo.weeklyAlerts, userAlerts: UserInfo.userAlerts, token: UserInfo.token)
+    public static func saveNotificationToken() {
+        InstanceID.instanceID().instanceID { (_result, error) in
+            if let result = _result {
+                UserInfo.token = result.token
+                FiretailDatabase.shared.saveUserInfoToFirebase(key: "token", value: result.token)
+            }
+        }
     }
 }
 

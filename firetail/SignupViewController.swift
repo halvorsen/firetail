@@ -174,7 +174,7 @@ final class SignupViewController: ViewSetup, UITextFieldDelegate {
                 UserInfo.alerts.removeAll()
                 DashboardViewController.shared.collectionView?.reloadData()
                 UserInfo.tickerArray.removeAll()
-                UserInfo.saveUserInfo()
+                FiretailDatabase.shared.saveUserInfoToFirebase(key: "email", value: UserInfo.email)
                 self.delay(bySeconds: 1.5) {
                     self.present(AddStockTickerViewController(), animated: true)
                 }

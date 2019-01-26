@@ -25,13 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UserInfo.dashboardMode = UserDefaults.standard.bool(forKey: "isCryptoDashboard") ? .crypto : .stocks
 
         FirebaseApp.configure()
-       
-        InstanceID.instanceID().instanceID { (_result, error) in
-            if let result = _result {
-                UserInfo.token = result.token
-            }
-            let _ = AppStore.shared
-        }
+
+        let _ = AppStore.shared
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotification(_:)),name: NSNotification.Name.InstanceIDTokenRefresh, object: nil)
         
@@ -72,11 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        InstanceID.instanceID().instanceID { (_result, error) in
-            if let result = _result {
-                UserInfo.token = result.token
-            }
-        }
+        UserInfo.saveNotificationToken()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -85,11 +76,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        InstanceID.instanceID().instanceID { (_result, error) in
-            if let result = _result {
-                UserInfo.token = result.token
-            }
-        }
         UserInfo.cachedInThisSession.removeAll()
     }
 
@@ -109,12 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     @objc private func tokenRefreshNotification(_ notification: Notification) {
-        InstanceID.instanceID().instanceID { (_result, error) in
-            if let result = _result {
-                UserInfo.token = result.token
-            }
-        }
-     
+        UserInfo.saveNotificationToken()
         connectToFcm()
     }
     

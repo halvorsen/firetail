@@ -137,13 +137,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         NotificationCenter.default.addObserver(self, selector: #selector(DashboardViewController.finishedFetching), name: NSNotification.Name(rawValue: updatedDataKey), object: nil)
        
         if UserInfo.token == "none" && UserInfo.userAlerts.count > 0 {
-            InstanceID.instanceID().instanceID { (_result, error) in
-                if let result = _result {
-                    UserInfo.token = result.token
-                    UserInfo.saveUserInfo()
-                }
-            }
-            
+            UserInfo.saveNotificationToken()
             if #available(iOS 10.0, *) {
                 // For iOS 10 display notification (sent via APNS)
                 UNUserNotificationCenter.current().delegate = self
@@ -153,13 +147,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                     options: authOptions,
                     completionHandler: {[weak self] _, _ in
                         guard let weakself = self else {return}
-                        InstanceID.instanceID().instanceID { (_result, error) in
-                            if let result = _result {
-                                UserInfo.token = result.token
-                                UserInfo.saveUserInfo()
-                            }
-                        }
-                        
+                        UserInfo.saveNotificationToken()
                         // Connect to FCM since connection may have failed when attempted before having a token.
                         weakself.connectToFcm()
                         
@@ -373,8 +361,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         loadsave.resaveUser(alerts: UserInfo.stockAlertsOrder + UserInfo.cryptoAlertsOrder)
         
         reboot()
-        
-        UserInfo.saveUserInfo()
+        FiretailDatabase.shared.saveUserInfoToFirebase(key: "userAlerts", value: UserInfo.userAlerts)
         view.addGestureRecognizer(alertPan)
         setStockLabels()
         
@@ -845,7 +832,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         
     }
     
-    @objc func purchase(productId: String = "firetail.iap.premium") {
+    @objc func purchase(productId: String = "firetail.iap.vulture2103532") {
         
         activityView = UIActivityIndicatorView(style: .whiteLarge)
         activityView.center = view.center
@@ -866,7 +853,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
                 } else {
                     weakself.premiumStar.isHidden = true
                 }
-                UserInfo.saveUserInfo()
+                FiretailDatabase.shared.saveUserMemberInfoToFirebase(key: "vultureSubscriber", value: true) // this also gets overwritten and saved by a cloud function
                 weakself.activityView.removeFromSuperview()
             case .error(let error):
                 
@@ -984,21 +971,12 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     @objc func connectToFcm() {
         
         // Won't connect since there is no token
-        InstanceID.instanceID().instanceID { (_result, error) in
-            if let result = _result {
-                UserInfo.token = result.token
-            }
-        }
+        UserInfo.saveNotificationToken()
         Messaging.messaging().shouldEstablishDirectChannel = true
     }
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        InstanceID.instanceID().instanceID { (_result, error) in
-            if let result = _result {
-                UserInfo.token = result.token
-                UserInfo.saveUserInfo()
-            }
-        }
+        UserInfo.saveNotificationToken()
     }
     
     override func viewWillAppear(_ animated: Bool) {
