@@ -69,23 +69,22 @@ final class FiretailDatabase {
     
     func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, intelligent: Bool, alertLongName: String, priceString: String, timestamp: String) {
         guard currentUser?.uid != nil else { return }
-        let value = [
+        guard let uid = currentUser?.uid else { return }
+        let value = [ // ##TODO add in subnodes according to ticker name if we chose
                 alertLongName: [
                     "deleted": deleted,
-                    "notificationType": [
-                        "flash": flash,
-                        "push": push,
-                        "sms": sms,
-                        "email": email,
-                        "urgent": urgent,
-                        "intelligent": intelligent
-                    ],
+                    "flash": flash,
+                    "push": push,
+                    "sms": sms,
+                    "email": email,
+                    "urgent": urgent,
+                    "intelligent": intelligent,
                     "isGreaterThan": isGreaterThan,
                     "price": price,
                     "ticker": ticker,
                     "triggered": triggered,
-                    "owner": currentUser?.uid ?? "none",
-                    "timestamp": timestamp
+                    "owner": uid, // once was an email with commas substituted
+                    "timestamp": timestamp //once was data1
                 ]
             ] as [String : Any]
         alertNode.child(alertLongName).setValue(value)
@@ -195,7 +194,7 @@ final class FiretailDatabase {
 /*
 V2 of Database:
 timestamp: Int,
-userdb: {
+userdb: { ---> *** structure of user json is same as before, starting at the root name ***
     uid: {
         email: String,
         fullName: String,
@@ -223,27 +222,37 @@ userdb: {
     .
     nthUser: ...
 },
-alertdb: {
+alert: { ---> *** structure of alert json is same as before ***
     crypto23532453ETH: {
-        timestamp: Int,
+        timestamp: Int, --> *** this was formally data1 ***
         deleted: bool,
-        notificationType: {
-            flash: true,
-            push: true,
-            sms: true,
-            email: true,
-            urgent: false,
-            intelligent: false
-        }
+        flash: true,
+        push: true,
+        sms: true,
+        email: true,
+        urgent: false,
+        intelligent: false --> *** this is new ***
         isGreaterThan: bool,
         price: Double,
         ticker: String,
         triggered: Bool
-        owner: StringUID
+        owner: StringUID --> *** now a firebase uid string, was email with comma replacements ***
     }
     .
     .
     .
     nthAlert: ...
+ }
 }
+ If we wish, we can also put alerts in sub nodes to help with db searches
+ alertSearch: {
+    ETH: {
+        crypto23532453ETH: true
+        crypto253453458ETH: true
+        .
+        .
+        .
+        nthAlert
+    }
+ }
 */
