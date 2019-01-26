@@ -110,7 +110,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
             else {
                 FiretailDatabase.shared.hasV1UserInfo { hasV1Info in
                     if hasV1Info {
-                        AppLoadingData().loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {
+                        FiretailDatabase.shared.loadUserInfoFromFirebase(firebaseUsername: UserInfo.username) {
                             FiretailDatabase.shared.migrateUserInfoFromV1toV2()
                             FiretailDatabase.shared.deleteV1UserInfo()
                         }
@@ -1022,7 +1022,7 @@ extension DashboardViewController: UICollectionViewDelegate, UICollectionViewDat
         guard let atIndex = UserInfo.currentAlertsInOrder.index(of: withAlert) else { return }
         guard let alertDeleting = UserInfo.currentAlerts[UserInfo.currentAlertsInOrder[atIndex]] else {print("error in deleteing"); return}
         DispatchQueue.main.async {
-            self.myLoadSave.saveAlertToFirebase(username: UserInfo.username, ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, alertLongName: alertDeleting.name, priceString: alertDeleting.price) //TODO: rundandant price strings and doubles
+            FiretailDatabase.shared.saveAlertToFirebase(ticker: alertDeleting.ticker, price: 0.0, isGreaterThan: alertDeleting.isGreaterThan, deleted: true, email: alertDeleting.email, sms: alertDeleting.sms, flash: alertDeleting.flash, urgent: alertDeleting.urgent, triggered: alertDeleting.triggered, push: alertDeleting.push, intelligent: alertDeleting.intelligent, alertLongName: alertDeleting.name, priceString: alertDeleting.price)
             UserInfo.alerts.removeValue(forKey: withAlert)
             UserInfo.currentAlertsInOrder.remove(at: atIndex)
             

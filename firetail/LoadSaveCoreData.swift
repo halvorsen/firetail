@@ -106,37 +106,6 @@ final class LoadSaveCoreData {
         }
  
     }
-
-    public static func saveUserInfoToFirebase(username:String,fullName:String,email:String,phone:String,premium:Bool, vultureSubscriber:Bool,numOfAlerts:Int,brokerName:String,cryptoBrokerName:String,brokerURL:String,weeklyAlerts:[String:Int],userAlerts:[String:String], token: String) {
-        
-        let rootRef = Database.database().reference()
-
-        let itemsRef = rootRef.child("users")
-
-        let userRef = itemsRef.child(username)
-        let weeklyAlertsRef = userRef.child("weeklyAlerts")
-        let userAlertsRef = userRef.child("userAlerts")
-        let dict1=["username":username,"fullName":fullName,"email":email,"phone":phone,"premium":premium, "vultureSubscriber":vultureSubscriber,"numOfAlerts":numOfAlerts,"brokerName":brokerName,"cryptoBrokerName":cryptoBrokerName,"brokerURL":brokerURL, "token":token] as [String : Any]
-        let dict2 = weeklyAlerts as [String : Any]
-        let dict3 = userAlerts as [String : Any]
-        
-        userRef.setValue(dict1)
-        weeklyAlertsRef.setValue(dict2)
-        userAlertsRef.setValue(dict3)
-    }
-    
-    func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, alertLongName: String, priceString: String, data1: String = "", data2: String = "", data3: String = "", data4: String = "", data5: String = "") {
-        
-        let rootRef = Database.database().reference()
-        
-        let itemsRef = rootRef.child("alerts")
-
-        let alertRef = itemsRef.child(alertLongName)
-        let dict = ["id":alertLongName,"isGreaterThan":isGreaterThan,"price":price,"deleted":deleted,"email":email,"flash":flash,"sms":sms,"ticker":ticker.uppercased(),"push":push, "urgent":urgent,"triggered":triggered,"username":UserInfo.username, "priceString":priceString, "data1":data1, "data2":data2, "data3":data3, "data4":data4, "data5":data5] as [String : Any]
-        alertRef.setValue(dict)
-        
-    }
-   
 }
 
 //Fields under path alerts/alertID/

@@ -104,7 +104,7 @@ final class FiretailDatabase {
         memberInfoNode.child(key).setValue(value)
     }
     
-    func saveAlertToFirebase(username: String, ticker: String,price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool,sms: Bool,flash: Bool,urgent: Bool, triggered: String, push: Bool, intelligent: Bool, alertLongName: String, priceString: String, timestamp: String) {
+    func saveAlertToFirebase(ticker: String, price: Double, isGreaterThan: Bool, deleted: Bool, email: Bool, sms: Bool, flash: Bool, urgent: Bool, triggered: String, push: Bool, intelligent: Bool, alertLongName: String, priceString: String, data2: String = "") {
         guard currentUser?.uid != nil else { return }
         guard let uid = currentUser?.uid else { return }
         let value = [ // ##TODO add in subnodes according to ticker name if we chose
@@ -121,7 +121,7 @@ final class FiretailDatabase {
                     "ticker": ticker,
                     "triggered": triggered,
                     "owner": uid, // once was an email with commas substituted
-                    "timestamp": timestamp //once was data1
+                    "data2": data2
                 ]
             ] as [String : Any]
         alertNode.child(alertLongName).setValue(value)
@@ -256,7 +256,8 @@ userdb: { ---> *** structure of user json is same as before, starting at the roo
 },
 alert: { ---> *** structure of alert json is same as before ***
     crypto23532453ETH: {
-        timestamp: Int, --> *** this was formally data1 ***
+        data1: Int, (this is a timestampe set by a cloud function)
+        data2: String, (phone number if sms alert)
         deleted: bool,
         flash: true,
         push: true,
@@ -267,7 +268,7 @@ alert: { ---> *** structure of alert json is same as before ***
         isGreaterThan: bool,
         price: Double,
         ticker: String,
-        triggered: Bool
+        triggered: Bool,
         owner: StringUID --> *** now a firebase uid string, was email with comma replacements ***
     }
     .
