@@ -176,24 +176,29 @@ final class LoginViewController: ViewSetup, UITextFieldDelegate {
         
         loadsave.saveUsername(username: cleanString)
         UserInfo.username = cleanString
-        
-        Auth.auth().signIn(withEmail: myText, password: myText2, completion: { (user, error) in
-            if error != nil {
-                self.activityView.removeFromSuperview()
-                let alert = UIAlertController(title: "Warning", message: error!.localizedDescription, preferredStyle: UIAlertController.Style.alert)
-                let action = UIAlertAction(title: "Okay", style: .default, handler: nil)
-                alert.addAction(action)
-                self.present(alert, animated: true, completion: nil)
-            } else {
-                self.activityView.removeFromSuperview()
-                Alerts.eraseStockAlertFile()
-                UserInfo.alerts.removeAll()
-                UserInfo.tickerArray.removeAll()
-                DashboardViewController.shared.collectionView?.reloadData()
-                self.present(DashboardViewController.shared, animated: true)
-                
-            }
-        })
+        FiretailDatabase.shared.saveCurrentUserInfoToProperty {
+            FiretailDatabase.shared.deleteUserInfo()//deletes anonymous node
+            Auth.auth().signIn(withEmail: myText, password: myText2, completion: { (user, error) in
+                if error != nil {
+                    if let uid = UserInfo.currentUserUID {
+                        FiretailDatabase.shared.addAllUserInfo(to: uid)
+                    }
+                    self.activityView.removeFromSuperview()
+                    let alert = UIAlertController(title: "Warning", message: error!.localizedDescription, preferredStyle: UIAlertController.Style.alert)
+                    let action = UIAlertAction(title: "Okay", style: .default, handler: nil)
+                    alert.addAction(action)
+                    self.present(alert, animated: true, completion: nil)
+                } else {
+                    FiretailDatabase.shared.saveOldUserInfo() //restores anonymous node
+                    self.activityView.removeFromSuperview()
+                    Alerts.eraseStockAlertFile()
+                    UserInfo.alerts.removeAll()
+                    UserInfo.tickerArray.removeAll()
+                    DashboardViewController.shared.collectionView?.reloadData()
+                    self.present(DashboardViewController.shared, animated: true)
+                }
+            })
+        }
       
         activityView = UIActivityIndicatorView(style: .whiteLarge)
         activityView.center = self.view.center
@@ -217,5 +222,4 @@ final class LoginViewController: ViewSetup, UITextFieldDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         reachabilityRemoveNotification()
     }
-    
 }

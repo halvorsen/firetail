@@ -14,20 +14,21 @@ import ReachabilitySwift
 final class SignupViewController: ViewSetup, UITextFieldDelegate {
 
     var login = UIButton()
+    var back = UIButton()
     var username = UILabel()
     var continueB = UIButton()
     var createAccount = UILabel()
     var textFields = [UITextField]()
     let loadsave = LoadSaveCoreData()
     var tap = UITapGestureRecognizer()
-
+    var backAction: () -> Void = {}
     
     //var ti = [String]()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
+        backAction = {
+            self.dismiss(animated: true)
+        }
         tap = UITapGestureRecognizer(target: self, action: #selector(SignupViewController.dismissKeyboard(_:)))
         view.backgroundColor = CustomColor.black33
         let logo = UIImageView(frame: CGRect(x: screenWidth/2 - 93*screenHeight/1334, y: 42*screenHeight/667, width: 93*screenHeight/667, height: 119*screenHeight/667))
@@ -87,6 +88,12 @@ final class SignupViewController: ViewSetup, UITextFieldDelegate {
             view.addSubview(myTextField)
             textFields.append(myTextField)
         }
+        addButton(name: back, x: 0, y: 0, width: 96, height: 114, title: "", font: "HelveticalNeue-Bold", fontSize: 1, titleColor: .clear, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SignupViewController.backTouchUpInside), addSubview: true)
+        back.setImage(#imageLiteral(resourceName: "backarrow"), for: .normal)
+    }
+    
+    @objc private func backTouchUpInside() {
+        backAction()
     }
     
     @objc private func loginFunc(_ sender: UIButton) {
@@ -162,27 +169,31 @@ final class SignupViewController: ViewSetup, UITextFieldDelegate {
             self.present(alert, animated: true, completion: nil)
             return
         }
-        
-        Auth.auth().createUser(withEmail: email, password: password1) {
-            user, error in
-            if error == nil {
-                self.continueOnce = true
-                self.username.text = email
-                Auth.auth().signIn(withEmail: email, password: password1) //adds authentication
-          
-                Alerts.eraseStockAlertFile()
-                UserInfo.alerts.removeAll()
-                DashboardViewController.shared.collectionView?.reloadData()
-                UserInfo.tickerArray.removeAll()
-                FiretailDatabase.shared.saveUserInfoToFirebase(key: "email", value: UserInfo.email)
-                self.delay(bySeconds: 1.5) {
-                    self.present(AddStockTickerViewController(), animated: true)
+        FiretailDatabase.shared.saveCurrentUserInfoToProperty() {
+            Auth.auth().createUser(withEmail: email, password: password1) {
+                user, error in
+                if error == nil {
+                    self.continueOnce = true
+                    self.username.text = email
+                    FiretailDatabase.shared.deleteUserInfo()//deletes anonymous node
+                    Auth.auth().signIn(withEmail: email, password: password1) //adds authentication
+                    if let uid = UserInfo.currentUserUID {
+                        FiretailDatabase.shared.addAllUserInfo(to: uid)
+                    }
+                    Alerts.eraseStockAlertFile()
+                    UserInfo.alerts.removeAll()
+                    DashboardViewController.shared.collectionView?.reloadData()
+                    UserInfo.tickerArray.removeAll()
+                    FiretailDatabase.shared.saveUserInfoToFirebase(key: "email", value: UserInfo.email)
+                    self.delay(bySeconds: 1.5) {
+                        self.present(AddStockTickerViewController(), animated: true)
+                    }
+                } else {
+                    self.continueOnce = true
+                    let alert = UIAlertController(title: "Account Creation Error", message: error?.localizedDescription ?? "Please Try Another Email", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                 }
-            } else {
-                self.continueOnce = true
-                let alert = UIAlertController(title: "Account Creation Error", message: error?.localizedDescription ?? "Please Try Another Email", preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
             }
         }
     }

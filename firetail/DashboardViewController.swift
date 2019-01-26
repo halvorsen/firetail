@@ -42,7 +42,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
     var alertAmount = UILabel()
     var alerts1102 = UILabel()
     var daysOfTheWeek = UILabel()
-    var (alerts, changeEmail, addPhone, changeBroker, legal, support, goPremium) = (UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton())
+    var (alerts, changeEmail, addPhone, accounts, legal, support, goPremium) = (UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton())
     var container = UIScrollView()
     var container2 = UIScrollView()
     
@@ -184,7 +184,7 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         addButton(name: alerts, x: 82, y: 655, width: 280, height: 75, title: UserInfo.vultureSubscriber ? "ALERTS" : "INTELLIGENT ALERTS", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.alertsFunc(_:)), addSubview: true)
         addButton(name: changeEmail, x: 82, y: 815, width: 280, height: 75, title: "SETTINGS", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.changeEmailFunc(_:)), addSubview: true)
         addButton(name: addPhone, x: 82, y: 735, width: 280, height: 75, title: "BROKER/EXCHANGE", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.addPhoneFunc(_:)), addSubview: true)
-        addButton(name: changeBroker, x: 82, y: 895, width: 280, height: 75, title: "LOGOUT", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.logoutFunc(_:)), addSubview: true)
+        addButton(name: accounts, x: 82, y: 895, width: 280, height: 75, title: "LOGOUT", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.logoutFunc(_:)), addSubview: true)
         addButton(name: legal, x: 82, y: 1055, width: 280, height: 75, title: "LEGAL", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.legalFunc(_:)), addSubview: true)
         addButton(name: support, x: 82, y: 1135, width: 280, height: 75, title: "SUPPORT", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.supportFunc(_:)), addSubview: true)
         self.addButton(name: self.goPremium, x: 82, y: 1215, width: 280, height: 75, title: UserInfo.vultureSubscriber ? "PREMIUM" : "GO PREMIUM", font: "Roboto-Medium", fontSize: 13, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(DashboardViewController.goPremiumFunc(_:)), addSubview: true)
@@ -303,6 +303,10 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         }
         NotificationCenter.default.addObserver(self, selector: #selector(togglePremiumButtonUI), name: NSNotification.Name.init("isVultureSubscriber"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(togglePremiumButtonUI), name: NSNotification.Name.init("isNotVultureSubscriber"), object: nil)
+        
+        if UserInfo.currentUserUID == nil {
+            accounts.setTitle("Firetail Account", for: .normal)
+        }
     }
     
     @objc private func togglePremiumButtonUI() {
@@ -660,26 +664,29 @@ class DashboardViewController: ViewSetup, UITextFieldDelegate, UIScrollViewDeleg
         present(SettingsViewController(), animated: true)
     }
     @objc private func logoutFunc(_ sender: UIButton) {
-        
-        UserInfo.month = ["","","","","","","","","","","",""]
-        UserInfo.token = "none"
-        UserInfo.oneYearDictionary.removeAll()
-        UserInfo.tickerArray.removeAll()
-        UserInfo.phone = "none"
-        UserInfo.email = "none"
-        UserInfo.brokerName = "none"
-        UserInfo.cryptoBrokerName = "none"
-        UserInfo.username = "none"
-        UserInfo.fullName = "none"
-        UserInfo.premium = false
-        UserInfo.brokerURL = "none"
-        UserInfo.weeklyAlerts = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
-        UserInfo.userAlerts.removeAll()
-        UserInfo.alerts.removeAll()
-        collectionView?.reloadData()
-        try? Auth.auth().signOut()
-        menuFunc()
-         present(LoginViewController(), animated: true)
+        if let _ = UserInfo.currentUserUID {
+            UserInfo.month = ["","","","","","","","","","","",""]
+            UserInfo.token = "none"
+            UserInfo.oneYearDictionary.removeAll()
+            UserInfo.tickerArray.removeAll()
+            UserInfo.phone = "none"
+            UserInfo.email = "none"
+            UserInfo.brokerName = "none"
+            UserInfo.cryptoBrokerName = "none"
+            UserInfo.username = "none"
+            UserInfo.fullName = "none"
+            UserInfo.premium = false
+            UserInfo.brokerURL = "none"
+            UserInfo.weeklyAlerts = ["mon":0,"tues":0,"wed":0,"thur":0,"fri":0]
+            UserInfo.userAlerts.removeAll()
+            UserInfo.alerts.removeAll()
+            collectionView?.reloadData()
+            try? Auth.auth().signOut()
+            menuFunc()
+            UserInfo.signInAnonymously()
+        } else {
+            present(SignupViewController(), animated: true)
+        }
     }
     @objc private func legalFunc(_ sender: UIButton) {
         if let url = URL(string: "http://firetailapp.com/legal") {

@@ -172,6 +172,16 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
             alertTriggerWhenGreaterThan = true
         }
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 && !newAlertBoolTuple.5 {
+            guard let _ = Auth.auth().currentUser?.email else {
+                let alert = UIAlertController(title: "Create Account", message: "If no alert type is selected, Firetail defaults to an email alert. Please create account.", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { _ in
+                    let controller = SignupViewController()
+                    self.present(controller, animated: true, completion: nil)
+                }
+                ))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
             
             guard let verified = Auth.auth().currentUser?.isEmailVerified,
                 verified else {

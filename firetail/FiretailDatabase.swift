@@ -38,16 +38,26 @@ final class FiretailDatabase {
         rootNode.child("users").child(UserInfo.email.replacingOccurrences(of: ",", with: ".", options: .literal, range: nil)).removeValue()
     }
     
-    var oldUserInfo: [String: Any] = [:]
-    func saveCurrentUserInfoToProperty() {
+    private var oldUserInfo: [String: Any] = [:]
+    
+    func saveCurrentUserInfoToProperty(completion: @escaping () -> Void) {
         userNode.observeSingleEvent(of: .value) { snapshot in
             if let value = snapshot.value as? [String: Any] {
                 self.oldUserInfo = value
             }
+            completion()
         }
     }
     
-    func addAllUserInfo(from userInfo: [String: Any], to uidTarget: String) {
+    func deleteUserInfo() {
+        userNode.removeValue()
+    }
+    
+    func saveOldUserInfo() {
+        userNode.setValue(oldUserInfo)
+    }
+    
+    func addAllUserInfo(to uidTarget: String) {
         rootNode.child(uidTarget).observeSingleEvent(of: .value) { snapshot in
             if var newUserInfo = snapshot.value as? [String: Any] { // uid target info exist
                 if let newAlerts = newUserInfo["userAlerts"] as? [String: String],
