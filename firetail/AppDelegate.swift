@@ -23,9 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let _ = Alerts.shared // ititialize shared alert class the retrieves alerts from file storage
         UserInfo.dashboardMode = UserDefaults.standard.bool(forKey: "isCryptoDashboard") ? .crypto : .stocks
-
+        
         FirebaseApp.configure()
-
+        
         let _ = AppStore.shared
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotification(_:)),name: NSNotification.Name.InstanceIDTokenRefresh, object: nil)
@@ -40,15 +40,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
         } else if UserInfo.alerts.count == 0 {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
-            
-                self.window?.rootViewController = AddStockTickerViewController()
-                self.window?.makeKeyAndVisible()
-            
+            let controller = AddStockTickerViewController()
+            self.window?.rootViewController = controller
+            self.window?.makeKeyAndVisible()
+            controller.switchBackbuttonToAccountsButton()
+    
         } else {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
             
-                self.window?.rootViewController = DashboardViewController.shared
-                self.window?.makeKeyAndVisible()
+            self.window?.rootViewController = DashboardViewController.shared
+            self.window?.makeKeyAndVisible()
             
         }
         SwiftyStoreKit.completeTransactions(completion: {_ in})
@@ -63,38 +64,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         UserInfo.saveNotificationToken()
     }
-
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
-
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         UserInfo.cachedInThisSession.removeAll()
     }
-
+    
     func applicationWillEnterForeground(_ application: UIApplication) {
-         DispatchQueue.global(qos: .background).async {
-        AppLoadingData.fetchAllStocks()
+        DispatchQueue.global(qos: .background).async {
+            AppLoadingData.fetchAllStocks()
         }
     }
-
+    
     func applicationDidBecomeActive(_ application: UIApplication) {
         connectToFcm()
         AppStore.shared.checkIfSubscribedToProduct(completion: {_, _ in})
     }
-
+    
     func applicationWillTerminate(_ application: UIApplication) {
-   
+        
     }
-
+    
     @objc private func tokenRefreshNotification(_ notification: Notification) {
         UserInfo.saveNotificationToken()
         connectToFcm()
     }
     
     @objc func connectToFcm() {
-       
+        
         Messaging.messaging().shouldEstablishDirectChannel = true
         
     }
@@ -104,7 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-      
+        
         // Note: *with swizzling disabled you must let Messaging know about the message
         // Messaging.messaging().appDidReceiveMessage(userInfo)`
         
@@ -118,7 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-      
+        
         // Note: *with swizzling disabled you must let Messaging know about the message
         // Messaging.messaging().appDidReceiveMessage(userInfo)
         
@@ -133,6 +134,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         completionHandler(UIBackgroundFetchResult.newData)
     }
-
+    
 }
 

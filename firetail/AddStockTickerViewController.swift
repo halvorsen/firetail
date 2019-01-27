@@ -16,6 +16,17 @@ final class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     var stockSymbolTextField = UITextField()
     let stockSymbol = UILabel()
     var newAlertTicker = String()
+    var signIn = false
+    
+    func switchBackbuttonToAccountsButton() {
+        backArrow.setImage(nil, for: .normal)
+        backArrow.setTitle("Account", for: .normal)
+        backArrow.setTitleColor(.white, for: .normal)
+        backArrow.contentEdgeInsets = UIEdgeInsets(top: 10, left: 18, bottom: 10, right: 20)
+        backArrow.titleLabel?.font = UIFont(name: "Roboto-Bold", size: 17)
+        backArrow.frame.size = backArrow.intrinsicContentSize
+        signIn = true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +79,11 @@ final class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         view.addSubview(stockSymbolTextField)
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        if let email = UserInfo.currentUserEmail {
+            backArrow.isHidden = true
+        }
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         stockSymbolTextField.becomeFirstResponder()
@@ -81,7 +97,11 @@ final class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func back(_ sender: UIButton) {
-        dismiss(animated: true)
+        if signIn {
+            present(SignupViewController(), animated: true, completion: nil)
+        } else {
+            dismiss(animated: true)
+        }
     }
     
     private func transitionAndFetch() {
@@ -106,7 +126,6 @@ final class AddStockTickerViewController: ViewSetup, UITextFieldDelegate {
         
     }
     
-
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.text = ""
         textField.autocorrectionType = .no

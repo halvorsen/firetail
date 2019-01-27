@@ -37,7 +37,7 @@ final class SignupViewController: ViewSetup, UITextFieldDelegate {
         let accountView = UIView(frame: CGRect(x: 0, y: 266*screenHeight/667, width: screenWidth, height: 401*screenHeight/667))
         accountView.backgroundColor = CustomColor.black28
         view.addSubview(accountView)
-        addButton(name: login, x: 0, y: 400, width: 254, height: 76, title: "LOGIN", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SignupViewController.loginFunc(_:)), addSubview: true, alignment: .center)
+        addButton(name: login, x: 80, y: 400, width: 254, height: 76, title: "SIGNIN INSTEAD", font: "Roboto-Bold", fontSize: 15, titleColor: .white, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(SignupViewController.loginFunc(_:)), addSubview: true, alignment: .left)
         addLabel(name: username, text: "", textColor: .white, textAlignment: .right, fontName: "Roboto-Medium", fontSize: 15, x: 200, y: 400, width: 470, height: 76, lines: 1)
         username.alpha = 0.1
         view.addSubview(username)
@@ -97,7 +97,9 @@ final class SignupViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func loginFunc(_ sender: UIButton) {
-        present(LoginViewController(), animated: true)
+        let controller = LoginViewController()
+        controller
+        present(controller, animated: true)
     }
     
     func textFieldDidBeginEditing(_ textField : UITextField)

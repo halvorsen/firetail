@@ -45,7 +45,9 @@ public struct UserInfo {
     public static var currentUserUID: String? {
         return Auth.auth().currentUser?.uid
     }
- 
+    public static var currentUserEmail: String? {
+        return Auth.auth().currentUser?.email
+    }
     public static func signInAnonymously() {
         Auth.auth().signInAnonymously { (data, error) in
             if let uid = data?.user.uid {

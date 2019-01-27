@@ -115,7 +115,7 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
             (mySwitchFlash,UserInfo.isCryptoMode ? 455 : 395,3),
             (mySwitchAll,UserInfo.isCryptoMode ? 515 : 455,4)
             
-            ]
+        ]
         
         for (mySwitch, yPosition, tag) in UserInfo.isCryptoMode ? switches : Array(switches[1...]) {
             
@@ -166,7 +166,7 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
         newAlertLongID = UserInfo.dashboardMode == .stocks ? timestamp + newAlertTicker.uppercased() : "crypto" + timestamp + newAlertTicker.uppercased()
         UserInfo.currentAlertsInOrder = [newAlertLongID] + UserInfo.currentAlertsInOrder
         UserInfo.userAlerts[alertID[UserInfo.userAlerts.count]] = newAlertLongID
-      
+        
         var alertTriggerWhenGreaterThan = false
         if finalAlertPrice > lastPrice {
             alertTriggerWhenGreaterThan = true
@@ -196,11 +196,21 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
             
         }
         else {
+            if newAlertBoolTuple.0 && Auth.auth().currentUser?.email == nil {
+                let alert = UIAlertController(title: "Create Account", message: "To receive an email alert please create account.", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { _ in
+                    let controller = SignupViewController()
+                    self.present(controller, animated: true, completion: nil)
+                }
+                ))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
             UserInfo.alerts[newAlertLongID] = (newAlertLongID, alertTriggerWhenGreaterThan, priceString, false, false, newAlertBoolTuple.0, newAlertBoolTuple.3, newAlertBoolTuple.1, newAlertTicker, "false", newAlertBoolTuple.2, newAlertBoolTuple.4, 1)
         }
-
+        
         UserInfo.populateAlertsWithOrder()
-
+        
         DashboardViewController.shared.configureAndAddAlertCollection()
         DashboardViewController.shared.container.contentOffset.x = 0.0
         if !newAlertBoolTuple.1 && !newAlertBoolTuple.0 && !newAlertBoolTuple.2 && !newAlertBoolTuple.3 && !newAlertBoolTuple.4 && !newAlertBoolTuple.5 {
@@ -225,13 +235,11 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
             addPhoneNumber()
         } else {
             if let first = presentingViewController,
-                let second = first.presentingViewController,
-                let third = second.presentingViewController {
+                let second = first.presentingViewController {
                 
-                second.view.isHidden = true
                 first.view.isHidden = true
-                if let _ = third as? DashboardViewController {
-                third.dismiss(animated: true)
+                if let _ = second as? DashboardViewController {
+                    second.dismiss(animated: true)
                 } else {
                     present(DashboardViewController(), animated: true)
                 }
@@ -345,9 +353,9 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
                 
             case 5:
                 if UserInfo.vultureSubscriber {
-                newAlertBoolTuple.5 = true
-                UserDefaults.standard.set(true, forKey: "intelligenceOn")
-                UserInfo.intelligenceOn = true
+                    newAlertBoolTuple.5 = true
+                    UserDefaults.standard.set(true, forKey: "intelligenceOn")
+                    UserInfo.intelligenceOn = true
                 } else {
                     present(PremiumInformationViewController(), animated: true)
                 }
@@ -464,8 +472,8 @@ final class AddStockAlertViewController: ViewSetup, UITextFieldDelegate, UNUserN
         alert.addAction(UIAlertAction(title: "Cencel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Save", style: UIAlertAction.Style.default, handler: { _ in
             if let text = alert.textFields?[0].text {
-                 UserInfo.phone = text
-                 FiretailDatabase.shared.saveUserInfoToFirebase(key: "phone", value: UserInfo.phone)
+                UserInfo.phone = text
+                FiretailDatabase.shared.saveUserInfoToFirebase(key: "phone", value: UserInfo.phone)
             }
         }))
         present(alert, animated: true, completion: nil)

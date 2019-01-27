@@ -57,9 +57,7 @@ class ViewSetup: UIViewController {
     
     
     @objc func reachabilityChanged(note: NSNotification) {
-        print("reachabilityChanged")
         let reachability = note.object as! Reachability
-        print("is reachable: \(reachability.isReachable)")
         if reachability.isReachable {
             
             removeNoInternetCover()

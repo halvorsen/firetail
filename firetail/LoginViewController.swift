@@ -207,7 +207,11 @@ final class LoginViewController: ViewSetup, UITextFieldDelegate {
     }
     
     @objc private func createAccountFunc(_ sender: UIButton) {
-        present(SignupViewController(), animated: true)
+        if let _ = presentingViewController as? SignupViewController {
+            dismiss(animated: true)
+        } else {
+            present(SignupViewController(), animated: true)
+        }
         
     }
     
