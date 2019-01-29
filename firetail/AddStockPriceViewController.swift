@@ -226,6 +226,8 @@ final class AddStockPriceViewController: ViewSetup, UIScrollViewDelegate {
         if UserInfo.dashboardMode == .crypto {
             Binance.dataSetBTC = nil
             Binance.fetchBinanceDollarPrice(forTicker: newAlertTicker) { (dataSet) in
+                print("DATA1")
+                print(dataSet)
                 guard let dataSet = dataSet else {
                     self.displayAlertCrypto()
                     return

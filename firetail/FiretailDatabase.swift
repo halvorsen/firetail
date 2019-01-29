@@ -15,8 +15,9 @@ final class FiretailDatabase {
     
     private let rootNode = Database.database().reference()
     private lazy var userNode = rootNode.child("userdb").child(currentUser?.uid ?? "none")
-    private lazy var alertNode = rootNode.child("alertdb")
+    private lazy var alertNode = rootNode.child("alerts")
     private lazy var memberInfoNode = userNode.child("memberInfo")
+    private lazy var alertSearchNode = rootNode.child("alertSearch")
     
     private var currentUser: User? {
           return Auth.auth().currentUser
@@ -118,7 +119,6 @@ final class FiretailDatabase {
         guard currentUser?.uid != nil else { return }
         guard let uid = currentUser?.uid else { return }
         let value = [ // ##TODO add in subnodes according to ticker name if we chose
-                alertLongName: [
                     "deleted": deleted,
                     "flash": flash,
                     "push": push,
@@ -132,9 +132,9 @@ final class FiretailDatabase {
                     "triggered": triggered,
                     "owner": uid, // once was an email with commas substituted
                     "data2": data2
-                ]
             ] as [String : Any]
         alertNode.child(alertLongName).setValue(value)
+        alertSearchNode.child(ticker).setValue([alertLongName:intelligent])
     }
     
     private func getWeeklyAlerts(_ alerts: [String:String]) -> [String: Int]? {

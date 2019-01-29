@@ -42,7 +42,7 @@ final class IEXAPI {
                         }
                     }
                     catch {
-                        print("error in JSONSerialization")
+                        print("error in JSONSerialization2")
                         result(nil)
                     }
                     for jsonElement in json {

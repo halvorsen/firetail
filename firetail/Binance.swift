@@ -6,12 +6,6 @@
 //  Copyright © 2018 Aaron Halvorsen. All rights reserved.
 //
 
-/*
- 1fqdUoR6mfHjswvvDJkhSVrPobsZu65ceuPzRVqU6CZfhHkFI1DRZhhsxvT0hwfR
- Secret:
- SKJj0QbHE8KHnzBTPeOOUjNJNuMEhljg9HhWkgs04KnrODNKr2ZO84W9z3O0gH29
- */
-
 import Foundation
 
 final class Binance {
@@ -94,7 +88,7 @@ final class Binance {
                     
                 }
                 catch {
-                    print("error in JSONSerialization")
+                    print("error in JSONSerialization1")
                     result(nil)
                 }
             }

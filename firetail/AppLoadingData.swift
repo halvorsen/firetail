@@ -43,6 +43,8 @@ final class AppLoadingData {
             let symbol = UserInfo.tickerArray[i]
             if Binance.isCryptoTickerSupported(ticker: symbol) {
                 Binance.fetchBinanceDollarPrice(forTicker: symbol) { (dataSet) in
+                print("DATA2")
+                print(dataSet)
                     if let dataSet = dataSet {
                         UserInfo.cachedInThisSession.append(symbol)
                         UserInfo.tenYearDictionary[symbol] = Array(dataSet.price.suffix(1000))

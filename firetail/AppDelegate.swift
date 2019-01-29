@@ -21,9 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        let _ = Alerts.shared // ititialize shared alert class the retrieves alerts from file storage
+        Alerts.shared.load() // retrieves alerts from file storage
         UserInfo.dashboardMode = UserDefaults.standard.bool(forKey: "isCryptoDashboard") ? .crypto : .stocks
-        
+        print("start user info:")
+        print(UserInfo.alerts)
         FirebaseApp.configure()
         
         let _ = AppStore.shared
@@ -32,25 +33,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
         
-        let user = Auth.auth().currentUser
-        if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") && user != nil && UserInfo.alerts.count != 0 {
-            
+        if UserDefaults.standard.bool(forKey: "fireTailLaunchedBefore") {
             self.window?.rootViewController = DashboardViewController.shared
             self.window?.makeKeyAndVisible()
-            
-        } else if UserInfo.alerts.count == 0 {
+        } else {
             UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
             let controller = AddStockTickerViewController()
             self.window?.rootViewController = controller
             self.window?.makeKeyAndVisible()
             controller.switchBackbuttonToAccountsButton()
-    
-        } else {
-            UserDefaults.standard.set(true, forKey: "fireTailLaunchedBefore")
-            
-            self.window?.rootViewController = DashboardViewController.shared
-            self.window?.makeKeyAndVisible()
-            
         }
         SwiftyStoreKit.completeTransactions(completion: {_ in})
         return true
